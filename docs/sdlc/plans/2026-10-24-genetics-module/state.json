@@ -6,8 +6,8 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T22:46:07.086Z",
-  "stage": "learn",
+  "updated": "2026-10-24T22:46:29.921Z",
+  "stage": "closed",
   "stageHistory": [
     {
       "stage": "discover",
@@ -40,6 +40,10 @@
     {
       "stage": "learn",
       "at": "2026-10-24T22:46:07.086Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-24T22:46:29.919Z"
     }
   ],
   "paused": null,
@@ -975,6 +979,10 @@
       "at": "2026-10-24T22:46:07.086Z",
       "event": "advanced",
       "detail": "learn"
+    },
+    {
+      "at": "2026-10-24T22:46:29.921Z",
+      "event": "closed"
     }
   ],
   "cairnVersion": "0.3.0",
