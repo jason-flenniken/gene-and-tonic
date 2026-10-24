@@ -6,8 +6,8 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:52:36.523Z",
-  "stage": "verify",
+  "updated": "2026-10-24T15:52:36.623Z",
+  "stage": "review",
   "stageHistory": [
     {
       "stage": "discover",
@@ -28,6 +28,10 @@
     {
       "stage": "verify",
       "at": "2026-10-24T15:49:32.219Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-24T15:52:36.622Z"
     }
   ],
   "paused": null,
@@ -728,6 +732,11 @@
       "at": "2026-10-24T15:52:36.523Z",
       "event": "verify pass",
       "detail": "tests: 126 passing (Pint, PHPStan L7 clean), build ok; 21/21 FRs met (FR-13 timeout env gap fixed in b30ce42), FR-10 partially untested (logged); NFR-03 live timing not verifiable without keys; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    {
+      "at": "2026-10-24T15:52:36.622Z",
+      "event": "advanced",
+      "detail": "review"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1265,11 +1274,5 @@
       "from": "check",
       "at": "2026-10-24T15:51:52.816Z"
     }
-  ],
-  "step": {
-    "stage": "verify",
-    "name": "fixing",
-    "count": 1,
-    "at": "2026-10-24T15:51:52.882Z"
-  }
+  ]
 }
