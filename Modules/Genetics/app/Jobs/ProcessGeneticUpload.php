@@ -9,6 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Jobs\SyncJob;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Enums\UploadStatus;
@@ -81,7 +82,8 @@ class ProcessGeneticUpload implements ShouldQueue
                 return;
             }
 
-            report($e);
+            // Stack traces carry call arguments, including genotypes: log the class only.
+            Log::warning('Genetic upload failed', ['upload_id' => $upload->id, 'exception' => $e::class]);
             $this->markFailed($upload, self::GENERIC_ERROR);
         } finally {
             if (! $retrying) {

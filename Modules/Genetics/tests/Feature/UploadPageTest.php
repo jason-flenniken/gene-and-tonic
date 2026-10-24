@@ -67,6 +67,17 @@ it('rejects a disallowed or oversized file without creating a row or dispatching
     'over the max' => fn () => UploadedFile::fake()->create('genome.txt', 25601, 'text/plain'),
 ]);
 
+it('cuts a long original file name to 255 characters', function () {
+    Queue::fake();
+
+    Livewire::actingAs($this->user)->test('genetics::profile')
+        ->set('file', uploadFixture('23andme.txt', str_repeat('a', 300).'.txt'))
+        ->call('upload')
+        ->assertHasNoErrors();
+
+    expect(mb_strlen(GeneticUpload::sole()->original_name))->toBe(255);
+});
+
 it('rate-limits the sixth upload in a minute', function () {
     Queue::fake();
     $component = Livewire::actingAs($this->user)->test('genetics::profile');
@@ -110,6 +121,8 @@ it('polls while an upload is active and stops once it is complete', function () 
         ->call('upload')
         ->assertSeeHtml('wire:poll.3s')
         ->assertSee('Queued');
+
+    expect($component->html())->toMatch('/<div[^<>]*wire:poll\.3s[^<>]*>/');
 
     app()->call([new ProcessGeneticUpload(GeneticUpload::sole()->id), 'handle']);
 

@@ -105,6 +105,20 @@ it('stores every marker CSV row and creates pending reference rows for unknown r
         ->and($this->text->requests())->toBe([]);
 });
 
+it('stores 1 of 1 known and 5 unknown rsIDs from a raw export, and all 6 from a marker CSV', function (string $contents, string $extension, int $stored, int $pending) {
+    $upload = queuedUpload($this->user, $contents, $extension, isFixture: false);
+
+    ProcessGeneticUpload::dispatchSync($upload->id);
+
+    expect(UserVariant::count())->toBe($stored)
+        ->and($upload->refresh()->stored_count)->toBe($stored)
+        ->and($upload->found_count)->toBe(6)
+        ->and(GeneVariant::where('status', LookupStatus::Pending)->count())->toBe($pending);
+})->with([
+    'raw export' => ["# rsid\tchromosome\tposition\tgenotype\nrs1801133\t1\t1\tAG\nrs90000051\t1\t2\tAG\nrs90000052\t1\t3\tAG\nrs90000053\t1\t4\tAG\nrs90000054\t1\t5\tAG\nrs90000055\t1\t6\tAG\n", 'txt', 1, 0],
+    'marker CSV' => ["rsid,genotype\nrs1801133,AG\nrs90000051,AG\nrs90000052,AG\nrs90000053,AG\nrs90000054,AG\nrs90000055,AG\n", 'csv', 6, 5],
+]);
+
 it('lets a second upload update an existing genotype so the newest wins', function () {
     $first = queuedUpload($this->user, "rsid,genotype\nrs90000031,AG\nrs90000032,CC\n", 'csv', 'first.csv', isFixture: false);
     ProcessGeneticUpload::dispatchSync($first->id);
