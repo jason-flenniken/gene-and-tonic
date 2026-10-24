@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:53:17.114Z",
+  "updated": "2026-10-24T20:53:52.908Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -380,16 +380,19 @@
             "Modules/Genetics/tests/Unit/LookupResultBuilderTest.php"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "security controls on public actions and stored URLs",
-          "substep": "reviewing",
           "branch": "task/genetics-module/supplements-hardening",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--supplements-hardening",
           "base": "ea13f8c5e382f4d07f96ffd2460fbed7e29ef95e",
           "startedAt": "2026-10-24T20:49:44.411Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T20:53:52.908Z",
+          "tip": "a810ad4",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "b549616157f3fdc4b32cbe5007b97744ee64a125"
         },
         {
           "id": "genetics-hardening",
@@ -462,6 +465,12 @@
       "at": "2026-10-24T20:46:44.360Z",
       "reason": "changed outside task \"Recommendations matching and panel\" scope (found at task done)",
       "task": "recommendations-panel"
+    },
+    {
+      "path": "Modules/Supplements/config/config.php",
+      "at": "2026-10-24T20:53:52.907Z",
+      "reason": "changed outside task \"Supplements rate limits, reaper, URL validation\" scope (found at task done)",
+      "task": "supplements-hardening"
     }
   ],
   "log": [
@@ -798,6 +807,21 @@
       "at": "2026-10-24T20:53:17.114Z",
       "event": "task done",
       "detail": "Genetics reaper and large-file parse test"
+    },
+    {
+      "at": "2026-10-24T20:53:40.076Z",
+      "event": "task merging",
+      "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:53:52.908Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/config/config.php"
+    },
+    {
+      "at": "2026-10-24T20:53:52.908Z",
+      "event": "task done",
+      "detail": "Supplements rate limits, reaper, URL validation"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1526,6 +1550,36 @@
       ],
       "from": "implementer",
       "at": "2026-10-24T20:52:40.920Z"
+    },
+    {
+      "id": "s70",
+      "area": "security",
+      "text": "Store the sanitized (trimmed) source URL, not the raw one",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:53:32.046Z"
+    },
+    {
+      "id": "s71",
+      "area": "security",
+      "text": "Mark the show page's supplementId #[Locked]",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:53:32.108Z"
+    },
+    {
+      "id": "s72",
+      "area": "quality",
+      "text": "Decide/document whether a late job may flip a reaped Failed run back to Complete",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:53:32.171Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
