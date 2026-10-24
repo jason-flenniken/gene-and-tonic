@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:44:14.918Z",
+  "updated": "2026-10-24T16:46:33.674Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -31,7 +31,142 @@
       "hash": "38be9999825d6762"
     }
   },
-  "phases": [],
+  "phases": [
+    {
+      "id": "first-pdf",
+      "name": "First PDF end to end",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "shared-page-actions",
+          "name": "Shared page-action slot",
+          "covers": [
+            "FR-16"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Shared/**",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/tests/Feature/PageActionsSlotTest.php",
+            "Modules/Supplements/tests/Unit/BoundaryTest.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "clinical-report",
+          "name": "Clinical PDF report",
+          "covers": [
+            "FR-01",
+            "FR-02",
+            "FR-03",
+            "FR-04",
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09",
+            "FR-10",
+            "FR-11",
+            "FR-12",
+            "FR-13",
+            "FR-15",
+            "FR-18"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Reports/**",
+            "modules_statuses.json",
+            "Modules/Supplements/app/Testing/**",
+            "Modules/Supplements/tests/Feature/FakeSupplementResearchReaderTest.php"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new public route taking untrusted input, model and scraped text rendered into HTML that Chrome executes, launches a local process"
+        }
+      ]
+    },
+    {
+      "id": "templates-and-button",
+      "name": "Second template, download button, docs",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "modern-template",
+          "name": "Modern template and section overrides",
+          "covers": [
+            "FR-11",
+            "FR-12",
+            "FR-13",
+            "FR-14",
+            "FR-15"
+          ],
+          "blockedBy": [
+            "clinical-report"
+          ],
+          "scope": [
+            "Modules/Reports/resources/views/templates/**",
+            "Modules/Reports/resources/views/sections/**",
+            "Modules/Reports/config/**",
+            "Modules/Reports/app/Services/**",
+            "Modules/Reports/tests/Feature/TemplatesTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new template renders model and scraped text into HTML that Chrome executes"
+        },
+        {
+          "id": "download-menu",
+          "name": "Download menu on the detail page",
+          "covers": [
+            "FR-17"
+          ],
+          "blockedBy": [
+            "shared-page-actions",
+            "clinical-report"
+          ],
+          "scope": [
+            "Modules/Reports/resources/views/components/**",
+            "Modules/Reports/app/Providers/ReportsServiceProvider.php",
+            "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "chrome-render-and-docs",
+          "name": "Real Chrome render test and docs",
+          "covers": [
+            "FR-19",
+            "FR-20"
+          ],
+          "blockedBy": [
+            "modern-template",
+            "download-menu"
+          ],
+          "scope": [
+            "CLAUDE.md",
+            ".env.example",
+            "Modules/Reports/tests/Feature/ChromeRenderTest.php",
+            "Modules/Supplements/app/Data/SupplementResearchData.php",
+            "Modules/Supplements/app/Contracts/SupplementResearchReader.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        }
+      ]
+    }
+  ],
   "evidence": {},
   "drift": [],
   "log": [
@@ -58,6 +193,11 @@
       "at": "2026-10-24T16:44:14.918Z",
       "event": "advanced",
       "detail": "plan"
+    },
+    {
+      "at": "2026-10-24T16:46:33.674Z",
+      "event": "plan loaded",
+      "detail": "2 phases, 5 tasks"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -139,5 +279,6 @@
       "declines": "research-intelligence-dashboard:s79",
       "at": "2026-10-24T16:36:13.854Z"
     }
-  ]
+  ],
+  "planHash": "5bc9c3ce6894effc"
 }
