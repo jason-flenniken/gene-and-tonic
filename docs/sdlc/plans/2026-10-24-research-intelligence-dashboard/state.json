@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:52:36.623Z",
+  "updated": "2026-10-24T16:10:07.260Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -341,6 +341,12 @@
       "result": "pass",
       "at": "2026-10-24T15:52:36.523Z",
       "note": "tests: 126 passing (Pint, PHPStan L7 clean), build ok; 21/21 FRs met (FR-13 timeout env gap fixed in b30ce42), FR-10 partially untested (logged); NFR-03 live timing not verifiable without keys; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-24T16:10:07.260Z",
+      "note": "3 Required fixed (queue retry overlap, cost by alias, dead code) + lock TTL fixed by hand at user's choice; 129 tests green; follow-ups logged",
+      "blocking": 0
     }
   },
   "drift": [
@@ -737,6 +743,26 @@
       "at": "2026-10-24T15:52:36.622Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-24T15:52:41.889Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-24T16:04:06.530Z",
+      "event": "step",
+      "detail": "fixing (3)"
+    },
+    {
+      "at": "2026-10-24T16:06:06.549Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-24T16:10:07.260Z",
+      "event": "review pass",
+      "detail": "3 Required fixed (queue retry overlap, cost by alias, dead code) + lock TTL fixed by hand at user's choice; 129 tests green; follow-ups logged"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1273,6 +1299,161 @@
       ],
       "from": "check",
       "at": "2026-10-24T15:51:52.816Z"
+    },
+    {
+      "id": "s54",
+      "area": "security",
+      "text": "Rate-limit add, retry and re-run together (session/IP) plus a per-supplement cooldown in claimRun; retries re-run the paid search",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:54:07.325Z"
+    },
+    {
+      "id": "s55",
+      "area": "security",
+      "text": "Accept a model-supplied PMID only for PubMed sources or when the digits appear in the cited source",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:54:07.407Z"
+    },
+    {
+      "id": "s56",
+      "area": "docs",
+      "text": "Plan docs (state.json, decisions.md) contain absolute local paths; strip or ignore before any public push",
+      "where": [
+        "docs/sdlc/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:54:07.485Z"
+    },
+    {
+      "id": "s57",
+      "area": "quality",
+      "text": "Log ai_requests rows for any Throwable in the text generator (catch, log, rethrow) like the Firecrawl driver, so every call writes a row",
+      "where": [
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:05.831Z"
+    },
+    {
+      "id": "s58",
+      "area": "tests",
+      "text": "StatsTest imports Intelligence's private AiRequest model; move the cross-module overview assertion to tests/Feature/DashboardTest.php and seed usage via a public Intelligence Testing helper",
+      "where": [
+        "Modules/Supplements/tests/Feature/StatsTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:05.899Z"
+    },
+    {
+      "id": "s59",
+      "area": "tests",
+      "text": "FR-11 test inserts ai_requests status 'ok' (invalid) and can't fail without an FK; use 'success' or the real UsageLogger write path",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:05.967Z"
+    },
+    {
+      "id": "s60",
+      "area": "perf",
+      "text": "Send Firecrawl a server timeout (~55000ms) below the 60s client timeout so slow searches return Firecrawl's timeout instead of a connection error",
+      "where": [
+        "Modules/Intelligence/config/config.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.033Z"
+    },
+    {
+      "id": "s61",
+      "area": "ux",
+      "text": "Effect 'outcome' is a free string truncated to 50 chars; make it an enum (positive|negative|mixed|none) or describe it in the instructions",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.095Z"
+    },
+    {
+      "id": "s62",
+      "area": "perf",
+      "text": "max_output_tokens 8000 covers reasoning tokens too; watch first live run, raise to ~16000 if Length failures appear, and don't retry Length",
+      "where": [
+        "Modules/Supplements/config/config.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.158Z"
+    },
+    {
+      "id": "s63",
+      "area": "ux",
+      "text": "Detail page doesn't poll during active research; add conditional wire:poll.3s like the catalog",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.231Z"
+    },
+    {
+      "id": "s64",
+      "area": "ux",
+      "text": "hasActiveRuns checks only the current page; ask the repository whether any run is active",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.304Z"
+    },
+    {
+      "id": "s65",
+      "area": "quality",
+      "text": "Supplements depends on the app shell via <x-tabs> and route('home'); move tabs into Shared later",
+      "where": [
+        "resources/views/components/tabs/**"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.381Z"
+    },
+    {
+      "id": "s66",
+      "area": "docs",
+      "text": "Add commented RESEARCH_DRIVER, FIRECRAWL_TIMEOUT, FIRECRAWL_MAX_RESULTS, AI_LOG_REQUESTS with defaults",
+      "where": [
+        ".env.example"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.452Z"
+    },
+    {
+      "id": "s67",
+      "area": "tests",
+      "text": "Add a behavioural overlap test (held lock drops the duplicate run) and tie expireAfter to retry_after/timeout so a config change can't silently break the margin",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T16:06:53.251Z"
+    },
+    {
+      "id": "s68",
+      "area": "tests",
+      "text": "Drop the redundant toBeGreaterThan(0.0) next to toBe(0.022) in the dated-model pricing test",
+      "where": [
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:10:07.196Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "review",
+    "name": "rechecking",
+    "at": "2026-10-24T16:06:06.548Z"
+  }
 }
