@@ -5,8 +5,10 @@ namespace Modules\Genetics\Providers;
 use Livewire\Livewire;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
+use Modules\Genetics\Support\Extraction\AiMarkerExtractor;
+use Modules\Genetics\Support\Extraction\LocalTextExtractor;
 use Modules\Genetics\Support\Extraction\MarkerExtractor;
-use Modules\Genetics\Support\Extraction\NullMarkerExtractor;
+use Modules\Genetics\Support\Extraction\TextExtractor;
 use Modules\Intelligence\Contracts\ProfileRegistry;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
@@ -45,7 +47,9 @@ class GeneticsServiceProvider extends ModuleServiceProvider
             classViewPath: module_path($this->name, 'resources/views/livewire'),
         );
 
-        $this->app->make(ProfileRegistry::class)->register('genetics.lookup', config('genetics.lookup_profile'));
+        $registry = $this->app->make(ProfileRegistry::class);
+        $registry->register('genetics.extract', config('genetics.extract_profile'));
+        $registry->register('genetics.lookup', config('genetics.lookup_profile'));
     }
 
     public function register(): void
@@ -55,6 +59,7 @@ class GeneticsServiceProvider extends ModuleServiceProvider
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 
         $this->app->bind(GeneticProfileReader::class, EloquentGeneticProfileReader::class);
-        $this->app->bind(MarkerExtractor::class, NullMarkerExtractor::class);
+        $this->app->bind(TextExtractor::class, LocalTextExtractor::class);
+        $this->app->bind(MarkerExtractor::class, AiMarkerExtractor::class);
     }
 }

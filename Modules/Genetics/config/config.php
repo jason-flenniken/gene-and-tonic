@@ -30,6 +30,25 @@ return [
         'prompt' => 'genetics::prompts.lookup',
     ],
 
+    /*
+    | AI profile used to pull markers out of a pdf or unrecognised file.
+    | Registered with Intelligence as "genetics.extract" when the module boots.
+    */
+    'extract_profile' => [
+        'provider' => env('AI_GENETICS_EXTRACT_PROVIDER', 'openai'),
+        'model' => env('AI_GENETICS_EXTRACT_MODEL', 'gpt-6-luna'),
+        'effort' => env('AI_GENETICS_EXTRACT_EFFORT', 'low'),
+        'max_tokens' => (int) env('AI_GENETICS_EXTRACT_MAX_TOKENS', 4000),
+        'timeout' => (int) env('AI_GENETICS_EXTRACT_TIMEOUT', 60),
+        'instructions' => 'genetics::prompts.extract-instructions',
+        'prompt' => 'genetics::prompts.extract',
+    ],
+
+    'extract' => [
+        // Most characters of marker lines sent to the model in one call.
+        'max_chars' => (int) env('GENETICS_EXTRACT_MAX_CHARS', 20000),
+    ],
+
     'lookup' => [
         'domains' => array_values(array_filter(array_map(
             'trim',
