@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:41:45.060Z",
+  "updated": "2026-10-24T15:46:38.079Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -278,10 +278,16 @@
             "Modules/Supplements/tests/Unit/**"
           ],
           "complexity": "complex",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "sends untrusted scraped content to the model, persists model output, controls API spend"
+          "riskReason": "sends untrusted scraped content to the model, persists model output, controls API spend",
+          "substep": "implementing",
+          "branch": "task/research-intelligence-dashboard/research-pipeline",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--research-pipeline",
+          "base": "9dbaa054fb8667fcb957c3bf2b784de0fdc2a51a",
+          "startedAt": "2026-10-24T15:42:08.212Z",
+          "level": "standard"
         },
         {
           "id": "overview-and-usage",
@@ -303,9 +309,18 @@
             "Modules/Supplements/tests/Feature/Stats*"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "branch": "task/research-intelligence-dashboard/overview-and-usage",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--overview-and-usage",
+          "base": "9dbaa054fb8667fcb957c3bf2b784de0fdc2a51a",
+          "startedAt": "2026-10-24T15:42:12.996Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:46:38.078Z",
+          "tip": "d80fd66",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "556666a2878bbce62725e14c39a33768a88e2ab6"
         }
       ]
     }
@@ -620,6 +635,41 @@
       "at": "2026-10-24T15:41:45.059Z",
       "event": "phase finished",
       "detail": "Intelligence and catalog (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T15:42:08.212Z",
+      "event": "task started",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:42:08.294Z",
+      "event": "task implementing",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:42:12.997Z",
+      "event": "task started",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:42:13.081Z",
+      "event": "task implementing",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:45:51.096Z",
+      "event": "task reviewing",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:46:31.648Z",
+      "event": "task merging",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:46:38.079Z",
+      "event": "task done",
+      "detail": "Overview and AI usage tabs"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1026,6 +1076,46 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T15:41:28.572Z"
+    },
+    {
+      "id": "s41",
+      "area": "tests",
+      "text": "Add an AiRequest factory; usage tests currently create rows through a local helper",
+      "where": [
+        "Modules/Intelligence/database/factories/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:45:50.896Z"
+    },
+    {
+      "id": "s42",
+      "area": "perf",
+      "text": "Index ai_requests on created_at/status if usage grows; 24h and failed aggregates scan the table",
+      "where": [
+        "Modules/Intelligence/database/migrations/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:45:50.965Z"
+    },
+    {
+      "id": "s43",
+      "area": "ux",
+      "text": "Overview widgets don't poll; consider wire:poll while research is active so counts update live",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:45:51.032Z"
+    },
+    {
+      "id": "s44",
+      "area": "tests",
+      "text": "Assert the supplement total via the data-stat=\"total\" element instead of a bare '10'",
+      "where": [
+        "Modules/Supplements/tests/Feature/StatsTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:46:31.584Z"
     }
   ]
 }
