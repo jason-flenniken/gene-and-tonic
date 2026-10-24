@@ -6,8 +6,8 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:44:12.198Z",
-  "stage": "prd",
+  "updated": "2026-10-24T16:44:14.918Z",
+  "stage": "plan",
   "stageHistory": [
     {
       "stage": "discover",
@@ -16,6 +16,10 @@
     {
       "stage": "prd",
       "at": "2026-10-24T16:42:54.158Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-24T16:44:14.917Z"
     }
   ],
   "paused": null,
@@ -49,6 +53,11 @@
       "at": "2026-10-24T16:44:12.198Z",
       "event": "PRD approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T16:44:14.918Z",
+      "event": "advanced",
+      "detail": "plan"
     }
   ],
   "cairnVersion": "0.3.0",
