@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:24:57.415Z",
+  "updated": "2026-10-24T15:25:43.643Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "foundations",
       "name": "Foundations",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "module-foundations",
@@ -70,16 +70,19 @@
             "Modules/Supplements/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "adds the laravel/ai dependency and API-key env vars",
-          "substep": "reviewing",
           "branch": "task/research-intelligence-dashboard/module-foundations",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--module-foundations",
           "base": "23945f9d4536fbd0481c12ebef9a6b3a068e833f",
           "startedAt": "2026-10-24T15:20:57.245Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T15:25:43.643Z",
+          "tip": "f3092f3",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "e3465a471f2857f36638491d34028049f3d2be49"
         },
         {
           "id": "dashboard-shell",
@@ -272,7 +275,14 @@
     }
   ],
   "evidence": {},
-  "drift": [],
+  "drift": [
+    {
+      "path": "phpstan.neon",
+      "at": "2026-10-24T15:25:43.643Z",
+      "reason": "changed outside task \"Module foundations\" scope (found at task done)",
+      "task": "module-foundations"
+    }
+  ],
   "log": [
     {
       "at": "2026-10-24T14:18:08.365Z",
@@ -368,6 +378,21 @@
       "at": "2026-10-24T15:24:57.415Z",
       "event": "task done",
       "detail": "Dashboard shell"
+    },
+    {
+      "at": "2026-10-24T15:25:27.901Z",
+      "event": "task merging",
+      "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:25:43.643Z",
+      "event": "drift",
+      "detail": "phpstan.neon"
+    },
+    {
+      "at": "2026-10-24T15:25:43.643Z",
+      "event": "task done",
+      "detail": "Module foundations"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -434,6 +459,26 @@
       ],
       "from": "implementer",
       "at": "2026-10-24T15:24:35.768Z"
+    },
+    {
+      "id": "s7",
+      "area": "security",
+      "text": "Ignore all .env.* variants (add .env.* with !.env.example) now that real API keys are in play",
+      "where": [
+        ".gitignore"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:25:27.639Z"
+    },
+    {
+      "id": "s8",
+      "area": "tests",
+      "text": "Unit test dirs don't extend TestCase, so the stray-request guard doesn't cover them; keep network code out of Unit tests or extend TestCase there",
+      "where": [
+        "tests/Pest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:25:27.766Z"
     }
   ]
 }
