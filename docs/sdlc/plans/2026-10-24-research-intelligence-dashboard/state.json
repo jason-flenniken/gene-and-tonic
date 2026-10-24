@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:34:00.950Z",
+  "updated": "2026-10-24T15:35:33.150Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -168,16 +168,19 @@
             "resources/views/pages/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 1,
           "risky": true,
           "riskReason": "untrusted input, new migrations, and deletes",
-          "substep": "fixing",
           "branch": "task/research-intelligence-dashboard/supplements-catalog",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--supplements-catalog",
           "base": "824e3b102d8d8bea3d432bc4ef20417a3bebfd18",
           "startedAt": "2026-10-24T15:26:18.068Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T15:35:33.149Z",
+          "tip": "366b5e1",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "b904ca73f6f39fc08635986185991dd77e2b22f7"
         },
         {
           "id": "intelligence-web-research",
@@ -194,10 +197,16 @@
             "Modules/Intelligence/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "new external integration returning untrusted scraped content; API key handling"
+          "riskReason": "new external integration returning untrusted scraped content; API key handling",
+          "substep": "implementing",
+          "branch": "task/research-intelligence-dashboard/intelligence-web-research",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--intelligence-web-research",
+          "base": "ed780b02d0cfa9df92d4b7304d406a3d77bd04df",
+          "startedAt": "2026-10-24T15:34:14.866Z",
+          "level": "standard"
         },
         {
           "id": "supplement-page",
@@ -458,6 +467,26 @@
       "at": "2026-10-24T15:34:00.950Z",
       "event": "task done",
       "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:34:14.867Z",
+      "event": "task started",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:34:14.951Z",
+      "event": "task implementing",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:35:26.532Z",
+      "event": "task merging",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:35:33.150Z",
+      "event": "task done",
+      "detail": "Supplements catalog"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -714,6 +743,16 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T15:33:54.602Z"
+    },
+    {
+      "id": "s26",
+      "area": "quality",
+      "text": "claimRun's active-run loss path relies on a thrown unique violation; comment it or check for an existing row before the insert",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:35:26.462Z"
     }
   ]
 }
