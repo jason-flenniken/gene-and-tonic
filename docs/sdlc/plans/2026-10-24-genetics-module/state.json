@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T19:58:13.102Z",
+  "updated": "2026-10-24T20:21:02.983Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -205,10 +205,19 @@
             ".gitignore"
           ],
           "complexity": "complex",
-          "status": "pending",
-          "fixRound": 0,
+          "status": "done",
+          "fixRound": 1,
           "risky": true,
-          "riskReason": "untrusted file upload, file paths, personal data at rest, deletes raw files"
+          "riskReason": "untrusted file upload, file paths, personal data at rest, deletes raw files",
+          "branch": "task/genetics-module/upload-parsing",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--upload-parsing",
+          "base": "4a466b55fb9e8bb70a2945df053b1d69e99996eb",
+          "startedAt": "2026-10-24T19:58:18.168Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:21:02.982Z",
+          "tip": "be4fcae",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "fc6ba8c4df87ed10383af807df4f6d45c8901d35"
         },
         {
           "id": "gene-lookup",
@@ -547,6 +556,36 @@
       "at": "2026-10-24T19:58:13.102Z",
       "event": "phase finished",
       "detail": "Sign-in, genetic profile, gene interactions (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T19:58:18.169Z",
+      "event": "task started",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T19:58:35.495Z",
+      "event": "task implementing",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:16:27.617Z",
+      "event": "task reviewing",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:18:14.427Z",
+      "event": "task fixing",
+      "detail": "Upload with deterministic parsing (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T20:20:51.587Z",
+      "event": "task merging",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:21:02.983Z",
+      "event": "task done",
+      "detail": "Upload with deterministic parsing"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -895,6 +934,116 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T19:57:47.690Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Real-browser check of a 25 MB upload once Herd upload limits are raised",
+      "where": [
+        "Modules/Genetics/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:16:27.408Z"
+    },
+    {
+      "id": "s33",
+      "area": "quality",
+      "text": "Re-check Livewire temp-upload metadata cleanup (FileUploadConfiguration internals) after each Livewire upgrade",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:16:27.478Z"
+    },
+    {
+      "id": "s34",
+      "area": "security",
+      "text": "genetics:reap-stale should also delete raw files left on uploads stuck in Queued/Parsing",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:16:27.548Z"
+    },
+    {
+      "id": "s35",
+      "area": "security",
+      "text": "Set Livewire temporary upload middleware to auth + a per-user throttle instead of the default 60/min per IP",
+      "where": [
+        "config/livewire.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.191Z"
+    },
+    {
+      "id": "s36",
+      "area": "security",
+      "text": "Scheduled prune of genetics livewire-tmp files older than 1h and of uploads stuck active with their files",
+      "where": [
+        "Modules/Genetics/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.255Z"
+    },
+    {
+      "id": "s37",
+      "area": "tests",
+      "text": "Exercise the real genetics temp disk and .json sidecar deletion instead of Livewire's tmp-for-tests disk",
+      "where": [
+        "Modules/Genetics/tests/Feature/UploadPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.318Z"
+    },
+    {
+      "id": "s38",
+      "area": "quality",
+      "text": "Bound fgets line length (e.g. 8192) and skip or fail on over-long lines",
+      "where": [
+        "Modules/Genetics/app/Support/Parsing/Lines.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.383Z"
+    },
+    {
+      "id": "s39",
+      "area": "security",
+      "text": "Use RateLimiter::attempt for atomic check-and-hit on upload/add limits",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.451Z"
+    },
+    {
+      "id": "s40",
+      "area": "security",
+      "text": "original_name / user_variants.source may contain a person's name: document as personal data or encrypt",
+      "where": [
+        "Modules/Genetics/database/migrations/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.514Z"
+    },
+    {
+      "id": "s41",
+      "area": "quality",
+      "text": "Document that the last attempt marks Failed and swallows (no failed_jobs row); count found_count after rsid de-dup",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:18:14.364Z"
+    },
+    {
+      "id": "s42",
+      "area": "quality",
+      "text": "Pass a default to config('genetics.max_marker_rows') so a missing key doesn't reject every marker list",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:20:51.519Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
