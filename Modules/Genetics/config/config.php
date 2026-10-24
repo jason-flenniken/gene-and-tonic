@@ -10,6 +10,11 @@ return [
     'max_upload_kb' => (int) env('GENETICS_MAX_UPLOAD_KB', 25600),
 
     /*
+    | Minutes an upload or lookup may stay active before genetics:reap-stale fails it.
+    */
+    'reap_after_minutes' => (int) env('GENETICS_REAP_AFTER_MINUTES', 15),
+
+    /*
     | Most rows a marker list (or extracted PDF) may hold. Every row is stored and
     | an unknown rsID creates a shared pending reference row, so a longer list
     | fails before anything is written. Raw DNA exports have no such cap.

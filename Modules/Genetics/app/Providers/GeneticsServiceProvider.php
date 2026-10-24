@@ -4,6 +4,7 @@ namespace Modules\Genetics\Providers;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
+use Modules\Genetics\Console\DemoFilesCommand;
 use Modules\Genetics\Console\ReapStaleCommand;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
@@ -53,7 +54,7 @@ class GeneticsServiceProvider extends ModuleServiceProvider
         $registry->register('genetics.extract', config('genetics.extract_profile'));
         $registry->register('genetics.lookup', config('genetics.lookup_profile'));
 
-        $this->commands([ReapStaleCommand::class]);
+        $this->commands([ReapStaleCommand::class, DemoFilesCommand::class]);
 
         $this->app->booted(function (): void {
             $this->app->make(Schedule::class)
