@@ -6,8 +6,8 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:16:39.036Z",
-  "stage": "review",
+  "updated": "2026-10-24T17:16:39.152Z",
+  "stage": "ship",
   "stageHistory": [
     {
       "stage": "discover",
@@ -32,6 +32,10 @@
     {
       "stage": "review",
       "at": "2026-10-24T17:11:19.675Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-24T17:16:39.151Z"
     }
   ],
   "paused": null,
@@ -497,6 +501,11 @@
       "at": "2026-10-24T17:16:39.036Z",
       "event": "review pass",
       "detail": "2 Required fixed (test helper isolation, Modern title text); 27 follow-ups logged this plan"
+    },
+    {
+      "at": "2026-10-24T17:16:39.152Z",
+      "event": "advanced",
+      "detail": "ship"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -850,10 +859,5 @@
     }
   ],
   "planHash": "5bc9c3ce6894effc",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "review",
-    "name": "rechecking",
-    "at": "2026-10-24T17:16:08.957Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
