@@ -142,11 +142,11 @@ final class ResearchFindingsBuilder
         $gene = is_string($item['gene'] ?? null) ? strtoupper(trim($item['gene'])) : '';
         $relation = is_string($item['relation'] ?? null) ? GeneRelation::tryFrom(strtolower(trim($item['relation']))) : null;
         $keys = self::validKeys($item['source_ids'] ?? null, $byId);
-        $rsid = self::optionalMatch($item['rsid'] ?? null, '/^rs\d{1,10}$/', false);
-        $allele = self::optionalMatch($item['allele'] ?? null, '/^[ACGTDI]$/', true);
+        $rsid = self::rsid($item['rsid'] ?? null);
+        $allele = $rsid === null ? null : self::allele($item['allele'] ?? null);
 
         if (preg_match('/^[A-Z0-9-]{1,15}$/', $gene) !== 1 || $relation === null || $keys === []
-            || $rsid === false || $allele === false || ! is_string($item['explanation'] ?? null)) {
+            || ! is_string($item['explanation'] ?? null)) {
             return null;
         }
 
@@ -167,21 +167,35 @@ final class ResearchFindingsBuilder
     }
 
     /**
-     * Null or blank is a valid "not given"; anything else must match the pattern. Returns false when invalid.
+     * Models write rsIDs as published ("RS1801133", "rs1801133 (C677T)"), so the first rsID token is taken.
+     * Without one the interaction stays, matching on the gene alone.
      */
-    private static function optionalMatch(mixed $value, string $pattern, bool $upper): string|false|null
+    private static function rsid(mixed $value): ?string
     {
-        if ($value === null || (is_string($value) && trim($value) === '')) {
+        if (is_string($value) && preg_match('/\brs\d{1,10}\b/', strtolower($value), $m) === 1) {
+            return $m[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Keeps a single effect-allele letter, takes the trailing base of an HGVS-style "C677T" or "677T",
+     * and otherwise returns null so the interaction matches on the rsID alone.
+     */
+    private static function allele(mixed $value): ?string
+    {
+        if (! is_string($value)) {
             return null;
         }
 
-        if (! is_string($value)) {
-            return false;
+        $value = strtoupper(trim($value));
+
+        if (preg_match('/^[ACGTDI]$/', $value) === 1) {
+            return $value;
         }
 
-        $value = $upper ? strtoupper(trim($value)) : trim($value);
-
-        return preg_match($pattern, $value) === 1 ? $value : false;
+        return preg_match('/^[ACGT]?\d+([ACGT])$/', $value, $m) === 1 ? $m[1] : null;
     }
 
     /**

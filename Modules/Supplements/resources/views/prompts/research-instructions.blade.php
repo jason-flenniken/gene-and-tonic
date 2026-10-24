@@ -11,6 +11,6 @@ Rules:
 - Return no finding you cannot cite to at least one provided source.
 - Write plain text only. Do not use markdown or HTML.
 - Put dosage warnings, interactions and other safety information in safety_notes.
-- gene_interactions lists published gene-supplement interactions for this supplement: the gene symbol, the rsID and allele exactly as published (or null when the source gives none), a relation of helps, caution or related, and a one or two sentence explanation.
+- gene_interactions lists published gene-supplement interactions for this supplement: the gene symbol, the rsid (a bare rsID such as rs1801133, or null), the allele (the single effect-allele letter A, C, G or T as published, for example T for MTHFR C677T, or null if not stated), a relation of helps, caution or related, and a one or two sentence explanation.
 - Report generic population-level interactions only. Never address or assume any individual's genotype.
 - Cite each gene interaction through source_ids, and omit any you cannot cite to a provided source.

@@ -94,11 +94,26 @@ it('drops gene interactions that are uncited or carry invalid fields', function 
     'no source ids' => [['source_ids' => []]],
     'relation cure' => [['relation' => 'cure']],
     'html gene' => [['gene' => '<b>X</b>']],
-    'bad rsid' => [['rsid' => 'rs1; DROP']],
-    'bad allele' => [['allele' => 'Z']],
-    'multi-char allele' => [['allele' => 'AG']],
     'blank explanation' => [['explanation' => '  [S1] ']],
     'non-string gene' => [['gene' => ['MTHFR']]],
+]);
+
+it('normalises the allele and rsid and keeps the interaction when they are unusable', function (array $overrides, ?string $rsid, ?string $allele) {
+    $findings = ResearchFindingsBuilder::build(unitOutput(['gene_interactions' => [unitInteraction($overrides)]]), unitSources());
+
+    expect($findings->geneInteractions)->toHaveCount(1)
+        ->and($findings->geneInteractions[0])->toMatchArray(['gene' => 'MTHFR', 'rsid' => $rsid, 'allele' => $allele]);
+})->with([
+    'HGVS allele C677T' => [['allele' => 'C677T'], 'rs1801133', 'T'],
+    'HGVS allele 677T' => [['allele' => '677T'], 'rs1801133', 'T'],
+    'genotype TT' => [['allele' => 'TT'], 'rs1801133', null],
+    'slash alleles' => [['allele' => 'C/T'], 'rs1801133', null],
+    'junk allele' => [['allele' => 'Z'], 'rs1801133', null],
+    'non-string allele' => [['allele' => ['T']], 'rs1801133', null],
+    'upper-case rsid' => [['rsid' => 'RS1801133'], 'rs1801133', 'T'],
+    'rsid with annotation' => [['rsid' => 'rs1801133 (C677T)'], 'rs1801133', 'T'],
+    'junk rsid drops the allele too' => [['rsid' => 'C677T'], null, null],
+    'non-string rsid' => [['rsid' => 1801133], null, null],
 ]);
 
 it('treats missing or malformed gene_interactions as none', function (mixed $value) {
