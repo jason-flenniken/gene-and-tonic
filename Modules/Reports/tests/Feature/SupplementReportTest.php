@@ -80,13 +80,19 @@ it('returns 404 for an unknown supplement', function () {
     assertNoPdfResponded();
 });
 
-it('returns 404 while research is still running', function () {
-    $this->reader->with(reportResearch(['status' => ResearchStatus::Analyzing]));
-
+it('returns 404 for a supplement with no research', function () {
     $this->get(reportUrl())->assertNotFound();
 
     assertNoPdfResponded();
 });
+
+it('returns 404 while research is still running', function (ResearchStatus $status) {
+    $this->reader->with(reportResearch(['status' => $status]));
+
+    $this->get(reportUrl())->assertNotFound();
+
+    assertNoPdfResponded();
+})->with([ResearchStatus::Queued, ResearchStatus::Searching, ResearchStatus::Analyzing]);
 
 it('returns 404 for failed research without leaking the error', function () {
     $this->reader->with(reportResearch(['status' => ResearchStatus::Failed, 'error' => 'Provider key sk-secret rejected']));
