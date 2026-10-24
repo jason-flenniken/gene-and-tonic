@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:41:34.890Z",
+  "updated": "2026-10-24T15:41:39.803Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -115,7 +115,7 @@
     {
       "id": "engines",
       "name": "Intelligence and catalog",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "intelligence-text-generation",
@@ -232,16 +232,19 @@
             "Modules/Supplements/tests/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "renders model output and scraped titles to the browser",
-          "substep": "merging",
           "branch": "task/research-intelligence-dashboard/supplement-page",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--supplement-page",
           "base": "aa8d20ec9b44b4f41a4e3a6782421e383192c5af",
           "startedAt": "2026-10-24T15:35:45.675Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T15:41:39.803Z",
+          "tip": "79c30a4",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "1c4df7d6cd1845e5e896c4bc0c1af28204196586"
         }
       ]
     },
@@ -314,6 +317,42 @@
       "at": "2026-10-24T15:25:43.643Z",
       "reason": "changed outside task \"Module foundations\" scope (found at task done)",
       "task": "module-foundations"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/Supplement.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementEffect.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementMechanism.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementResearch.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementSource.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementStudy.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
     }
   ],
   "log": [
@@ -541,6 +580,41 @@
       "at": "2026-10-24T15:41:34.890Z",
       "event": "task done",
       "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/Supplement.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementEffect.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementMechanism.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementResearch.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementSource.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementStudy.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "task done",
+      "detail": "Supplement page and reader"
     }
   ],
   "cairnVersion": "0.3.0",
