@@ -90,7 +90,7 @@ These rules are not enforced automatically yet. When the first two modules exist
 
 - **Genetic data is sensitive.** Raw uploads and genotypes stay inside Genetics, stored with encrypted casts and private storage. Other modules, including the AI calls, receive only the summarized `GeneticProfile` DTO.
 - **There is no authentication yet.** Genetic data, recommendations and reports belong to a `User`, so add auth before building Genetics.
-- **AI calls go only through the Intelligence contract.** Nothing outside Intelligence talks to a provider SDK or HTTP API. Tests bind the Intelligence fake and never hit a real API. The provider/SDK is not chosen yet.
+- **AI calls go only through the Intelligence contract.** Nothing outside Intelligence talks to a provider SDK or HTTP API. Tests bind the Intelligence fake and never hit a real API. The AI layer is `laravel/ai` (pinned `^1.3`, migrations never published) behind Intelligence contracts. Firecrawl is called over REST through `Http` (no SDK). Tests run with `Http::preventStrayRequests()` (set in `tests/TestCase.php`).
 - **PDF reports render from DTOs only.** Reports never queries other modules' tables.
 - **PDFs use spatie/laravel-pdf v2 with the `chrome` driver** (chrome-php driving a local Chrome/Chromium binary, so no Node or Puppeteer). The default is set in `config/laravel-pdf.php`. Only the Reports module uses the `Pdf` facade.
   - Chrome renders modern CSS, so report views can use Tailwind.

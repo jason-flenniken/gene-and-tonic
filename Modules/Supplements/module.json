@@ -1,0 +1,11 @@
+{
+    "name": "Supplements",
+    "alias": "supplements",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Supplements\\Providers\\SupplementsServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,30 @@
+{
+    "name": "modules/intelligence",
+    "description": "AI gateway and web research module. May depend on: Shared.",
+    "authors": [
+        {
+            "name": "Jason Flenniken",
+            "email": "jason.flenniken@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Intelligence\\": "app/",
+            "Modules\\Intelligence\\Database\\Factories\\": "database/factories/",
+            "Modules\\Intelligence\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Intelligence\\Tests\\": "tests/"
+        }
+    }
+}

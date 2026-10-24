@@ -1,0 +1,30 @@
+{
+    "name": "modules/supplements",
+    "description": "Supplement catalog and research module. May depend on: Intelligence, Shared.",
+    "authors": [
+        {
+            "name": "Jason Flenniken",
+            "email": "jason.flenniken@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Supplements\\": "app/",
+            "Modules\\Supplements\\Database\\Factories\\": "database/factories/",
+            "Modules\\Supplements\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Supplements\\Tests\\": "tests/"
+        }
+    }
+}

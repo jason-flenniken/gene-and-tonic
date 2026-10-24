@@ -16,3 +16,9 @@ parameters:
         - Modules/*/tests/*
 
     level: 7
+
+    ignoreErrors:
+        # Consumed by DTOs in later tasks; remove once a production class uses it.
+        -
+            identifier: trait.unused
+            path: Modules/Shared/app/Data/Concerns/ArrayableData.php
