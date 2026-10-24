@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:47:44.466Z",
+  "updated": "2026-10-24T16:50:21.045Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -61,9 +61,18 @@
             "Modules/Supplements/tests/Unit/BoundaryTest.php"
           ],
           "complexity": "simple",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "branch": "task/supplement-pdf-reports/shared-page-actions",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--shared-page-actions",
+          "base": "5573914c25e80d09872349f58b245b066ed59e3c",
+          "startedAt": "2026-10-24T16:47:53.963Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T16:50:21.045Z",
+          "tip": "e44bf0d",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "5096bbf6dcd9d5801b4330b829fead946367748a"
         },
         {
           "id": "clinical-report",
@@ -93,10 +102,16 @@
             "Modules/Supplements/tests/Feature/FakeSupplementResearchReaderTest.php"
           ],
           "complexity": "complex",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "new public route taking untrusted input, model and scraped text rendered into HTML that Chrome executes, launches a local process"
+          "riskReason": "new public route taking untrusted input, model and scraped text rendered into HTML that Chrome executes, launches a local process",
+          "substep": "implementing",
+          "branch": "task/supplement-pdf-reports/clinical-report",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--clinical-report",
+          "base": "5573914c25e80d09872349f58b245b066ed59e3c",
+          "startedAt": "2026-10-24T16:47:59.185Z",
+          "level": "standard"
         }
       ]
     },
@@ -178,7 +193,20 @@
     }
   ],
   "evidence": {},
-  "drift": [],
+  "drift": [
+    {
+      "path": "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+      "at": "2026-10-24T16:50:21.044Z",
+      "reason": "changed outside task \"Shared page-action slot\" scope (found at task done)",
+      "task": "shared-page-actions"
+    },
+    {
+      "path": "Modules/Supplements/tests/Fixtures/views/header-action.blade.php",
+      "at": "2026-10-24T16:50:21.045Z",
+      "reason": "changed outside task \"Shared page-action slot\" scope (found at task done)",
+      "task": "shared-page-actions"
+    }
+  ],
   "log": [
     {
       "at": "2026-10-24T16:33:31.229Z",
@@ -218,6 +246,51 @@
       "at": "2026-10-24T16:47:44.465Z",
       "event": "advanced",
       "detail": "execute"
+    },
+    {
+      "at": "2026-10-24T16:47:53.963Z",
+      "event": "task started",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:47:59.186Z",
+      "event": "task started",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T16:48:29.257Z",
+      "event": "task implementing",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:48:29.347Z",
+      "event": "task implementing",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T16:49:41.634Z",
+      "event": "task reviewing",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:50:13.791Z",
+      "event": "task merging",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:50:21.045Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+    },
+    {
+      "at": "2026-10-24T16:50:21.045Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Fixtures/views/header-action.blade.php"
+    },
+    {
+      "at": "2026-10-24T16:50:21.045Z",
+      "event": "task done",
+      "detail": "Shared page-action slot"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -298,6 +371,56 @@
       "from": "user",
       "declines": "research-intelligence-dashboard:s79",
       "at": "2026-10-24T16:36:13.854Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Page-action slot: assert a registered view receives a null status when research is absent",
+      "where": [
+        "Modules/Supplements/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T16:49:41.429Z"
+    },
+    {
+      "id": "s6",
+      "area": "quality",
+      "text": "Ship a Testing fake for PageActions if another module ever needs to fake the registry",
+      "where": [
+        "Modules/Shared/app/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T16:49:41.493Z"
+    },
+    {
+      "id": "s7",
+      "area": "docs",
+      "text": "Document slot names once more than one slot exists",
+      "where": [
+        "Modules/Shared/app/Contracts/PageActions.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T16:49:41.561Z"
+    },
+    {
+      "id": "s8",
+      "area": "quality",
+      "text": "Skip the empty ml-auto action wrapper when no supplement.header actions are registered",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T16:50:13.637Z"
+    },
+    {
+      "id": "s9",
+      "area": "tests",
+      "text": "Supplements->Reports arch check is trivially true until Reports exists (now it does)",
+      "where": [
+        "Modules/Supplements/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T16:50:13.712Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
