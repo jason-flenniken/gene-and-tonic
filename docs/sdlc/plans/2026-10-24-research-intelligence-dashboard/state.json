@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "slug": "research-intelligence-dashboard",
+  "title": "Research, Intelligence and dashboard",
+  "track": "feature",
+  "branch": "feature/research-intelligence-dashboard",
+  "base": "main",
+  "created": "2026-10-24T14:18:08.365Z",
+  "updated": "2026-10-24T14:18:08.366Z",
+  "stage": "discover",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-24T14:18:08.365Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {},
+  "phases": [],
+  "evidence": {},
+  "drift": [],
+  "log": [
+    {
+      "at": "2026-10-24T14:18:08.365Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-24T14:18:08.366Z",
+      "event": "level",
+      "detail": "standard"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard"
+}
