@@ -48,8 +48,8 @@ final class ResearchFindingsBuilder
             }
 
             $effects[] = [
-                'claim' => self::cut($item['claim'], 500),
-                'outcome' => self::cut($item['outcome'], 50),
+                'claim' => self::prose($item['claim'], 500),
+                'outcome' => self::prose($item['outcome'], 1000),
                 'evidence_grade' => $grade->value,
                 'source_keys' => $keys,
             ];
@@ -67,7 +67,7 @@ final class ResearchFindingsBuilder
                 continue;
             }
 
-            $mechanisms[] = ['description' => self::cut($item['description'], 5000), 'source_keys' => $keys];
+            $mechanisms[] = ['description' => self::prose($item['description'], 5000), 'source_keys' => $keys];
         }
 
         $studies = [];
@@ -92,7 +92,7 @@ final class ResearchFindingsBuilder
                 'population' => is_string($population) && $population !== '' ? self::cut($population, 255) : null,
                 'sample_size' => self::positiveInt($item['sample_size'] ?? null),
                 'year' => self::year($item['year'] ?? null),
-                'finding' => self::cut($item['finding'], 5000),
+                'finding' => self::prose($item['finding'], 5000),
                 'evidence_grade' => $grade->value,
                 'source_key' => $sourceId,
                 'pmid' => self::pmid($byId[$sourceId]->url, $item['pmid'] ?? null),
@@ -100,8 +100,8 @@ final class ResearchFindingsBuilder
         }
 
         return new ResearchFindings(
-            summary: self::cut($summary, 10000),
-            safetyNotes: self::cut($safety, 10000),
+            summary: self::prose($summary, 10000),
+            safetyNotes: self::prose($safety, 10000),
             sources: array_map(fn (SourceDocument $s): array => [
                 'source_key' => self::cut($s->id, 10),
                 'url' => $s->url,
@@ -167,5 +167,16 @@ final class ResearchFindingsBuilder
     private static function cut(string $value, int $max): string
     {
         return mb_substr(trim($value), 0, $max);
+    }
+
+    /**
+     * Citations belong in the source id fields, so inline markers such as "[S1, S2]" or "(S3)"
+     * are removed from prose; reports number sources themselves.
+     */
+    private static function prose(string $value, int $max): string
+    {
+        $stripped = preg_replace('/\s*[\[(]\s*S\d+(?:\s*[,;]\s*S\d+)*\s*[\])]/u', '', $value);
+
+        return self::cut($stripped ?? $value, $max);
     }
 }

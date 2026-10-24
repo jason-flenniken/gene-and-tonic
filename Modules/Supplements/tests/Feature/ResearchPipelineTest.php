@@ -299,6 +299,32 @@ it('drops findings that cite unknown sources and keeps the rest', function () {
         ->and(SupplementStudy::sole()->pmid)->toBe('42');
 });
 
+it('keeps sentence-length outcomes and strips inline source ids from prose', function () {
+    $supplement = queuedSupplement();
+    $outcome = 'In 155 adults reporting poor sleep, Insomnia Severity Index scores improved modestly versus placebo after four weeks.';
+    FakeWebResearcher::install()->returning(pipelineSources());
+    FakeTextGenerator::install()->respondWith(pipelineOutput([
+        'summary' => 'Small benefit for insomnia [S1, S2]. Well absorbed (S3).',
+        'safety_notes' => 'Loose stools at high doses [S2]',
+        'effects' => [['claim' => 'Improves sleep [S1]', 'outcome' => $outcome.' [S1; S2]', 'evidence_grade' => 'moderate', 'source_ids' => ['S1']]],
+        'mechanisms' => [['description' => 'NMDA antagonist [S2].', 'source_ids' => ['S2']]],
+        'studies' => [
+            ['title' => 'Trial [S1]', 'design' => 'RCT', 'population' => null, 'sample_size' => null, 'year' => null, 'finding' => 'Improved sleep [S1]', 'evidence_grade' => 'moderate', 'source_id' => 'S1', 'pmid' => null],
+        ],
+    ]));
+
+    runResearch($supplement);
+
+    $research = $supplement->research()->first();
+    expect($research->summary)->toBe('Small benefit for insomnia. Well absorbed.')
+        ->and($research->safety_notes)->toBe('Loose stools at high doses')
+        ->and(SupplementEffect::sole()->claim)->toBe('Improves sleep')
+        ->and(SupplementEffect::sole()->outcome)->toBe($outcome)
+        ->and(SupplementMechanism::sole()->description)->toBe('NMDA antagonist.')
+        ->and(SupplementStudy::sole()->title)->toBe('Trial [S1]')
+        ->and(SupplementStudy::sole()->finding)->toBe('Improved sleep');
+});
+
 it('sends sources as escaped <source> blocks with the injection-resistant instructions', function () {
     $supplement = queuedSupplement();
     FakeWebResearcher::install()->returning(pipelineSources());
