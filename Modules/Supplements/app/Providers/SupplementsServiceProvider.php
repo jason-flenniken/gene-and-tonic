@@ -3,8 +3,10 @@
 namespace Modules\Supplements\Providers;
 
 use Livewire\Livewire;
+use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Repositories\EloquentResearchRepository;
 use Modules\Supplements\Repositories\EloquentSupplementRepository;
+use Modules\Supplements\Repositories\EloquentSupplementResearchReader;
 use Modules\Supplements\Repositories\ResearchRepository;
 use Modules\Supplements\Repositories\SupplementRepository;
 use Nwidart\Modules\Support\ModuleServiceProvider;
@@ -53,5 +55,6 @@ class SupplementsServiceProvider extends ModuleServiceProvider
 
         $this->app->bind(SupplementRepository::class, EloquentSupplementRepository::class);
         $this->app->bind(ResearchRepository::class, EloquentResearchRepository::class);
+        $this->app->bind(SupplementResearchReader::class, EloquentSupplementResearchReader::class);
     }
 }

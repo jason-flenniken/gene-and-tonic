@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Supplements\Database\Factories\SupplementMechanismFactory;
 
+/**
+ * @property string $description
+ * @property array<int, string>|null $source_keys
+ */
 class SupplementMechanism extends Model
 {
     /** @use HasFactory<SupplementMechanismFactory> */

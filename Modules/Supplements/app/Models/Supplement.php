@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Supplements\Database\Factories\SupplementFactory;
 
+/**
+ * @property int $id
+ * @property string $name
+ */
 class Supplement extends Model
 {
     /** @use HasFactory<SupplementFactory> */

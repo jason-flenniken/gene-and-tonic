@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Supplements\Database\Factories\SupplementSourceFactory;
 
+/**
+ * @property string $source_key
+ * @property string|null $url
+ * @property string $title
+ * @property string|null $domain
+ */
 class SupplementSource extends Model
 {
     /** @use HasFactory<SupplementSourceFactory> */

@@ -2,6 +2,7 @@
 
 namespace Modules\Supplements\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Modules\Supplements\Database\Factories\SupplementResearchFactory;
 use Modules\Supplements\Enums\ResearchStatus;
 
+/**
+ * @property int $id
+ * @property int $supplement_id
+ * @property ResearchStatus $status
+ * @property string|null $error
+ * @property string|null $summary
+ * @property string|null $safety_notes
+ * @property CarbonInterface|null $completed_at
+ */
 class SupplementResearch extends Model
 {
     /** @use HasFactory<SupplementResearchFactory> */
