@@ -131,3 +131,8 @@ _2026-10-24 18:58_
 **Decision:** Outcome: Genetics module with demo-user sign-in; TXT/CSV/PDF upload (<=25 MB) parsed deterministically when possible, cheap configurable AI otherwise; single-SNP entry; shared gene reference table (~30 verified seed SNPs, Firecrawl+AI lookups capped 15/upload); supplement research gains cited gene interactions; new Recommendations module rule-matches the user's genotypes into a Your genetics panel and a PDF genetics section. User: signed-in demo user shown to interviewers. Why now: demo Sunday night 2026-10-25, interview Monday. Success: on a synthetic file, upload -> genes with plain-language effects -> add one SNP -> open a supplement and see which variants it relates to and why. Constraint: time (cut scope, not quality) and minimal LLM cost; raw genotypes reach AI only as rsID/gene lines from PDFs. Out of scope: registration/password reset, delete UI, zip uploads, upload history, multiple profiles, dosing advice, AI-written personal recommendations. Order work so the PDF section is last.
 **Why:** confirmed by the user
 _2026-10-24 19:15_
+
+### 27. Slip candidates
+**Decision:** None picked: all requirements stay in scope; the plan still orders the PDF section, reapers, large-file test and URL hardening last
+**Why:** user approved the PRD without marking any item as allowed to slip
+_2026-10-24 19:22_
