@@ -3,7 +3,9 @@
 namespace Modules\Supplements\Support;
 
 use Modules\Intelligence\Data\SourceDocument;
+use Modules\Shared\Support\SourceUrl;
 use Modules\Supplements\Enums\EvidenceGrade;
+use Modules\Supplements\Enums\GeneRelation;
 
 /**
  * Turns the model's untrusted structured answer into ResearchFindings, keeping only cited findings.
@@ -27,6 +29,12 @@ final class ResearchFindingsBuilder
             || ! is_array($output['studies'] ?? null)) {
             throw new UnusableResearchOutput('Missing or mistyped top-level keys.');
         }
+
+        // Sources with an unsafe URL are dropped, so nothing can cite them either.
+        $sources = array_values(array_filter(
+            $sources,
+            fn (SourceDocument $s): bool => SourceUrl::sanitize($s->url) !== null,
+        ));
 
         $byId = [];
         foreach ($sources as $source) {
@@ -99,6 +107,15 @@ final class ResearchFindingsBuilder
             ];
         }
 
+        $geneInteractions = [];
+        foreach (is_array($output['gene_interactions'] ?? null) ? $output['gene_interactions'] : [] as $item) {
+            $interaction = is_array($item) ? self::geneInteraction($item, $byId) : null;
+
+            if ($interaction !== null) {
+                $geneInteractions[] = $interaction;
+            }
+        }
+
         return new ResearchFindings(
             summary: self::prose($summary, 10000),
             safetyNotes: self::prose($safety, 10000),
@@ -111,7 +128,74 @@ final class ResearchFindingsBuilder
             effects: $effects,
             mechanisms: $mechanisms,
             studies: $studies,
+            geneInteractions: $geneInteractions,
         );
+    }
+
+    /**
+     * @param  array<mixed>  $item
+     * @param  array<string, SourceDocument>  $byId
+     * @return array{gene: string, rsid: ?string, allele: ?string, relation: string, explanation: string, source_keys: list<string>}|null
+     */
+    private static function geneInteraction(array $item, array $byId): ?array
+    {
+        $gene = is_string($item['gene'] ?? null) ? strtoupper(trim($item['gene'])) : '';
+        $relation = is_string($item['relation'] ?? null) ? GeneRelation::tryFrom(strtolower(trim($item['relation']))) : null;
+        $keys = self::validKeys($item['source_ids'] ?? null, $byId);
+        $rsid = self::rsid($item['rsid'] ?? null);
+        $allele = $rsid === null ? null : self::allele($item['allele'] ?? null);
+
+        if (preg_match('/^[A-Z0-9-]{1,15}$/', $gene) !== 1 || $relation === null || $keys === []
+            || ! is_string($item['explanation'] ?? null)) {
+            return null;
+        }
+
+        $explanation = self::prose($item['explanation'], 1000);
+
+        if ($explanation === '') {
+            return null;
+        }
+
+        return [
+            'gene' => $gene,
+            'rsid' => $rsid,
+            'allele' => $allele,
+            'relation' => $relation->value,
+            'explanation' => $explanation,
+            'source_keys' => $keys,
+        ];
+    }
+
+    /**
+     * Models write rsIDs as published ("RS1801133", "rs1801133 (C677T)"), so the first rsID token is taken.
+     * Without one the interaction stays, matching on the gene alone.
+     */
+    private static function rsid(mixed $value): ?string
+    {
+        if (is_string($value) && preg_match('/\brs\d{1,10}\b/', strtolower($value), $m) === 1) {
+            return $m[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Keeps a single effect-allele letter, takes the trailing base of an HGVS-style "C677T" or "677T",
+     * and otherwise returns null so the interaction matches on the rsID alone.
+     */
+    private static function allele(mixed $value): ?string
+    {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $value = strtoupper(trim($value));
+
+        if (preg_match('/^[ACGTDI]$/', $value) === 1) {
+            return $value;
+        }
+
+        return preg_match('/^[ACGT]?\d+([ACGT])$/', $value, $m) === 1 ? $m[1] : null;
     }
 
     /**

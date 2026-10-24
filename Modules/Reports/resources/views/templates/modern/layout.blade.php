@@ -8,6 +8,6 @@
     This is a research summary generated from published sources, not medical advice. Talk to a qualified clinician before starting a supplement.
 </aside>
 
-@foreach (['overview', 'effects', 'mechanisms', 'studies', 'sources'] as $section)
+@foreach (['overview', 'effects', 'genetics', 'mechanisms', 'studies', 'sources'] as $section)
     @includeFirst(["reports::templates.{$template}.sections.{$section}", "reports::sections.{$section}"])
 @endforeach

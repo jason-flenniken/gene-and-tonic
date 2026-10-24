@@ -10,6 +10,7 @@ use Modules\Supplements\Actions\DeleteSupplement;
 use Modules\Supplements\Actions\StartResearch;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Repositories\SupplementRepository;
+use Modules\Supplements\Support\ActionThrottle;
 
 new class extends Component
 {
@@ -22,6 +23,12 @@ new class extends Component
     public function add(AddSupplement $addSupplement): void
     {
         $this->validateOnly('name', ['name' => ['required', 'string']]);
+
+        if (! ActionThrottle::attempt('supplements-add')) {
+            $this->addError('name', ActionThrottle::MESSAGE);
+
+            return;
+        }
 
         $supplement = $addSupplement->handle($this->name);
 
@@ -54,6 +61,12 @@ new class extends Component
         $supplement = $supplements->find($id);
 
         if ($supplement === null) {
+            return;
+        }
+
+        if (! ActionThrottle::attempt('supplements-run')) {
+            Flux::toast(text: ActionThrottle::MESSAGE, variant: 'danger');
+
             return;
         }
 

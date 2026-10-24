@@ -66,14 +66,14 @@ Livewire in modules:
 
 | Module | Owns | May depend on |
 |---|---|---|
-| Shared | Kernel: typed IDs, base DTO/enum helpers, and the `PageActions` contract (a named-slot registry: a module registers a view under a slot, e.g. `supplement.header`, and the owning page renders it, so modules add buttons to each other's pages without importing each other). Keep it tiny; a type used by only one module doesn't belong here. | nothing |
-| Genetics | Upload and parsing of genetic results, variants/genotypes. All raw genetic data. | Shared |
+| Shared | Kernel: typed IDs, base DTO/enum helpers, and the `PageActions` contract (a named-slot registry: a module registers a view under a slot, e.g. `supplement.header` (buttons) or `supplement.panels` (content panels), and the owning page renders it, so modules add buttons to each other's pages without importing each other). Keep it tiny; a type used by only one module doesn't belong here. | nothing |
+| Genetics | Upload and parsing of genetic results (23andMe, AncestryDNA, MyHeritage, marker CSV, PDF), the gene reference table `gene_variants`, encrypted per-user `user_variants`. All raw genetic data. | Intelligence, Shared |
 | Supplements | Supplement catalog, research/evidence, gene–supplement interaction knowledge | Intelligence, Shared |
 | Intelligence | Provider-agnostic AI gateway contract, prompt templates, request/usage logging. No domain knowledge. | Shared |
-| Recommendations | Orchestration: GeneticProfile + supplement evidence → Intelligence → stored recommendation sets | Genetics, Supplements, Intelligence, Shared |
-| Reports | PDF generation from research, recommendation and profile DTOs, storage, download. A read-only consumer. | Supplements, Shared (Recommendations and Genetics later) |
+| Recommendations | Rule-based genetic relevance: GeneticProfile + supplement gene interactions → the panel on the supplement page. | Genetics, Supplements, Shared |
+| Reports | PDF generation from research, recommendation and profile DTOs, storage, download. A read-only consumer. | Supplements, Recommendations, Shared |
 
-Shared, Intelligence, Supplements and Reports exist; Genetics and Recommendations come later.
+All six modules exist.
 
 ### Adding a report template
 
@@ -81,7 +81,7 @@ A template is a config entry plus a view folder; nothing else changes.
 
 1. Add an entry to `templates` in `Modules/Reports/config/config.php`: `label`, `format`, `margins` (mm, `[top, right, bottom, left]`) and `orientation`.
 2. Create `Modules/Reports/resources/views/templates/<name>/` with `layout.blade.php`, `header.blade.php`, `footer.blade.php` and the styles. Plain inline CSS, system fonts, no scripts or remote assets. Header and footer need their own inline styles with an explicit `font-size` (8pt or more).
-3. The layout must include the five-section loop. Each section resolves with `@includeFirst(['reports::templates.<name>.sections.<section>', 'reports::sections.<section>'])`, so to restyle one section add `templates/<name>/sections/<section>.blade.php`; otherwise the shared one is used.
+3. The layout must include the section loop (`overview`, `effects`, `genetics`, `mechanisms`, `studies`, `sources`). Each section resolves with `@includeFirst(['reports::templates.<name>.sections.<section>', 'reports::sections.<section>'])`, so to restyle one section add `templates/<name>/sections/<section>.blade.php`; otherwise the shared one is used.
 
 Real-render check (opt-in, launches Chrome, writes a PDF per template and asserts `%PDF-`; skipped otherwise):
 
@@ -102,11 +102,16 @@ These rules are not enforced automatically yet. When the first two modules exist
 
 ## Domain constraints
 
-- **Genetic data is sensitive.** Raw uploads and genotypes stay inside Genetics, stored with encrypted casts and private storage. Other modules, including the AI calls, receive only the summarized `GeneticProfile` DTO.
-- **There is no authentication yet.** Genetic data, recommendations and reports belong to a `User`, so add auth before building Genetics.
+- **Genetic data is sensitive.** Raw uploads and genotypes stay inside Genetics, stored with encrypted casts and private storage. Other modules, including the AI calls, receive only the summarized `GeneticProfile` DTO. One exception: PDF and unknown-format extraction (`genetics.extract` profile) sends the model only marker lines (rsID/gene lines), never full documents. Gene lookups (`genetics.lookup`) send only rsIDs and gene symbols. Genotypes are never logged.
+- **Auth is a hand-rolled Livewire login** at `/login`. `DemoUserSeeder` creates the demo user from `DEMO_USER_NAME/EMAIL/PASSWORD` (`config/auth.php`), and `php artisan db:seed` runs it. Only the Genetics routes use the `auth` middleware; the supplement catalog and PDF download are public. The PDF's genetics section renders only for the signed-in owner. Every Genetics and Recommendations query is scoped by `auth()->id()`.
 - **AI calls go only through the Intelligence contract.** Nothing outside Intelligence talks to a provider SDK or HTTP API. Tests bind the Intelligence fake and never hit a real API. The AI layer is `laravel/ai` (pinned `^1.3`, migrations never published) behind Intelligence contracts. Firecrawl is called over REST through `Http` (no SDK). Tests run with `Http::preventStrayRequests()` (set in `tests/TestCase.php`).
 - **PDF reports render from DTOs only.** Reports never queries other modules' tables.
 - **PDFs use spatie/laravel-pdf v2 with the `chrome` driver** (chrome-php driving a local Chrome/Chromium binary, so no Node or Puppeteer). The default is set in `config/laravel-pdf.php`. Only the Reports module uses the `Pdf` facade.
   - Chrome renders modern CSS, so report views can use Tailwind.
   - Feature tests call `Pdf::fake()` and assert with `Pdf::assertRespondedWithPdf()` and `assertSaved()`, so normal tests don't launch Chrome.
   - Production and CI need a Chrome binary. GitHub's Ubuntu runners ship one, but a real-render test there will likely also need `LARAVEL_PDF_CHROME_NO_SANDBOX=true`.
+- **Allele convention.** `gene_variants.reference_allele` is the plus-strand non-risk allele and `risk_allele` the plus-strand effect allele (e.g. MTHFR C677T is G>A on the plus strand). FUT2 rs601338 risk allele `A` = non-secretor (higher B12).
+- **Uploads.** The limit is 25 MB (`GENETICS_MAX_UPLOAD_KB`). Herd's PHP `upload_max_filesize` and `post_max_size` must be raised to at least 25M (and nginx `client_max_body_size` if you hit a 413). The `genetics` disk is private (`storage/app/genetics`, no `serve`/`url`), and raw files are deleted after processing.
+- **Scheduler.** `php artisan schedule:work` runs `supplements:reap-stale` and `genetics:reap-stale`; Herd's `artisan dev` does not start it.
+- **Demo files.** `php artisan genetics:demo-files` writes a synthetic 23andMe TXT and report PDF to the gitignored `storage/app/demo/`, built around methylfolate (MTHFR, MTR, MTRR, FUT2).
+- **Test memory.** `phpunit.xml` sets `memory_limit` to 512M because the per-module arch tests are heavy.

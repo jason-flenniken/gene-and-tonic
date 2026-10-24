@@ -1,0 +1,30 @@
+{
+    "name": "modules/recommendations",
+    "description": "Matches a user's genetic profile against supplement research. May depend on: Genetics, Supplements, Shared.",
+    "authors": [
+        {
+            "name": "Jason Flenniken",
+            "email": "jason.flenniken@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Recommendations\\": "app/",
+            "Modules\\Recommendations\\Database\\Factories\\": "database/factories/",
+            "Modules\\Recommendations\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Recommendations\\Tests\\": "tests/"
+        }
+    }
+}

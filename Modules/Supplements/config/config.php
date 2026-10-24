@@ -17,6 +17,11 @@ return [
         'prompt' => 'supplements::prompts.research',
     ],
 
+    /*
+    | Research runs active longer than this are failed by supplements:reap-stale.
+    */
+    'reap_after_minutes' => (int) env('RESEARCH_REAP_AFTER_MINUTES', 15),
+
     'research' => [
         'domains' => [
             'pubmed.ncbi.nlm.nih.gov',
@@ -26,5 +31,7 @@ return [
             'nccih.nih.gov',
         ],
         'limit' => 8,
+        'gene_query' => '%s gene polymorphism nutrigenomics',
+        'gene_limit' => (int) env('RESEARCH_GENE_LIMIT', 4),
     ],
 ];

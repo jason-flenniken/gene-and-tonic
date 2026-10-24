@@ -19,6 +19,8 @@ final readonly class SupplementResearchData implements Arrayable
      * @param  list<MechanismData>  $mechanisms
      * @param  list<StudyData>  $studies
      * @param  list<SourceData>  $sources
+     * @param  list<GeneInteractionData>  $geneInteractions
+     * @param  bool  $geneticsChecked  False for research completed before gene interactions existed.
      * @param  string|null  $error  Failure message, set only for Failed runs. Safe to show in the app UI; never rendered in reports.
      */
     public function __construct(
@@ -33,5 +35,7 @@ final readonly class SupplementResearchData implements Arrayable
         public array $sources,
         public ?CarbonImmutable $completedAt,
         public ?string $error = null,
+        public array $geneInteractions = [],
+        public bool $geneticsChecked = false,
     ) {}
 }

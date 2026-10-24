@@ -1,0 +1,30 @@
+{
+    "name": "modules/genetics",
+    "description": "Genetic results, variants and SNP reference data. May depend on: Intelligence, Shared.",
+    "authors": [
+        {
+            "name": "Jason Flenniken",
+            "email": "jason.flenniken@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Genetics\\": "app/",
+            "Modules\\Genetics\\Database\\Factories\\": "database/factories/",
+            "Modules\\Genetics\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Genetics\\Tests\\": "tests/"
+        }
+    }
+}

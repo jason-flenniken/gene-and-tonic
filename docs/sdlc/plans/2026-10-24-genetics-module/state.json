@@ -1,0 +1,2083 @@
+{
+  "schema": 1,
+  "slug": "genetics-module",
+  "title": "Genetics module",
+  "track": "feature",
+  "branch": "feature/genetics-module",
+  "base": "main",
+  "created": "2026-10-24T17:56:37.442Z",
+  "updated": "2026-10-24T22:46:29.921Z",
+  "stage": "closed",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-24T17:56:37.442Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-24T19:15:19.423Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-24T19:22:33.049Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-24T19:31:14.227Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-24T20:57:16.328Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-24T21:00:25.463Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-24T21:12:14.971Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-24T22:46:07.086Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-24T22:46:29.919Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {
+    "prd": {
+      "at": "2026-10-24T19:22:27.316Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "c31e79fdd15760c1"
+    },
+    "plan": {
+      "at": "2026-10-24T19:31:10.197Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "1e04af42eed00fb2"
+    },
+    "ship": {
+      "at": "2026-10-24T22:45:24.861Z",
+      "via": "human",
+      "source": "mod"
+    }
+  },
+  "phases": [
+    {
+      "id": "sign-in-and-profile",
+      "name": "Sign-in, genetic profile, gene interactions",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "auth-login",
+          "name": "Demo-user login",
+          "covers": [
+            "FR-01",
+            "FR-02"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "app/**",
+            "routes/web.php",
+            "resources/views/pages/⚡login.blade.php",
+            "resources/views/layouts/app.blade.php",
+            "tests/Feature/Auth/**",
+            "database/seeders/DemoUserSeeder.php",
+            "config/auth.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "authentication, credentials, session handling",
+          "branch": "task/genetics-module/auth-login",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--auth-login",
+          "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
+          "startedAt": "2026-10-24T19:31:27.236Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T19:34:27.743Z",
+          "tip": "d699e7f",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "1044e82dc30705059901f8ceef7ad1b754c70299"
+        },
+        {
+          "id": "genetics-core",
+          "name": "Genetics module, reference table, profile data",
+          "covers": [
+            "FR-04",
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Genetics/**",
+            "modules_statuses.json",
+            "Modules/Supplements/tests/Unit/BoundaryTest.php",
+            "Modules/Intelligence/tests/Unit/BoundaryTest.php"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "migrations, special-category personal data with an encrypted cast, curated medical reference data",
+          "branch": "task/genetics-module/genetics-core",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--genetics-core",
+          "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
+          "startedAt": "2026-10-24T19:31:32.563Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T19:54:29.133Z",
+          "tip": "8ed6a77",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "61e7db914fa5a9d0fcaad47dbdda3e717ea740d1"
+        },
+        {
+          "id": "supplement-interactions",
+          "name": "Gene interactions in supplement research",
+          "covers": [
+            "FR-21",
+            "FR-22",
+            "FR-23"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/database/**",
+            "Modules/Supplements/resources/**",
+            "Modules/Supplements/config/**",
+            "Modules/Supplements/tests/Feature/**",
+            "Modules/Supplements/tests/Unit/ResearchFindingsBuilderTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted model output and scraped sources persisted and rendered, migration",
+          "branch": "task/genetics-module/supplement-interactions",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--supplement-interactions",
+          "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
+          "startedAt": "2026-10-24T19:31:37.778Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T19:36:02.665Z",
+          "tip": "fce4e7b",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "6e601ba9cf2aa206b3b056e4fa92aceeea998662"
+        },
+        {
+          "id": "genetics-page",
+          "name": "My genetics page, add SNP, dashboard tab",
+          "covers": [
+            "FR-03",
+            "FR-10",
+            "FR-11"
+          ],
+          "blockedBy": [
+            "auth-login",
+            "genetics-core"
+          ],
+          "scope": [
+            "Modules/Genetics/**",
+            "resources/views/pages/⚡dashboard.blade.php",
+            "tests/Feature/DashboardTest.php",
+            "database/seeders/DatabaseSeeder.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "authorization of personal genetic data, untrusted form input",
+          "branch": "task/genetics-module/genetics-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--genetics-page",
+          "base": "0ecc3fdc22803753087c80ee4a93378610433fcb",
+          "startedAt": "2026-10-24T19:54:42.193Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T19:57:56.681Z",
+          "tip": "dab727a",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "1fe2cf731582e9ff08a1f09809e4fe7a1cfaf9eb"
+        }
+      ]
+    },
+    {
+      "id": "uploads-and-lookups",
+      "name": "Uploads, gene lookups, AI extraction",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "upload-parsing",
+          "name": "Upload with deterministic parsing",
+          "covers": [
+            "FR-12",
+            "FR-13",
+            "FR-14",
+            "FR-17",
+            "FR-18",
+            "FR-28"
+          ],
+          "blockedBy": [
+            "genetics-page"
+          ],
+          "scope": [
+            "Modules/Genetics/**",
+            "config/filesystems.php",
+            "config/livewire.php",
+            ".gitignore"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "untrusted file upload, file paths, personal data at rest, deletes raw files",
+          "branch": "task/genetics-module/upload-parsing",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--upload-parsing",
+          "base": "4a466b55fb9e8bb70a2945df053b1d69e99996eb",
+          "startedAt": "2026-10-24T19:58:18.168Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:21:02.982Z",
+          "tip": "be4fcae",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "fc6ba8c4df87ed10383af807df4f6d45c8901d35"
+        },
+        {
+          "id": "gene-lookup",
+          "name": "Gene lookup with Firecrawl and AI",
+          "covers": [
+            "FR-10",
+            "FR-11",
+            "FR-19",
+            "FR-20",
+            "FR-28"
+          ],
+          "blockedBy": [
+            "upload-parsing"
+          ],
+          "scope": [
+            "Modules/Genetics/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted model output and scraped pages persisted and rendered, paid API spend",
+          "branch": "task/genetics-module/gene-lookup",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--gene-lookup",
+          "base": "3f6b0eb169ddce9d04493169f9cb477857bb2f8d",
+          "startedAt": "2026-10-24T20:21:21.044Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:27:11.817Z",
+          "tip": "c76b863",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "0e75cade5311bfd2be8e5182d5664461fc93d43e"
+        },
+        {
+          "id": "pdf-extraction",
+          "name": "AI extraction for PDFs and unknown formats",
+          "covers": [
+            "FR-15",
+            "FR-16"
+          ],
+          "blockedBy": [
+            "gene-lookup"
+          ],
+          "scope": [
+            "Modules/Genetics/**",
+            "composer.json",
+            "composer.lock"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new dependency, untrusted document text sent to a model, model output persisted",
+          "branch": "task/genetics-module/pdf-extraction",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--pdf-extraction",
+          "base": "fa53c853a9610c9018a03081bf5c065a525fdac5",
+          "startedAt": "2026-10-24T20:27:26.208Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:30:54.760Z",
+          "tip": "da6d22b",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "836da959b56db09da88aa0595f7507c29a85ff50"
+        }
+      ]
+    },
+    {
+      "id": "relevance",
+      "name": "Your genetics on supplements and in the PDF",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "recommendations-panel",
+          "name": "Recommendations matching and panel",
+          "covers": [
+            "FR-24",
+            "FR-25",
+            "FR-26"
+          ],
+          "blockedBy": [
+            "genetics-page",
+            "supplement-interactions"
+          ],
+          "scope": [
+            "Modules/Recommendations/**",
+            "modules_statuses.json",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+            "Modules/Supplements/tests/Unit/BoundaryTest.php",
+            "Modules/Genetics/tests/Unit/BoundaryTest.php"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "personal genetic data crosses a module boundary and renders on a public page",
+          "branch": "task/genetics-module/recommendations-panel",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--recommendations-panel",
+          "base": "b6166cce77b67613e06fdc27f3eab3766ee3888d",
+          "startedAt": "2026-10-24T20:31:09.077Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:46:44.361Z",
+          "tip": "cacda00",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "baecf9e10e8276333594aed37e15265838a52521"
+        },
+        {
+          "id": "pdf-genetics-section",
+          "name": "Genetics section in the PDF",
+          "covers": [
+            "FR-27"
+          ],
+          "blockedBy": [
+            "recommendations-panel"
+          ],
+          "scope": [
+            "Modules/Reports/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "personal genetic data in a download from a public route",
+          "branch": "task/genetics-module/pdf-genetics-section",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--pdf-genetics-section",
+          "base": "902a181fb45b35dfb06f98e13dc80a3b2d02723b",
+          "startedAt": "2026-10-24T20:46:58.578Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:49:29.375Z",
+          "tip": "62da5d9",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "3aaff0d1c3ed9989cfc14b23868f2631a2a21f05"
+        }
+      ]
+    },
+    {
+      "id": "hardening-and-docs",
+      "name": "Hardening, demo files, docs",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "supplements-hardening",
+          "name": "Supplements rate limits, reaper, URL validation",
+          "covers": [
+            "FR-28",
+            "FR-29",
+            "FR-30"
+          ],
+          "blockedBy": [
+            "supplement-interactions",
+            "gene-lookup",
+            "recommendations-panel"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/tests/**",
+            "Modules/Shared/app/Support/**",
+            "Modules/Shared/tests/**",
+            "Modules/Genetics/app/Support/LookupResultBuilder.php",
+            "Modules/Genetics/tests/Unit/LookupResultBuilderTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "security controls on public actions and stored URLs",
+          "branch": "task/genetics-module/supplements-hardening",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--supplements-hardening",
+          "base": "ea13f8c5e382f4d07f96ffd2460fbed7e29ef95e",
+          "startedAt": "2026-10-24T20:49:44.411Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:53:52.908Z",
+          "tip": "a810ad4",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "b549616157f3fdc4b32cbe5007b97744ee64a125"
+        },
+        {
+          "id": "genetics-hardening",
+          "name": "Genetics reaper and large-file parse test",
+          "covers": [
+            "FR-29"
+          ],
+          "blockedBy": [
+            "pdf-extraction"
+          ],
+          "scope": [
+            "Modules/Genetics/app/Console/ReapStaleCommand.php",
+            "Modules/Genetics/app/Providers/GeneticsServiceProvider.php",
+            "Modules/Genetics/tests/Feature/ReapStaleTest.php",
+            "Modules/Genetics/tests/Feature/LargeParseTest.php",
+            "Modules/Genetics/tests/Feature/ProfilePricingTest.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/genetics-module/genetics-hardening",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--genetics-hardening",
+          "base": "ea13f8c5e382f4d07f96ffd2460fbed7e29ef95e",
+          "startedAt": "2026-10-24T20:49:49.456Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:53:17.114Z",
+          "tip": "94e1b3c",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "6d7486fcae543500f699afb49d0d26f4e3c3dfc2"
+        },
+        {
+          "id": "docs-and-demo",
+          "name": "Demo files and docs",
+          "covers": [
+            "FR-31",
+            "FR-32"
+          ],
+          "blockedBy": [
+            "pdf-genetics-section",
+            "supplements-hardening",
+            "genetics-hardening"
+          ],
+          "scope": [
+            "CLAUDE.md",
+            ".env.example",
+            ".gitignore",
+            "Modules/Genetics/app/Console/DemoFilesCommand.php",
+            "Modules/Genetics/app/Providers/GeneticsServiceProvider.php",
+            "Modules/Genetics/tests/Feature/DemoFilesTest.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/genetics-module/docs-and-demo",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--docs-and-demo",
+          "base": "2cdc2e01bf607d30d4fd2b28471e70f1c81781e7",
+          "startedAt": "2026-10-24T20:54:00.211Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:57:14.219Z",
+          "tip": "d6811e9",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "c41cad723a459d9751764cdef38df6b2af7f35ed"
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-24T21:00:25.360Z",
+      "note": "tests: 461 passing, 3 skipped (opt-in); 35 requirements met (32 FR + 3 NFR), 1 partly untested (FR-32 git-ignore); secret scan: clean; audit: composer + npm 0 vulnerabilities; new dep smalot/pdfparser (approved)"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-24T21:12:14.862Z",
+      "note": "2 Required fixed (demo-user seeder fails closed; gene-interaction rsID/allele normalised with end-to-end test); optional findings logged as follow-ups",
+      "blocking": 0
+    }
+  },
+  "drift": [
+    {
+      "path": "tests/Feature/Auth/LoginTest.php",
+      "at": "2026-10-24T19:57:56.681Z",
+      "reason": "changed outside task \"My genetics page, add SNP, dashboard tab\" scope (found at task done)",
+      "task": "genetics-page"
+    },
+    {
+      "path": "phpunit.xml",
+      "at": "2026-10-24T20:46:44.360Z",
+      "reason": "changed outside task \"Recommendations matching and panel\" scope (found at task done)",
+      "task": "recommendations-panel"
+    },
+    {
+      "path": "Modules/Supplements/config/config.php",
+      "at": "2026-10-24T20:53:52.907Z",
+      "reason": "changed outside task \"Supplements rate limits, reaper, URL validation\" scope (found at task done)",
+      "task": "supplements-hardening"
+    },
+    {
+      "path": "Modules/Genetics/config/config.php",
+      "at": "2026-10-24T20:57:14.219Z",
+      "reason": "changed outside task \"Demo files and docs\" scope (found at task done)",
+      "task": "docs-and-demo"
+    }
+  ],
+  "log": [
+    {
+      "at": "2026-10-24T17:56:37.442Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-24T17:56:37.442Z",
+      "event": "level",
+      "detail": "standard"
+    },
+    {
+      "at": "2026-10-24T19:15:19.424Z",
+      "event": "advanced",
+      "detail": "prd"
+    },
+    {
+      "at": "2026-10-24T19:22:27.316Z",
+      "event": "PRD approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T19:22:33.049Z",
+      "event": "advanced",
+      "detail": "plan"
+    },
+    {
+      "at": "2026-10-24T19:27:12.677Z",
+      "event": "plan loaded",
+      "detail": "4 phases, 12 tasks"
+    },
+    {
+      "at": "2026-10-24T19:31:10.198Z",
+      "event": "plan approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T19:31:14.228Z",
+      "event": "advanced",
+      "detail": "execute"
+    },
+    {
+      "at": "2026-10-24T19:31:27.237Z",
+      "event": "task started",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:31:32.563Z",
+      "event": "task started",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:31:37.779Z",
+      "event": "task started",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:32:26.869Z",
+      "event": "task implementing",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:32:26.943Z",
+      "event": "task implementing",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:32:27.021Z",
+      "event": "task implementing",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:33:24.561Z",
+      "event": "task reviewing",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:34:17.159Z",
+      "event": "task merging",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:34:27.743Z",
+      "event": "task done",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:35:01.075Z",
+      "event": "task reviewing",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:35:53.900Z",
+      "event": "task merging",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:36:02.666Z",
+      "event": "task done",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:52:49.283Z",
+      "event": "task reviewing",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:54:17.624Z",
+      "event": "task merging",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:54:29.134Z",
+      "event": "task done",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:54:42.194Z",
+      "event": "task started",
+      "detail": "My genetics page, add SNP, dashboard tab"
+    },
+    {
+      "at": "2026-10-24T19:55:02.130Z",
+      "event": "task implementing",
+      "detail": "My genetics page, add SNP, dashboard tab"
+    },
+    {
+      "at": "2026-10-24T19:56:48.641Z",
+      "event": "task reviewing",
+      "detail": "My genetics page, add SNP, dashboard tab"
+    },
+    {
+      "at": "2026-10-24T19:57:47.751Z",
+      "event": "task merging",
+      "detail": "My genetics page, add SNP, dashboard tab"
+    },
+    {
+      "at": "2026-10-24T19:57:56.681Z",
+      "event": "drift",
+      "detail": "tests/Feature/Auth/LoginTest.php"
+    },
+    {
+      "at": "2026-10-24T19:57:56.681Z",
+      "event": "task done",
+      "detail": "My genetics page, add SNP, dashboard tab"
+    },
+    {
+      "at": "2026-10-24T19:58:13.102Z",
+      "event": "phase finished",
+      "detail": "Sign-in, genetic profile, gene interactions (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T19:58:18.169Z",
+      "event": "task started",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T19:58:35.495Z",
+      "event": "task implementing",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:16:27.617Z",
+      "event": "task reviewing",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:18:14.427Z",
+      "event": "task fixing",
+      "detail": "Upload with deterministic parsing (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T20:20:51.587Z",
+      "event": "task merging",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:21:02.983Z",
+      "event": "task done",
+      "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:21:21.045Z",
+      "event": "task started",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:21:38.751Z",
+      "event": "task implementing",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:25:47.490Z",
+      "event": "task reviewing",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:27:00.052Z",
+      "event": "task merging",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:27:11.818Z",
+      "event": "task done",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:27:26.209Z",
+      "event": "task started",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:27:43.250Z",
+      "event": "task implementing",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:29:41.724Z",
+      "event": "task reviewing",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:30:40.573Z",
+      "event": "task merging",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:30:54.761Z",
+      "event": "task done",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:31:03.009Z",
+      "event": "phase finished",
+      "detail": "Uploads, gene lookups, AI extraction (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T20:31:09.078Z",
+      "event": "task started",
+      "detail": "Recommendations matching and panel"
+    },
+    {
+      "at": "2026-10-24T20:31:25.395Z",
+      "event": "task implementing",
+      "detail": "Recommendations matching and panel"
+    },
+    {
+      "at": "2026-10-24T20:45:28.164Z",
+      "event": "task reviewing",
+      "detail": "Recommendations matching and panel"
+    },
+    {
+      "at": "2026-10-24T20:46:29.801Z",
+      "event": "task merging",
+      "detail": "Recommendations matching and panel"
+    },
+    {
+      "at": "2026-10-24T20:46:44.361Z",
+      "event": "drift",
+      "detail": "phpunit.xml"
+    },
+    {
+      "at": "2026-10-24T20:46:44.361Z",
+      "event": "task done",
+      "detail": "Recommendations matching and panel"
+    },
+    {
+      "at": "2026-10-24T20:46:58.579Z",
+      "event": "task started",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:47:14.446Z",
+      "event": "task implementing",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:48:28.744Z",
+      "event": "task reviewing",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:49:16.834Z",
+      "event": "task merging",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:49:29.377Z",
+      "event": "task done",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:49:31.523Z",
+      "event": "phase finished",
+      "detail": "Your genetics on supplements and in the PDF (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T20:49:44.412Z",
+      "event": "task started",
+      "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:49:49.456Z",
+      "event": "task started",
+      "detail": "Genetics reaper and large-file parse test"
+    },
+    {
+      "at": "2026-10-24T20:50:15.522Z",
+      "event": "task implementing",
+      "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:50:15.586Z",
+      "event": "task implementing",
+      "detail": "Genetics reaper and large-file parse test"
+    },
+    {
+      "at": "2026-10-24T20:52:19.578Z",
+      "event": "task reviewing",
+      "detail": "Genetics reaper and large-file parse test"
+    },
+    {
+      "at": "2026-10-24T20:52:40.983Z",
+      "event": "task reviewing",
+      "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:53:04.017Z",
+      "event": "task merging",
+      "detail": "Genetics reaper and large-file parse test"
+    },
+    {
+      "at": "2026-10-24T20:53:17.114Z",
+      "event": "task done",
+      "detail": "Genetics reaper and large-file parse test"
+    },
+    {
+      "at": "2026-10-24T20:53:40.076Z",
+      "event": "task merging",
+      "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:53:52.908Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/config/config.php"
+    },
+    {
+      "at": "2026-10-24T20:53:52.908Z",
+      "event": "task done",
+      "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:54:00.212Z",
+      "event": "task started",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:54:20.592Z",
+      "event": "task implementing",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:56:14.240Z",
+      "event": "task reviewing",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:57:00.869Z",
+      "event": "task merging",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:57:14.219Z",
+      "event": "drift",
+      "detail": "Modules/Genetics/config/config.php"
+    },
+    {
+      "at": "2026-10-24T20:57:14.219Z",
+      "event": "task done",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:57:16.328Z",
+      "event": "phase finished",
+      "detail": "Hardening, demo files, docs (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T20:57:16.328Z",
+      "event": "advanced",
+      "detail": "verify"
+    },
+    {
+      "at": "2026-10-24T20:57:32.281Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-24T20:57:56.119Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-24T21:00:25.361Z",
+      "event": "verify pass",
+      "detail": "tests: 461 passing, 3 skipped (opt-in); 35 requirements met (32 FR + 3 NFR), 1 partly untested (FR-32 git-ignore); secret scan: clean; audit: composer + npm 0 vulnerabilities; new dep smalot/pdfparser (approved)"
+    },
+    {
+      "at": "2026-10-24T21:00:25.463Z",
+      "event": "advanced",
+      "detail": "review"
+    },
+    {
+      "at": "2026-10-24T21:00:36.590Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-24T21:07:46.272Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-24T21:10:22.423Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-24T21:12:14.862Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (demo-user seeder fails closed; gene-interaction rsID/allele normalised with end-to-end test); optional findings logged as follow-ups"
+    },
+    {
+      "at": "2026-10-24T21:12:14.971Z",
+      "event": "advanced",
+      "detail": "ship"
+    },
+    {
+      "at": "2026-10-24T21:13:38.557Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-24T22:45:24.862Z",
+      "event": "ship approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T22:46:06.980Z",
+      "event": "step",
+      "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-24T22:46:07.086Z",
+      "event": "advanced",
+      "detail": "learn"
+    },
+    {
+      "at": "2026-10-24T22:46:29.921Z",
+      "event": "closed"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "security",
+      "text": "Resolved research-intelligence-dashboard:s78",
+      "where": [
+        ".gitignore",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Supplements/app/Actions/AddSupplement.php",
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s78",
+      "note": "brought into genetics-module",
+      "at": "2026-10-24T18:00:57.663Z"
+    },
+    {
+      "id": "s2",
+      "area": "tests",
+      "text": "Declined research-intelligence-dashboard:s79",
+      "where": [
+        "tests/Feature/ExampleTest.php",
+        "tests/TestCase.php",
+        "tests/Pest.php",
+        "Modules/Supplements/**",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php",
+        "Modules/Intelligence/**",
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php",
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Intelligence/database/factories/**",
+        "Modules/Supplements/tests/Feature/StatsTest.php",
+        "Modules/Supplements/tests/**",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s79",
+      "at": "2026-10-24T18:00:57.788Z"
+    },
+    {
+      "id": "s3",
+      "area": "ux",
+      "text": "Declined research-intelligence-dashboard:s80",
+      "where": [
+        "resources/views/components/tabs/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Intelligence/config/config.php",
+        "Modules/Supplements/config/config.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s80",
+      "at": "2026-10-24T18:00:57.788Z"
+    },
+    {
+      "id": "s4",
+      "area": "ux",
+      "text": "Declined supplement-pdf-reports:s39",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "Modules/Reports/resources/views/templates/*/styles.blade.php"
+      ],
+      "from": "user",
+      "declines": "supplement-pdf-reports:s39",
+      "at": "2026-10-24T18:00:57.788Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Once DatabaseSeeder calls DemoUserSeeder, add a test that db:seed leaves one demo user who can log in",
+      "where": [
+        "tests/Feature/Auth/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:33:24.350Z"
+    },
+    {
+      "id": "s6",
+      "area": "security",
+      "text": "Add an IP-only login throttle alongside the per-email+IP one, against credential stuffing across many emails",
+      "where": [
+        "resources/views/pages/⚡login.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:33:24.419Z"
+    },
+    {
+      "id": "s7",
+      "area": "ux",
+      "text": "Add a My genetics nav link in the header when genetics.profile exists",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:33:24.491Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "Add max:255 to the login email rule; the throttle key embeds the raw email",
+      "where": [
+        "resources/views/pages/⚡login.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:34:05.705Z"
+    },
+    {
+      "id": "s9",
+      "area": "quality",
+      "text": "Remember-me checkbox was not in spec and is untested: drop it or add a test",
+      "where": [
+        "resources/views/pages/⚡login.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:34:05.773Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Test the post-login redirect to genetics.profile once that route exists",
+      "where": [
+        "tests/Feature/Auth/LoginTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:34:05.846Z"
+    },
+    {
+      "id": "s11",
+      "area": "security",
+      "text": "Refuse to seed the demo user in production when DEMO_USER_PASSWORD is unset or the default",
+      "where": [
+        "database/seeders/DemoUserSeeder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:34:16.948Z"
+    },
+    {
+      "id": "s12",
+      "area": "security",
+      "text": "Configure trustProxies before deploying behind a proxy so the login throttle keys on the real client IP",
+      "where": [
+        "bootstrap/app.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:34:17.018Z"
+    },
+    {
+      "id": "s13",
+      "area": "tests",
+      "text": "Assert session regeneration at HTTP level rather than inside Livewire::test",
+      "where": [
+        "tests/Feature/Auth/LoginTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:34:17.089Z"
+    },
+    {
+      "id": "s14",
+      "area": "tests",
+      "text": "Let FakeWebResearcher queue a different result or failure per call so multi-search tests need no inline researcher",
+      "where": [
+        "Modules/Intelligence/app/Testing/FakeWebResearcher.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:35:00.927Z"
+    },
+    {
+      "id": "s15",
+      "area": "ux",
+      "text": "Put a re-run action next to the 'Re-run research to check genetic interactions' hint",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:35:01.002Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Delete/create gene interactions through the supplement relation for consistency with other child rows",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:35:44.140Z"
+    },
+    {
+      "id": "s17",
+      "area": "quality",
+      "text": "Normalise URLs (trailing slash, fragment) when de-duplicating merged sources",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:35:44.212Z"
+    },
+    {
+      "id": "s18",
+      "area": "tests",
+      "text": "Cover a gene search that returns an empty list",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:35:44.280Z"
+    },
+    {
+      "id": "s19",
+      "area": "security",
+      "text": "Cap the number of gene_interactions accepted per run (e.g. 30) with a test",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:35:53.776Z"
+    },
+    {
+      "id": "s20",
+      "area": "quality",
+      "text": "Guard the gene_query sprintf against a misconfigured format (catch ValueError, skip the gene search) or document the single %s",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:35:53.838Z"
+    },
+    {
+      "id": "s21",
+      "area": "tests",
+      "text": "Re-run the Recommendations boundary probes once that module exists; they are vacuous until then",
+      "where": [
+        "Modules/*/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:52:49.132Z"
+    },
+    {
+      "id": "s22",
+      "area": "docs",
+      "text": "Document the reference_allele (non-risk plus-strand allele) / risk_allele convention and the FUT2 direction caveat",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:52:49.214Z"
+    },
+    {
+      "id": "s23",
+      "area": "security",
+      "text": "Cap AddVariant's source label at 255 chars (upload file names)",
+      "where": [
+        "Modules/Genetics/app/Actions/AddVariant.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:53:53.696Z"
+    },
+    {
+      "id": "s24",
+      "area": "quality",
+      "text": "copiesOf: return 0 for an empty or multi-character allele instead of throwing",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:54:17.343Z"
+    },
+    {
+      "id": "s25",
+      "area": "quality",
+      "text": "Retry once on UniqueConstraintViolationException when concurrent adds race on rsid/user",
+      "where": [
+        "Modules/Genetics/app/Actions/AddVariant.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:54:17.417Z"
+    },
+    {
+      "id": "s26",
+      "area": "quality",
+      "text": "toPlusStrand: skip the complement flip when only one reference allele is known to avoid false matches",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:54:17.492Z"
+    },
+    {
+      "id": "s27",
+      "area": "tests",
+      "text": "Flaky encryption test: not->toContain('CT') on ciphertext; assert Crypt decrypts to plaintext instead",
+      "where": [
+        "Modules/Genetics/tests/Feature/UserVariantTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:54:17.560Z"
+    },
+    {
+      "id": "s28",
+      "area": "tests",
+      "text": "Test that a guest bounced from /genetics lands back on /genetics after login (intended URL)",
+      "where": [
+        "tests/Feature/Auth/LoginTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:56:48.577Z"
+    },
+    {
+      "id": "s29",
+      "area": "security",
+      "text": "User-typed gene label lands on the shared reference row; treat it as a lookup hint only (lookup result overwrites it) and consider a daily cap on new reference rows per user",
+      "where": [
+        "Modules/Genetics/app/Actions/AddVariant.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:57:40.889Z"
+    },
+    {
+      "id": "s30",
+      "area": "tests",
+      "text": "Add a guest addVariant case with valid input asserting nothing is written",
+      "where": [
+        "Modules/Genetics/tests/Feature/ProfilePageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:57:40.954Z"
+    },
+    {
+      "id": "s31",
+      "area": "quality",
+      "text": "Make isLookedUp() protected (public methods are client-callable actions) and replace the \\u{10FFFF} null-gene sort sentinel with an explicit comparator",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:57:47.690Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Real-browser check of a 25 MB upload once Herd upload limits are raised",
+      "where": [
+        "Modules/Genetics/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:16:27.408Z"
+    },
+    {
+      "id": "s33",
+      "area": "quality",
+      "text": "Re-check Livewire temp-upload metadata cleanup (FileUploadConfiguration internals) after each Livewire upgrade",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:16:27.478Z"
+    },
+    {
+      "id": "s34",
+      "area": "security",
+      "text": "genetics:reap-stale should also delete raw files left on uploads stuck in Queued/Parsing",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:16:27.548Z"
+    },
+    {
+      "id": "s35",
+      "area": "security",
+      "text": "Set Livewire temporary upload middleware to auth + a per-user throttle instead of the default 60/min per IP",
+      "where": [
+        "config/livewire.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.191Z"
+    },
+    {
+      "id": "s36",
+      "area": "security",
+      "text": "Scheduled prune of genetics livewire-tmp files older than 1h and of uploads stuck active with their files",
+      "where": [
+        "Modules/Genetics/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.255Z"
+    },
+    {
+      "id": "s37",
+      "area": "tests",
+      "text": "Exercise the real genetics temp disk and .json sidecar deletion instead of Livewire's tmp-for-tests disk",
+      "where": [
+        "Modules/Genetics/tests/Feature/UploadPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.318Z"
+    },
+    {
+      "id": "s38",
+      "area": "quality",
+      "text": "Bound fgets line length (e.g. 8192) and skip or fail on over-long lines",
+      "where": [
+        "Modules/Genetics/app/Support/Parsing/Lines.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.383Z"
+    },
+    {
+      "id": "s39",
+      "area": "security",
+      "text": "Use RateLimiter::attempt for atomic check-and-hit on upload/add limits",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.451Z"
+    },
+    {
+      "id": "s40",
+      "area": "security",
+      "text": "original_name / user_variants.source may contain a person's name: document as personal data or encrypt",
+      "where": [
+        "Modules/Genetics/database/migrations/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:18:07.514Z"
+    },
+    {
+      "id": "s41",
+      "area": "quality",
+      "text": "Document that the last attempt marks Failed and swallows (no failed_jobs row); count found_count after rsid de-dup",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:18:14.364Z"
+    },
+    {
+      "id": "s42",
+      "area": "quality",
+      "text": "Pass a default to config('genetics.max_marker_rows') so a missing key doesn't reject every marker list",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:20:51.519Z"
+    },
+    {
+      "id": "s43",
+      "area": "ux",
+      "text": "Show the stored lookup error (add error to VariantData) and a per-row loading state on Look up",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:25:47.284Z"
+    },
+    {
+      "id": "s44",
+      "area": "perf",
+      "text": "Daily spend ceiling on lookups per user",
+      "where": [
+        "Modules/Genetics/app/Actions/LookupVariant.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:25:47.354Z"
+    },
+    {
+      "id": "s45",
+      "area": "tests",
+      "text": "Render test that genetics::prompts.lookup escapes source markdown",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:25:47.422Z"
+    },
+    {
+      "id": "s46",
+      "area": "quality",
+      "text": "Revert the LookingUp claim if dispatch throws; the reaper covers lost jobs later",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:26:47.809Z"
+    },
+    {
+      "id": "s47",
+      "area": "quality",
+      "text": "On upload-job retry, subtract lookups already claimed by this upload from the cap",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:26:47.873Z"
+    },
+    {
+      "id": "s48",
+      "area": "security",
+      "text": "Global/daily lookup budget (e.g. RateLimiter key genetics-lookup-global); per-user bounds still allow ~100 paid lookups/min",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:26:59.866Z"
+    },
+    {
+      "id": "s49",
+      "area": "security",
+      "text": "Fall back to default lookup domains (or fail closed) when GENETICS_LOOKUP_DOMAINS is empty; an empty list allows any host",
+      "where": [
+        "Modules/Genetics/config/config.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:26:59.929Z"
+    },
+    {
+      "id": "s50",
+      "area": "security",
+      "text": "Use @js($variant->rsid) in wire:click lookUp instead of string interpolation",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:26:59.992Z"
+    },
+    {
+      "id": "s51",
+      "area": "tests",
+      "text": "Real-render check against a multi-page lab-style PDF with embedded fonts (synthetic data)",
+      "where": [
+        "Modules/Genetics/tests/Feature/ExtractionTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:29:41.527Z"
+    },
+    {
+      "id": "s52",
+      "area": "perf",
+      "text": "Page/size guard before pdfparser loads a large PDF into memory",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:29:41.592Z"
+    },
+    {
+      "id": "s53",
+      "area": "quality",
+      "text": "Cache the reference gene list used for line filtering",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:29:41.657Z"
+    },
+    {
+      "id": "s54",
+      "area": "quality",
+      "text": "Drop a line that doesn't fit whole under max_chars instead of truncating mid-token",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:30:27.594Z"
+    },
+    {
+      "id": "s55",
+      "area": "security",
+      "text": "Keep only extracted rsIDs that appear in the lines sent to the model (blocks invented/injected rows); add a test",
+      "where": [
+        "Modules/Genetics/app/Support/ExtractionOutputBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:30:40.366Z"
+    },
+    {
+      "id": "s56",
+      "area": "security",
+      "text": "Size/page pre-check for PDFs and a worker memory guard; pdfparser is unbounded on crafted files",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:30:40.430Z"
+    },
+    {
+      "id": "s57",
+      "area": "quality",
+      "text": "Scrub invalid UTF-8 before the /u regexes; optionally strip non-marker tokens (names) from sent lines",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:30:40.506Z"
+    },
+    {
+      "id": "s58",
+      "area": "tests",
+      "text": "Consolidate per-module arch tests under tests/Arch; each costs ~8MB in the full run (memory limit raised to 512M meanwhile)",
+      "where": [
+        "Modules/*/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:45:28.041Z"
+    },
+    {
+      "id": "s59",
+      "area": "tests",
+      "text": "End-to-end /supplements/{id} test of the Your genetics panel",
+      "where": [
+        "Modules/Recommendations/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:45:28.104Z"
+    },
+    {
+      "id": "s60",
+      "area": "tests",
+      "text": "Full-page GET of /supplements/{id} as guest and as user B asserting no genotype in HTML",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:46:15.994Z"
+    },
+    {
+      "id": "s61",
+      "area": "security",
+      "text": "Fail closed: branch on a null relevance result instead of @auth",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡genetic-panel.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:46:16.062Z"
+    },
+    {
+      "id": "s62",
+      "area": "security",
+      "text": "If response caching is ever added, exclude supplements.show or vary by user (personal panel on a public page)",
+      "where": [
+        "Modules/Supplements/routes/web.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:46:16.129Z"
+    },
+    {
+      "id": "s63",
+      "area": "quality",
+      "text": "Remove the leftover generated comment above the contract bind",
+      "where": [
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:46:29.736Z"
+    },
+    {
+      "id": "s64",
+      "area": "tests",
+      "text": "Add a signed-in-with-match case to the opt-in real Chrome render test",
+      "where": [
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:48:28.620Z"
+    },
+    {
+      "id": "s65",
+      "area": "security",
+      "text": "Send Cache-Control: private, no-store on PDF downloads now that they can carry per-user genetics",
+      "where": [
+        "Modules/Reports/app/Http/Controllers/SupplementReportController.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:48:28.682Z"
+    },
+    {
+      "id": "s66",
+      "area": "tests",
+      "text": "Invert the Recommendations rule to an allow-list (Contracts, Data, Testing) so new private namespaces trip it",
+      "where": [
+        "Modules/Reports/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:49:16.709Z"
+    },
+    {
+      "id": "s67",
+      "area": "quality",
+      "text": "Use dedicated CSS classes for the genotype line and disclaimer instead of reusing grade/empty",
+      "where": [
+        "Modules/Reports/resources/views/sections/genetics.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:49:16.773Z"
+    },
+    {
+      "id": "s68",
+      "area": "tests",
+      "text": "Reaper case: stale upload whose raw file is already missing still fails cleanly",
+      "where": [
+        "Modules/Genetics/tests/Feature/ReapStaleTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:52:19.508Z"
+    },
+    {
+      "id": "s69",
+      "area": "quality",
+      "text": "Share a throttle helper between Supplements ActionThrottle and the Genetics inline limiters",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:52:40.920Z"
+    },
+    {
+      "id": "s70",
+      "area": "security",
+      "text": "Store the sanitized (trimmed) source URL, not the raw one",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:53:32.046Z"
+    },
+    {
+      "id": "s71",
+      "area": "security",
+      "text": "Mark the show page's supplementId #[Locked]",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:53:32.108Z"
+    },
+    {
+      "id": "s72",
+      "area": "quality",
+      "text": "Decide/document whether a late job may flip a reaped Failed run back to Complete",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:53:32.171Z"
+    },
+    {
+      "id": "s73",
+      "area": "tests",
+      "text": "Write demo files to a temp storage path in tests instead of the real storage/app/demo",
+      "where": [
+        "Modules/Genetics/tests/Feature/DemoFilesTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:56:14.117Z"
+    },
+    {
+      "id": "s74",
+      "area": "docs",
+      "text": "Reword 'boundary rules not enforced automatically yet' now that per-module arch tests enforce them",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:56:14.178Z"
+    },
+    {
+      "id": "s75",
+      "area": "docs",
+      "text": "Say Genetics routes and logout use auth",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:57:00.798Z"
+    },
+    {
+      "id": "s76",
+      "area": "tests",
+      "text": "Pin that storage/app/demo files are git-ignored (git check-ignore in a test)",
+      "where": [
+        "Modules/Genetics/tests/Feature/DemoFilesTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T21:00:25.228Z"
+    },
+    {
+      "id": "s77",
+      "area": "tests",
+      "text": "Add Shared's private namespaces (Services, Providers) to the Genetics boundary test",
+      "where": [
+        "Modules/Genetics/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T21:00:25.294Z"
+    },
+    {
+      "id": "s78",
+      "area": "security",
+      "text": "Require auth (or a global daily budget) for supplement add/retry/re-run; per-IP limits are bypassable and each run is paid",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:02:40.215Z"
+    },
+    {
+      "id": "s79",
+      "area": "security",
+      "text": "Per-user daily lookup budget and back-off on repeated Failed retries",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:02:40.278Z"
+    },
+    {
+      "id": "s80",
+      "area": "security",
+      "text": "Delete-my-genetic-data action, a stated retention rule, and encrypt or drop original_name/source file names",
+      "where": [
+        "Modules/Genetics/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:02:40.340Z"
+    },
+    {
+      "id": "s81",
+      "area": "quality",
+      "text": "Don't strand-flip when only one reference allele is known (TT with risk A becomes AA, false 2-copy match on A/T SNPs)",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:45.993Z"
+    },
+    {
+      "id": "s82",
+      "area": "ux",
+      "text": "Set genetics_checked_at only when the gene search actually ran",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:46.062Z"
+    },
+    {
+      "id": "s83",
+      "area": "tests",
+      "text": "Time the full ProcessGeneticUpload job on the large file and reset peak memory before measuring",
+      "where": [
+        "Modules/Genetics/tests/Feature/LargeParseTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:46.131Z"
+    },
+    {
+      "id": "s84",
+      "area": "docs",
+      "text": "Fix the 'not enforced automatically yet' boundary paragraph and the RESEARCH_GENE_LIMIT description in .env.example",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:46.201Z"
+    },
+    {
+      "id": "s85",
+      "area": "security",
+      "text": "Add a minimum length and case-insensitive default check to the demo password guard; consider failing loudly in production",
+      "where": [
+        "database/seeders/DemoUserSeeder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:10:54.525Z"
+    },
+    {
+      "id": "s86",
+      "area": "docs",
+      "text": "singleAllele docblock example: use TT or C/T, not C677T (the builder now normalises C677T)",
+      "where": [
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:12:02.919Z"
+    },
+    {
+      "id": "s87",
+      "area": "security",
+      "text": "Genetics security hardening: per-user daily and global lookup budgets, auth or a budget on paid supplement add/retry/re-run, PDF size/page guard and worker memory limit, keep only extracted rsIDs that appear in the sent lines (and strip names from them), lookup-domain fallback, Livewire temp-upload auth + stale tmp sweep, IP-only login throttle and trusted proxies, stronger demo-password guard, Cache-Control private on genetic PDFs, user gene hints off the shared reference row, delete-my-data + retention, #[Locked] on show page id",
+      "where": [
+        "resources/views/pages/⚡login.blade.php",
+        "database/seeders/DemoUserSeeder.php",
+        "bootstrap/app.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/AddVariant.php",
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php",
+        "config/livewire.php",
+        "Modules/Genetics/**",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/database/migrations/**",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Genetics/config/config.php",
+        "Modules/Genetics/app/Support/ExtractionOutputBuilder.php",
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php",
+        "Modules/Recommendations/resources/views/livewire/⚡genetic-panel.blade.php",
+        "Modules/Supplements/routes/web.php",
+        "Modules/Reports/app/Http/Controllers/SupplementReportController.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s6",
+        "genetics-module:s8",
+        "genetics-module:s11",
+        "genetics-module:s12",
+        "genetics-module:s19",
+        "genetics-module:s23",
+        "genetics-module:s29",
+        "genetics-module:s34",
+        "genetics-module:s35",
+        "genetics-module:s36",
+        "genetics-module:s39",
+        "genetics-module:s40",
+        "genetics-module:s48",
+        "genetics-module:s49",
+        "genetics-module:s50",
+        "genetics-module:s55",
+        "genetics-module:s56",
+        "genetics-module:s61",
+        "genetics-module:s62",
+        "genetics-module:s65",
+        "genetics-module:s70",
+        "genetics-module:s71",
+        "genetics-module:s78",
+        "genetics-module:s79",
+        "genetics-module:s80",
+        "genetics-module:s85"
+      ],
+      "at": "2026-10-24T21:12:39.568Z"
+    },
+    {
+      "id": "s88",
+      "area": "tests",
+      "text": "Deeper Genetics tests: full-page guest/other-user checks on /supplements/{id}, real temp-disk and sidecar cleanup, reaper edge cases, multi-page lab PDF, real Chrome render with genetics, consolidate per-module arch tests under tests/Arch (allow-lists, Shared namespaces), FakeWebResearcher per-call queue, large-parse through the full job, misc missing cases",
+      "where": [
+        "tests/Feature/Auth/**",
+        "tests/Feature/Auth/LoginTest.php",
+        "Modules/Intelligence/app/Testing/FakeWebResearcher.php",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php",
+        "Modules/*/tests/Unit/BoundaryTest.php",
+        "Modules/Genetics/tests/Feature/UserVariantTest.php",
+        "Modules/Genetics/tests/Feature/ProfilePageTest.php",
+        "Modules/Genetics/tests/**",
+        "Modules/Genetics/tests/Feature/UploadPageTest.php",
+        "Modules/Genetics/tests/Feature/LookupTest.php",
+        "Modules/Genetics/tests/Feature/ExtractionTest.php",
+        "Modules/Recommendations/tests/**",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php",
+        "Modules/Reports/tests/Unit/BoundaryTest.php",
+        "Modules/Genetics/tests/Feature/ReapStaleTest.php",
+        "Modules/Genetics/tests/Feature/DemoFilesTest.php",
+        "Modules/Genetics/tests/Unit/BoundaryTest.php",
+        "Modules/Genetics/tests/Feature/LargeParseTest.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s5",
+        "genetics-module:s10",
+        "genetics-module:s13",
+        "genetics-module:s14",
+        "genetics-module:s18",
+        "genetics-module:s21",
+        "genetics-module:s27",
+        "genetics-module:s28",
+        "genetics-module:s30",
+        "genetics-module:s32",
+        "genetics-module:s37",
+        "genetics-module:s45",
+        "genetics-module:s51",
+        "genetics-module:s58",
+        "genetics-module:s59",
+        "genetics-module:s60",
+        "genetics-module:s64",
+        "genetics-module:s66",
+        "genetics-module:s68",
+        "genetics-module:s73",
+        "genetics-module:s76",
+        "genetics-module:s77",
+        "genetics-module:s83"
+      ],
+      "at": "2026-10-24T21:12:39.701Z"
+    },
+    {
+      "id": "s89",
+      "area": "quality",
+      "text": "Genetics code-quality cleanups: Genotype edge cases (empty allele, one known allele flips), unique-race retry in AddVariant, revert LookingUp claim on dispatch failure, upload-retry cap accounting, bounded line reads and UTF-8 scrub, URL de-dup normalisation, cap gene_interactions per run, genetics_checked_at only when the gene search ran, shared throttle helper, small view/provider tidies",
+      "where": [
+        "resources/views/pages/⚡login.blade.php",
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Genetics/app/Data/Genotype.php",
+        "Modules/Genetics/app/Actions/AddVariant.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/app/Support/Parsing/Lines.php",
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php",
+        "Modules/Genetics/app/Actions/LookupVariant.php",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php",
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php",
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php",
+        "Modules/Reports/resources/views/sections/genetics.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s9",
+        "genetics-module:s16",
+        "genetics-module:s17",
+        "genetics-module:s20",
+        "genetics-module:s24",
+        "genetics-module:s25",
+        "genetics-module:s26",
+        "genetics-module:s31",
+        "genetics-module:s33",
+        "genetics-module:s38",
+        "genetics-module:s41",
+        "genetics-module:s42",
+        "genetics-module:s44",
+        "genetics-module:s46",
+        "genetics-module:s47",
+        "genetics-module:s52",
+        "genetics-module:s53",
+        "genetics-module:s54",
+        "genetics-module:s57",
+        "genetics-module:s63",
+        "genetics-module:s67",
+        "genetics-module:s69",
+        "genetics-module:s72",
+        "genetics-module:s81"
+      ],
+      "at": "2026-10-24T21:12:39.831Z"
+    },
+    {
+      "id": "s90",
+      "area": "ux",
+      "text": "Genetics UX polish: show stored lookup errors and per-row loading on Look up, My genetics nav link, re-run action beside the interactions hint",
+      "where": [
+        "resources/views/layouts/app.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s7",
+        "genetics-module:s15",
+        "genetics-module:s43",
+        "genetics-module:s82"
+      ],
+      "at": "2026-10-24T21:12:39.962Z"
+    },
+    {
+      "id": "s91",
+      "area": "docs",
+      "text": "Docs touch-ups: boundary-enforcement paragraph, auth/logout wording, allele-convention single source, RESEARCH_GENE_LIMIT description, singleAllele docblock",
+      "where": [
+        "CLAUDE.md",
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s22",
+        "genetics-module:s74",
+        "genetics-module:s75",
+        "genetics-module:s84",
+        "genetics-module:s86"
+      ],
+      "at": "2026-10-24T21:12:40.108Z"
+    }
+  ],
+  "planHash": "1e04af42eed00fb2",
+  "configHash": "85d35cf89052f183"
+}

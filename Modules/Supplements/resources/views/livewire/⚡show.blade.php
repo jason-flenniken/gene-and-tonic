@@ -1,16 +1,19 @@
 <?php
 
+use Flux\Flux;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Actions\StartResearch;
 use Modules\Supplements\Repositories\SupplementRepository;
+use Modules\Supplements\Support\ActionThrottle;
 
 new #[Title('Supplement')] class extends Component
 {
-    private const TABS = ['overview', 'effects', 'mechanisms', 'studies', 'sources'];
+    private const TABS = ['overview', 'effects', 'mechanisms', 'studies', 'genetics', 'sources'];
 
     public int $supplementId;
 
@@ -33,6 +36,27 @@ new #[Title('Supplement')] class extends Component
     public function updatedTab(): void
     {
         $this->normalizeTab();
+    }
+
+    public function rerun(SupplementRepository $supplements, StartResearch $startResearch): void
+    {
+        $supplement = $supplements->find($this->supplementId);
+
+        if ($supplement === null) {
+            return;
+        }
+
+        if (! ActionThrottle::attempt('supplements-run')) {
+            Flux::toast(text: ActionThrottle::MESSAGE, variant: 'danger');
+
+            return;
+        }
+
+        if ($startResearch->handle($supplement)) {
+            Flux::toast(text: 'Research started.', variant: 'success');
+        } else {
+            Flux::toast(text: 'Research is already running.', variant: 'warning');
+        }
     }
 
     #[Computed]
@@ -74,6 +98,9 @@ new #[Title('Supplement')] class extends Component
                 <flux:badge color="{{ $research->status->color() }}" size="sm">{{ $research->status->label() }}</flux:badge>
             @endif
             <div class="ml-auto flex items-center gap-3">
+                @if ($research && ! $research->status->isActive())
+                    <flux:button size="sm" wire:click="rerun">Re-run</flux:button>
+                @endif
                 @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.header') as $actionView)
                     @include($actionView, ['supplementId' => $supplementId, 'status' => $research?->status])
                 @endforeach
@@ -86,6 +113,7 @@ new #[Title('Supplement')] class extends Component
         <x-tabs.item :active="$tab === 'effects'" wire:click="$set('tab', 'effects')">Effects ({{ count($research?->effects ?? []) }})</x-tabs.item>
         <x-tabs.item :active="$tab === 'mechanisms'" wire:click="$set('tab', 'mechanisms')">Mechanisms ({{ count($research?->mechanisms ?? []) }})</x-tabs.item>
         <x-tabs.item :active="$tab === 'studies'" wire:click="$set('tab', 'studies')">Studies ({{ count($research?->studies ?? []) }})</x-tabs.item>
+        <x-tabs.item :active="$tab === 'genetics'" wire:click="$set('tab', 'genetics')">Genetics ({{ count($research?->geneInteractions ?? []) }})</x-tabs.item>
         <x-tabs.item :active="$tab === 'sources'" wire:click="$set('tab', 'sources')">Sources ({{ count($research?->sources ?? []) }})</x-tabs.item>
     </x-tabs>
 
@@ -201,6 +229,31 @@ new #[Title('Supplement')] class extends Component
                 </flux:card>
             @endif
         </div>
+    @elseif ($tab === 'genetics')
+        <div role="tabpanel" data-panel="genetics" class="space-y-3">
+            @if ($research === null || ! $research->geneticsChecked)
+                <flux:card><flux:text>Re-run research to check genetic interactions.</flux:text></flux:card>
+            @else
+                @forelse ($research->geneInteractions as $interaction)
+                    <flux:card wire:key="gene-{{ $loop->index }}">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <flux:heading>{{ $interaction->gene }}</flux:heading>
+                            @if ($interaction->rsid)
+                                <flux:badge size="sm">{{ $interaction->rsid }}</flux:badge>
+                            @endif
+                            @if ($interaction->allele)
+                                <flux:badge size="sm">Allele {{ $interaction->allele }}</flux:badge>
+                            @endif
+                            <flux:badge size="sm" color="{{ $interaction->relation->color() }}">{{ $interaction->relation->label() }}</flux:badge>
+                        </div>
+                        <flux:text class="mt-1">{{ $interaction->explanation }}</flux:text>
+                        <x-supplements::source-badges :keys="$interaction->sourceKeys" :sources="$this->sourcesByKey" />
+                    </flux:card>
+                @empty
+                    <flux:card><flux:text>No genetic interactions found in the sources.</flux:text></flux:card>
+                @endforelse
+            @endif
+        </div>
     @else
         <div role="tabpanel" data-panel="sources">
             @if (($research?->sources ?? []) === [])
@@ -235,4 +288,8 @@ new #[Title('Supplement')] class extends Component
             @endif
         </div>
     @endif
+
+    @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.panels') as $panelView)
+        @include($panelView, ['supplementId' => $supplementId])
+    @endforeach
 </div>

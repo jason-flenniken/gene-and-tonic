@@ -64,3 +64,79 @@ it('sanitises study numbers and the pmid', function () {
         ->and($findings->studies[1])->toMatchArray(['year' => 2021, 'sample_size' => 120, 'pmid' => '555'])
         ->and($findings->studies[2]['pmid'])->toBeNull();
 });
+
+function unitInteraction(array $overrides = []): array
+{
+    return array_merge([
+        'gene' => 'mthfr', 'rsid' => 'rs1801133', 'allele' => 't', 'relation' => 'helps',
+        'explanation' => 'T carriers may need more folate [S1].', 'source_ids' => ['S1'],
+    ], $overrides);
+}
+
+it('keeps valid gene interactions, normalising gene and allele and stripping inline markers', function () {
+    $findings = ResearchFindingsBuilder::build(
+        unitOutput(['gene_interactions' => [unitInteraction(), unitInteraction(['rsid' => null, 'allele' => null, 'relation' => 'Caution', 'source_ids' => ['S2', 'S9']])]]),
+        unitSources(),
+    );
+
+    expect($findings->geneInteractions)->toBe([
+        ['gene' => 'MTHFR', 'rsid' => 'rs1801133', 'allele' => 'T', 'relation' => 'helps', 'explanation' => 'T carriers may need more folate.', 'source_keys' => ['S1']],
+        ['gene' => 'MTHFR', 'rsid' => null, 'allele' => null, 'relation' => 'caution', 'explanation' => 'T carriers may need more folate.', 'source_keys' => ['S2']],
+    ]);
+});
+
+it('drops gene interactions that are uncited or carry invalid fields', function (array $overrides) {
+    $findings = ResearchFindingsBuilder::build(unitOutput(['gene_interactions' => [unitInteraction($overrides)]]), unitSources());
+
+    expect($findings->geneInteractions)->toBe([]);
+})->with([
+    'uncited' => [['source_ids' => ['S7']]],
+    'no source ids' => [['source_ids' => []]],
+    'relation cure' => [['relation' => 'cure']],
+    'html gene' => [['gene' => '<b>X</b>']],
+    'blank explanation' => [['explanation' => '  [S1] ']],
+    'non-string gene' => [['gene' => ['MTHFR']]],
+]);
+
+it('normalises the allele and rsid and keeps the interaction when they are unusable', function (array $overrides, ?string $rsid, ?string $allele) {
+    $findings = ResearchFindingsBuilder::build(unitOutput(['gene_interactions' => [unitInteraction($overrides)]]), unitSources());
+
+    expect($findings->geneInteractions)->toHaveCount(1)
+        ->and($findings->geneInteractions[0])->toMatchArray(['gene' => 'MTHFR', 'rsid' => $rsid, 'allele' => $allele]);
+})->with([
+    'HGVS allele C677T' => [['allele' => 'C677T'], 'rs1801133', 'T'],
+    'HGVS allele 677T' => [['allele' => '677T'], 'rs1801133', 'T'],
+    'genotype TT' => [['allele' => 'TT'], 'rs1801133', null],
+    'slash alleles' => [['allele' => 'C/T'], 'rs1801133', null],
+    'junk allele' => [['allele' => 'Z'], 'rs1801133', null],
+    'non-string allele' => [['allele' => ['T']], 'rs1801133', null],
+    'upper-case rsid' => [['rsid' => 'RS1801133'], 'rs1801133', 'T'],
+    'rsid with annotation' => [['rsid' => 'rs1801133 (C677T)'], 'rs1801133', 'T'],
+    'junk rsid drops the allele too' => [['rsid' => 'C677T'], null, null],
+    'non-string rsid' => [['rsid' => 1801133], null, null],
+]);
+
+it('treats missing or malformed gene_interactions as none', function (mixed $value) {
+    $findings = ResearchFindingsBuilder::build(unitOutput(['gene_interactions' => $value, 'effects' => []]), unitSources());
+
+    expect($findings->geneInteractions)->toBe([]);
+})->with([[null], ['nope'], [['not-an-array']]]);
+
+it('drops sources with unsafe urls and anything citing only them', function () {
+    $sources = [
+        new SourceDocument('S1', 'https://user:pw@evil.com/x', 'Bad', 'evil.com', null, 'md'),
+        new SourceDocument('S2', 'https://ods.od.nih.gov/factsheets/Zinc/', 'Fact sheet', 'ods.od.nih.gov', null, 'md'),
+    ];
+
+    $findings = ResearchFindingsBuilder::build(unitOutput([
+        'effects' => [
+            ['claim' => 'A', 'outcome' => 'o', 'evidence_grade' => 'strong', 'source_ids' => ['S1']],
+            ['claim' => 'B', 'outcome' => 'o', 'evidence_grade' => 'strong', 'source_ids' => ['S1', 'S2']],
+        ],
+    ]), $sources);
+
+    expect(array_column($findings->sources, 'source_key'))->toBe(['S2'])
+        ->and($findings->effects)->toHaveCount(1)
+        ->and($findings->effects[0]['claim'])->toBe('B')
+        ->and($findings->effects[0]['source_keys'])->toBe(['S2']);
+});

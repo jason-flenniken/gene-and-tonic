@@ -1,0 +1,8 @@
+##fileformat=MyHeritage
+##Synthetic sample for tests. Not real genetic data.
+RSID,CHROMOSOME,POSITION,RESULT
+"rs1801133","1","11796321","GG"
+"rs4680","22","19963748","AG"
+"rs90000021","3","3000","CT"
+"rs90000022","4","3001","--"
+"rs90000023","5","3002","AA"

@@ -4,6 +4,7 @@ namespace Modules\Supplements\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Modules\Supplements\Database\Factories\SupplementFactory;
@@ -28,6 +29,12 @@ class Supplement extends Model
     public function research(): HasOne
     {
         return $this->hasOne(SupplementResearch::class);
+    }
+
+    /** @return HasMany<SupplementGeneInteraction, $this> */
+    public function geneInteractions(): HasMany
+    {
+        return $this->hasMany(SupplementGeneInteraction::class);
     }
 
     /** @return HasManyThrough<SupplementEffect, SupplementResearch, $this> */

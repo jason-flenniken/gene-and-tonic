@@ -3,6 +3,7 @@
 namespace Modules\Reports\Services;
 
 use Illuminate\Support\Str;
+use Modules\Recommendations\Data\GeneticRelevanceData;
 use Modules\Supplements\Data\SupplementResearchData;
 use Spatie\LaravelPdf\Enums\Unit;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -16,13 +17,14 @@ class SupplementReportRenderer
 {
     public function __construct(private TemplateRegistry $templates) {}
 
-    public function render(SupplementResearchData $research, string $template): PdfBuilder
+    public function render(SupplementResearchData $research, string $template, ?GeneticRelevanceData $relevance = null): PdfBuilder
     {
         $config = $this->templates->get($template);
         [$top, $right, $bottom, $left] = $config['margins'];
 
         $data = [
             'research' => $research,
+            'relevance' => $relevance,
             'template' => $template,
             'label' => $config['label'],
             'generatedAt' => now(),

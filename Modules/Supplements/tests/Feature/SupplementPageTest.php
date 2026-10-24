@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\View;
 use Livewire\Livewire;
 use Modules\Shared\Contracts\PageActions;
+use Modules\Supplements\Enums\GeneRelation;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
+use Modules\Supplements\Models\SupplementGeneInteraction;
 use Modules\Supplements\Models\SupplementMechanism;
 use Modules\Supplements\Models\SupplementResearch;
 use Modules\Supplements\Models\SupplementSource;
@@ -107,4 +109,46 @@ it('renders every view registered for the supplement header slot', function () {
 
     $this->get(route('supplements.show', $supplement))->assertOk()
         ->assertSee('Action for '.$supplement->id.' (complete)', false);
+});
+
+it('renders every view registered for the supplement panels slot below the tab panels with only the supplement id', function (string $tab) {
+    View::getFinder()->prependLocation(module_path('Supplements', 'tests/Fixtures/views'));
+    app(PageActions::class)->register('supplement.panels', 'header-action');
+    $supplement = researchedSupplement();
+
+    $this->get(route('supplements.show', $supplement)."?tab=$tab")->assertOk()
+        ->assertSeeInOrder(['data-panel="'.$tab.'"', 'Action for '.$supplement->id.' (none)'], false);
+})->with(['overview', 'genetics']);
+
+it('lists gene interactions with their source markers on the Genetics tab', function () {
+    $supplement = researchedSupplement();
+    $supplement->research->update(['genetics_checked_at' => now()]);
+    SupplementGeneInteraction::factory()->create([
+        'supplement_id' => $supplement->id, 'gene' => 'MTHFR', 'rsid' => 'rs1801133', 'allele' => 'T',
+        'relation' => GeneRelation::Caution, 'explanation' => '<script>alert(1)</script> may need more folate.', 'source_keys' => ['S1'],
+    ]);
+    $url = route('supplements.show', $supplement);
+
+    $this->get($url)->assertSee('Genetics (1)');
+    $this->get("$url?tab=genetics")
+        ->assertSee('MTHFR')->assertSee('rs1801133')->assertSee('Allele T')->assertSee('Caution')
+        ->assertSee('href="https://pubmed.ncbi.nlm.nih.gov/1/"', false)
+        ->assertSee('&lt;script&gt;', false)
+        ->assertDontSee('<script>alert(1)</script>', false)
+        ->assertDontSee('Re-run research');
+});
+
+it('says when checked research found no gene interactions', function () {
+    $supplement = researchedSupplement();
+    $supplement->research->update(['genetics_checked_at' => now()]);
+
+    $this->get(route('supplements.show', $supplement).'?tab=genetics')
+        ->assertSee('No genetic interactions found')->assertDontSee('Re-run research');
+});
+
+it('asks to re-run research that predates gene interactions', function () {
+    $supplement = researchedSupplement();
+
+    $this->get(route('supplements.show', $supplement).'?tab=genetics')
+        ->assertSee('Re-run research to check genetic interactions.');
 });
