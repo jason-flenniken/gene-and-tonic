@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\User;
 use Livewire\Livewire;
+use Modules\Genetics\Actions\AddVariant;
+use Modules\Genetics\Models\UserVariant;
 
 beforeEach(fn () => $this->withoutVite());
 
@@ -32,4 +35,25 @@ it('updates the url-bound tab property', function () {
         ->assertSet('tab', 'usage')
         ->set('tab', 'nope')
         ->assertSet('tab', 'overview');
+});
+
+it('shows a sign-in prompt on the genetics tab for a guest', function () {
+    $this->get('/?tab=genetics')
+        ->assertOk()
+        ->assertSee('data-panel="genetics"', false)
+        ->assertSee('Sign in to add your genetic results')
+        ->assertDontSee('SNPs on file');
+});
+
+it('shows the variant count and a link on the genetics tab for a signed-in user', function () {
+    $user = User::factory()->create();
+    app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG');
+    app(AddVariant::class)->handle($user->id, 'rs4680', 'AA');
+    UserVariant::factory()->create();
+
+    $this->actingAs($user)->get('/?tab=genetics')
+        ->assertOk()
+        ->assertSee('SNPs on file')
+        ->assertSeeInOrder(['data-stat="variants"', '2'], false)
+        ->assertSee(route('genetics.profile'), false);
 });
