@@ -7,9 +7,11 @@ use Modules\Intelligence\Contracts\TextGenerator;
 use Modules\Intelligence\Contracts\WebResearcher;
 use Modules\Intelligence\Data\PromptRequest;
 use Modules\Intelligence\Data\SearchQuery;
+use Modules\Intelligence\Data\SourceDocument;
 use Modules\Intelligence\Exceptions\GenerationFailedException;
 use Modules\Intelligence\Exceptions\ResearchProviderException;
 use Modules\Supplements\Enums\EvidenceGrade;
+use Modules\Supplements\Enums\GeneRelation;
 use Modules\Supplements\Repositories\ResearchRepository;
 use Modules\Supplements\Repositories\SupplementRepository;
 use Modules\Supplements\Support\ResearchFindingsBuilder;
@@ -57,6 +59,8 @@ class ResearchSupplement
             return;
         }
 
+        $sources = $this->withGeneSources($name, $sources);
+
         $this->research->markAnalyzing($supplementId);
 
         try {
@@ -78,6 +82,40 @@ class ResearchSupplement
         }
 
         $this->research->replaceFindings($supplementId, $findings);
+    }
+
+    /**
+     * Second search for gene-specific sources on the same domains. A failure here is not fatal:
+     * the run continues with the first search's sources. Merged sources are de-duplicated by URL
+     * and re-numbered S1..Sn so the single generate call sees contiguous ids.
+     *
+     * @param  list<SourceDocument>  $sources
+     * @return list<SourceDocument>
+     */
+    private function withGeneSources(string $name, array $sources): array
+    {
+        try {
+            $geneSources = $this->researcher->search(new SearchQuery(
+                query: sprintf((string) config('supplements.research.gene_query'), $name),
+                domains: array_values((array) config('supplements.research.domains')),
+                limit: (int) config('supplements.research.gene_limit', 4),
+                scrape: true,
+            ));
+        } catch (ResearchProviderException) {
+            $geneSources = [];
+        }
+
+        $merged = [];
+        foreach ([...$sources, ...$geneSources] as $source) {
+            $merged[$source->url] ??= $source;
+        }
+
+        $numbered = [];
+        foreach (array_values($merged) as $index => $source) {
+            $numbered[] = new SourceDocument('S'.($index + 1), $source->url, $source->title, $source->domain, $source->description, $source->markdown);
+        }
+
+        return $numbered;
     }
 
     /**
@@ -113,6 +151,14 @@ class ResearchSupplement
                 'evidence_grade' => $s->string()->enum($grades)->required(),
                 'source_id' => $s->string()->required(),
                 'pmid' => $s->string()->nullable()->required(),
+            ]))->required(),
+            'gene_interactions' => $s->array()->items($s->object([
+                'gene' => $s->string()->required(),
+                'rsid' => $s->string()->nullable()->required(),
+                'allele' => $s->string()->nullable()->required(),
+                'relation' => $s->string()->enum(array_map(fn (GeneRelation $r): string => $r->value, GeneRelation::cases()))->required(),
+                'explanation' => $s->string()->required(),
+                'source_ids' => $ids(),
             ]))->required(),
         ];
     }

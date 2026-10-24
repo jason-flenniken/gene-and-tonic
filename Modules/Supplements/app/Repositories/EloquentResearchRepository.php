@@ -6,6 +6,7 @@ use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
+use Modules\Supplements\Models\SupplementGeneInteraction;
 use Modules\Supplements\Models\SupplementResearch;
 use Modules\Supplements\Support\ResearchFindings;
 
@@ -92,11 +93,16 @@ class EloquentResearchRepository implements ResearchRepository
             $research->effects()->delete();
             $research->mechanisms()->delete();
             $research->studies()->delete();
+            SupplementGeneInteraction::query()->where('supplement_id', $supplementId)->delete();
 
             $research->sources()->createMany($findings->sources);
             $research->effects()->createMany($findings->effects);
             $research->mechanisms()->createMany($findings->mechanisms);
             $research->studies()->createMany($findings->studies);
+
+            foreach ($findings->geneInteractions as $position => $interaction) {
+                SupplementGeneInteraction::query()->create([...$interaction, 'supplement_id' => $supplementId, 'position' => $position]);
+            }
 
             $research->update([
                 'summary' => $findings->summary,
@@ -104,6 +110,7 @@ class EloquentResearchRepository implements ResearchRepository
                 'status' => ResearchStatus::Complete,
                 'error' => null,
                 'completed_at' => now(),
+                'genetics_checked_at' => now(),
             ]);
         });
     }

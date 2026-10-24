@@ -5,12 +5,14 @@ namespace Modules\Supplements\Repositories;
 use Carbon\CarbonImmutable;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\EffectData;
+use Modules\Supplements\Data\GeneInteractionData;
 use Modules\Supplements\Data\MechanismData;
 use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Data\SupplementResearchData;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
+use Modules\Supplements\Models\SupplementGeneInteraction;
 use Modules\Supplements\Models\SupplementMechanism;
 use Modules\Supplements\Models\SupplementSource;
 use Modules\Supplements\Models\SupplementStudy;
@@ -20,7 +22,7 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
     public function forSupplement(int $supplementId): ?SupplementResearchData
     {
         $supplement = Supplement::query()
-            ->with(['research.effects', 'research.mechanisms', 'research.studies', 'research.sources'])
+            ->with(['research.effects', 'research.mechanisms', 'research.studies', 'research.sources', 'geneInteractions'])
             ->find($supplementId);
 
         $research = $supplement?->research;
@@ -64,6 +66,15 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
             ))->all()),
             completedAt: $research->completed_at !== null ? CarbonImmutable::instance($research->completed_at) : null,
             error: $research->error,
+            geneInteractions: array_values($supplement->geneInteractions->sortBy('position')->map(fn (SupplementGeneInteraction $g): GeneInteractionData => new GeneInteractionData(
+                gene: $g->gene,
+                rsid: $g->rsid,
+                allele: $g->allele,
+                relation: $g->relation,
+                explanation: $g->explanation,
+                sourceKeys: $this->keys($g->source_keys),
+            ))->all()),
+            geneticsChecked: $research->genetics_checked_at !== null,
         );
     }
 
