@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T19:31:14.228Z",
+  "updated": "2026-10-24T19:34:27.743Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -65,10 +65,19 @@
             "config/auth.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "authentication, credentials, session handling"
+          "riskReason": "authentication, credentials, session handling",
+          "branch": "task/genetics-module/auth-login",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--auth-login",
+          "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
+          "startedAt": "2026-10-24T19:31:27.236Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T19:34:27.743Z",
+          "tip": "d699e7f",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "1044e82dc30705059901f8ceef7ad1b754c70299"
         },
         {
           "id": "genetics-core",
@@ -89,10 +98,16 @@
             "Modules/Intelligence/tests/Unit/BoundaryTest.php"
           ],
           "complexity": "complex",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "migrations, special-category personal data with an encrypted cast, curated medical reference data"
+          "riskReason": "migrations, special-category personal data with an encrypted cast, curated medical reference data",
+          "substep": "implementing",
+          "branch": "task/genetics-module/genetics-core",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--genetics-core",
+          "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
+          "startedAt": "2026-10-24T19:31:32.563Z",
+          "level": "standard"
         },
         {
           "id": "supplement-interactions",
@@ -112,10 +127,16 @@
             "Modules/Supplements/tests/Unit/ResearchFindingsBuilderTest.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "untrusted model output and scraped sources persisted and rendered, migration"
+          "riskReason": "untrusted model output and scraped sources persisted and rendered, migration",
+          "substep": "implementing",
+          "branch": "task/genetics-module/supplement-interactions",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--supplement-interactions",
+          "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
+          "startedAt": "2026-10-24T19:31:37.778Z",
+          "level": "standard"
         },
         {
           "id": "genetics-page",
@@ -394,6 +415,51 @@
       "at": "2026-10-24T19:31:14.228Z",
       "event": "advanced",
       "detail": "execute"
+    },
+    {
+      "at": "2026-10-24T19:31:27.237Z",
+      "event": "task started",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:31:32.563Z",
+      "event": "task started",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:31:37.779Z",
+      "event": "task started",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:32:26.869Z",
+      "event": "task implementing",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:32:26.943Z",
+      "event": "task implementing",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:32:27.021Z",
+      "event": "task implementing",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:33:24.561Z",
+      "event": "task reviewing",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:34:17.159Z",
+      "event": "task merging",
+      "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:34:27.743Z",
+      "event": "task done",
+      "detail": "Demo-user login"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -472,6 +538,96 @@
       "from": "user",
       "declines": "supplement-pdf-reports:s39",
       "at": "2026-10-24T18:00:57.788Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Once DatabaseSeeder calls DemoUserSeeder, add a test that db:seed leaves one demo user who can log in",
+      "where": [
+        "tests/Feature/Auth/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:33:24.350Z"
+    },
+    {
+      "id": "s6",
+      "area": "security",
+      "text": "Add an IP-only login throttle alongside the per-email+IP one, against credential stuffing across many emails",
+      "where": [
+        "resources/views/pages/⚡login.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:33:24.419Z"
+    },
+    {
+      "id": "s7",
+      "area": "ux",
+      "text": "Add a My genetics nav link in the header when genetics.profile exists",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:33:24.491Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "Add max:255 to the login email rule; the throttle key embeds the raw email",
+      "where": [
+        "resources/views/pages/⚡login.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:34:05.705Z"
+    },
+    {
+      "id": "s9",
+      "area": "quality",
+      "text": "Remember-me checkbox was not in spec and is untested: drop it or add a test",
+      "where": [
+        "resources/views/pages/⚡login.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:34:05.773Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Test the post-login redirect to genetics.profile once that route exists",
+      "where": [
+        "tests/Feature/Auth/LoginTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:34:05.846Z"
+    },
+    {
+      "id": "s11",
+      "area": "security",
+      "text": "Refuse to seed the demo user in production when DEMO_USER_PASSWORD is unset or the default",
+      "where": [
+        "database/seeders/DemoUserSeeder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:34:16.948Z"
+    },
+    {
+      "id": "s12",
+      "area": "security",
+      "text": "Configure trustProxies before deploying behind a proxy so the login throttle keys on the real client IP",
+      "where": [
+        "bootstrap/app.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:34:17.018Z"
+    },
+    {
+      "id": "s13",
+      "area": "tests",
+      "text": "Assert session regeneration at HTTP level rather than inside Livewire::test",
+      "where": [
+        "tests/Feature/Auth/LoginTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:34:17.089Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
