@@ -47,6 +47,17 @@ return [
             'report' => false,
         ],
 
+        /*
+        | Raw genetic uploads and Livewire's temporary copies. Never served and
+        | never given a URL; files are deleted when processing finishes.
+        */
+        'genetics' => [
+            'driver' => 'local',
+            'root' => storage_path('app/genetics'),
+            'throw' => true,
+            'report' => false,
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

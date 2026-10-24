@@ -5,6 +5,8 @@ namespace Modules\Genetics\Providers;
 use Livewire\Livewire;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
+use Modules\Genetics\Support\Extraction\MarkerExtractor;
+use Modules\Genetics\Support\Extraction\NullMarkerExtractor;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class GeneticsServiceProvider extends ModuleServiceProvider
@@ -50,5 +52,6 @@ class GeneticsServiceProvider extends ModuleServiceProvider
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 
         $this->app->bind(GeneticProfileReader::class, EloquentGeneticProfileReader::class);
+        $this->app->bind(MarkerExtractor::class, NullMarkerExtractor::class);
     }
 }

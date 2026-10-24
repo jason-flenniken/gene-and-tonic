@@ -96,3 +96,11 @@ it('rejects an invalid gene symbol', function () {
 
     expect(DB::table('gene_variants')->count())->toBe(0);
 });
+
+it('caps the source label at 255 characters', function () {
+    $user = User::factory()->create();
+
+    app(AddVariant::class)->handle($user->id, 'rs12345', 'CT', source: str_repeat('é', 300).'.txt');
+
+    expect(mb_strlen(UserVariant::sole()->source))->toBe(255);
+});
