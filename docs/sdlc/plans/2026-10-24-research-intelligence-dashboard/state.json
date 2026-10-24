@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:35:33.150Z",
+  "updated": "2026-10-24T15:41:34.890Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -197,16 +197,19 @@
             "Modules/Intelligence/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
-          "fixRound": 0,
+          "status": "done",
+          "fixRound": 1,
           "risky": true,
           "riskReason": "new external integration returning untrusted scraped content; API key handling",
-          "substep": "implementing",
           "branch": "task/research-intelligence-dashboard/intelligence-web-research",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--intelligence-web-research",
           "base": "ed780b02d0cfa9df92d4b7304d406a3d77bd04df",
           "startedAt": "2026-10-24T15:34:14.866Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T15:41:34.889Z",
+          "tip": "109c6cf",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "88ef325657bf0e4e736aa2ef1640b772250812c0"
         },
         {
           "id": "supplement-page",
@@ -229,10 +232,16 @@
             "Modules/Supplements/tests/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "renders model output and scraped titles to the browser"
+          "riskReason": "renders model output and scraped titles to the browser",
+          "substep": "merging",
+          "branch": "task/research-intelligence-dashboard/supplement-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--supplement-page",
+          "base": "aa8d20ec9b44b4f41a4e3a6782421e383192c5af",
+          "startedAt": "2026-10-24T15:35:45.675Z",
+          "level": "standard"
         }
       ]
     },
@@ -487,6 +496,51 @@
       "at": "2026-10-24T15:35:33.150Z",
       "event": "task done",
       "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:35:45.676Z",
+      "event": "task started",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:35:45.759Z",
+      "event": "task implementing",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:37:43.065Z",
+      "event": "task reviewing",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:38:56.668Z",
+      "event": "task fixing",
+      "detail": "Intelligence web research (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T15:39:25.584Z",
+      "event": "task reviewing",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:40:29.745Z",
+      "event": "task merging",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:40:49.216Z",
+      "event": "task reviewing",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:41:28.643Z",
+      "event": "task merging",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:41:34.890Z",
+      "event": "task done",
+      "detail": "Intelligence web research"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -753,6 +807,146 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T15:35:26.462Z"
+    },
+    {
+      "id": "s27",
+      "area": "tests",
+      "text": "Arch test: Http facade only used by Intelligence Services drivers (enforces no-SDK / single HTTP seam)",
+      "where": [
+        "Modules/Intelligence/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:37:42.935Z"
+    },
+    {
+      "id": "s28",
+      "area": "quality",
+      "text": "Decide whether failed Firecrawl searches should record billed credits (currently null credits, 0 cost)",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:37:43.001Z"
+    },
+    {
+      "id": "s29",
+      "area": "security",
+      "text": "Empty domains list fails open (any host accepted, includeDomains sent empty); require non-empty domains or make 'any' explicit; normalize/validate configured domains",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.404Z"
+    },
+    {
+      "id": "s30",
+      "area": "security",
+      "text": "Clamp Firecrawl timeout to 1..120 and add connectTimeout(10); consider withoutRedirecting()",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.466Z"
+    },
+    {
+      "id": "s31",
+      "area": "security",
+      "text": "Truncate untrusted title/description/url (≈300/1000/2048) and bound response size; these fields feed the prompt",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.534Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Assert the failed search ai_requests row contains neither the query text nor a key that appears in an error message",
+      "where": [
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.602Z"
+    },
+    {
+      "id": "s33",
+      "area": "quality",
+      "text": "Point Larastan at module migrations (databaseMigrationsPath with Modules/*/database/migrations) so model @property docblocks aren't needed",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:39:25.443Z"
+    },
+    {
+      "id": "s34",
+      "area": "ux",
+      "text": "Supplement page title is a static 'Supplement'; use the supplement name",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:39:25.515Z"
+    },
+    {
+      "id": "s35",
+      "area": "security",
+      "text": "Mark the show page's supplementId and name properties #[Locked] so a client can't swap the supplement after mount",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:40:22.280Z"
+    },
+    {
+      "id": "s36",
+      "area": "tests",
+      "text": "Extend safeUrl tests: JavaScript: mixed case, data:, leading-space javascript:, HTTPS:// uppercase",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:40:22.344Z"
+    },
+    {
+      "id": "s37",
+      "area": "docs",
+      "text": "Document SupplementResearchData's extra error field in the contract",
+      "where": [
+        "Modules/Supplements/app/Contracts/SupplementResearchReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:40:22.407Z"
+    },
+    {
+      "id": "s38",
+      "area": "security",
+      "text": "safeUrl() accepts userinfo URLs (https://trusted@evil/); parse_url, require http(s)+host, reject user/pass, whitespace, control chars and backslash",
+      "where": [
+        "Modules/Supplements/app/Data/SourceData.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:40:29.614Z"
+    },
+    {
+      "id": "s39",
+      "area": "tests",
+      "text": "Add a GET test with a hostile ?tab= value asserting fallback to overview and no unescaped markup",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:40:29.679Z"
+    },
+    {
+      "id": "s40",
+      "area": "security",
+      "text": "Reject non-ASCII whitespace/fullwidth chars in source URLs, or compare hosts via idn_to_ascii",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:41:28.572Z"
     }
   ]
 }
