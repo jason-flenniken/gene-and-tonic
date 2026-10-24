@@ -6,8 +6,8 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T16:15:07.341Z",
-  "stage": "ship",
+  "updated": "2026-10-24T16:15:38.470Z",
+  "stage": "learn",
   "stageHistory": [
     {
       "stage": "discover",
@@ -36,6 +36,10 @@
     {
       "stage": "ship",
       "at": "2026-10-24T16:10:07.362Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-24T16:15:38.470Z"
     }
   ],
   "paused": null,
@@ -787,6 +791,16 @@
       "at": "2026-10-24T16:15:07.341Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T16:15:38.352Z",
+      "event": "step",
+      "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-24T16:15:38.470Z",
+      "event": "advanced",
+      "detail": "learn"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1745,10 +1759,5 @@
       ],
       "at": "2026-10-24T16:10:50.771Z"
     }
-  ],
-  "step": {
-    "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-24T16:11:54.912Z"
-  }
+  ]
 }
