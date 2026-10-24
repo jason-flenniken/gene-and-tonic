@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T19:36:02.666Z",
+  "updated": "2026-10-24T19:54:29.134Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -98,16 +98,19 @@
             "Modules/Intelligence/tests/Unit/BoundaryTest.php"
           ],
           "complexity": "complex",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "migrations, special-category personal data with an encrypted cast, curated medical reference data",
-          "substep": "implementing",
           "branch": "task/genetics-module/genetics-core",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--genetics-core",
           "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
           "startedAt": "2026-10-24T19:31:32.563Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T19:54:29.133Z",
+          "tip": "8ed6a77",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "61e7db914fa5a9d0fcaad47dbdda3e717ea740d1"
         },
         {
           "id": "supplement-interactions",
@@ -478,6 +481,21 @@
       "at": "2026-10-24T19:36:02.666Z",
       "event": "task done",
       "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:52:49.283Z",
+      "event": "task reviewing",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:54:17.624Z",
+      "event": "task merging",
+      "detail": "Genetics module, reference table, profile data"
+    },
+    {
+      "at": "2026-10-24T19:54:29.134Z",
+      "event": "task done",
+      "detail": "Genetics module, reference table, profile data"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -716,6 +734,76 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T19:35:53.838Z"
+    },
+    {
+      "id": "s21",
+      "area": "tests",
+      "text": "Re-run the Recommendations boundary probes once that module exists; they are vacuous until then",
+      "where": [
+        "Modules/*/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:52:49.132Z"
+    },
+    {
+      "id": "s22",
+      "area": "docs",
+      "text": "Document the reference_allele (non-risk plus-strand allele) / risk_allele convention and the FUT2 direction caveat",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:52:49.214Z"
+    },
+    {
+      "id": "s23",
+      "area": "security",
+      "text": "Cap AddVariant's source label at 255 chars (upload file names)",
+      "where": [
+        "Modules/Genetics/app/Actions/AddVariant.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:53:53.696Z"
+    },
+    {
+      "id": "s24",
+      "area": "quality",
+      "text": "copiesOf: return 0 for an empty or multi-character allele instead of throwing",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:54:17.343Z"
+    },
+    {
+      "id": "s25",
+      "area": "quality",
+      "text": "Retry once on UniqueConstraintViolationException when concurrent adds race on rsid/user",
+      "where": [
+        "Modules/Genetics/app/Actions/AddVariant.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:54:17.417Z"
+    },
+    {
+      "id": "s26",
+      "area": "quality",
+      "text": "toPlusStrand: skip the complement flip when only one reference allele is known to avoid false matches",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:54:17.492Z"
+    },
+    {
+      "id": "s27",
+      "area": "tests",
+      "text": "Flaky encryption test: not->toContain('CT') on ciphertext; assert Crypt decrypts to plaintext instead",
+      "where": [
+        "Modules/Genetics/tests/Feature/UserVariantTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:54:17.560Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",

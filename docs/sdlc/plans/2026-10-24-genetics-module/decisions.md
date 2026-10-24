@@ -136,3 +136,8 @@ _2026-10-24 19:15_
 **Decision:** None picked: all requirements stay in scope; the plan still orders the PDF section, reapers, large-file test and URL hardening last
 **Why:** user approved the PRD without marking any item as allowed to slip
 _2026-10-24 19:22_
+
+### 28. Allele column convention
+**Decision:** gene_variants.reference_allele means the plus-strand non-risk allele (not necessarily the GRCh38 reference base); risk_allele is the plus-strand effect allele. Lookup prompt/builder and matching follow this. FUT2 rs601338 risk allele A is the non-secretor allele (higher B12)
+**Why:** found during seed verification: for 6 SNPs the GRCh38 reference base is the risk allele, which would collapse {ref,risk} and break strand resolution
+_2026-10-24 19:52_
