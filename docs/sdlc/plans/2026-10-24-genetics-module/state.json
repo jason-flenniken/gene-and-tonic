@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:21:02.983Z",
+  "updated": "2026-10-24T20:27:11.818Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -236,10 +236,19 @@
             "Modules/Genetics/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "untrusted model output and scraped pages persisted and rendered, paid API spend"
+          "riskReason": "untrusted model output and scraped pages persisted and rendered, paid API spend",
+          "branch": "task/genetics-module/gene-lookup",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--gene-lookup",
+          "base": "3f6b0eb169ddce9d04493169f9cb477857bb2f8d",
+          "startedAt": "2026-10-24T20:21:21.044Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:27:11.817Z",
+          "tip": "c76b863",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "0e75cade5311bfd2be8e5182d5664461fc93d43e"
         },
         {
           "id": "pdf-extraction",
@@ -586,6 +595,31 @@
       "at": "2026-10-24T20:21:02.983Z",
       "event": "task done",
       "detail": "Upload with deterministic parsing"
+    },
+    {
+      "at": "2026-10-24T20:21:21.045Z",
+      "event": "task started",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:21:38.751Z",
+      "event": "task implementing",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:25:47.490Z",
+      "event": "task reviewing",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:27:00.052Z",
+      "event": "task merging",
+      "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:27:11.818Z",
+      "event": "task done",
+      "detail": "Gene lookup with Firecrawl and AI"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1044,6 +1078,86 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T20:20:51.519Z"
+    },
+    {
+      "id": "s43",
+      "area": "ux",
+      "text": "Show the stored lookup error (add error to VariantData) and a per-row loading state on Look up",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:25:47.284Z"
+    },
+    {
+      "id": "s44",
+      "area": "perf",
+      "text": "Daily spend ceiling on lookups per user",
+      "where": [
+        "Modules/Genetics/app/Actions/LookupVariant.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:25:47.354Z"
+    },
+    {
+      "id": "s45",
+      "area": "tests",
+      "text": "Render test that genetics::prompts.lookup escapes source markdown",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:25:47.422Z"
+    },
+    {
+      "id": "s46",
+      "area": "quality",
+      "text": "Revert the LookingUp claim if dispatch throws; the reaper covers lost jobs later",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:26:47.809Z"
+    },
+    {
+      "id": "s47",
+      "area": "quality",
+      "text": "On upload-job retry, subtract lookups already claimed by this upload from the cap",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:26:47.873Z"
+    },
+    {
+      "id": "s48",
+      "area": "security",
+      "text": "Global/daily lookup budget (e.g. RateLimiter key genetics-lookup-global); per-user bounds still allow ~100 paid lookups/min",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:26:59.866Z"
+    },
+    {
+      "id": "s49",
+      "area": "security",
+      "text": "Fall back to default lookup domains (or fail closed) when GENETICS_LOOKUP_DOMAINS is empty; an empty list allows any host",
+      "where": [
+        "Modules/Genetics/config/config.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:26:59.929Z"
+    },
+    {
+      "id": "s50",
+      "area": "security",
+      "text": "Use @js($variant->rsid) in wire:click lookUp instead of string interpolation",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:26:59.992Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
