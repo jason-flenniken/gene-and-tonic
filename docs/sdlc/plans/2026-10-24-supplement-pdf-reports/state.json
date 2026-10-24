@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:16:39.152Z",
+  "updated": "2026-10-24T17:20:00.463Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -51,6 +51,11 @@
       "via": "human",
       "source": "mod",
       "hash": "5bc9c3ce6894effc"
+    },
+    "ship": {
+      "at": "2026-10-24T17:20:00.462Z",
+      "via": "human",
+      "source": "mod"
     }
   },
   "phases": [
@@ -506,6 +511,16 @@
       "at": "2026-10-24T17:16:39.152Z",
       "event": "advanced",
       "detail": "ship"
+    },
+    {
+      "at": "2026-10-24T17:18:07.119Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-24T17:20:00.463Z",
+      "event": "ship approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -856,8 +871,153 @@
       ],
       "from": "branch-review",
       "at": "2026-10-24T17:14:52.948Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Dismissed supplement-pdf-reports:s10",
+      "where": [
+        "Modules/Reports/tests/**"
+      ],
+      "from": "user",
+      "resolves": "supplement-pdf-reports:s10",
+      "dismissed": true,
+      "note": "fixed in review: helpers moved to ReportFixtures",
+      "at": "2026-10-24T17:17:07.767Z"
+    },
+    {
+      "id": "s33",
+      "area": "tests",
+      "text": "Dismissed supplement-pdf-reports:s21",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "user",
+      "resolves": "supplement-pdf-reports:s21",
+      "dismissed": true,
+      "note": "fixed in review: each Reports test file runs alone",
+      "at": "2026-10-24T17:17:07.887Z"
+    },
+    {
+      "id": "s34",
+      "area": "tests",
+      "text": "Dismissed supplement-pdf-reports:s9",
+      "where": [
+        "Modules/Supplements/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "user",
+      "resolves": "supplement-pdf-reports:s9",
+      "dismissed": true,
+      "note": "Reports now exists, so the arch check is live",
+      "at": "2026-10-24T17:17:08.002Z"
+    },
+    {
+      "id": "s35",
+      "area": "tests",
+      "text": "Deeper Reports tests: real detail-page test for the download menu and a browser test for the template select, allowlist arch test for Reports, wider hostile-render cases, null-status slot case, Chrome test temp-file cleanup",
+      "where": [
+        "Modules/Supplements/tests/**",
+        "Modules/Reports/tests/Feature/DownloadMenuTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Reports/tests/Feature/TemplatesTest.php",
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php",
+        "Modules/Reports/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s5",
+        "supplement-pdf-reports:s17",
+        "supplement-pdf-reports:s19",
+        "supplement-pdf-reports:s20",
+        "supplement-pdf-reports:s25",
+        "supplement-pdf-reports:s27",
+        "supplement-pdf-reports:s28"
+      ],
+      "at": "2026-10-24T17:17:08.125Z"
+    },
+    {
+      "id": "s36",
+      "area": "security",
+      "text": "Harden the PDF endpoint before production: auth plus per-user limiter, concurrent-render cap or cached PDFs, trusted proxies, stricter safeUrl (FILTER_VALIDATE_URL, length cap)",
+      "where": [
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Reports/routes/web.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s14",
+        "supplement-pdf-reports:s15",
+        "supplement-pdf-reports:s29"
+      ],
+      "at": "2026-10-24T17:17:08.247Z"
+    },
+    {
+      "id": "s37",
+      "area": "quality",
+      "text": "Template authoring cleanups: shared disclaimer and section-loop partials, header/footer padding from config margins, validate REPORTS_DEFAULT_TEMPLATE, drop unused Livewire namespace, tests/Fixtures naming",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/layout.blade.php",
+        "Modules/Reports/resources/views/templates/*/header.blade.php",
+        "Modules/Reports/app/Services/TemplateRegistry.php",
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php",
+        "Modules/Reports/tests/fixtures/**"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s11",
+        "supplement-pdf-reports:s12",
+        "supplement-pdf-reports:s16",
+        "supplement-pdf-reports:s30",
+        "supplement-pdf-reports:s13",
+        "supplement-pdf-reports:s31"
+      ],
+      "at": "2026-10-24T17:17:08.370Z"
+    },
+    {
+      "id": "s38",
+      "area": "quality",
+      "text": "Small cleanups and docs: skip empty header action wrapper, guard order in download menu, PageActions fake when needed, Deptrac for the module graph, document slot names, list REPORTS_PDF_OUTPUT_DIR",
+      "where": [
+        "Modules/Shared/app/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "phpstan.neon",
+        "Modules/Shared/app/Contracts/PageActions.php",
+        ".env.example"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s6",
+        "supplement-pdf-reports:s8",
+        "supplement-pdf-reports:s22",
+        "supplement-pdf-reports:s24",
+        "supplement-pdf-reports:s7",
+        "supplement-pdf-reports:s26"
+      ],
+      "at": "2026-10-24T17:17:08.486Z"
+    },
+    {
+      "id": "s39",
+      "area": "ux",
+      "text": "PDF and menu polish: visible label on the template select; replace forced per-section page breaks with break-inside: avoid so short reports aren't sparse",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "Modules/Reports/resources/views/templates/*/styles.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s18",
+        "supplement-pdf-reports:s23"
+      ],
+      "at": "2026-10-24T17:17:08.610Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "ship",
+    "name": "approving",
+    "at": "2026-10-24T17:18:07.119Z"
+  }
 }
