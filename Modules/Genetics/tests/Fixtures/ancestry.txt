@@ -1,0 +1,9 @@
+#AncestryDNA raw data download
+#Synthetic sample for tests. Not real genetic data.
+rsid	chromosome	position	allele1	allele2
+rs1801133	1	11796321	A	G
+rs601338	19	48703417	A	A
+rs90000011	23	2000	T	T
+rs1805087	1	236885200	G	A
+rs90000012	2	2001	0	0
+rs90000013	26	2002	C	T

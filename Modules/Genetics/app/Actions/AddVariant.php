@@ -14,6 +14,7 @@ class AddVariant
     /**
      * Records one genotype for a user, creating a pending reference row for an
      * unknown rsID. A second call for the same user and rsID overwrites the first.
+     * The source label (e.g. an uploaded file's name) is cut to its 255-character column.
      *
      * @throws InvalidArgumentException on an invalid rsID, gene symbol or genotype, or a no-call
      */
@@ -30,6 +31,8 @@ class AddVariant
         if ($gene !== null && preg_match('/^[A-Z0-9-]{1,15}$/', $gene) !== 1) {
             throw new InvalidArgumentException('Invalid gene symbol.');
         }
+
+        $source = mb_substr($source, 0, 255);
 
         $normalized = Genotype::normalize($genotype)
             ?? throw new InvalidArgumentException('Genotype is a no-call.');
