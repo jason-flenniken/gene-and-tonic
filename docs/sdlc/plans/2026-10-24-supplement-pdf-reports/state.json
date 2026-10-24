@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "slug": "supplement-pdf-reports",
+  "title": "Supplement PDF reports",
+  "track": "feature",
+  "branch": "feature/supplement-pdf-reports",
+  "base": "main",
+  "created": "2026-10-24T16:33:31.229Z",
+  "updated": "2026-10-24T16:33:31.229Z",
+  "stage": "discover",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-24T16:33:31.229Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {},
+  "phases": [],
+  "evidence": {},
+  "drift": [],
+  "log": [
+    {
+      "at": "2026-10-24T16:33:31.229Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-24T16:33:31.229Z",
+      "event": "level",
+      "detail": "standard"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard"
+}
