@@ -6,8 +6,8 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T21:12:14.862Z",
-  "stage": "review",
+  "updated": "2026-10-24T21:12:14.971Z",
+  "stage": "ship",
   "stageHistory": [
     {
       "stage": "discover",
@@ -32,6 +32,10 @@
     {
       "stage": "review",
       "at": "2026-10-24T21:00:25.463Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-24T21:12:14.971Z"
     }
   ],
   "paused": null,
@@ -937,6 +941,11 @@
       "at": "2026-10-24T21:12:14.862Z",
       "event": "review pass",
       "detail": "2 Required fixed (demo-user seeder fails closed; gene-interaction rsID/allele normalised with end-to-end test); optional findings logged as follow-ups"
+    },
+    {
+      "at": "2026-10-24T21:12:14.971Z",
+      "event": "advanced",
+      "detail": "ship"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1838,10 +1847,5 @@
     }
   ],
   "planHash": "1e04af42eed00fb2",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "review",
-    "name": "rechecking",
-    "at": "2026-10-24T21:10:22.423Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
