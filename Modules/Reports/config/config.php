@@ -20,5 +20,11 @@ return [
             'margins' => [22, 16, 22, 16],
             'orientation' => 'portrait',
         ],
+        'modern' => [
+            'label' => 'Modern',
+            'format' => 'letter',
+            'margins' => [20, 18, 20, 18],
+            'orientation' => 'portrait',
+        ],
     ],
 ];
