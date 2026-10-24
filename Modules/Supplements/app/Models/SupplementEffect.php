@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Supplements\Database\Factories\SupplementEffectFactory;
 use Modules\Supplements\Enums\EvidenceGrade;
 
+/**
+ * @property string $claim
+ * @property string|null $outcome
+ * @property EvidenceGrade $evidence_grade
+ * @property array<int, string>|null $source_keys
+ */
 class SupplementEffect extends Model
 {
     /** @use HasFactory<SupplementEffectFactory> */

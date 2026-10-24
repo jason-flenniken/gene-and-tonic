@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Modules\Supplements\Database\Factories\SupplementStudyFactory;
 use Modules\Supplements\Enums\EvidenceGrade;
 
+/**
+ * @property string $title
+ * @property string|null $design
+ * @property string|null $population
+ * @property int|null $sample_size
+ * @property int|null $year
+ * @property string|null $finding
+ * @property EvidenceGrade|null $evidence_grade
+ * @property string|null $source_key
+ * @property string|null $pmid
+ */
 class SupplementStudy extends Model
 {
     /** @use HasFactory<SupplementStudyFactory> */
