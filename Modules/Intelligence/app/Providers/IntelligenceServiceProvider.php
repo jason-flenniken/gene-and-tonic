@@ -3,6 +3,12 @@
 namespace Modules\Intelligence\Providers;
 
 use Livewire\Livewire;
+use Modules\Intelligence\Contracts\ProfileRegistry;
+use Modules\Intelligence\Contracts\TextGenerator;
+use Modules\Intelligence\Repositories\AiRequestRepository;
+use Modules\Intelligence\Repositories\EloquentAiRequestRepository;
+use Modules\Intelligence\Services\ConfigProfileRegistry;
+use Modules\Intelligence\Services\LaravelAiTextGenerator;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class IntelligenceServiceProvider extends ModuleServiceProvider
@@ -45,6 +51,8 @@ class IntelligenceServiceProvider extends ModuleServiceProvider
     {
         parent::register();
 
-        // Bind this module's public contracts (app/Contracts) to their private implementations here.
+        $this->app->singleton(ProfileRegistry::class, ConfigProfileRegistry::class);
+        $this->app->bind(TextGenerator::class, LaravelAiTextGenerator::class);
+        $this->app->bind(AiRequestRepository::class, EloquentAiRequestRepository::class);
     }
 }
