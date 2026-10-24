@@ -12,7 +12,7 @@ return [
         'model' => env('AI_RESEARCH_MODEL', 'gpt-6.1-sol'),
         'effort' => env('AI_RESEARCH_EFFORT', 'medium'),
         'max_tokens' => (int) env('AI_RESEARCH_MAX_TOKENS', 8000),
-        'timeout' => 120,
+        'timeout' => (int) env('AI_RESEARCH_TIMEOUT', 120),
         'instructions' => 'supplements::prompts.research-instructions',
         'prompt' => 'supplements::prompts.research',
     ],

@@ -371,6 +371,22 @@ it('reads AI_RESEARCH_* from the environment in the config file', function () {
         ->and($config['research_profile']['max_tokens'])->toBe(1234);
 });
 
+it('reads AI_RESEARCH_TIMEOUT from the environment into the registered profile', function () {
+    putenv('AI_RESEARCH_TIMEOUT=45');
+    $_ENV['AI_RESEARCH_TIMEOUT'] = '45';
+
+    try {
+        $config = require module_path('Supplements', 'config/config.php');
+    } finally {
+        putenv('AI_RESEARCH_TIMEOUT');
+        unset($_ENV['AI_RESEARCH_TIMEOUT']);
+    }
+
+    app(ProfileRegistry::class)->register('supplements.research', $config['research_profile']);
+
+    expect(app(ProfileRegistry::class)->get('supplements.research')->timeout)->toBe(45);
+});
+
 it('keeps ai_requests rows when the supplement is deleted', function () {
     $supplement = queuedSupplement();
     FakeWebResearcher::install()->returning(pipelineSources());
