@@ -6,12 +6,16 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:33:31.229Z",
-  "stage": "discover",
+  "updated": "2026-10-24T16:42:54.158Z",
+  "stage": "prd",
   "stageHistory": [
     {
       "stage": "discover",
       "at": "2026-10-24T16:33:31.229Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-24T16:42:54.158Z"
     }
   ],
   "paused": null,
@@ -28,8 +32,91 @@
       "at": "2026-10-24T16:33:31.229Z",
       "event": "level",
       "detail": "standard"
+    },
+    {
+      "at": "2026-10-24T16:42:54.158Z",
+      "event": "advanced",
+      "detail": "prd"
     }
   ],
   "cairnVersion": "0.3.0",
-  "level": "standard"
+  "level": "standard",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "docs",
+      "text": "Resolved research-intelligence-dashboard:s81",
+      "where": [
+        "CLAUDE.md",
+        "Modules/Supplements/app/Contracts/SupplementResearchReader.php",
+        "docs/sdlc/**",
+        ".env.example"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s81",
+      "note": "brought into supplement-pdf-reports",
+      "at": "2026-10-24T16:36:13.725Z"
+    },
+    {
+      "id": "s2",
+      "area": "ux",
+      "text": "Declined research-intelligence-dashboard:s80",
+      "where": [
+        "resources/views/components/tabs/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Intelligence/config/config.php",
+        "Modules/Supplements/config/config.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s80",
+      "at": "2026-10-24T16:36:13.854Z"
+    },
+    {
+      "id": "s3",
+      "area": "security",
+      "text": "Declined research-intelligence-dashboard:s78",
+      "where": [
+        ".gitignore",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Supplements/app/Actions/AddSupplement.php",
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s78",
+      "at": "2026-10-24T16:36:13.854Z"
+    },
+    {
+      "id": "s4",
+      "area": "tests",
+      "text": "Declined research-intelligence-dashboard:s79",
+      "where": [
+        "tests/Feature/ExampleTest.php",
+        "tests/TestCase.php",
+        "tests/Pest.php",
+        "Modules/Supplements/**",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php",
+        "Modules/Intelligence/**",
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php",
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Intelligence/database/factories/**",
+        "Modules/Supplements/tests/Feature/StatsTest.php",
+        "Modules/Supplements/tests/**",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s79",
+      "at": "2026-10-24T16:36:13.854Z"
+    }
+  ]
 }
