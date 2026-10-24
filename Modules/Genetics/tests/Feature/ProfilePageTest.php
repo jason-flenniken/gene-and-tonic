@@ -1,13 +1,17 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Database\Seeders\GeneVariantSeeder;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
 
-beforeEach(fn () => $this->withoutVite());
+beforeEach(function () {
+    $this->withoutVite();
+    Queue::fake();
+});
 
 it('redirects a guest from /genetics to the login page', function () {
     $this->get('/genetics')->assertRedirect('/login');
