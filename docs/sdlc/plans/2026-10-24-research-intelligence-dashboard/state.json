@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:25:53.890Z",
+  "updated": "2026-10-24T15:34:00.950Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -135,10 +135,19 @@
             "Modules/Intelligence/**"
           ],
           "complexity": "complex",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "new external AI integration, model output, a migration, and secrets that must never be logged"
+          "riskReason": "new external AI integration, model output, a migration, and secrets that must never be logged",
+          "branch": "task/research-intelligence-dashboard/intelligence-text-generation",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--intelligence-text-generation",
+          "base": "824e3b102d8d8bea3d432bc4ef20417a3bebfd18",
+          "startedAt": "2026-10-24T15:26:11.324Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:34:00.950Z",
+          "tip": "0bb46c8",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "6403874e1a582a01ca201f0b6a7981b268bd42b7"
         },
         {
           "id": "supplements-catalog",
@@ -159,10 +168,16 @@
             "resources/views/pages/**"
           ],
           "complexity": "standard",
-          "status": "pending",
-          "fixRound": 0,
+          "status": "in_progress",
+          "fixRound": 1,
           "risky": true,
-          "riskReason": "untrusted input, new migrations, and deletes"
+          "riskReason": "untrusted input, new migrations, and deletes",
+          "substep": "fixing",
+          "branch": "task/research-intelligence-dashboard/supplements-catalog",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--supplements-catalog",
+          "base": "824e3b102d8d8bea3d432bc4ef20417a3bebfd18",
+          "startedAt": "2026-10-24T15:26:18.068Z",
+          "level": "standard"
         },
         {
           "id": "intelligence-web-research",
@@ -398,6 +413,51 @@
       "at": "2026-10-24T15:25:53.890Z",
       "event": "phase finished",
       "detail": "Foundations (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T15:26:11.324Z",
+      "event": "task started",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:26:18.068Z",
+      "event": "task started",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:28:11.063Z",
+      "event": "task implementing",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:28:11.123Z",
+      "event": "task implementing",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:31:16.602Z",
+      "event": "task reviewing",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:32:26.428Z",
+      "event": "task reviewing",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:33:13.933Z",
+      "event": "task fixing",
+      "detail": "Supplements catalog (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T15:33:54.673Z",
+      "event": "task merging",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:34:00.950Z",
+      "event": "task done",
+      "detail": "Intelligence text generation"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -484,6 +544,176 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T15:25:27.766Z"
+    },
+    {
+      "id": "s9",
+      "area": "tests",
+      "text": "Add an arch test that Actions and Livewire views make no Model::query/where/create calls (FR-20), and run migrate:fresh + rollback on MySQL in CI",
+      "where": [
+        "Modules/Supplements/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:31:16.466Z"
+    },
+    {
+      "id": "s10",
+      "area": "quality",
+      "text": "recentlyCompleted/paginateWithResearch return Eloquent models; expose a DTO contract if another module ever consumes the overview data",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:31:16.535Z"
+    },
+    {
+      "id": "s11",
+      "area": "quality",
+      "text": "WebResearcher should reuse UsageLogger (add logSearch) and extend scrub() with the Firecrawl key config",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:32:26.232Z"
+    },
+    {
+      "id": "s12",
+      "area": "quality",
+      "text": "Set Larastan configDirectories to include Modules/*/config so module config files may call env() (restores AI_LOG_REQUESTS and AI_RESEARCH_* overrides)",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:32:26.299Z"
+    },
+    {
+      "id": "s13",
+      "area": "quality",
+      "text": "Refusals and failed calls log 0 tokens although the provider may have billed them; read usage from the raw response when available",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:32:26.363Z"
+    },
+    {
+      "id": "s14",
+      "area": "quality",
+      "text": "Resolve SupplementRepository one way in the catalog component (boot() or injection) instead of mixing app() and method injection",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:32:31.903Z"
+    },
+    {
+      "id": "s15",
+      "area": "tests",
+      "text": "Comment that the unique-race test simulates concurrency via a wrapper; the unique index is the real guard",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:32:31.967Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Reorder imports (Flux before Illuminate); Pint doesn't lint Blade SFCs",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:32:32.033Z"
+    },
+    {
+      "id": "s17",
+      "area": "security",
+      "text": "Throttle the catalog add action (Livewire throttle or RateLimiter per session) and consider capping concurrent active runs, to bound API spend",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:13.738Z"
+    },
+    {
+      "id": "s18",
+      "area": "security",
+      "text": "A run stuck in queued (dispatch failure, dead worker) blocks retries forever; treat queued/searching/analyzing older than N minutes as stale",
+      "where": [
+        "Modules/Supplements/app/Actions/AddSupplement.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:13.801Z"
+    },
+    {
+      "id": "s19",
+      "area": "ux",
+      "text": "Concurrent adds of two names with the same slug report 'already added'; retry uniqueSlug once on slug collision",
+      "where": [
+        "Modules/Supplements/app/Actions/AddSupplement.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:13.869Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Add a test for the FinishReason::Length branch (incomplete/length response -> GenerationFailedException + failed row)",
+      "where": [
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:33:37.219Z"
+    },
+    {
+      "id": "s21",
+      "area": "quality",
+      "text": "Wrap unexpected Throwables (view render, non-AiException) as GenerationFailedException and make the usage log write non-fatal so it can't mask the original error or drop a result",
+      "where": [
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:33:37.288Z"
+    },
+    {
+      "id": "s22",
+      "area": "quality",
+      "text": "Resolve the nullable GenerationResult into locals once instead of repeated $result->x ?? ... access",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:33:37.353Z"
+    },
+    {
+      "id": "s23",
+      "area": "security",
+      "text": "GenerationFailedException keeps the provider exception as previous; a report() would log RequestException bodies (may echo masked keys). Drop or sanitize previous and test a 401 body containing the key",
+      "where": [
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:54.459Z"
+    },
+    {
+      "id": "s24",
+      "area": "security",
+      "text": "Validate max_tokens/timeout as numeric > 0 with upper caps; env '0' gives an unbounded Guzzle timeout",
+      "where": [
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:54.531Z"
+    },
+    {
+      "id": "s25",
+      "area": "tests",
+      "text": "Make the no-secrets test's failure case carry the key and prompt text in the response body and connection message, so a future getMessage() leak would fail it",
+      "where": [
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:54.602Z"
     }
   ]
 }
