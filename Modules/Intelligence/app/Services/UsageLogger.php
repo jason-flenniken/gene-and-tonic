@@ -36,7 +36,7 @@ class UsageLogger
             'output_tokens' => $outputTokens,
             'credits' => null,
             'latency_ms' => $latencyMs,
-            'estimated_cost_usd' => $this->estimateCost($model, $inputTokens, $outputTokens),
+            'estimated_cost_usd' => $this->estimateCost($profile->model, $inputTokens, $outputTokens, $model),
             'status' => $error === null ? 'success' : 'failed',
             'error' => $error === null ? null : mb_substr($this->scrub($error->getMessage()), 0, 500),
         ]);
@@ -67,10 +67,15 @@ class UsageLogger
         ]);
     }
 
-    public function estimateCost(string $model, int $inputTokens, int $outputTokens): float
+    /**
+     * Prices by the configured alias first: providers often return a dated snapshot id
+     * (e.g. gpt-6.1-sol-2026-08-12) that is not in the pricing table.
+     */
+    public function estimateCost(string $model, int $inputTokens, int $outputTokens, ?string $returnedModel = null): float
     {
         // Model names contain dots, so index the array instead of using a dotted config path.
-        $price = config('intelligence.pricing.models', [])[$model] ?? null;
+        $prices = config('intelligence.pricing.models', []);
+        $price = $prices[$model] ?? ($returnedModel !== null ? ($prices[$returnedModel] ?? null) : null);
 
         if (! is_array($price)) {
             return 0.0;

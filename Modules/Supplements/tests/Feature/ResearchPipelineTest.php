@@ -2,6 +2,7 @@
 
 use Illuminate\Contracts\Queue\Job;
 use Illuminate\JsonSchema\JsonSchemaTypeFactory;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Modules\Intelligence\Contracts\ProfileRegistry;
@@ -405,4 +406,15 @@ it('keeps ai_requests rows when the supplement is deleted', function () {
         ->and(SupplementResearch::count())->toBe(0)
         ->and(SupplementEffect::count())->toBe(0)
         ->and(DB::table('ai_requests')->count())->toBe(1);
+});
+
+it('guards against concurrent execution of the same supplement and outlives the job timeout', function () {
+    $job = new RunSupplementResearch(42);
+    $middleware = $job->middleware();
+
+    expect($middleware)->toHaveCount(1)
+        ->and($middleware[0])->toBeInstanceOf(WithoutOverlapping::class)
+        ->and($middleware[0]->key)->toBe('42')
+        ->and($middleware[0]->releaseAfter)->toBeNull()
+        ->and(config('queue.connections.database.retry_after'))->toBeGreaterThan($job->timeout);
 });

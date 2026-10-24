@@ -243,3 +243,17 @@ it('provides a fake text generator', function () {
     $fake->assertGenerated(fn (PromptRequest $r): bool => $r->variables === ['x' => 1]);
     expect($fake->requests())->toHaveCount(3);
 });
+
+it('prices by the configured alias when the provider returns a dated snapshot id', function () {
+    Http::fake(['api.openai.com/*' => Http::response(array_merge(
+        openAiBody('{"summary":"ok"}'),
+        ['model' => 'gpt-6.1-sol-2026-08-12'],
+    ))]);
+
+    app(TextGenerator::class)->generate(testRequest());
+
+    $row = AiRequest::sole();
+    expect($row->model)->toBe('gpt-6.1-sol-2026-08-12')
+        ->and((float) $row->estimated_cost_usd)->toBeGreaterThan(0.0)
+        ->and((float) $row->estimated_cost_usd)->toBe(0.022);
+});

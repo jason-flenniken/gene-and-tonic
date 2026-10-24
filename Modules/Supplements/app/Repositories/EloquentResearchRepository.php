@@ -57,14 +57,6 @@ class EloquentResearchRepository implements ResearchRepository
         return true;
     }
 
-    public function hasActiveRun(Supplement $supplement): bool
-    {
-        return SupplementResearch::query()
-            ->where('supplement_id', $supplement->getKey())
-            ->whereIn('status', $this->activeStatuses())
-            ->exists();
-    }
-
     public function markSearching(int $supplementId): void
     {
         SupplementResearch::query()

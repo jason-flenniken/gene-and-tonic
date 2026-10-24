@@ -17,9 +17,6 @@ interface ResearchRepository
      */
     public function claimRun(Supplement $supplement): bool;
 
-    /** Advisory only (e.g. UI); never use it to decide whether to dispatch. */
-    public function hasActiveRun(Supplement $supplement): bool;
-
     /** No-ops when the supplement (or its research row) no longer exists. */
     public function markSearching(int $supplementId): void;
 

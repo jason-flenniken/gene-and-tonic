@@ -17,7 +17,6 @@ use Modules\Supplements\Models\SupplementSource;
 use Modules\Supplements\Models\SupplementStudy;
 use Modules\Supplements\Repositories\ResearchRepository;
 use Modules\Supplements\Repositories\SupplementRepository;
-use Modules\Supplements\Support\ResearchFindings;
 
 beforeEach(function () {
     $this->withoutVite();
@@ -170,56 +169,15 @@ it('dispatches one job when a second start follows the first claim', function ()
     Queue::assertPushed(RunSupplementResearch::class, 1);
 });
 
-it('does not rely on the advisory pre-check: a stale hasActiveRun cannot cause a second dispatch', function () {
+it('dispatches nothing when a concurrent request loses the claim', function () {
     $supplement = Supplement::factory()->create();
     SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Failed]);
 
-    // Simulates two requests that both read "no active run" before either claims.
-    $stale = new class(app(ResearchRepository::class)) implements ResearchRepository
-    {
-        public function __construct(private ResearchRepository $inner) {}
+    $winner = new StartResearch(app(ResearchRepository::class));
+    $loser = new StartResearch(app(ResearchRepository::class));
 
-        public function markQueued(Supplement $supplement): SupplementResearch
-        {
-            return $this->inner->markQueued($supplement);
-        }
-
-        public function claimRun(Supplement $supplement): bool
-        {
-            return $this->inner->claimRun($supplement);
-        }
-
-        public function hasActiveRun(Supplement $supplement): bool
-        {
-            return false;
-        }
-
-        public function markSearching(int $supplementId): void
-        {
-            $this->inner->markSearching($supplementId);
-        }
-
-        public function markAnalyzing(int $supplementId): void
-        {
-            $this->inner->markAnalyzing($supplementId);
-        }
-
-        public function markFailed(int $supplementId, string $reason): void
-        {
-            $this->inner->markFailed($supplementId, $reason);
-        }
-
-        public function replaceFindings(int $supplementId, ResearchFindings $findings): void
-        {
-            $this->inner->replaceFindings($supplementId, $findings);
-        }
-    };
-    $action = new StartResearch($stale);
-
-    expect($stale->hasActiveRun($supplement))->toBeFalse()
-        ->and($action->handle($supplement))->toBeTrue()
-        ->and($stale->hasActiveRun($supplement))->toBeFalse()
-        ->and($action->handle($supplement))->toBeFalse();
+    expect($winner->handle($supplement))->toBeTrue()
+        ->and($loser->handle($supplement))->toBeFalse();
     Queue::assertPushed(RunSupplementResearch::class, 1);
 });
 

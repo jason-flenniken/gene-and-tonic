@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Jobs\SyncJob;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 use Modules\Supplements\Actions\ResearchSupplement;
 use Modules\Supplements\Repositories\ResearchRepository;
@@ -21,9 +22,20 @@ class RunSupplementResearch implements ShouldQueue
 
     public int $backoff = 15;
 
-    public int $timeout = 180;
+    public int $timeout = 200;
 
     public function __construct(public readonly int $supplementId) {}
+
+    /**
+     * A concurrent duplicate is dropped (not released) so it can never reach the paid steps
+     * or burn a retry attempt. The lock expires after the queue's retry_after window.
+     *
+     * @return array<int, object>
+     */
+    public function middleware(): array
+    {
+        return [(new WithoutOverlapping((string) $this->supplementId))->dontRelease()->expireAfter(240)];
+    }
 
     public function handle(ResearchSupplement $research, ResearchRepository $runs): void
     {

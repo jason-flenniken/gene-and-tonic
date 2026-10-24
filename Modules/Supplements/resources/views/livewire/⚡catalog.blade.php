@@ -76,13 +76,6 @@ new class extends Component
     {
         return app(SupplementRepository::class)->paginateWithResearch(10);
     }
-
-    public function detailUrl(Supplement $supplement): string
-    {
-        return Route::has('supplements.show')
-            ? route('supplements.show', $supplement)
-            : url('/supplements/'.$supplement->getKey());
-    }
 };
 ?>
 
@@ -115,7 +108,7 @@ new class extends Component
                         @foreach ($this->supplements as $supplement)
                             <tr wire:key="supplement-{{ $supplement->id }}">
                                 <td class="py-2 pr-4">
-                                    <a href="{{ $this->detailUrl($supplement) }}" class="font-medium hover:underline">{{ $supplement->name }}</a>
+                                    <a href="{{ route('supplements.show', $supplement) }}" class="font-medium hover:underline">{{ $supplement->name }}</a>
                                 </td>
                                 <td class="py-2 pr-4">
                                     @if ($supplement->research)
