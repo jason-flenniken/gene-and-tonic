@@ -6,7 +6,7 @@ use Livewire\Component;
 
 new #[Title('Dashboard')] class extends Component
 {
-    private const TABS = ['overview', 'supplements', 'usage'];
+    private const TABS = ['overview', 'supplements', 'genetics', 'usage'];
 
     #[Url(as: 'tab', except: 'overview')]
     public string $tab = 'overview';
@@ -34,6 +34,7 @@ new #[Title('Dashboard')] class extends Component
     <x-tabs>
         <x-tabs.item :active="$tab === 'overview'" wire:click="$set('tab', 'overview')">Overview</x-tabs.item>
         <x-tabs.item :active="$tab === 'supplements'" wire:click="$set('tab', 'supplements')">Supplements</x-tabs.item>
+        <x-tabs.item :active="$tab === 'genetics'" wire:click="$set('tab', 'genetics')">Genetics</x-tabs.item>
         <x-tabs.item :active="$tab === 'usage'" wire:click="$set('tab', 'usage')">AI Usage</x-tabs.item>
     </x-tabs>
 
@@ -49,6 +50,11 @@ new #[Title('Dashboard')] class extends Component
         <div role="tabpanel" data-panel="supplements">
             {{-- panel:supplements --}}
             <livewire:supplements::catalog />
+        </div>
+    @elseif ($tab === 'genetics')
+        <div role="tabpanel" data-panel="genetics">
+            {{-- panel:genetics --}}
+            <livewire:genetics::summary />
         </div>
     @else
         <div role="tabpanel" data-panel="usage">

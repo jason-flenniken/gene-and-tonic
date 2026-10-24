@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Modules\Genetics\Models\UserVariant;
 
@@ -11,7 +12,7 @@ it('stores the genotype as ciphertext and reads it back as plaintext', function 
     $raw = DB::table('user_variants')->value('genotype');
 
     expect($raw)->not->toBe('CT')
-        ->and($raw)->not->toContain('CT')
+        ->and(Crypt::decryptString($raw))->toBe('CT')
         ->and(UserVariant::sole()->genotype)->toBe('CT');
 });
 

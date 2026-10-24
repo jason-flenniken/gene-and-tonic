@@ -2,4 +2,4 @@
 
 use Illuminate\Support\Facades\Route;
 
-// Route::livewire('/genetics', 'genetics::index')->name('genetics.index');
+Route::livewire('/genetics', 'genetics::profile')->middleware('auth')->name('genetics.profile');

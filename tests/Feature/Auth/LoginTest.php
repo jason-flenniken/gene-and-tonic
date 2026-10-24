@@ -19,7 +19,7 @@ it('signs in the seeded demo user and redirects', function () {
         ->set('password', config('auth.demo.password'))
         ->call('login')
         ->assertHasNoErrors()
-        ->assertRedirect(route('home'));
+        ->assertRedirect(route('genetics.profile'));
 
     expect(auth()->check())->toBeTrue()
         ->and(auth()->user()->email)->toBe(config('auth.demo.email'))
