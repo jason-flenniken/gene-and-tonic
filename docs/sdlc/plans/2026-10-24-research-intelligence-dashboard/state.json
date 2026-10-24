@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:49:32.219Z",
+  "updated": "2026-10-24T15:52:36.523Z",
   "stage": "verify",
   "stageHistory": [
     {
@@ -332,7 +332,13 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-24T15:52:36.523Z",
+      "note": "tests: 126 passing (Pint, PHPStan L7 clean), build ok; 21/21 FRs met (FR-13 timeout env gap fixed in b30ce42), FR-10 partially untested (logged); NFR-03 live timing not verifiable without keys; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    }
+  },
   "drift": [
     {
       "path": "phpstan.neon",
@@ -702,6 +708,26 @@
       "at": "2026-10-24T15:49:32.219Z",
       "event": "advanced",
       "detail": "verify"
+    },
+    {
+      "at": "2026-10-24T15:49:43.244Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-24T15:49:57.502Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-24T15:51:52.882Z",
+      "event": "step",
+      "detail": "fixing (1)"
+    },
+    {
+      "at": "2026-10-24T15:52:36.523Z",
+      "event": "verify pass",
+      "detail": "tests: 126 passing (Pint, PHPStan L7 clean), build ok; 21/21 FRs met (FR-13 timeout env gap fixed in b30ce42), FR-10 partially untested (logged); NFR-03 live timing not verifiable without keys; secret scan: clean; audit: composer + npm 0 vulnerabilities"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1218,6 +1244,32 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T15:49:23.542Z"
+    },
+    {
+      "id": "s52",
+      "area": "tests",
+      "text": "Assert FR-10 study columns (design, population, n, year, finding, grade) on ?tab=studies",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T15:51:52.749Z"
+    },
+    {
+      "id": "s53",
+      "area": "tests",
+      "text": "Assert FR-10 effect outcome text and mechanism source badges",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T15:51:52.816Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "verify",
+    "name": "fixing",
+    "count": 1,
+    "at": "2026-10-24T15:51:52.882Z"
+  }
 }
