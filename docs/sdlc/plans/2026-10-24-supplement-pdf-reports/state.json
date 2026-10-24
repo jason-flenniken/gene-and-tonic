@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:06:50.912Z",
+  "updated": "2026-10-24T17:07:20.298Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -174,15 +174,18 @@
             "Modules/Reports/tests/Feature/DownloadMenuTest.php"
           ],
           "complexity": "simple",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": false,
-          "substep": "reviewing",
           "branch": "task/supplement-pdf-reports/download-menu",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--download-menu",
           "base": "0186ebab7911209f71262c4e419228f10e8ded36",
           "startedAt": "2026-10-24T17:04:11.125Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T17:07:20.297Z",
+          "tip": "815c52a",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "7725e27805bafc32d2f523fc091df62c7b411872"
         },
         {
           "id": "chrome-render-and-docs",
@@ -223,6 +226,12 @@
       "at": "2026-10-24T16:50:21.045Z",
       "reason": "changed outside task \"Shared page-action slot\" scope (found at task done)",
       "task": "shared-page-actions"
+    },
+    {
+      "path": "Modules/Shared/tests/Feature/PageActionsBindingTest.php",
+      "at": "2026-10-24T17:07:20.297Z",
+      "reason": "changed outside task \"Download menu on the detail page\" scope (found at task done)",
+      "task": "download-menu"
     }
   ],
   "log": [
@@ -369,6 +378,21 @@
       "at": "2026-10-24T17:06:50.912Z",
       "event": "task done",
       "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:07:15.060Z",
+      "event": "task merging",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:07:20.297Z",
+      "event": "drift",
+      "detail": "Modules/Shared/tests/Feature/PageActionsBindingTest.php"
+    },
+    {
+      "at": "2026-10-24T17:07:20.298Z",
+      "event": "task done",
+      "detail": "Download menu on the detail page"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -619,6 +643,16 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T17:06:45.782Z"
+    },
+    {
+      "id": "s22",
+      "area": "quality",
+      "text": "Move route/registry lookups inside the Complete guard in the download menu view",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:07:14.989Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
