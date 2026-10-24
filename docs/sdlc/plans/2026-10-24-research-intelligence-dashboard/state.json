@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:19:50.022Z",
+  "updated": "2026-10-24T15:20:31.790Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -29,6 +29,12 @@
       "via": "human",
       "source": "terminal",
       "hash": "8010d0795572d915"
+    },
+    "plan": {
+      "at": "2026-10-24T15:20:31.790Z",
+      "via": "human",
+      "source": "terminal",
+      "hash": "817c86a75d041b52"
     }
   },
   "phases": [
@@ -288,9 +294,15 @@
       "at": "2026-10-24T15:19:50.022Z",
       "event": "PRD approved",
       "detail": "terminal"
+    },
+    {
+      "at": "2026-10-24T15:20:31.790Z",
+      "event": "plan approved",
+      "detail": "terminal"
     }
   ],
   "cairnVersion": "0.3.0",
   "level": "standard",
-  "planHash": "817c86a75d041b52"
+  "planHash": "817c86a75d041b52",
+  "configHash": "85d35cf89052f183"
 }
