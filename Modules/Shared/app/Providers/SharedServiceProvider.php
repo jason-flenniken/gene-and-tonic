@@ -3,6 +3,8 @@
 namespace Modules\Shared\Providers;
 
 use Livewire\Livewire;
+use Modules\Shared\Contracts\PageActions;
+use Modules\Shared\Services\InMemoryPageActions;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class SharedServiceProvider extends ModuleServiceProvider
@@ -46,5 +48,7 @@ class SharedServiceProvider extends ModuleServiceProvider
         parent::register();
 
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
+
+        $this->app->singleton(PageActions::class, InMemoryPageActions::class);
     }
 }

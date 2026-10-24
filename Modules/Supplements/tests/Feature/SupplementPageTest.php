@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\View;
 use Livewire\Livewire;
+use Modules\Shared\Contracts\PageActions;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
@@ -96,4 +98,13 @@ it('escapes model and scraped text and never links unsafe urls', function () {
         ->assertSee('&lt;img src=x onerror=alert(1)&gt;', false)
         ->assertDontSee('<img src=x', false)
         ->assertDontSee('href="javascript:', false);
+});
+
+it('renders every view registered for the supplement header slot', function () {
+    View::getFinder()->prependLocation(module_path('Supplements', 'tests/Fixtures/views'));
+    app(PageActions::class)->register('supplement.header', 'header-action');
+    $supplement = researchedSupplement();
+
+    $this->get(route('supplements.show', $supplement))->assertOk()
+        ->assertSee('Action for '.$supplement->id.' (complete)', false);
 });
