@@ -28,13 +28,22 @@ class RunSupplementResearch implements ShouldQueue
 
     /**
      * A concurrent duplicate is dropped (not released) so it can never reach the paid steps
-     * or burn a retry attempt. The lock expires after the queue's retry_after window.
+     * or burn a retry attempt. A worker killed on timeout never releases the lock, so it must
+     * expire after the job timeout but before retry_after makes the job reservable again;
+     * otherwise the retry would be dropped and the run left stuck in an active status.
      *
      * @return array<int, object>
      */
     public function middleware(): array
     {
-        return [(new WithoutOverlapping((string) $this->supplementId))->dontRelease()->expireAfter(240)];
+        return [(new WithoutOverlapping((string) $this->supplementId))->dontRelease()->expireAfter($this->lockSeconds())];
+    }
+
+    public function lockSeconds(): int
+    {
+        $retryAfter = (int) config('queue.connections.'.config('queue.default').'.retry_after', 240);
+
+        return max($this->timeout + 1, $retryAfter - 30);
     }
 
     public function handle(ResearchSupplement $research, ResearchRepository $runs): void

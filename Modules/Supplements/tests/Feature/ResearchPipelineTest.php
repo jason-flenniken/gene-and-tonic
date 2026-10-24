@@ -418,3 +418,12 @@ it('guards against concurrent execution of the same supplement and outlives the 
         ->and($middleware[0]->releaseAfter)->toBeNull()
         ->and(config('queue.connections.database.retry_after'))->toBeGreaterThan($job->timeout);
 });
+
+it('expires the overlap lock after the job timeout but before the job can be reserved again', function () {
+    config(['queue.default' => 'database']);
+    $job = new RunSupplementResearch(42);
+    $lockSeconds = $job->middleware()[0]->expiresAfter;
+
+    expect($lockSeconds)->toBeGreaterThan($job->timeout)
+        ->and($lockSeconds)->toBeLessThan(config('queue.connections.database.retry_after'));
+});
