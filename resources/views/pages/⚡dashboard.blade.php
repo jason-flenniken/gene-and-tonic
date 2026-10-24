@@ -47,9 +47,7 @@ new #[Title('Dashboard')] class extends Component
     @elseif ($tab === 'supplements')
         <div role="tabpanel" data-panel="supplements">
             {{-- panel:supplements --}}
-            <flux:card>
-                <flux:text>Supplement research will appear here.</flux:text>
-            </flux:card>
+            <livewire:supplements::catalog />
         </div>
     @else
         <div role="tabpanel" data-panel="usage">

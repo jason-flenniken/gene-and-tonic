@@ -3,6 +3,10 @@
 namespace Modules\Supplements\Providers;
 
 use Livewire\Livewire;
+use Modules\Supplements\Repositories\EloquentResearchRepository;
+use Modules\Supplements\Repositories\EloquentSupplementRepository;
+use Modules\Supplements\Repositories\ResearchRepository;
+use Modules\Supplements\Repositories\SupplementRepository;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class SupplementsServiceProvider extends ModuleServiceProvider
@@ -46,5 +50,8 @@ class SupplementsServiceProvider extends ModuleServiceProvider
         parent::register();
 
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
+
+        $this->app->bind(SupplementRepository::class, EloquentSupplementRepository::class);
+        $this->app->bind(ResearchRepository::class, EloquentResearchRepository::class);
     }
 }
