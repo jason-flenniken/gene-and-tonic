@@ -6,8 +6,8 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:47:41.686Z",
-  "stage": "plan",
+  "updated": "2026-10-24T16:47:44.466Z",
+  "stage": "execute",
   "stageHistory": [
     {
       "stage": "discover",
@@ -20,6 +20,10 @@
     {
       "stage": "plan",
       "at": "2026-10-24T16:44:14.917Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-24T16:47:44.465Z"
     }
   ],
   "paused": null,
@@ -41,7 +45,7 @@
     {
       "id": "first-pdf",
       "name": "First PDF end to end",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "shared-page-actions",
@@ -209,6 +213,11 @@
       "at": "2026-10-24T16:47:41.685Z",
       "event": "plan approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T16:47:44.465Z",
+      "event": "advanced",
+      "detail": "execute"
     }
   ],
   "cairnVersion": "0.3.0",
