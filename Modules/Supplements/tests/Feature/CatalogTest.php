@@ -17,6 +17,7 @@ use Modules\Supplements\Models\SupplementSource;
 use Modules\Supplements\Models\SupplementStudy;
 use Modules\Supplements\Repositories\ResearchRepository;
 use Modules\Supplements\Repositories\SupplementRepository;
+use Modules\Supplements\Support\ResearchFindings;
 
 beforeEach(function () {
     $this->withoutVite();
@@ -192,6 +193,26 @@ it('does not rely on the advisory pre-check: a stale hasActiveRun cannot cause a
         {
             return false;
         }
+
+        public function markSearching(int $supplementId): void
+        {
+            $this->inner->markSearching($supplementId);
+        }
+
+        public function markAnalyzing(int $supplementId): void
+        {
+            $this->inner->markAnalyzing($supplementId);
+        }
+
+        public function markFailed(int $supplementId, string $reason): void
+        {
+            $this->inner->markFailed($supplementId, $reason);
+        }
+
+        public function replaceFindings(int $supplementId, ResearchFindings $findings): void
+        {
+            $this->inner->replaceFindings($supplementId, $findings);
+        }
     };
     $action = new StartResearch($stale);
 
@@ -246,7 +267,51 @@ it('reports counts by status and recently completed', function () {
         ->and($repo->recentlyCompleted(5)->pluck('id')->all())->toBe([$a->id]);
 });
 
-it('runs the placeholder job without error', function () {
-    (new RunSupplementResearch(1))->handle();
-    expect(true)->toBeTrue();
+it('polls only while some run is queued, searching or analyzing', function (ResearchStatus $status, bool $polls) {
+    SupplementResearch::factory()->for(Supplement::factory())->create(['status' => $status]);
+
+    $component = Livewire::test('supplements::catalog');
+
+    $polls ? $component->assertSeeHtml('wire:poll.3s') : $component->assertDontSeeHtml('wire:poll');
+})->with([
+    [ResearchStatus::Queued, true],
+    [ResearchStatus::Searching, true],
+    [ResearchStatus::Analyzing, true],
+    [ResearchStatus::Complete, false],
+    [ResearchStatus::Failed, false],
+]);
+
+it('shows the error and a Retry button on failed rows, and retry queues exactly one job', function () {
+    $supplement = Supplement::factory()->create(['name' => 'Zinc']);
+    SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Failed, 'error' => 'No trusted sources found for Zinc <b>']);
+
+    $component = Livewire::test('supplements::catalog')
+        ->assertSee('No trusted sources found for Zinc')
+        ->assertSee('Retry')
+        ->assertDontSeeHtml('<b>');
+
+    $component->call('retry', $supplement->id);
+    Queue::assertPushed(RunSupplementResearch::class, 1);
+    expect($supplement->fresh()->research->status)->toBe(ResearchStatus::Queued);
+
+    $component->call('retry', $supplement->id);
+    Queue::assertPushed(RunSupplementResearch::class, 1);
+});
+
+it('does not queue a retry while the run is queued', function () {
+    $supplement = Supplement::factory()->create();
+    SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Queued]);
+
+    Livewire::test('supplements::catalog')->call('retry', $supplement->id);
+
+    Queue::assertNothingPushed();
+});
+
+it('shows a Re-run button on completed rows', function () {
+    $supplement = Supplement::factory()->create();
+    SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Complete]);
+
+    Livewire::test('supplements::catalog')->assertSee('Re-run')->call('retry', $supplement->id);
+
+    Queue::assertPushed(RunSupplementResearch::class, 1);
 });

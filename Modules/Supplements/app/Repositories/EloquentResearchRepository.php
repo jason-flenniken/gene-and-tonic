@@ -3,9 +3,11 @@
 namespace Modules\Supplements\Repositories;
 
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Facades\DB;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementResearch;
+use Modules\Supplements\Support\ResearchFindings;
 
 class EloquentResearchRepository implements ResearchRepository
 {
@@ -61,6 +63,57 @@ class EloquentResearchRepository implements ResearchRepository
             ->where('supplement_id', $supplement->getKey())
             ->whereIn('status', $this->activeStatuses())
             ->exists();
+    }
+
+    public function markSearching(int $supplementId): void
+    {
+        SupplementResearch::query()
+            ->where('supplement_id', $supplementId)
+            ->update(['status' => ResearchStatus::Searching, 'error' => null, 'started_at' => now()]);
+    }
+
+    public function markAnalyzing(int $supplementId): void
+    {
+        SupplementResearch::query()
+            ->where('supplement_id', $supplementId)
+            ->update(['status' => ResearchStatus::Analyzing]);
+    }
+
+    public function markFailed(int $supplementId, string $reason): void
+    {
+        SupplementResearch::query()
+            ->where('supplement_id', $supplementId)
+            ->where('status', '!=', ResearchStatus::Failed)
+            ->update(['status' => ResearchStatus::Failed, 'error' => mb_substr($reason, 0, 500)]);
+    }
+
+    public function replaceFindings(int $supplementId, ResearchFindings $findings): void
+    {
+        DB::transaction(function () use ($supplementId, $findings): void {
+            $research = SupplementResearch::query()->where('supplement_id', $supplementId)->first();
+
+            if ($research === null) {
+                return;
+            }
+
+            $research->sources()->delete();
+            $research->effects()->delete();
+            $research->mechanisms()->delete();
+            $research->studies()->delete();
+
+            $research->sources()->createMany($findings->sources);
+            $research->effects()->createMany($findings->effects);
+            $research->mechanisms()->createMany($findings->mechanisms);
+            $research->studies()->createMany($findings->studies);
+
+            $research->update([
+                'summary' => $findings->summary,
+                'safety_notes' => $findings->safetyNotes,
+                'status' => ResearchStatus::Complete,
+                'error' => null,
+                'completed_at' => now(),
+            ]);
+        });
     }
 
     /** @return list<ResearchStatus> */

@@ -7,6 +7,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Supplements\Actions\AddSupplement;
 use Modules\Supplements\Actions\DeleteSupplement;
+use Modules\Supplements\Actions\StartResearch;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Repositories\SupplementRepository;
 
@@ -48,6 +49,27 @@ new class extends Component
         $this->resetPage();
     }
 
+    public function retry(int $id, SupplementRepository $supplements, StartResearch $startResearch): void
+    {
+        $supplement = $supplements->find($id);
+
+        if ($supplement === null) {
+            return;
+        }
+
+        if ($startResearch->handle($supplement)) {
+            Flux::toast(text: 'Research started.', variant: 'success');
+        } else {
+            Flux::toast(text: 'Research is already running.', variant: 'warning');
+        }
+    }
+
+    #[Computed]
+    public function hasActiveRuns(): bool
+    {
+        return $this->supplements->contains(fn (Supplement $s): bool => $s->research?->status->isActive() === true);
+    }
+
     /** @return LengthAwarePaginator<int, Supplement> */
     #[Computed]
     public function supplements(): LengthAwarePaginator
@@ -64,7 +86,7 @@ new class extends Component
 };
 ?>
 
-<div class="space-y-6">
+<div class="space-y-6" @if ($this->hasActiveRuns) wire:poll.3s @endif>
     <flux:card>
         <form wire:submit="add" class="flex items-start gap-3">
             <div class="flex-1">
@@ -98,11 +120,22 @@ new class extends Component
                                 <td class="py-2 pr-4">
                                     @if ($supplement->research)
                                         <flux:badge color="{{ $supplement->research->status->color() }}" size="sm">{{ $supplement->research->status->label() }}</flux:badge>
+                                        @if ($supplement->research->error)
+                                            <flux:text size="sm" class="mt-1 text-red-600 dark:text-red-400">{{ $supplement->research->error }}</flux:text>
+                                        @endif
                                     @endif
                                 </td>
                                 <td class="py-2 pr-4">{{ $supplement->effects_count }}</td>
                                 <td class="py-2 pr-4">{{ $supplement->studies_count }}</td>
-                                <td class="py-2 text-right">
+                                <td class="space-x-1 py-2 text-right">
+                                    @if ($supplement->research)
+                                        @php($active = $supplement->research->status->isActive())
+                                        @if ($supplement->research->status === \Modules\Supplements\Enums\ResearchStatus::Failed)
+                                            <flux:button size="sm" wire:click="retry({{ $supplement->id }})">Retry</flux:button>
+                                        @else
+                                            <flux:button size="xs" variant="ghost" :disabled="$active" wire:click="retry({{ $supplement->id }})">Re-run</flux:button>
+                                        @endif
+                                    @endif
                                     <flux:modal.trigger name="delete-supplement">
                                         <flux:button size="sm" variant="ghost" wire:click="confirmDelete({{ $supplement->id }})">Delete</flux:button>
                                     </flux:modal.trigger>
