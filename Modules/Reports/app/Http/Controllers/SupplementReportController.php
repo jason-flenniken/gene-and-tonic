@@ -4,6 +4,7 @@ namespace Modules\Reports\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Recommendations\Contracts\GeneticRelevanceReader;
 use Modules\Reports\Services\SupplementReportRenderer;
 use Modules\Reports\Services\TemplateRegistry;
 use Modules\Supplements\Contracts\SupplementResearchReader;
@@ -22,6 +23,7 @@ class SupplementReportController extends Controller
         TemplateRegistry $templates,
         SupplementResearchReader $reader,
         SupplementReportRenderer $renderer,
+        GeneticRelevanceReader $relevanceReader,
     ): PdfBuilder {
         $template = $request->query('template', $templates->default());
 
@@ -41,6 +43,10 @@ class SupplementReportController extends Controller
             abort(404);
         }
 
-        return $renderer->render($research, $template);
+        // Only the signed-in user's own matches; never a request value.
+        $userId = auth()->id();
+        $relevance = $userId === null ? null : $relevanceReader->forUserAndSupplement((int) $userId, $supplementId);
+
+        return $renderer->render($research, $template, $relevance);
     }
 }
