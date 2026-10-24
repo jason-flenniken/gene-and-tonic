@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T21:00:25.463Z",
+  "updated": "2026-10-24T21:12:14.862Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -474,6 +474,12 @@
       "result": "pass",
       "at": "2026-10-24T21:00:25.360Z",
       "note": "tests: 461 passing, 3 skipped (opt-in); 35 requirements met (32 FR + 3 NFR), 1 partly untested (FR-32 git-ignore); secret scan: clean; audit: composer + npm 0 vulnerabilities; new dep smalot/pdfparser (approved)"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-24T21:12:14.862Z",
+      "note": "2 Required fixed (demo-user seeder fails closed; gene-interaction rsID/allele normalised with end-to-end test); optional findings logged as follow-ups",
+      "blocking": 0
     }
   },
   "drift": [
@@ -911,6 +917,26 @@
       "at": "2026-10-24T21:00:25.463Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-24T21:00:36.590Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-24T21:07:46.272Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-24T21:10:22.423Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-24T21:12:14.862Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (demo-user seeder fails closed; gene-interaction rsID/allele normalised with end-to-end test); optional findings logged as follow-ups"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1719,8 +1745,103 @@
       ],
       "from": "check",
       "at": "2026-10-24T21:00:25.294Z"
+    },
+    {
+      "id": "s78",
+      "area": "security",
+      "text": "Require auth (or a global daily budget) for supplement add/retry/re-run; per-IP limits are bypassable and each run is paid",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:02:40.215Z"
+    },
+    {
+      "id": "s79",
+      "area": "security",
+      "text": "Per-user daily lookup budget and back-off on repeated Failed retries",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:02:40.278Z"
+    },
+    {
+      "id": "s80",
+      "area": "security",
+      "text": "Delete-my-genetic-data action, a stated retention rule, and encrypt or drop original_name/source file names",
+      "where": [
+        "Modules/Genetics/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:02:40.340Z"
+    },
+    {
+      "id": "s81",
+      "area": "quality",
+      "text": "Don't strand-flip when only one reference allele is known (TT with risk A becomes AA, false 2-copy match on A/T SNPs)",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:45.993Z"
+    },
+    {
+      "id": "s82",
+      "area": "ux",
+      "text": "Set genetics_checked_at only when the gene search actually ran",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:46.062Z"
+    },
+    {
+      "id": "s83",
+      "area": "tests",
+      "text": "Time the full ProcessGeneticUpload job on the large file and reset peak memory before measuring",
+      "where": [
+        "Modules/Genetics/tests/Feature/LargeParseTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:46.131Z"
+    },
+    {
+      "id": "s84",
+      "area": "docs",
+      "text": "Fix the 'not enforced automatically yet' boundary paragraph and the RESEARCH_GENE_LIMIT description in .env.example",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:07:46.201Z"
+    },
+    {
+      "id": "s85",
+      "area": "security",
+      "text": "Add a minimum length and case-insensitive default check to the demo password guard; consider failing loudly in production",
+      "where": [
+        "database/seeders/DemoUserSeeder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T21:10:54.525Z"
+    },
+    {
+      "id": "s86",
+      "area": "docs",
+      "text": "singleAllele docblock example: use TT or C/T, not C677T (the builder now normalises C677T)",
+      "where": [
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T21:12:02.919Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "review",
+    "name": "rechecking",
+    "at": "2026-10-24T21:10:22.423Z"
+  }
 }
