@@ -1,1 +1,5 @@
-[]
+{
+    "Shared": true,
+    "Intelligence": true,
+    "Supplements": true
+}
