@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:46:33.674Z",
+  "updated": "2026-10-24T16:47:41.686Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -29,6 +29,12 @@
       "via": "human",
       "source": "mod",
       "hash": "38be9999825d6762"
+    },
+    "plan": {
+      "at": "2026-10-24T16:47:41.685Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "5bc9c3ce6894effc"
     }
   },
   "phases": [
@@ -198,6 +204,11 @@
       "at": "2026-10-24T16:46:33.674Z",
       "event": "plan loaded",
       "detail": "2 phases, 5 tasks"
+    },
+    {
+      "at": "2026-10-24T16:47:41.685Z",
+      "event": "plan approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -280,5 +291,6 @@
       "at": "2026-10-24T16:36:13.854Z"
     }
   ],
-  "planHash": "5bc9c3ce6894effc"
+  "planHash": "5bc9c3ce6894effc",
+  "configHash": "85d35cf89052f183"
 }
