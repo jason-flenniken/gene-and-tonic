@@ -20,6 +20,19 @@ return [
         'firecrawl_credit_usd' => 0.001,
     ],
 
+    'research' => [
+        'driver' => env('RESEARCH_DRIVER', 'firecrawl'),
+        'firecrawl' => [
+            'url' => env('FIRECRAWL_API_URL', 'https://api.firecrawl.dev'),
+            'key' => env('FIRECRAWL_API_KEY'),
+            'timeout' => (int) env('FIRECRAWL_TIMEOUT', 60),
+        ],
+        // Hard cap on Firecrawl results requested per search, whatever the caller asks for.
+        'max_results' => (int) env('FIRECRAWL_MAX_RESULTS', 8),
+        // Scraped markdown is truncated to this many characters per source.
+        'max_source_chars' => 6000,
+    ],
+
     // Write an ai_requests row for each provider call.
-    'log_requests' => true,
+    'log_requests' => (bool) env('AI_LOG_REQUESTS', true),
 ];
