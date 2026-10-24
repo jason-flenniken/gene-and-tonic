@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T16:50:21.045Z",
+  "updated": "2026-10-24T17:03:38.088Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "first-pdf",
       "name": "First PDF end to end",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "shared-page-actions",
@@ -102,16 +102,19 @@
             "Modules/Supplements/tests/Feature/FakeSupplementResearchReaderTest.php"
           ],
           "complexity": "complex",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "new public route taking untrusted input, model and scraped text rendered into HTML that Chrome executes, launches a local process",
-          "substep": "implementing",
           "branch": "task/supplement-pdf-reports/clinical-report",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--clinical-report",
           "base": "5573914c25e80d09872349f58b245b066ed59e3c",
           "startedAt": "2026-10-24T16:47:59.185Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T17:03:38.088Z",
+          "tip": "399bd31",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "156b9a4ee509d1e68a9c1af1903d20c3e191433f"
         }
       ]
     },
@@ -291,6 +294,21 @@
       "at": "2026-10-24T16:50:21.045Z",
       "event": "task done",
       "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T17:02:23.864Z",
+      "event": "task reviewing",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T17:03:23.828Z",
+      "event": "task merging",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T17:03:38.088Z",
+      "event": "task done",
+      "detail": "Clinical PDF report"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -421,6 +439,66 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T16:50:13.712Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Report tests declare global helpers (reportResearch, reportUrl, expectAbsent, assertNoPdfResponded); move them to a shared Pest helper file so new test files can't fatal on redeclare",
+      "where": [
+        "Modules/Reports/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:02:23.735Z"
+    },
+    {
+      "id": "s11",
+      "area": "quality",
+      "text": "Disclaimer text is copied into each template layout; extract one shared partial",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/layout.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:02:23.799Z"
+    },
+    {
+      "id": "s12",
+      "area": "quality",
+      "text": "Move the section loop + @includeFirst into a shared reports::partials.sections partial so new layouts only add their title block",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/layout.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:03:18.905Z"
+    },
+    {
+      "id": "s13",
+      "area": "quality",
+      "text": "Unused Livewire namespace registration from the stub (Reports has no Livewire components)",
+      "where": [
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:03:18.971Z"
+    },
+    {
+      "id": "s14",
+      "area": "security",
+      "text": "PDF throttle keys on IP only: confirm trusted proxies at deploy; consider a global concurrency cap or caching the PDF by research completedAt",
+      "where": [
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:03:23.692Z"
+    },
+    {
+      "id": "s15",
+      "area": "security",
+      "text": "safeUrl only checks ^https?://; add FILTER_VALIDATE_URL and a length cap",
+      "where": [
+        "Modules/Supplements/app/Data/SourceData.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:03:23.761Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
