@@ -10,7 +10,7 @@ Laravel Boost's framework guidelines (PHP style, Pint, Pest, Livewire, Artisan, 
 
 A demo app for supplement research and recommendations, built as a **modular monolith**. A user uploads genetic test results. The app combines them with supplement research, asks an AI model (over its API) for recommendations, and produces a **PDF report** of the findings. The PDF report is the main deliverable of the product.
 
-Stack: Laravel 13, Livewire 4 (single-file components by default), Flux UI (free), Tailwind 4, Pest 5, PHP 8.4, MySQL 8.4, and nwidart/laravel-modules 13.
+Stack: Laravel 13, Livewire 4 (single-file components by default), Flux UI (free), Tailwind 4, Pest 5, PHP 8.4, MySQL 8.4, nwidart/laravel-modules 13, and spatie/laravel-pdf 2 (Chrome driver).
 
 ## Environment
 
@@ -91,4 +91,8 @@ These rules are not enforced automatically yet. When the first two modules exist
 - **Genetic data is sensitive.** Raw uploads and genotypes stay inside Genetics, stored with encrypted casts and private storage. Other modules, including the AI calls, receive only the summarized `GeneticProfile` DTO.
 - **There is no authentication yet.** Genetic data, recommendations and reports belong to a `User`, so add auth before building Genetics.
 - **AI calls go only through the Intelligence contract.** Nothing outside Intelligence talks to a provider SDK or HTTP API. Tests bind the Intelligence fake and never hit a real API. The provider/SDK is not chosen yet.
-- **PDF reports render from DTOs only.** Reports never queries other modules' tables. The PDF library is not chosen yet.
+- **PDF reports render from DTOs only.** Reports never queries other modules' tables.
+- **PDFs use spatie/laravel-pdf v2 with the `chrome` driver** (chrome-php driving a local Chrome/Chromium binary, so no Node or Puppeteer). The default is set in `config/laravel-pdf.php`. Only the Reports module uses the `Pdf` facade.
+  - Chrome renders modern CSS, so report views can use Tailwind.
+  - Feature tests call `Pdf::fake()` and assert with `Pdf::assertRespondedWithPdf()` and `assertSaved()`, so normal tests don't launch Chrome.
+  - Production and CI need a Chrome binary. GitHub's Ubuntu runners ship one, but a real-render test there will likely also need `LARAVEL_PDF_CHROME_NO_SANDBOX=true`.
