@@ -4,6 +4,7 @@ namespace Modules\Intelligence\Services;
 
 use Modules\Intelligence\Data\GenerationResult;
 use Modules\Intelligence\Data\ProfileData;
+use Modules\Intelligence\Data\SearchQuery;
 use Modules\Intelligence\Repositories\AiRequestRepository;
 use Throwable;
 
@@ -41,6 +42,31 @@ class UsageLogger
         ]);
     }
 
+    /**
+     * Logs a web search. The query text is never stored.
+     */
+    public function logSearch(SearchQuery $query, ?int $resultCount, ?Throwable $error, int $latencyMs, ?int $credits): void
+    {
+        if (! config('intelligence.log_requests', true)) {
+            return;
+        }
+
+        $this->requests->record([
+            'operation' => 'search',
+            'profile' => null,
+            'provider' => 'firecrawl',
+            'model' => null,
+            'effort' => null,
+            'input_tokens' => 0,
+            'output_tokens' => 0,
+            'credits' => $credits,
+            'latency_ms' => $latencyMs,
+            'estimated_cost_usd' => round(($credits ?? 0) * (float) config('intelligence.pricing.firecrawl_credit_usd', 0), 6),
+            'status' => $error === null ? 'success' : 'failed',
+            'error' => $error === null ? null : mb_substr($this->scrub($error->getMessage()), 0, 500),
+        ]);
+    }
+
     public function estimateCost(string $model, int $inputTokens, int $outputTokens): float
     {
         // Model names contain dots, so index the array instead of using a dotted config path.
@@ -68,6 +94,12 @@ class UsageLogger
             if (is_string($key) && $key !== '') {
                 $message = str_replace($key, '[redacted]', $message);
             }
+        }
+
+        $firecrawlKey = config('intelligence.research.firecrawl.key');
+
+        if (is_string($firecrawlKey) && $firecrawlKey !== '') {
+            $message = str_replace($firecrawlKey, '[redacted]', $message);
         }
 
         return (string) preg_replace('/\b(?:sk|key|fc)-[A-Za-z0-9_\-]{8,}/', '[redacted]', $message);

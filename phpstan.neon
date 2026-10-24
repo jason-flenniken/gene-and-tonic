@@ -16,3 +16,7 @@ parameters:
         - Modules/*/tests/*
 
     level: 7
+
+    configDirectories:
+        - %currentWorkingDirectory%/config
+        - %currentWorkingDirectory%/Modules/*/config

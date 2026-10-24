@@ -5,9 +5,12 @@ namespace Modules\Intelligence\Providers;
 use Livewire\Livewire;
 use Modules\Intelligence\Contracts\ProfileRegistry;
 use Modules\Intelligence\Contracts\TextGenerator;
+use Modules\Intelligence\Contracts\WebResearcher;
+use Modules\Intelligence\Exceptions\ResearchProviderException;
 use Modules\Intelligence\Repositories\AiRequestRepository;
 use Modules\Intelligence\Repositories\EloquentAiRequestRepository;
 use Modules\Intelligence\Services\ConfigProfileRegistry;
+use Modules\Intelligence\Services\FirecrawlWebResearcher;
 use Modules\Intelligence\Services\LaravelAiTextGenerator;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
@@ -53,6 +56,10 @@ class IntelligenceServiceProvider extends ModuleServiceProvider
 
         $this->app->singleton(ProfileRegistry::class, ConfigProfileRegistry::class);
         $this->app->bind(TextGenerator::class, LaravelAiTextGenerator::class);
+        $this->app->bind(WebResearcher::class, fn ($app): WebResearcher => match ($driver = config('intelligence.research.driver', 'firecrawl')) {
+            'firecrawl' => $app->make(FirecrawlWebResearcher::class),
+            default => throw ResearchProviderException::because('Unknown research driver ['.(is_string($driver) ? $driver : 'invalid').']'),
+        });
         $this->app->bind(AiRequestRepository::class, EloquentAiRequestRepository::class);
     }
 }
