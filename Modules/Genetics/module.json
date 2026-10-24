@@ -1,0 +1,11 @@
+{
+    "name": "Genetics",
+    "alias": "genetics",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Genetics\\Providers\\GeneticsServiceProvider"
+    ],
+    "files": []
+}
