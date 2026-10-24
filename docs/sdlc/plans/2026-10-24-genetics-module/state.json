@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:49:29.377Z",
+  "updated": "2026-10-24T20:49:31.524Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -285,7 +285,7 @@
     {
       "id": "relevance",
       "name": "Your genetics on supplements and in the PDF",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "recommendations-panel",
@@ -354,7 +354,7 @@
     {
       "id": "hardening-and-docs",
       "name": "Hardening, demo files, docs",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "supplements-hardening",
@@ -738,6 +738,11 @@
       "at": "2026-10-24T20:49:29.377Z",
       "event": "task done",
       "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:49:31.523Z",
+      "event": "phase finished",
+      "detail": "Your genetics on supplements and in the PDF (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
