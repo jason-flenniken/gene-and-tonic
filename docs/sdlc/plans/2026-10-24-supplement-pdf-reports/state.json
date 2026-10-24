@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:03:38.088Z",
+  "updated": "2026-10-24T17:03:47.154Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "first-pdf",
       "name": "First PDF end to end",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "shared-page-actions",
@@ -121,7 +121,7 @@
     {
       "id": "templates-and-button",
       "name": "Second template, download button, docs",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "modern-template",
@@ -309,6 +309,11 @@
       "at": "2026-10-24T17:03:38.088Z",
       "event": "task done",
       "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T17:03:47.153Z",
+      "event": "phase finished",
+      "detail": "First PDF end to end (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
