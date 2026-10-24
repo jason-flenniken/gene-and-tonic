@@ -1,0 +1,13 @@
+{
+  "setup": "composer install && npm ci && php -r \"file_exists('.env') || copy('.env.example', '.env');\" && php artisan key:generate",
+  "test": "composer test",
+  "build": "npm run build",
+  "start": "composer run dev",
+  "seed": "php artisan db:seed",
+  "appTypes": ["web"],
+  "maxParallel": 3,
+  "resumeFreshAfterMinutes": 60,
+  "autoCommit": true,
+  "audit": "composer audit && npm audit --audit-level=high",
+  "defaultLevel": "standard"
+}
