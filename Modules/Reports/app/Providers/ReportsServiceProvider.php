@@ -6,6 +6,7 @@ use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Livewire;
+use Modules\Shared\Contracts\PageActions;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class ReportsServiceProvider extends ModuleServiceProvider
@@ -45,6 +46,8 @@ class ReportsServiceProvider extends ModuleServiceProvider
 
         // Each PDF request launches Chrome, so downloads are throttled per IP.
         RateLimiter::for('reports', fn (Request $request) => Limit::perMinute(10)->by($request->ip()));
+
+        app(PageActions::class)->register('supplement.header', 'reports::components.download-menu');
     }
 
     public function register(): void
