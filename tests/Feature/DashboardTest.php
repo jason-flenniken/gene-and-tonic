@@ -2,6 +2,8 @@
 
 use Livewire\Livewire;
 
+beforeEach(fn () => $this->withoutVite());
+
 it('renders the dashboard at the home route', function () {
     $this->get('/')
         ->assertOk()
