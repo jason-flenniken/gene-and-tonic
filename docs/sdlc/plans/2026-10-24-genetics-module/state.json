@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:57:16.328Z",
+  "updated": "2026-10-24T21:00:25.361Z",
   "stage": "verify",
   "stageHistory": [
     {
@@ -465,7 +465,13 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-24T21:00:25.360Z",
+      "note": "tests: 461 passing, 3 skipped (opt-in); 35 requirements met (32 FR + 3 NFR), 1 partly untested (FR-32 git-ignore); secret scan: clean; audit: composer + npm 0 vulnerabilities; new dep smalot/pdfparser (approved)"
+    }
+  },
   "drift": [
     {
       "path": "tests/Feature/Auth/LoginTest.php",
@@ -881,6 +887,21 @@
       "at": "2026-10-24T20:57:16.328Z",
       "event": "advanced",
       "detail": "verify"
+    },
+    {
+      "at": "2026-10-24T20:57:32.281Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-24T20:57:56.119Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-24T21:00:25.361Z",
+      "event": "verify pass",
+      "detail": "tests: 461 passing, 3 skipped (opt-in); 35 requirements met (32 FR + 3 NFR), 1 partly untested (FR-32 git-ignore); secret scan: clean; audit: composer + npm 0 vulnerabilities; new dep smalot/pdfparser (approved)"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1669,8 +1690,33 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T20:57:00.798Z"
+    },
+    {
+      "id": "s76",
+      "area": "tests",
+      "text": "Pin that storage/app/demo files are git-ignored (git check-ignore in a test)",
+      "where": [
+        "Modules/Genetics/tests/Feature/DemoFilesTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T21:00:25.228Z"
+    },
+    {
+      "id": "s77",
+      "area": "tests",
+      "text": "Add Shared's private namespaces (Services, Providers) to the Genetics boundary test",
+      "where": [
+        "Modules/Genetics/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T21:00:25.294Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "verify",
+    "name": "scanning",
+    "at": "2026-10-24T20:57:56.118Z"
+  }
 }
