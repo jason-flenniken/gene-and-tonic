@@ -19,6 +19,7 @@ final readonly class SupplementResearchData implements Arrayable
      * @param  list<MechanismData>  $mechanisms
      * @param  list<StudyData>  $studies
      * @param  list<SourceData>  $sources
+     * @param  string|null  $error  Failure message, set only for Failed runs. Safe to show in the app UI; never rendered in reports.
      */
     public function __construct(
         public int $supplementId,
