@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T16:10:07.362Z",
+  "updated": "2026-10-24T16:15:07.341Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -51,6 +51,11 @@
       "via": "human",
       "source": "terminal",
       "hash": "817c86a75d041b52"
+    },
+    "ship": {
+      "at": "2026-10-24T16:15:07.341Z",
+      "via": "human",
+      "source": "mod"
     }
   },
   "phases": [
@@ -772,6 +777,16 @@
       "at": "2026-10-24T16:10:07.362Z",
       "event": "advanced",
       "detail": "ship"
+    },
+    {
+      "at": "2026-10-24T16:11:54.912Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-24T16:15:07.341Z",
+      "event": "ship approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1458,6 +1473,282 @@
       ],
       "from": "branch-review",
       "at": "2026-10-24T16:10:07.196Z"
+    },
+    {
+      "id": "s69",
+      "area": "quality",
+      "text": "Resolved research-intelligence-dashboard:s1",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s1",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.108Z"
+    },
+    {
+      "id": "s70",
+      "area": "tests",
+      "text": "Resolved research-intelligence-dashboard:s3",
+      "where": [
+        "Modules/*/tests/**"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s3",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.194Z"
+    },
+    {
+      "id": "s71",
+      "area": "quality",
+      "text": "Resolved research-intelligence-dashboard:s11",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s11",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.280Z"
+    },
+    {
+      "id": "s72",
+      "area": "quality",
+      "text": "Resolved research-intelligence-dashboard:s12",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s12",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.364Z"
+    },
+    {
+      "id": "s73",
+      "area": "tests",
+      "text": "Dismissed research-intelligence-dashboard:s15",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s15",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.462Z"
+    },
+    {
+      "id": "s74",
+      "area": "quality",
+      "text": "Dismissed research-intelligence-dashboard:s16",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s16",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.567Z"
+    },
+    {
+      "id": "s75",
+      "area": "quality",
+      "text": "Dismissed research-intelligence-dashboard:s22",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s22",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.660Z"
+    },
+    {
+      "id": "s76",
+      "area": "quality",
+      "text": "Dismissed research-intelligence-dashboard:s49",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s49",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.750Z"
+    },
+    {
+      "id": "s77",
+      "area": "tests",
+      "text": "Dismissed research-intelligence-dashboard:s68",
+      "where": [
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s68",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.837Z"
+    },
+    {
+      "id": "s78",
+      "area": "security",
+      "text": "Security hardening: rate-limit add/retry/re-run, stale-run reaper, stricter URL/PMID validation at persistence and render (userinfo, non-ASCII), drop chained provider exceptions, bound timeouts/tokens/field sizes, require non-empty research domains, ignore .env.*, #[Locked] on the show page",
+      "where": [
+        ".gitignore",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Supplements/app/Actions/AddSupplement.php",
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s7",
+        "research-intelligence-dashboard:s17",
+        "research-intelligence-dashboard:s18",
+        "research-intelligence-dashboard:s19",
+        "research-intelligence-dashboard:s23",
+        "research-intelligence-dashboard:s24",
+        "research-intelligence-dashboard:s29",
+        "research-intelligence-dashboard:s30",
+        "research-intelligence-dashboard:s31",
+        "research-intelligence-dashboard:s35",
+        "research-intelligence-dashboard:s38",
+        "research-intelligence-dashboard:s40",
+        "research-intelligence-dashboard:s48",
+        "research-intelligence-dashboard:s50",
+        "research-intelligence-dashboard:s54",
+        "research-intelligence-dashboard:s55"
+      ],
+      "at": "2026-10-24T16:10:50.426Z"
+    },
+    {
+      "id": "s79",
+      "area": "tests",
+      "text": "Test depth: Pest arch tests for module boundaries and the Http seam, FR-10 study/effect column assertions, provider edge cases (Length finish, leaky error bodies), hostile ?tab, behavioural overlap-lock test, AiRequest factory, global withoutVite, opt-in live-provider smoke test, fix cross-module test imports",
+      "where": [
+        "tests/Feature/ExampleTest.php",
+        "tests/TestCase.php",
+        "tests/Pest.php",
+        "Modules/Supplements/**",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php",
+        "Modules/Intelligence/**",
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php",
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Intelligence/database/factories/**",
+        "Modules/Supplements/tests/Feature/StatsTest.php",
+        "Modules/Supplements/tests/**",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s5",
+        "research-intelligence-dashboard:s6",
+        "research-intelligence-dashboard:s8",
+        "research-intelligence-dashboard:s9",
+        "research-intelligence-dashboard:s20",
+        "research-intelligence-dashboard:s25",
+        "research-intelligence-dashboard:s27",
+        "research-intelligence-dashboard:s32",
+        "research-intelligence-dashboard:s36",
+        "research-intelligence-dashboard:s39",
+        "research-intelligence-dashboard:s41",
+        "research-intelligence-dashboard:s44",
+        "research-intelligence-dashboard:s45",
+        "research-intelligence-dashboard:s52",
+        "research-intelligence-dashboard:s53",
+        "research-intelligence-dashboard:s58",
+        "research-intelligence-dashboard:s59",
+        "research-intelligence-dashboard:s67"
+      ],
+      "at": "2026-10-24T16:10:50.513Z"
+    },
+    {
+      "id": "s80",
+      "area": "ux",
+      "text": "Demo polish and live tuning: outcome as an enum, poll the detail page and overview widgets, dynamic page titles, accessible tab/panel wiring, raise output-token budget if Length appears, Firecrawl server timeout below client timeout, cap total prompt size",
+      "where": [
+        "resources/views/components/tabs/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Intelligence/config/config.php",
+        "Modules/Supplements/config/config.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s4",
+        "research-intelligence-dashboard:s34",
+        "research-intelligence-dashboard:s43",
+        "research-intelligence-dashboard:s47",
+        "research-intelligence-dashboard:s60",
+        "research-intelligence-dashboard:s61",
+        "research-intelligence-dashboard:s62",
+        "research-intelligence-dashboard:s63",
+        "research-intelligence-dashboard:s64"
+      ],
+      "at": "2026-10-24T16:10:50.598Z"
+    },
+    {
+      "id": "s81",
+      "area": "docs",
+      "text": "Docs: update CLAUDE.md module map (Supplements -> Intelligence), list all config env keys in .env.example, document the reader's error field, strip local paths from plan docs before a public push",
+      "where": [
+        "CLAUDE.md",
+        "Modules/Supplements/app/Contracts/SupplementResearchReader.php",
+        "docs/sdlc/**",
+        ".env.example"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s2",
+        "research-intelligence-dashboard:s37",
+        "research-intelligence-dashboard:s46",
+        "research-intelligence-dashboard:s56",
+        "research-intelligence-dashboard:s66"
+      ],
+      "at": "2026-10-24T16:10:50.685Z"
+    },
+    {
+      "id": "s82",
+      "area": "quality",
+      "text": "Code quality: log every TextGenerator failure (catch Throwable), record billed tokens/credits on failures, consistent repository resolution, Larastan module migrations path instead of @property docblocks, move tabs into Shared, ai_requests indexes, small cleanups (claimRun comment, positiveInt)",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+        "Modules/Intelligence/app/Services/UsageLogger.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php",
+        "phpstan.neon",
+        "Modules/Intelligence/database/migrations/**",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "resources/views/components/tabs/**"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s10",
+        "research-intelligence-dashboard:s13",
+        "research-intelligence-dashboard:s14",
+        "research-intelligence-dashboard:s21",
+        "research-intelligence-dashboard:s26",
+        "research-intelligence-dashboard:s28",
+        "research-intelligence-dashboard:s33",
+        "research-intelligence-dashboard:s42",
+        "research-intelligence-dashboard:s51",
+        "research-intelligence-dashboard:s57",
+        "research-intelligence-dashboard:s65"
+      ],
+      "at": "2026-10-24T16:10:50.771Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "ship",
+    "name": "approving",
+    "at": "2026-10-24T16:11:54.912Z"
+  }
 }
