@@ -1,0 +1,30 @@
+{
+    "name": "modules/shared",
+    "description": "Kernel module. May depend on: nothing.",
+    "authors": [
+        {
+            "name": "Jason Flenniken",
+            "email": "jason.flenniken@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Shared\\": "app/",
+            "Modules\\Shared\\Database\\Factories\\": "database/factories/",
+            "Modules\\Shared\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Shared\\Tests\\": "tests/"
+        }
+    }
+}

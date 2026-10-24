@@ -1,0 +1,1771 @@
+{
+  "schema": 1,
+  "slug": "research-intelligence-dashboard",
+  "title": "Research, Intelligence and dashboard",
+  "track": "feature",
+  "branch": "feature/research-intelligence-dashboard",
+  "base": "main",
+  "created": "2026-10-24T14:18:08.365Z",
+  "updated": "2026-10-24T16:15:48.001Z",
+  "stage": "closed",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-24T14:18:08.365Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-24T15:00:57.623Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-24T15:05:31.663Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-24T15:20:40.643Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-24T15:49:32.219Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-24T15:52:36.622Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-24T16:10:07.362Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-24T16:15:38.470Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-24T16:15:48.000Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {
+    "prd": {
+      "at": "2026-10-24T15:19:50.022Z",
+      "via": "human",
+      "source": "terminal",
+      "hash": "8010d0795572d915"
+    },
+    "plan": {
+      "at": "2026-10-24T15:20:31.790Z",
+      "via": "human",
+      "source": "terminal",
+      "hash": "817c86a75d041b52"
+    },
+    "ship": {
+      "at": "2026-10-24T16:15:07.341Z",
+      "via": "human",
+      "source": "mod"
+    }
+  },
+  "phases": [
+    {
+      "id": "foundations",
+      "name": "Foundations",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "module-foundations",
+          "name": "Module foundations",
+          "covers": [
+            "FR-18",
+            "FR-21"
+          ],
+          "blockedBy": [],
+          "scope": [
+            ".gitignore",
+            "AGENTS.md",
+            "boost.json",
+            "CLAUDE.md",
+            "composer.json",
+            "composer.lock",
+            "modules_statuses.json",
+            ".env.example",
+            "tests/TestCase.php",
+            "Modules/Shared/**",
+            "Modules/Intelligence/**",
+            "Modules/Supplements/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "adds the laravel/ai dependency and API-key env vars",
+          "branch": "task/research-intelligence-dashboard/module-foundations",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--module-foundations",
+          "base": "23945f9d4536fbd0481c12ebef9a6b3a068e833f",
+          "startedAt": "2026-10-24T15:20:57.245Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:25:43.643Z",
+          "tip": "f3092f3",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "e3465a471f2857f36638491d34028049f3d2be49"
+        },
+        {
+          "id": "dashboard-shell",
+          "name": "Dashboard shell",
+          "covers": [
+            "FR-01"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "routes/web.php",
+            "resources/views/**",
+            "tests/Feature/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": false,
+          "branch": "task/research-intelligence-dashboard/dashboard-shell",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--dashboard-shell",
+          "base": "23945f9d4536fbd0481c12ebef9a6b3a068e833f",
+          "startedAt": "2026-10-24T15:21:02.509Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:24:57.414Z",
+          "tip": "298bce0",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "9af876b13be0fa886eeb0ea0aab92a8d40f07efc"
+        }
+      ]
+    },
+    {
+      "id": "engines",
+      "name": "Intelligence and catalog",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "intelligence-text-generation",
+          "name": "Intelligence text generation",
+          "covers": [
+            "FR-12",
+            "FR-13",
+            "FR-14",
+            "FR-16",
+            "FR-18",
+            "FR-20"
+          ],
+          "blockedBy": [
+            "module-foundations"
+          ],
+          "scope": [
+            "Modules/Intelligence/**"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new external AI integration, model output, a migration, and secrets that must never be logged",
+          "branch": "task/research-intelligence-dashboard/intelligence-text-generation",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--intelligence-text-generation",
+          "base": "824e3b102d8d8bea3d432bc4ef20417a3bebfd18",
+          "startedAt": "2026-10-24T15:26:11.324Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:34:00.950Z",
+          "tip": "0bb46c8",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "6403874e1a582a01ca201f0b6a7981b268bd42b7"
+        },
+        {
+          "id": "supplements-catalog",
+          "name": "Supplements catalog",
+          "covers": [
+            "FR-03",
+            "FR-04",
+            "FR-11",
+            "FR-20",
+            "FR-21"
+          ],
+          "blockedBy": [
+            "module-foundations",
+            "dashboard-shell"
+          ],
+          "scope": [
+            "Modules/Supplements/**",
+            "resources/views/pages/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "untrusted input, new migrations, and deletes",
+          "branch": "task/research-intelligence-dashboard/supplements-catalog",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--supplements-catalog",
+          "base": "824e3b102d8d8bea3d432bc4ef20417a3bebfd18",
+          "startedAt": "2026-10-24T15:26:18.068Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:35:33.149Z",
+          "tip": "366b5e1",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "b904ca73f6f39fc08635986185991dd77e2b22f7"
+        },
+        {
+          "id": "intelligence-web-research",
+          "name": "Intelligence web research",
+          "covers": [
+            "FR-15",
+            "FR-16",
+            "FR-18"
+          ],
+          "blockedBy": [
+            "intelligence-text-generation"
+          ],
+          "scope": [
+            "Modules/Intelligence/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "new external integration returning untrusted scraped content; API key handling",
+          "branch": "task/research-intelligence-dashboard/intelligence-web-research",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--intelligence-web-research",
+          "base": "ed780b02d0cfa9df92d4b7304d406a3d77bd04df",
+          "startedAt": "2026-10-24T15:34:14.866Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:41:34.889Z",
+          "tip": "109c6cf",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "88ef325657bf0e4e736aa2ef1640b772250812c0"
+        },
+        {
+          "id": "supplement-page",
+          "name": "Supplement page and reader",
+          "covers": [
+            "FR-10",
+            "FR-19"
+          ],
+          "blockedBy": [
+            "supplements-catalog"
+          ],
+          "scope": [
+            "Modules/Supplements/app/Contracts/**",
+            "Modules/Supplements/app/Data/**",
+            "Modules/Supplements/app/Repositories/**",
+            "Modules/Supplements/app/Providers/**",
+            "Modules/Supplements/resources/views/livewire/⚡show*",
+            "Modules/Supplements/resources/views/components/**",
+            "Modules/Supplements/routes/**",
+            "Modules/Supplements/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "renders model output and scraped titles to the browser",
+          "branch": "task/research-intelligence-dashboard/supplement-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--supplement-page",
+          "base": "aa8d20ec9b44b4f41a4e3a6782421e383192c5af",
+          "startedAt": "2026-10-24T15:35:45.675Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:41:39.803Z",
+          "tip": "79c30a4",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "1c4df7d6cd1845e5e896c4bc0c1af28204196586"
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Research end to end",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "research-pipeline",
+          "name": "Research pipeline",
+          "covers": [
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09",
+            "FR-11"
+          ],
+          "blockedBy": [
+            "intelligence-web-research",
+            "supplement-page"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/config/**",
+            "Modules/Supplements/resources/views/prompts/**",
+            "Modules/Supplements/resources/views/livewire/⚡catalog*",
+            "Modules/Supplements/tests/Feature/Research*",
+            "Modules/Supplements/tests/Feature/Catalog*",
+            "Modules/Supplements/tests/Unit/**"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "sends untrusted scraped content to the model, persists model output, controls API spend",
+          "branch": "task/research-intelligence-dashboard/research-pipeline",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--research-pipeline",
+          "base": "9dbaa054fb8667fcb957c3bf2b784de0fdc2a51a",
+          "startedAt": "2026-10-24T15:42:08.212Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:49:30.394Z",
+          "tip": "82fa833",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "99a7062444273b4816b2ae04727ef8c0a26afff3"
+        },
+        {
+          "id": "overview-and-usage",
+          "name": "Overview and AI usage tabs",
+          "covers": [
+            "FR-02",
+            "FR-17"
+          ],
+          "blockedBy": [
+            "intelligence-web-research",
+            "supplements-catalog"
+          ],
+          "scope": [
+            "resources/views/pages/**",
+            "Modules/Intelligence/resources/views/livewire/**",
+            "Modules/Intelligence/app/Repositories/**",
+            "Modules/Intelligence/tests/**",
+            "Modules/Supplements/resources/views/livewire/⚡stats*",
+            "Modules/Supplements/tests/Feature/Stats*"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/research-intelligence-dashboard/overview-and-usage",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--overview-and-usage",
+          "base": "9dbaa054fb8667fcb957c3bf2b784de0fdc2a51a",
+          "startedAt": "2026-10-24T15:42:12.996Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T15:46:38.078Z",
+          "tip": "d80fd66",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "556666a2878bbce62725e14c39a33768a88e2ab6"
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-24T15:52:36.523Z",
+      "note": "tests: 126 passing (Pint, PHPStan L7 clean), build ok; 21/21 FRs met (FR-13 timeout env gap fixed in b30ce42), FR-10 partially untested (logged); NFR-03 live timing not verifiable without keys; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-24T16:10:07.260Z",
+      "note": "3 Required fixed (queue retry overlap, cost by alias, dead code) + lock TTL fixed by hand at user's choice; 129 tests green; follow-ups logged",
+      "blocking": 0
+    }
+  },
+  "drift": [
+    {
+      "path": "phpstan.neon",
+      "at": "2026-10-24T15:25:43.643Z",
+      "reason": "changed outside task \"Module foundations\" scope (found at task done)",
+      "task": "module-foundations"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/Supplement.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementEffect.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementMechanism.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementResearch.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementSource.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Supplements/app/Models/SupplementStudy.php",
+      "at": "2026-10-24T15:41:39.803Z",
+      "reason": "changed outside task \"Supplement page and reader\" scope (found at task done)",
+      "task": "supplement-page"
+    }
+  ],
+  "log": [
+    {
+      "at": "2026-10-24T14:18:08.365Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-24T14:18:08.366Z",
+      "event": "level",
+      "detail": "standard"
+    },
+    {
+      "at": "2026-10-24T15:00:57.624Z",
+      "event": "advanced",
+      "detail": "prd"
+    },
+    {
+      "at": "2026-10-24T15:05:21.632Z",
+      "event": "PRD approved",
+      "detail": "terminal"
+    },
+    {
+      "at": "2026-10-24T15:05:31.664Z",
+      "event": "advanced",
+      "detail": "plan"
+    },
+    {
+      "at": "2026-10-24T15:14:36.325Z",
+      "event": "plan loaded",
+      "detail": "3 phases, 8 tasks"
+    },
+    {
+      "at": "2026-10-24T15:19:50.021Z",
+      "event": "override: approve prd",
+      "detail": "the plan is in plan, not prd (source: terminal)",
+      "override": "FR-15 edited: Firecrawl via Laravel Http client (decision 25)"
+    },
+    {
+      "at": "2026-10-24T15:19:50.022Z",
+      "event": "PRD approved",
+      "detail": "terminal"
+    },
+    {
+      "at": "2026-10-24T15:20:31.790Z",
+      "event": "plan approved",
+      "detail": "terminal"
+    },
+    {
+      "at": "2026-10-24T15:20:40.643Z",
+      "event": "advanced",
+      "detail": "execute"
+    },
+    {
+      "at": "2026-10-24T15:20:57.246Z",
+      "event": "task started",
+      "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:21:02.510Z",
+      "event": "task started",
+      "detail": "Dashboard shell"
+    },
+    {
+      "at": "2026-10-24T15:22:04.030Z",
+      "event": "task implementing",
+      "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:22:04.101Z",
+      "event": "task implementing",
+      "detail": "Dashboard shell"
+    },
+    {
+      "at": "2026-10-24T15:22:54.048Z",
+      "event": "task reviewing",
+      "detail": "Dashboard shell"
+    },
+    {
+      "at": "2026-10-24T15:23:25.660Z",
+      "event": "task reviewing",
+      "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:23:40.791Z",
+      "event": "task merging",
+      "detail": "Dashboard shell"
+    },
+    {
+      "at": "2026-10-24T15:24:00.138Z",
+      "event": "task fixing",
+      "detail": "Dashboard shell (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T15:24:57.415Z",
+      "event": "task done",
+      "detail": "Dashboard shell"
+    },
+    {
+      "at": "2026-10-24T15:25:27.901Z",
+      "event": "task merging",
+      "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:25:43.643Z",
+      "event": "drift",
+      "detail": "phpstan.neon"
+    },
+    {
+      "at": "2026-10-24T15:25:43.643Z",
+      "event": "task done",
+      "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:25:53.890Z",
+      "event": "phase finished",
+      "detail": "Foundations (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T15:26:11.324Z",
+      "event": "task started",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:26:18.068Z",
+      "event": "task started",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:28:11.063Z",
+      "event": "task implementing",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:28:11.123Z",
+      "event": "task implementing",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:31:16.602Z",
+      "event": "task reviewing",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:32:26.428Z",
+      "event": "task reviewing",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:33:13.933Z",
+      "event": "task fixing",
+      "detail": "Supplements catalog (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T15:33:54.673Z",
+      "event": "task merging",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:34:00.950Z",
+      "event": "task done",
+      "detail": "Intelligence text generation"
+    },
+    {
+      "at": "2026-10-24T15:34:14.867Z",
+      "event": "task started",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:34:14.951Z",
+      "event": "task implementing",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:35:26.532Z",
+      "event": "task merging",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:35:33.150Z",
+      "event": "task done",
+      "detail": "Supplements catalog"
+    },
+    {
+      "at": "2026-10-24T15:35:45.676Z",
+      "event": "task started",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:35:45.759Z",
+      "event": "task implementing",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:37:43.065Z",
+      "event": "task reviewing",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:38:56.668Z",
+      "event": "task fixing",
+      "detail": "Intelligence web research (attempt 1)"
+    },
+    {
+      "at": "2026-10-24T15:39:25.584Z",
+      "event": "task reviewing",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:40:29.745Z",
+      "event": "task merging",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:40:49.216Z",
+      "event": "task reviewing",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:41:28.643Z",
+      "event": "task merging",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:41:34.890Z",
+      "event": "task done",
+      "detail": "Intelligence web research"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/Supplement.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementEffect.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementMechanism.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementResearch.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementSource.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Models/SupplementStudy.php"
+    },
+    {
+      "at": "2026-10-24T15:41:39.803Z",
+      "event": "task done",
+      "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:41:45.059Z",
+      "event": "phase finished",
+      "detail": "Intelligence and catalog (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T15:42:08.212Z",
+      "event": "task started",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:42:08.294Z",
+      "event": "task implementing",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:42:12.997Z",
+      "event": "task started",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:42:13.081Z",
+      "event": "task implementing",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:45:51.096Z",
+      "event": "task reviewing",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:46:31.648Z",
+      "event": "task merging",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:46:38.079Z",
+      "event": "task done",
+      "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:47:53.049Z",
+      "event": "task reviewing",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:49:23.613Z",
+      "event": "task merging",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:49:30.395Z",
+      "event": "task done",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:49:32.218Z",
+      "event": "phase finished",
+      "detail": "Research end to end (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T15:49:32.219Z",
+      "event": "advanced",
+      "detail": "verify"
+    },
+    {
+      "at": "2026-10-24T15:49:43.244Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-24T15:49:57.502Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-24T15:51:52.882Z",
+      "event": "step",
+      "detail": "fixing (1)"
+    },
+    {
+      "at": "2026-10-24T15:52:36.523Z",
+      "event": "verify pass",
+      "detail": "tests: 126 passing (Pint, PHPStan L7 clean), build ok; 21/21 FRs met (FR-13 timeout env gap fixed in b30ce42), FR-10 partially untested (logged); NFR-03 live timing not verifiable without keys; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    {
+      "at": "2026-10-24T15:52:36.622Z",
+      "event": "advanced",
+      "detail": "review"
+    },
+    {
+      "at": "2026-10-24T15:52:41.889Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-24T16:04:06.530Z",
+      "event": "step",
+      "detail": "fixing (3)"
+    },
+    {
+      "at": "2026-10-24T16:06:06.549Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-24T16:10:07.260Z",
+      "event": "review pass",
+      "detail": "3 Required fixed (queue retry overlap, cost by alias, dead code) + lock TTL fixed by hand at user's choice; 129 tests green; follow-ups logged"
+    },
+    {
+      "at": "2026-10-24T16:10:07.362Z",
+      "event": "advanced",
+      "detail": "ship"
+    },
+    {
+      "at": "2026-10-24T16:11:54.912Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-24T16:15:07.341Z",
+      "event": "ship approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T16:15:38.352Z",
+      "event": "step",
+      "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-24T16:15:38.470Z",
+      "event": "advanced",
+      "detail": "learn"
+    },
+    {
+      "at": "2026-10-24T16:15:48.001Z",
+      "event": "closed"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard",
+  "planHash": "817c86a75d041b52",
+  "configHash": "85d35cf89052f183",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "quality",
+      "text": "Remove the trait.unused ignoreErrors entry for ArrayableData once a production DTO uses the trait",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:23:25.427Z"
+    },
+    {
+      "id": "s2",
+      "area": "docs",
+      "text": "Update CLAUDE.md's 'No module exists yet' line and module map now that Shared, Intelligence and Supplements exist",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:23:25.504Z"
+    },
+    {
+      "id": "s3",
+      "area": "tests",
+      "text": "Intelligence and Supplements have only .gitkeep test dirs; add module tests as real code lands",
+      "where": [
+        "Modules/*/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:23:25.584Z"
+    },
+    {
+      "id": "s4",
+      "area": "ux",
+      "text": "Tabs lack aria-controls/id/roving tabindex and panels lack aria-labelledby; link tabs to panels when modules reuse the component",
+      "where": [
+        "resources/views/components/tabs/**"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:23:40.642Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Rename ExampleTest to DashboardTest and assert the app header/layout, which FR-01's check mentions",
+      "where": [
+        "tests/Feature/ExampleTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:23:40.720Z"
+    },
+    {
+      "id": "s6",
+      "area": "tests",
+      "text": "Call withoutVite() globally in TestCase so every page test is independent of built assets, instead of per-file beforeEach",
+      "where": [
+        "tests/TestCase.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:24:35.768Z"
+    },
+    {
+      "id": "s7",
+      "area": "security",
+      "text": "Ignore all .env.* variants (add .env.* with !.env.example) now that real API keys are in play",
+      "where": [
+        ".gitignore"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:25:27.639Z"
+    },
+    {
+      "id": "s8",
+      "area": "tests",
+      "text": "Unit test dirs don't extend TestCase, so the stray-request guard doesn't cover them; keep network code out of Unit tests or extend TestCase there",
+      "where": [
+        "tests/Pest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:25:27.766Z"
+    },
+    {
+      "id": "s9",
+      "area": "tests",
+      "text": "Add an arch test that Actions and Livewire views make no Model::query/where/create calls (FR-20), and run migrate:fresh + rollback on MySQL in CI",
+      "where": [
+        "Modules/Supplements/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:31:16.466Z"
+    },
+    {
+      "id": "s10",
+      "area": "quality",
+      "text": "recentlyCompleted/paginateWithResearch return Eloquent models; expose a DTO contract if another module ever consumes the overview data",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:31:16.535Z"
+    },
+    {
+      "id": "s11",
+      "area": "quality",
+      "text": "WebResearcher should reuse UsageLogger (add logSearch) and extend scrub() with the Firecrawl key config",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:32:26.232Z"
+    },
+    {
+      "id": "s12",
+      "area": "quality",
+      "text": "Set Larastan configDirectories to include Modules/*/config so module config files may call env() (restores AI_LOG_REQUESTS and AI_RESEARCH_* overrides)",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:32:26.299Z"
+    },
+    {
+      "id": "s13",
+      "area": "quality",
+      "text": "Refusals and failed calls log 0 tokens although the provider may have billed them; read usage from the raw response when available",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:32:26.363Z"
+    },
+    {
+      "id": "s14",
+      "area": "quality",
+      "text": "Resolve SupplementRepository one way in the catalog component (boot() or injection) instead of mixing app() and method injection",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:32:31.903Z"
+    },
+    {
+      "id": "s15",
+      "area": "tests",
+      "text": "Comment that the unique-race test simulates concurrency via a wrapper; the unique index is the real guard",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:32:31.967Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Reorder imports (Flux before Illuminate); Pint doesn't lint Blade SFCs",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:32:32.033Z"
+    },
+    {
+      "id": "s17",
+      "area": "security",
+      "text": "Throttle the catalog add action (Livewire throttle or RateLimiter per session) and consider capping concurrent active runs, to bound API spend",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:13.738Z"
+    },
+    {
+      "id": "s18",
+      "area": "security",
+      "text": "A run stuck in queued (dispatch failure, dead worker) blocks retries forever; treat queued/searching/analyzing older than N minutes as stale",
+      "where": [
+        "Modules/Supplements/app/Actions/AddSupplement.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:13.801Z"
+    },
+    {
+      "id": "s19",
+      "area": "ux",
+      "text": "Concurrent adds of two names with the same slug report 'already added'; retry uniqueSlug once on slug collision",
+      "where": [
+        "Modules/Supplements/app/Actions/AddSupplement.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:13.869Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Add a test for the FinishReason::Length branch (incomplete/length response -> GenerationFailedException + failed row)",
+      "where": [
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:33:37.219Z"
+    },
+    {
+      "id": "s21",
+      "area": "quality",
+      "text": "Wrap unexpected Throwables (view render, non-AiException) as GenerationFailedException and make the usage log write non-fatal so it can't mask the original error or drop a result",
+      "where": [
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:33:37.288Z"
+    },
+    {
+      "id": "s22",
+      "area": "quality",
+      "text": "Resolve the nullable GenerationResult into locals once instead of repeated $result->x ?? ... access",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:33:37.353Z"
+    },
+    {
+      "id": "s23",
+      "area": "security",
+      "text": "GenerationFailedException keeps the provider exception as previous; a report() would log RequestException bodies (may echo masked keys). Drop or sanitize previous and test a 401 body containing the key",
+      "where": [
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:54.459Z"
+    },
+    {
+      "id": "s24",
+      "area": "security",
+      "text": "Validate max_tokens/timeout as numeric > 0 with upper caps; env '0' gives an unbounded Guzzle timeout",
+      "where": [
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:54.531Z"
+    },
+    {
+      "id": "s25",
+      "area": "tests",
+      "text": "Make the no-secrets test's failure case carry the key and prompt text in the response body and connection message, so a future getMessage() leak would fail it",
+      "where": [
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:33:54.602Z"
+    },
+    {
+      "id": "s26",
+      "area": "quality",
+      "text": "claimRun's active-run loss path relies on a thrown unique violation; comment it or check for an existing row before the insert",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:35:26.462Z"
+    },
+    {
+      "id": "s27",
+      "area": "tests",
+      "text": "Arch test: Http facade only used by Intelligence Services drivers (enforces no-SDK / single HTTP seam)",
+      "where": [
+        "Modules/Intelligence/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:37:42.935Z"
+    },
+    {
+      "id": "s28",
+      "area": "quality",
+      "text": "Decide whether failed Firecrawl searches should record billed credits (currently null credits, 0 cost)",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:37:43.001Z"
+    },
+    {
+      "id": "s29",
+      "area": "security",
+      "text": "Empty domains list fails open (any host accepted, includeDomains sent empty); require non-empty domains or make 'any' explicit; normalize/validate configured domains",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.404Z"
+    },
+    {
+      "id": "s30",
+      "area": "security",
+      "text": "Clamp Firecrawl timeout to 1..120 and add connectTimeout(10); consider withoutRedirecting()",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.466Z"
+    },
+    {
+      "id": "s31",
+      "area": "security",
+      "text": "Truncate untrusted title/description/url (≈300/1000/2048) and bound response size; these fields feed the prompt",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.534Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Assert the failed search ai_requests row contains neither the query text nor a key that appears in an error message",
+      "where": [
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:38:56.602Z"
+    },
+    {
+      "id": "s33",
+      "area": "quality",
+      "text": "Point Larastan at module migrations (databaseMigrationsPath with Modules/*/database/migrations) so model @property docblocks aren't needed",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:39:25.443Z"
+    },
+    {
+      "id": "s34",
+      "area": "ux",
+      "text": "Supplement page title is a static 'Supplement'; use the supplement name",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:39:25.515Z"
+    },
+    {
+      "id": "s35",
+      "area": "security",
+      "text": "Mark the show page's supplementId and name properties #[Locked] so a client can't swap the supplement after mount",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:40:22.280Z"
+    },
+    {
+      "id": "s36",
+      "area": "tests",
+      "text": "Extend safeUrl tests: JavaScript: mixed case, data:, leading-space javascript:, HTTPS:// uppercase",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:40:22.344Z"
+    },
+    {
+      "id": "s37",
+      "area": "docs",
+      "text": "Document SupplementResearchData's extra error field in the contract",
+      "where": [
+        "Modules/Supplements/app/Contracts/SupplementResearchReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:40:22.407Z"
+    },
+    {
+      "id": "s38",
+      "area": "security",
+      "text": "safeUrl() accepts userinfo URLs (https://trusted@evil/); parse_url, require http(s)+host, reject user/pass, whitespace, control chars and backslash",
+      "where": [
+        "Modules/Supplements/app/Data/SourceData.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:40:29.614Z"
+    },
+    {
+      "id": "s39",
+      "area": "tests",
+      "text": "Add a GET test with a hostile ?tab= value asserting fallback to overview and no unescaped markup",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:40:29.679Z"
+    },
+    {
+      "id": "s40",
+      "area": "security",
+      "text": "Reject non-ASCII whitespace/fullwidth chars in source URLs, or compare hosts via idn_to_ascii",
+      "where": [
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:41:28.572Z"
+    },
+    {
+      "id": "s41",
+      "area": "tests",
+      "text": "Add an AiRequest factory; usage tests currently create rows through a local helper",
+      "where": [
+        "Modules/Intelligence/database/factories/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:45:50.896Z"
+    },
+    {
+      "id": "s42",
+      "area": "perf",
+      "text": "Index ai_requests on created_at/status if usage grows; 24h and failed aggregates scan the table",
+      "where": [
+        "Modules/Intelligence/database/migrations/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:45:50.965Z"
+    },
+    {
+      "id": "s43",
+      "area": "ux",
+      "text": "Overview widgets don't poll; consider wire:poll while research is active so counts update live",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:45:51.032Z"
+    },
+    {
+      "id": "s44",
+      "area": "tests",
+      "text": "Assert the supplement total via the data-stat=\"total\" element instead of a bare '10'",
+      "where": [
+        "Modules/Supplements/tests/Feature/StatsTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:46:31.584Z"
+    },
+    {
+      "id": "s45",
+      "area": "tests",
+      "text": "Opt-in live-provider smoke test (outside CI) to confirm OpenAI accepts the strict research schema",
+      "where": [
+        "Modules/Supplements/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:47:52.853Z"
+    },
+    {
+      "id": "s46",
+      "area": "docs",
+      "text": "CLAUDE.md module map says Supplements may depend on Shared only; the plan allows Supplements -> Intelligence. Update the map",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:47:52.919Z"
+    },
+    {
+      "id": "s47",
+      "area": "perf",
+      "text": "Cap total prompt size across the 8 sources, not just per-source markdown truncation",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:47:52.982Z"
+    },
+    {
+      "id": "s48",
+      "area": "security",
+      "text": "ResearchStepFailed chains the Intelligence exception as previous; drop it so a future report() can't log the chain",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:49:16.262Z"
+    },
+    {
+      "id": "s49",
+      "area": "quality",
+      "text": "Inline the per-row @php($active) into the Re-run branch",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:49:16.330Z"
+    },
+    {
+      "id": "s50",
+      "area": "security",
+      "text": "Defence in depth: re-check http(s) scheme on SourceDocument URLs at persistence, not only in the Firecrawl driver",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:49:23.478Z"
+    },
+    {
+      "id": "s51",
+      "area": "quality",
+      "text": "positiveInt accepts 0; rename or require > 0 for sample_size",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:49:23.542Z"
+    },
+    {
+      "id": "s52",
+      "area": "tests",
+      "text": "Assert FR-10 study columns (design, population, n, year, finding, grade) on ?tab=studies",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T15:51:52.749Z"
+    },
+    {
+      "id": "s53",
+      "area": "tests",
+      "text": "Assert FR-10 effect outcome text and mechanism source badges",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T15:51:52.816Z"
+    },
+    {
+      "id": "s54",
+      "area": "security",
+      "text": "Rate-limit add, retry and re-run together (session/IP) plus a per-supplement cooldown in claimRun; retries re-run the paid search",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:54:07.325Z"
+    },
+    {
+      "id": "s55",
+      "area": "security",
+      "text": "Accept a model-supplied PMID only for PubMed sources or when the digits appear in the cited source",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:54:07.407Z"
+    },
+    {
+      "id": "s56",
+      "area": "docs",
+      "text": "Plan docs (state.json, decisions.md) contain absolute local paths; strip or ignore before any public push",
+      "where": [
+        "docs/sdlc/**"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:54:07.485Z"
+    },
+    {
+      "id": "s57",
+      "area": "quality",
+      "text": "Log ai_requests rows for any Throwable in the text generator (catch, log, rethrow) like the Firecrawl driver, so every call writes a row",
+      "where": [
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:05.831Z"
+    },
+    {
+      "id": "s58",
+      "area": "tests",
+      "text": "StatsTest imports Intelligence's private AiRequest model; move the cross-module overview assertion to tests/Feature/DashboardTest.php and seed usage via a public Intelligence Testing helper",
+      "where": [
+        "Modules/Supplements/tests/Feature/StatsTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:05.899Z"
+    },
+    {
+      "id": "s59",
+      "area": "tests",
+      "text": "FR-11 test inserts ai_requests status 'ok' (invalid) and can't fail without an FK; use 'success' or the real UsageLogger write path",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:05.967Z"
+    },
+    {
+      "id": "s60",
+      "area": "perf",
+      "text": "Send Firecrawl a server timeout (~55000ms) below the 60s client timeout so slow searches return Firecrawl's timeout instead of a connection error",
+      "where": [
+        "Modules/Intelligence/config/config.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.033Z"
+    },
+    {
+      "id": "s61",
+      "area": "ux",
+      "text": "Effect 'outcome' is a free string truncated to 50 chars; make it an enum (positive|negative|mixed|none) or describe it in the instructions",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.095Z"
+    },
+    {
+      "id": "s62",
+      "area": "perf",
+      "text": "max_output_tokens 8000 covers reasoning tokens too; watch first live run, raise to ~16000 if Length failures appear, and don't retry Length",
+      "where": [
+        "Modules/Supplements/config/config.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.158Z"
+    },
+    {
+      "id": "s63",
+      "area": "ux",
+      "text": "Detail page doesn't poll during active research; add conditional wire:poll.3s like the catalog",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.231Z"
+    },
+    {
+      "id": "s64",
+      "area": "ux",
+      "text": "hasActiveRuns checks only the current page; ask the repository whether any run is active",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.304Z"
+    },
+    {
+      "id": "s65",
+      "area": "quality",
+      "text": "Supplements depends on the app shell via <x-tabs> and route('home'); move tabs into Shared later",
+      "where": [
+        "resources/views/components/tabs/**"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.381Z"
+    },
+    {
+      "id": "s66",
+      "area": "docs",
+      "text": "Add commented RESEARCH_DRIVER, FIRECRAWL_TIMEOUT, FIRECRAWL_MAX_RESULTS, AI_LOG_REQUESTS with defaults",
+      "where": [
+        ".env.example"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:04:06.452Z"
+    },
+    {
+      "id": "s67",
+      "area": "tests",
+      "text": "Add a behavioural overlap test (held lock drops the duplicate run) and tie expireAfter to retry_after/timeout so a config change can't silently break the margin",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T16:06:53.251Z"
+    },
+    {
+      "id": "s68",
+      "area": "tests",
+      "text": "Drop the redundant toBeGreaterThan(0.0) next to toBe(0.022) in the dated-model pricing test",
+      "where": [
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T16:10:07.196Z"
+    },
+    {
+      "id": "s69",
+      "area": "quality",
+      "text": "Resolved research-intelligence-dashboard:s1",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s1",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.108Z"
+    },
+    {
+      "id": "s70",
+      "area": "tests",
+      "text": "Resolved research-intelligence-dashboard:s3",
+      "where": [
+        "Modules/*/tests/**"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s3",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.194Z"
+    },
+    {
+      "id": "s71",
+      "area": "quality",
+      "text": "Resolved research-intelligence-dashboard:s11",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s11",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.280Z"
+    },
+    {
+      "id": "s72",
+      "area": "quality",
+      "text": "Resolved research-intelligence-dashboard:s12",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s12",
+      "note": "done during this plan",
+      "at": "2026-10-24T16:10:39.364Z"
+    },
+    {
+      "id": "s73",
+      "area": "tests",
+      "text": "Dismissed research-intelligence-dashboard:s15",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s15",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.462Z"
+    },
+    {
+      "id": "s74",
+      "area": "quality",
+      "text": "Dismissed research-intelligence-dashboard:s16",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s16",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.567Z"
+    },
+    {
+      "id": "s75",
+      "area": "quality",
+      "text": "Dismissed research-intelligence-dashboard:s22",
+      "where": [
+        "Modules/Intelligence/app/Services/UsageLogger.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s22",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.660Z"
+    },
+    {
+      "id": "s76",
+      "area": "quality",
+      "text": "Dismissed research-intelligence-dashboard:s49",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s49",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.750Z"
+    },
+    {
+      "id": "s77",
+      "area": "tests",
+      "text": "Dismissed research-intelligence-dashboard:s68",
+      "where": [
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s68",
+      "dismissed": true,
+      "note": "trivial nit, not worth tracking",
+      "at": "2026-10-24T16:10:39.837Z"
+    },
+    {
+      "id": "s78",
+      "area": "security",
+      "text": "Security hardening: rate-limit add/retry/re-run, stale-run reaper, stricter URL/PMID validation at persistence and render (userinfo, non-ASCII), drop chained provider exceptions, bound timeouts/tokens/field sizes, require non-empty research domains, ignore .env.*, #[Locked] on the show page",
+      "where": [
+        ".gitignore",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Supplements/app/Actions/AddSupplement.php",
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s7",
+        "research-intelligence-dashboard:s17",
+        "research-intelligence-dashboard:s18",
+        "research-intelligence-dashboard:s19",
+        "research-intelligence-dashboard:s23",
+        "research-intelligence-dashboard:s24",
+        "research-intelligence-dashboard:s29",
+        "research-intelligence-dashboard:s30",
+        "research-intelligence-dashboard:s31",
+        "research-intelligence-dashboard:s35",
+        "research-intelligence-dashboard:s38",
+        "research-intelligence-dashboard:s40",
+        "research-intelligence-dashboard:s48",
+        "research-intelligence-dashboard:s50",
+        "research-intelligence-dashboard:s54",
+        "research-intelligence-dashboard:s55"
+      ],
+      "at": "2026-10-24T16:10:50.426Z"
+    },
+    {
+      "id": "s79",
+      "area": "tests",
+      "text": "Test depth: Pest arch tests for module boundaries and the Http seam, FR-10 study/effect column assertions, provider edge cases (Length finish, leaky error bodies), hostile ?tab, behavioural overlap-lock test, AiRequest factory, global withoutVite, opt-in live-provider smoke test, fix cross-module test imports",
+      "where": [
+        "tests/Feature/ExampleTest.php",
+        "tests/TestCase.php",
+        "tests/Pest.php",
+        "Modules/Supplements/**",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php",
+        "Modules/Intelligence/**",
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php",
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Intelligence/database/factories/**",
+        "Modules/Supplements/tests/Feature/StatsTest.php",
+        "Modules/Supplements/tests/**",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s5",
+        "research-intelligence-dashboard:s6",
+        "research-intelligence-dashboard:s8",
+        "research-intelligence-dashboard:s9",
+        "research-intelligence-dashboard:s20",
+        "research-intelligence-dashboard:s25",
+        "research-intelligence-dashboard:s27",
+        "research-intelligence-dashboard:s32",
+        "research-intelligence-dashboard:s36",
+        "research-intelligence-dashboard:s39",
+        "research-intelligence-dashboard:s41",
+        "research-intelligence-dashboard:s44",
+        "research-intelligence-dashboard:s45",
+        "research-intelligence-dashboard:s52",
+        "research-intelligence-dashboard:s53",
+        "research-intelligence-dashboard:s58",
+        "research-intelligence-dashboard:s59",
+        "research-intelligence-dashboard:s67"
+      ],
+      "at": "2026-10-24T16:10:50.513Z"
+    },
+    {
+      "id": "s80",
+      "area": "ux",
+      "text": "Demo polish and live tuning: outcome as an enum, poll the detail page and overview widgets, dynamic page titles, accessible tab/panel wiring, raise output-token budget if Length appears, Firecrawl server timeout below client timeout, cap total prompt size",
+      "where": [
+        "resources/views/components/tabs/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Intelligence/config/config.php",
+        "Modules/Supplements/config/config.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s4",
+        "research-intelligence-dashboard:s34",
+        "research-intelligence-dashboard:s43",
+        "research-intelligence-dashboard:s47",
+        "research-intelligence-dashboard:s60",
+        "research-intelligence-dashboard:s61",
+        "research-intelligence-dashboard:s62",
+        "research-intelligence-dashboard:s63",
+        "research-intelligence-dashboard:s64"
+      ],
+      "at": "2026-10-24T16:10:50.598Z"
+    },
+    {
+      "id": "s81",
+      "area": "docs",
+      "text": "Docs: update CLAUDE.md module map (Supplements -> Intelligence), list all config env keys in .env.example, document the reader's error field, strip local paths from plan docs before a public push",
+      "where": [
+        "CLAUDE.md",
+        "Modules/Supplements/app/Contracts/SupplementResearchReader.php",
+        "docs/sdlc/**",
+        ".env.example"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s2",
+        "research-intelligence-dashboard:s37",
+        "research-intelligence-dashboard:s46",
+        "research-intelligence-dashboard:s56",
+        "research-intelligence-dashboard:s66"
+      ],
+      "at": "2026-10-24T16:10:50.685Z"
+    },
+    {
+      "id": "s82",
+      "area": "quality",
+      "text": "Code quality: log every TextGenerator failure (catch Throwable), record billed tokens/credits on failures, consistent repository resolution, Larastan module migrations path instead of @property docblocks, move tabs into Shared, ai_requests indexes, small cleanups (claimRun comment, positiveInt)",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+        "Modules/Intelligence/app/Services/UsageLogger.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php",
+        "phpstan.neon",
+        "Modules/Intelligence/database/migrations/**",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "resources/views/components/tabs/**"
+      ],
+      "from": "plan",
+      "merges": [
+        "research-intelligence-dashboard:s10",
+        "research-intelligence-dashboard:s13",
+        "research-intelligence-dashboard:s14",
+        "research-intelligence-dashboard:s21",
+        "research-intelligence-dashboard:s26",
+        "research-intelligence-dashboard:s28",
+        "research-intelligence-dashboard:s33",
+        "research-intelligence-dashboard:s42",
+        "research-intelligence-dashboard:s51",
+        "research-intelligence-dashboard:s57",
+        "research-intelligence-dashboard:s65"
+      ],
+      "at": "2026-10-24T16:10:50.771Z"
+    }
+  ]
+}
