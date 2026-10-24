@@ -22,4 +22,9 @@ class SupplementResearchFactory extends Factory
             'completed_at' => null,
         ];
     }
+
+    public function geneticsChecked(): static
+    {
+        return $this->state(['genetics_checked_at' => now()]);
+    }
 }

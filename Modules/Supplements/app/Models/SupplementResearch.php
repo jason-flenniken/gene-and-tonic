@@ -18,6 +18,7 @@ use Modules\Supplements\Enums\ResearchStatus;
  * @property string|null $summary
  * @property string|null $safety_notes
  * @property CarbonInterface|null $completed_at
+ * @property CarbonInterface|null $genetics_checked_at
  */
 class SupplementResearch extends Model
 {
@@ -28,7 +29,7 @@ class SupplementResearch extends Model
 
     protected $fillable = [
         'supplement_id', 'status', 'error', 'summary', 'safety_notes',
-        'queued_at', 'started_at', 'completed_at',
+        'queued_at', 'started_at', 'completed_at', 'genetics_checked_at',
     ];
 
     protected static function newFactory(): SupplementResearchFactory
@@ -44,6 +45,7 @@ class SupplementResearch extends Model
             'queued_at' => 'datetime',
             'started_at' => 'datetime',
             'completed_at' => 'datetime',
+            'genetics_checked_at' => 'datetime',
         ];
     }
 

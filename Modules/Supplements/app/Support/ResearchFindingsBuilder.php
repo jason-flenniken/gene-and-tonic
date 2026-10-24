@@ -4,6 +4,7 @@ namespace Modules\Supplements\Support;
 
 use Modules\Intelligence\Data\SourceDocument;
 use Modules\Supplements\Enums\EvidenceGrade;
+use Modules\Supplements\Enums\GeneRelation;
 
 /**
  * Turns the model's untrusted structured answer into ResearchFindings, keeping only cited findings.
@@ -99,6 +100,15 @@ final class ResearchFindingsBuilder
             ];
         }
 
+        $geneInteractions = [];
+        foreach (is_array($output['gene_interactions'] ?? null) ? $output['gene_interactions'] : [] as $item) {
+            $interaction = is_array($item) ? self::geneInteraction($item, $byId) : null;
+
+            if ($interaction !== null) {
+                $geneInteractions[] = $interaction;
+            }
+        }
+
         return new ResearchFindings(
             summary: self::prose($summary, 10000),
             safetyNotes: self::prose($safety, 10000),
@@ -111,7 +121,60 @@ final class ResearchFindingsBuilder
             effects: $effects,
             mechanisms: $mechanisms,
             studies: $studies,
+            geneInteractions: $geneInteractions,
         );
+    }
+
+    /**
+     * @param  array<mixed>  $item
+     * @param  array<string, SourceDocument>  $byId
+     * @return array{gene: string, rsid: ?string, allele: ?string, relation: string, explanation: string, source_keys: list<string>}|null
+     */
+    private static function geneInteraction(array $item, array $byId): ?array
+    {
+        $gene = is_string($item['gene'] ?? null) ? strtoupper(trim($item['gene'])) : '';
+        $relation = is_string($item['relation'] ?? null) ? GeneRelation::tryFrom(strtolower(trim($item['relation']))) : null;
+        $keys = self::validKeys($item['source_ids'] ?? null, $byId);
+        $rsid = self::optionalMatch($item['rsid'] ?? null, '/^rs\d{1,10}$/', false);
+        $allele = self::optionalMatch($item['allele'] ?? null, '/^[ACGTDI]$/', true);
+
+        if (preg_match('/^[A-Z0-9-]{1,15}$/', $gene) !== 1 || $relation === null || $keys === []
+            || $rsid === false || $allele === false || ! is_string($item['explanation'] ?? null)) {
+            return null;
+        }
+
+        $explanation = self::prose($item['explanation'], 1000);
+
+        if ($explanation === '') {
+            return null;
+        }
+
+        return [
+            'gene' => $gene,
+            'rsid' => $rsid,
+            'allele' => $allele,
+            'relation' => $relation->value,
+            'explanation' => $explanation,
+            'source_keys' => $keys,
+        ];
+    }
+
+    /**
+     * Null or blank is a valid "not given"; anything else must match the pattern. Returns false when invalid.
+     */
+    private static function optionalMatch(mixed $value, string $pattern, bool $upper): string|false|null
+    {
+        if ($value === null || (is_string($value) && trim($value) === '')) {
+            return null;
+        }
+
+        if (! is_string($value)) {
+            return false;
+        }
+
+        $value = $upper ? strtoupper(trim($value)) : trim($value);
+
+        return preg_match($pattern, $value) === 1 ? $value : false;
     }
 
     /**

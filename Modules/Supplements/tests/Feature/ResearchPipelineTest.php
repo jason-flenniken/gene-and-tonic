@@ -12,15 +12,19 @@ use Modules\Intelligence\Data\GenerationResult;
 use Modules\Intelligence\Data\PromptRequest;
 use Modules\Intelligence\Data\SearchQuery;
 use Modules\Intelligence\Data\SourceDocument;
+use Modules\Intelligence\Exceptions\ResearchProviderException;
 use Modules\Intelligence\Testing\FakeTextGenerator;
 use Modules\Intelligence\Testing\FakeWebResearcher;
 use Modules\Supplements\Actions\DeleteSupplement;
 use Modules\Supplements\Actions\ResearchSupplement;
+use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Enums\EvidenceGrade;
+use Modules\Supplements\Enums\GeneRelation;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Jobs\RunSupplementResearch;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
+use Modules\Supplements\Models\SupplementGeneInteraction;
 use Modules\Supplements\Models\SupplementMechanism;
 use Modules\Supplements\Models\SupplementResearch;
 use Modules\Supplements\Models\SupplementSource;
@@ -56,6 +60,7 @@ function pipelineOutput(array $overrides = []): array
         'studies' => [
             ['title' => 'Magnesium and sleep', 'design' => 'RCT', 'population' => 'Older adults', 'sample_size' => 46, 'year' => 2012, 'finding' => 'Improved insomnia scores.', 'evidence_grade' => 'strong', 'source_id' => 'S1', 'pmid' => null],
         ],
+        'gene_interactions' => [],
     ], $overrides);
 }
 
@@ -109,7 +114,7 @@ it('moves Queued -> Searching -> Analyzing -> Complete and persists the findings
 
     runResearch($supplement);
 
-    expect($seen)->toBe(['search:searching', 'generate:analyzing']);
+    expect($seen)->toBe(['search:searching', 'search:searching', 'generate:analyzing']);
 
     $research = $supplement->research()->first();
     expect($research->status)->toBe(ResearchStatus::Complete)
@@ -360,8 +365,9 @@ it('declares a strict-compatible schema', function () {
     $schema = ($ai->requests()[0]->schema)(new JsonSchemaTypeFactory);
     $json = json_encode(array_map(fn ($t) => $t->toArray(), $schema));
 
-    expect(array_keys($schema))->toBe(['summary', 'safety_notes', 'effects', 'mechanisms', 'studies'])
+    expect(array_keys($schema))->toBe(['summary', 'safety_notes', 'effects', 'mechanisms', 'studies', 'gene_interactions'])
         ->and($json)->toContain('"enum":["strong","moderate","limited"]')
+        ->and($json)->toContain('"enum":["helps","caution","related"]')
         ->and($json)->toContain('source_id');
 });
 
@@ -452,4 +458,136 @@ it('expires the overlap lock after the job timeout but before the job can be res
 
     expect($lockSeconds)->toBeGreaterThan($job->timeout)
         ->and($lockSeconds)->toBeLessThan(config('queue.connections.database.retry_after'));
+});
+
+/**
+ * Researcher returning a different list (or failure) per call.
+ *
+ * @param  list<list<SourceDocument>|ResearchProviderException>  $responses
+ */
+function sequencedResearcher(array $responses): WebResearcher
+{
+    $researcher = new class($responses) implements WebResearcher
+    {
+        /** @var list<SearchQuery> */
+        public array $queries = [];
+
+        public function __construct(private array $responses) {}
+
+        public function search(SearchQuery $query): array
+        {
+            $this->queries[] = $query;
+            $response = array_shift($this->responses) ?? [];
+
+            if ($response instanceof Throwable) {
+                throw $response;
+            }
+
+            return $response;
+        }
+    };
+    app()->instance(WebResearcher::class, $researcher);
+
+    return $researcher;
+}
+
+function geneInteractionOutput(): array
+{
+    return pipelineOutput(['gene_interactions' => [
+        ['gene' => 'mthfr', 'rsid' => 'rs1801133', 'allele' => 'T', 'relation' => 'helps', 'explanation' => 'T carriers may benefit.', 'source_ids' => ['S4']],
+        ['gene' => 'COMT', 'rsid' => null, 'allele' => null, 'relation' => 'related', 'explanation' => 'Involved in magnesium use.', 'source_ids' => ['S1', 'S5']],
+    ]]);
+}
+
+it('runs two searches and one generate call, storing cited gene interactions', function () {
+    $supplement = queuedSupplement();
+    $researcher = sequencedResearcher([
+        pipelineSources(),
+        [
+            new SourceDocument('S1', 'https://pubmed.ncbi.nlm.nih.gov/111/', 'Gene paper', 'pubmed.ncbi.nlm.nih.gov', null, 'Gene text one.'),
+            new SourceDocument('S2', 'https://pubmed.ncbi.nlm.nih.gov/222/', 'Gene paper two', 'pubmed.ncbi.nlm.nih.gov', null, 'Gene text two.'),
+        ],
+    ]);
+    $ai = FakeTextGenerator::install()->respondWith(geneInteractionOutput());
+
+    runResearch($supplement);
+
+    expect($researcher->queries)->toHaveCount(2)
+        ->and($researcher->queries[1]->query)->toBe('Magnesium glycinate gene polymorphism nutrigenomics')
+        ->and($researcher->queries[1]->domains)->toBe(config('supplements.research.domains'))
+        ->and($researcher->queries[1]->limit)->toBe(4)
+        ->and($ai->requests())->toHaveCount(1);
+
+    $request = $ai->requests()[0];
+    $prompt = view(app(ProfileRegistry::class)->get('supplements.research')->promptView, $request->variables)->render();
+    foreach (['S1', 'S2', 'S3', 'S4', 'S5'] as $id) {
+        expect($prompt)->toContain("<source id=\"{$id}\" ");
+    }
+    expect($prompt)->toContain('Gene text two.');
+
+    $stored = SupplementGeneInteraction::where('supplement_id', $supplement->id)->orderBy('position')->get();
+    expect($stored)->toHaveCount(2)
+        ->and($stored[0]->gene)->toBe('MTHFR')
+        ->and($stored[0]->source_keys)->toBe(['S4']);
+
+    $data = app(SupplementResearchReader::class)->forSupplement($supplement->id);
+    expect($data->geneticsChecked)->toBeTrue()
+        ->and($data->geneInteractions)->toHaveCount(2)
+        ->and($data->geneInteractions[1]->relation)->toBe(GeneRelation::Related)
+        ->and($data->sources)->toHaveCount(5);
+});
+
+it('de-duplicates merged sources by url and keeps ids contiguous', function () {
+    $supplement = queuedSupplement();
+    sequencedResearcher([
+        pipelineSources(),
+        [
+            new SourceDocument('S1', 'https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/', 'ODS dup', 'ods.od.nih.gov', null, 'dup'),
+            new SourceDocument('S2', 'https://pubmed.ncbi.nlm.nih.gov/333/', 'New', 'pubmed.ncbi.nlm.nih.gov', null, 'new'),
+        ],
+    ]);
+    FakeTextGenerator::install()->respondWith(pipelineOutput());
+
+    runResearch($supplement);
+
+    $sources = SupplementSource::where('research_id', $supplement->research()->value('id'))->orderBy('id')->get();
+    expect($sources->pluck('source_key')->all())->toBe(['S1', 'S2', 'S3', 'S4'])
+        ->and($sources->pluck('url')->all())->toBe([
+            'https://pubmed.ncbi.nlm.nih.gov/12345678/',
+            'https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/',
+            'https://pmc.ncbi.nlm.nih.gov/articles/PMC1/',
+            'https://pubmed.ncbi.nlm.nih.gov/333/',
+        ]);
+});
+
+it('still completes with the first search sources when the gene search fails', function () {
+    $supplement = queuedSupplement();
+    sequencedResearcher([pipelineSources(), ResearchProviderException::because('Gene search timed out.')]);
+    $ai = FakeTextGenerator::install()->respondWith(pipelineOutput());
+
+    runResearch($supplement);
+
+    $research = $supplement->research()->first();
+    expect($research->status)->toBe(ResearchStatus::Complete)
+        ->and($ai->requests())->toHaveCount(1)
+        ->and(SupplementSource::where('research_id', $research->id)->count())->toBe(3);
+});
+
+it('replaces earlier gene interactions on a re-run', function () {
+    $supplement = queuedSupplement();
+    FakeWebResearcher::install()->returning(pipelineSources());
+    FakeTextGenerator::install()
+        ->respondWith(pipelineOutput(['gene_interactions' => [
+            ['gene' => 'MTHFR', 'rsid' => null, 'allele' => null, 'relation' => 'helps', 'explanation' => 'First.', 'source_ids' => ['S1']],
+        ]]))
+        ->respondWith(pipelineOutput());
+
+    runResearch($supplement);
+    expect(SupplementGeneInteraction::count())->toBe(1);
+
+    app(ResearchRepository::class)->claimRun($supplement);
+    runResearch($supplement);
+
+    expect(SupplementGeneInteraction::count())->toBe(0)
+        ->and(app(SupplementResearchReader::class)->forSupplement($supplement->id)->geneticsChecked)->toBeTrue();
 });

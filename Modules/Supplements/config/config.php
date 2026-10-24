@@ -26,5 +26,7 @@ return [
             'nccih.nih.gov',
         ],
         'limit' => 8,
+        'gene_query' => '%s gene polymorphism nutrigenomics',
+        'gene_limit' => (int) env('RESEARCH_GENE_LIMIT', 4),
     ],
 ];

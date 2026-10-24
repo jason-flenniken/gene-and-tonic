@@ -6,9 +6,11 @@ use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Data\SupplementResearchData;
 use Modules\Supplements\Enums\EvidenceGrade;
+use Modules\Supplements\Enums\GeneRelation;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
+use Modules\Supplements\Models\SupplementGeneInteraction;
 use Modules\Supplements\Models\SupplementMechanism;
 use Modules\Supplements\Models\SupplementResearch;
 use Modules\Supplements\Models\SupplementSource;
@@ -63,4 +65,23 @@ it('only builds links for http(s) urls and numeric pmids', function () {
     expect($study('12a')->pubmedUrl())->toBeNull()
         ->and($study('1234567890')->pubmedUrl())->toBeNull()
         ->and($study(null)->pubmedUrl())->toBeNull();
+});
+
+it('returns stored gene interactions in position order and flags unchecked research', function () {
+    $supplement = Supplement::factory()->create();
+    $research = SupplementResearch::factory()->create(['supplement_id' => $supplement->id, 'status' => ResearchStatus::Complete]);
+    SupplementGeneInteraction::factory()->create(['supplement_id' => $supplement->id, 'gene' => 'COMT', 'rsid' => null, 'allele' => null, 'relation' => GeneRelation::Related, 'position' => 1]);
+    SupplementGeneInteraction::factory()->create(['supplement_id' => $supplement->id, 'gene' => 'MTHFR', 'position' => 0]);
+
+    $before = app(SupplementResearchReader::class)->forSupplement($supplement->id);
+    expect($before->geneticsChecked)->toBeFalse();
+
+    $research->update(['genetics_checked_at' => now()]);
+    $data = app(SupplementResearchReader::class)->forSupplement($supplement->id);
+
+    expect($data->geneticsChecked)->toBeTrue()
+        ->and(array_map(fn ($g) => $g->gene, $data->geneInteractions))->toBe(['MTHFR', 'COMT'])
+        ->and($data->geneInteractions[0]->relation)->toBe(GeneRelation::Helps)
+        ->and($data->geneInteractions[0]->sourceKeys)->toBe(['S1'])
+        ->and($data->toArray()['geneInteractions'][1]['relation'])->toBe('related');
 });
