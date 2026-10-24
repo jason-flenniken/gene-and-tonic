@@ -6,12 +6,16 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T14:18:08.366Z",
-  "stage": "discover",
+  "updated": "2026-10-24T15:00:57.624Z",
+  "stage": "prd",
   "stageHistory": [
     {
       "stage": "discover",
       "at": "2026-10-24T14:18:08.365Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-24T15:00:57.623Z"
     }
   ],
   "paused": null,
@@ -28,6 +32,11 @@
       "at": "2026-10-24T14:18:08.366Z",
       "event": "level",
       "detail": "standard"
+    },
+    {
+      "at": "2026-10-24T15:00:57.624Z",
+      "event": "advanced",
+      "detail": "prd"
     }
   ],
   "cairnVersion": "0.3.0",
