@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:46:38.079Z",
+  "updated": "2026-10-24T15:49:30.395Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -251,7 +251,7 @@
     {
       "id": "research",
       "name": "Research end to end",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "research-pipeline",
@@ -278,16 +278,19 @@
             "Modules/Supplements/tests/Unit/**"
           ],
           "complexity": "complex",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "sends untrusted scraped content to the model, persists model output, controls API spend",
-          "substep": "implementing",
           "branch": "task/research-intelligence-dashboard/research-pipeline",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-research-intelligence-dashboard--research-pipeline",
           "base": "9dbaa054fb8667fcb957c3bf2b784de0fdc2a51a",
           "startedAt": "2026-10-24T15:42:08.212Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T15:49:30.394Z",
+          "tip": "82fa833",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "99a7062444273b4816b2ae04727ef8c0a26afff3"
         },
         {
           "id": "overview-and-usage",
@@ -670,6 +673,21 @@
       "at": "2026-10-24T15:46:38.079Z",
       "event": "task done",
       "detail": "Overview and AI usage tabs"
+    },
+    {
+      "at": "2026-10-24T15:47:53.049Z",
+      "event": "task reviewing",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:49:23.613Z",
+      "event": "task merging",
+      "detail": "Research pipeline"
+    },
+    {
+      "at": "2026-10-24T15:49:30.395Z",
+      "event": "task done",
+      "detail": "Research pipeline"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1116,6 +1134,76 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T15:46:31.584Z"
+    },
+    {
+      "id": "s45",
+      "area": "tests",
+      "text": "Opt-in live-provider smoke test (outside CI) to confirm OpenAI accepts the strict research schema",
+      "where": [
+        "Modules/Supplements/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:47:52.853Z"
+    },
+    {
+      "id": "s46",
+      "area": "docs",
+      "text": "CLAUDE.md module map says Supplements may depend on Shared only; the plan allows Supplements -> Intelligence. Update the map",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:47:52.919Z"
+    },
+    {
+      "id": "s47",
+      "area": "perf",
+      "text": "Cap total prompt size across the 8 sources, not just per-source markdown truncation",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T15:47:52.982Z"
+    },
+    {
+      "id": "s48",
+      "area": "security",
+      "text": "ResearchStepFailed chains the Intelligence exception as previous; drop it so a future report() can't log the chain",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:49:16.262Z"
+    },
+    {
+      "id": "s49",
+      "area": "quality",
+      "text": "Inline the per-row @php($active) into the Re-run branch",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T15:49:16.330Z"
+    },
+    {
+      "id": "s50",
+      "area": "security",
+      "text": "Defence in depth: re-check http(s) scheme on SourceDocument URLs at persistence, not only in the Firecrawl driver",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:49:23.478Z"
+    },
+    {
+      "id": "s51",
+      "area": "quality",
+      "text": "positiveInt accepts 0; rename or require > 0 for sample_size",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T15:49:23.542Z"
     }
   ]
 }
