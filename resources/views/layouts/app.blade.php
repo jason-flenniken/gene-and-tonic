@@ -16,7 +16,17 @@
         @fluxAppearance
     </head>
     <body class="min-h-screen bg-white antialiased dark:bg-zinc-800">
-        {{ $slot }}
+        <header class="border-b border-zinc-200 dark:border-zinc-700">
+            <div class="mx-auto max-w-5xl px-4 py-4">
+                <flux:heading size="lg">{{ config('app.name', 'Laravel') }}</flux:heading>
+            </div>
+        </header>
+
+        <main class="mx-auto max-w-5xl px-4 py-8">
+            {{ $slot }}
+        </main>
+
+        <flux:toast />
 
         @fluxScripts
     </body>
