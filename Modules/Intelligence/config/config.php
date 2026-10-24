@@ -27,6 +27,8 @@ return [
             'key' => env('FIRECRAWL_API_KEY'),
             'timeout' => (int) env('FIRECRAWL_TIMEOUT', 60),
         ],
+        // Hard cap on Firecrawl results requested per search, whatever the caller asks for.
+        'max_results' => (int) env('FIRECRAWL_MAX_RESULTS', 8),
         // Scraped markdown is truncated to this many characters per source.
         'max_source_chars' => 6000,
     ],

@@ -154,3 +154,53 @@ it('provides a fake researcher', function () {
     $fake->failWith('nope');
     expect(fn () => app(WebResearcher::class)->search(researchQuery()))->toThrow(ResearchProviderException::class, 'nope');
 });
+
+it('drops urls that parse differently in browsers or leave the allowed domains', function (string $url, array $domains) {
+    Http::fake(['api.firecrawl.dev/*' => Http::response(firecrawlBody([
+        ['url' => $url, 'title' => 'x', 'markdown' => 'x'],
+    ]), 200)]);
+
+    $query = new SearchQuery('q', $domains, 8, true);
+
+    expect(app(WebResearcher::class)->search($query))->toBe([]);
+})->with([
+    'backslash before userinfo' => ['https://evil.com\\@pubmed.ncbi.nlm.nih.gov/', RESEARCH_DOMAINS],
+    'encoded backslash' => ['https://evil.com%5c@pubmed.ncbi.nlm.nih.gov/', RESEARCH_DOMAINS],
+    'encoded backslash uppercase' => ['https://evil.com%5C@pubmed.ncbi.nlm.nih.gov/', RESEARCH_DOMAINS],
+    'embedded tab' => ["https://evil.com\t@pubmed.ncbi.nlm.nih.gov/", RESEARCH_DOMAINS],
+    'userinfo' => ['https://evil.com@pubmed.ncbi.nlm.nih.gov/', RESEARCH_DOMAINS],
+    'suffix without dot boundary' => ['https://evilnih.gov/x', ['nih.gov']],
+    'suffix without dot boundary on subdomain' => ['https://evilods.od.nih.gov/x', RESEARCH_DOMAINS],
+    'mixed-case javascript scheme' => ['JavaScript:alert(1)', RESEARCH_DOMAINS],
+    'allowed host as subdomain of attacker' => ['https://pubmed.ncbi.nlm.nih.gov.evil.com/', RESEARCH_DOMAINS],
+]);
+
+it('keeps allowed urls and stores a normalised form', function (string $raw, string $expected) {
+    Http::fake(['api.firecrawl.dev/*' => Http::response(firecrawlBody([
+        ['url' => $raw, 'title' => 'x', 'markdown' => 'x'],
+    ]), 200)]);
+
+    $docs = app(WebResearcher::class)->search(researchQuery());
+
+    expect($docs)->toHaveCount(1)
+        ->and($docs[0]->url)->toBe($expected)
+        ->and($docs[0]->domain)->toBe('pubmed.ncbi.nlm.nih.gov');
+})->with([
+    'case' => ['HTTPS://PubMed.NCBI.nlm.nih.gov/12345678/', 'https://pubmed.ncbi.nlm.nih.gov/12345678/'],
+    'trailing dot' => ['https://pubmed.ncbi.nlm.nih.gov./x', 'https://pubmed.ncbi.nlm.nih.gov/x'],
+    'port' => ['https://pubmed.ncbi.nlm.nih.gov:443/x', 'https://pubmed.ncbi.nlm.nih.gov:443/x'],
+    'query and fragment' => ['https://pubmed.ncbi.nlm.nih.gov/x?term=mg#top', 'https://pubmed.ncbi.nlm.nih.gov/x?term=mg'],
+]);
+
+it('caps the requested limit at the configured maximum and floors it at one', function (int $asked, int $sent) {
+    Http::fake(['api.firecrawl.dev/*' => Http::response(firecrawlBody([]), 200)]);
+
+    app(WebResearcher::class)->search(new SearchQuery('q', RESEARCH_DOMAINS, $asked, false));
+
+    Http::assertSent(fn (Request $r): bool => $r['limit'] === $sent);
+})->with([
+    'huge' => [1000, 8],
+    'zero' => [0, 1],
+    'negative' => [-5, 1],
+    'within range' => [3, 3],
+]);

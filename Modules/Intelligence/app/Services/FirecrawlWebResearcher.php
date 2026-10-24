@@ -48,9 +48,11 @@ class FirecrawlWebResearcher implements WebResearcher
 
         $url = rtrim((string) config('intelligence.research.firecrawl.url', 'https://api.firecrawl.dev'), '/').'/v2/search';
 
+        $limit = max(1, min($query->limit, max(1, (int) config('intelligence.research.max_results', 8))));
+
         $body = [
             'query' => $query->query,
-            'limit' => $query->limit,
+            'limit' => $limit,
             'includeDomains' => $query->domains,
         ];
 
@@ -81,7 +83,7 @@ class FirecrawlWebResearcher implements WebResearcher
         $reported = $response->json('creditsUsed');
         $credits = is_int($reported) && $reported >= 0
             ? $reported
-            : (int) ceil($query->limit / 10) * 2 + ($query->scrape ? count($results) : 0);
+            : (int) ceil($limit / 10) * 2 + ($query->scrape ? count($results) : 0);
 
         return [$this->map($results, $query), $credits];
     }
@@ -101,13 +103,13 @@ class FirecrawlWebResearcher implements WebResearcher
                 continue;
             }
 
-            $url = trim($result['url']);
-            $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
-            $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+            $normalised = $this->normaliseUrl($result['url'], $query->domains);
 
-            if (! in_array($scheme, ['http', 'https'], true) || $host === '' || ! $this->hostAllowed($host, $query->domains)) {
+            if ($normalised === null) {
                 continue;
             }
+
+            [$url, $host] = $normalised;
 
             if (isset($seen[$url])) {
                 continue;
@@ -131,6 +133,45 @@ class FirecrawlWebResearcher implements WebResearcher
     }
 
     /**
+     * Validate an untrusted result URL and rebuild it from its parsed parts. URLs that parse differently
+     * in PHP and in browsers (backslash, whitespace, control characters, userinfo) are rejected outright.
+     *
+     * @param  list<string>  $domains
+     * @return array{0: string, 1: string}|null [normalised url, host]
+     */
+    private function normaliseUrl(string $raw, array $domains): ?array
+    {
+        $raw = trim($raw);
+
+        if (preg_match('/[\x00-\x20\x7f\\\\]/', $raw) === 1 || stripos($raw, '%5c') !== false) {
+            return null;
+        }
+
+        $parts = parse_url($raw);
+
+        $scheme = $parts === false ? '' : strtolower($parts['scheme'] ?? '');
+
+        if ($parts === false
+            || ! in_array($scheme, ['http', 'https'], true)
+            || isset($parts['user']) || isset($parts['pass'])) {
+            return null;
+        }
+
+        $host = rtrim(strtolower((string) ($parts['host'] ?? '')), '.');
+
+        if ($host === '' || ! $this->hostAllowed($host, $domains)) {
+            return null;
+        }
+
+        $url = $scheme.'://'.$host
+            .(isset($parts['port']) ? ':'.$parts['port'] : '')
+            .($parts['path'] ?? '')
+            .(isset($parts['query']) ? '?'.$parts['query'] : '');
+
+        return [$url, $host];
+    }
+
+    /**
      * @param  list<string>  $domains
      */
     private function hostAllowed(string $host, array $domains): bool
@@ -140,9 +181,9 @@ class FirecrawlWebResearcher implements WebResearcher
         }
 
         foreach ($domains as $domain) {
-            $domain = strtolower($domain);
+            $domain = rtrim(strtolower(trim($domain)), '.');
 
-            if ($host === $domain || str_ends_with($host, '.'.$domain)) {
+            if ($domain !== '' && ($host === $domain || str_ends_with($host, '.'.$domain))) {
                 return true;
             }
         }
