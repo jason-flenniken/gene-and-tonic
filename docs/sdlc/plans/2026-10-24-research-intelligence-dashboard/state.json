@@ -6,8 +6,8 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T16:10:07.260Z",
-  "stage": "review",
+  "updated": "2026-10-24T16:10:07.362Z",
+  "stage": "ship",
   "stageHistory": [
     {
       "stage": "discover",
@@ -32,6 +32,10 @@
     {
       "stage": "review",
       "at": "2026-10-24T15:52:36.622Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-24T16:10:07.362Z"
     }
   ],
   "paused": null,
@@ -763,6 +767,11 @@
       "at": "2026-10-24T16:10:07.260Z",
       "event": "review pass",
       "detail": "3 Required fixed (queue retry overlap, cost by alias, dead code) + lock TTL fixed by hand at user's choice; 129 tests green; follow-ups logged"
+    },
+    {
+      "at": "2026-10-24T16:10:07.362Z",
+      "event": "advanced",
+      "detail": "ship"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1450,10 +1459,5 @@
       "from": "branch-review",
       "at": "2026-10-24T16:10:07.196Z"
     }
-  ],
-  "step": {
-    "stage": "review",
-    "name": "rechecking",
-    "at": "2026-10-24T16:06:06.548Z"
-  }
+  ]
 }
