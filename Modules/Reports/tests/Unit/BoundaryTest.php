@@ -16,3 +16,19 @@ arch('reports does not use private Supplements namespaces or Intelligence')
         'Modules\Supplements\Providers',
         'Modules\Intelligence',
     ]);
+
+/*
+| Reports may read Recommendations only through its public Contracts, Data and Testing
+| namespaces.
+*/
+arch('reports does not use private Recommendations namespaces')
+    ->expect('Modules\Reports')
+    ->not->toUse([
+        'Modules\Recommendations\Services',
+        'Modules\Recommendations\Models',
+        'Modules\Recommendations\Actions',
+        'Modules\Recommendations\Jobs',
+        'Modules\Recommendations\Livewire',
+        'Modules\Recommendations\Listeners',
+        'Modules\Recommendations\Providers',
+    ]);
