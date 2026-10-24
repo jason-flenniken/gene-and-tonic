@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:10:16.737Z",
+  "updated": "2026-10-24T17:11:19.561Z",
   "stage": "verify",
   "stageHistory": [
     {
@@ -226,7 +226,13 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-24T17:11:19.561Z",
+      "note": "tests: 171 passing, 2 skipped (opt-in Chrome; run once: both templates %PDF-, 0.6-0.9s); 20 FRs + 2 NFRs: 21 met, 1 met but untested (FR-17 page-level/browser); build ok; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    }
+  },
   "drift": [
     {
       "path": "Modules/Supplements/tests/Feature/SupplementPageTest.php",
@@ -441,6 +447,21 @@
       "at": "2026-10-24T17:10:16.737Z",
       "event": "advanced",
       "detail": "verify"
+    },
+    {
+      "at": "2026-10-24T17:10:25.636Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-24T17:10:37.355Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-24T17:11:19.561Z",
+      "event": "verify pass",
+      "detail": "tests: 171 passing, 2 skipped (opt-in Chrome; run once: both templates %PDF-, 0.6-0.9s); 20 FRs + 2 NFRs: 21 met, 1 met but untested (FR-17 page-level/browser); build ok; secret scan: clean; audit: composer + npm 0 vulnerabilities"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -741,8 +762,33 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T17:10:05.882Z"
+    },
+    {
+      "id": "s27",
+      "area": "tests",
+      "text": "FR-17 met but untested end to end: no test loads the real detail page with Reports registered (completed/queued/failed), and select-change is markup-only (needs a browser test)",
+      "where": [
+        "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T17:11:19.415Z"
+    },
+    {
+      "id": "s28",
+      "area": "tests",
+      "text": "Reports arch test is a denylist of Supplements namespaces; switch to an allowlist (only Contracts/Data/Enums/Testing) so new private namespaces are covered",
+      "where": [
+        "Modules/Reports/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T17:11:19.487Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "verify",
+    "name": "scanning",
+    "at": "2026-10-24T17:10:37.355Z"
+  }
 }
