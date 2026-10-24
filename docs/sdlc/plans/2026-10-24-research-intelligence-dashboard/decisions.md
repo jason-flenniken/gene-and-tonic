@@ -116,3 +116,8 @@ _2026-10-24 15:00_
 **Decision:** Outcome: Shared, Intelligence and Supplements modules plus a 3-tab home dashboard. Adding a supplement queues a job that searches trusted sources with Firecrawl, then one OpenAI call (laravel/ai behind Intelligence's contracts, with config-driven prompt/model/effort profiles) extracts cited effects, mechanisms and strong-evidence studies. Results are saved through repositories and shown live in tabs; every AI call's usage and cost is logged. | User: the user as single demo user; no login; shared supplement catalog. | Why now: interview Monday 2026-10-26; proves the module pattern and AI pipeline; it is the knowledge base for the PDF reports. | Success: live demo (add, watch status, cited findings in tabs) plus a clean code walkthrough (boundaries, contracts, repositories, config profiles, green CI). | Constraint: demoable by Sunday night 2026-10-25; cut scope, not quality. | Out of scope: PDF reports (next plan), auth, research history, seeded demo data, Pest arch tests, live-API smoke command, prompt editor UI, Genetics, Recommendations, Reports.
 **Why:** confirmed by the user
 _2026-10-24 15:00_
+
+### 24. API keys for the live demo
+**Decision:** The user has both OpenAI and Firecrawl keys and will set OPENAI_API_KEY and FIRECRAWL_API_KEY in .env before the live check; build and tests use fakes.
+**Why:** user has both
+_2026-10-24 15:01_
