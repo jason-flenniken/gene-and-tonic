@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T21:12:14.971Z",
+  "updated": "2026-10-24T22:45:24.862Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -51,6 +51,11 @@
       "via": "human",
       "source": "mod",
       "hash": "1e04af42eed00fb2"
+    },
+    "ship": {
+      "at": "2026-10-24T22:45:24.861Z",
+      "via": "human",
+      "source": "mod"
     }
   },
   "phases": [
@@ -946,6 +951,16 @@
       "at": "2026-10-24T21:12:14.971Z",
       "event": "advanced",
       "detail": "ship"
+    },
+    {
+      "at": "2026-10-24T21:13:38.557Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-24T22:45:24.862Z",
+      "event": "ship approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1844,8 +1859,208 @@
       ],
       "from": "branch-review",
       "at": "2026-10-24T21:12:02.919Z"
+    },
+    {
+      "id": "s87",
+      "area": "security",
+      "text": "Genetics security hardening: per-user daily and global lookup budgets, auth or a budget on paid supplement add/retry/re-run, PDF size/page guard and worker memory limit, keep only extracted rsIDs that appear in the sent lines (and strip names from them), lookup-domain fallback, Livewire temp-upload auth + stale tmp sweep, IP-only login throttle and trusted proxies, stronger demo-password guard, Cache-Control private on genetic PDFs, user gene hints off the shared reference row, delete-my-data + retention, #[Locked] on show page id",
+      "where": [
+        "resources/views/pages/⚡login.blade.php",
+        "database/seeders/DemoUserSeeder.php",
+        "bootstrap/app.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/AddVariant.php",
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php",
+        "config/livewire.php",
+        "Modules/Genetics/**",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/database/migrations/**",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Genetics/config/config.php",
+        "Modules/Genetics/app/Support/ExtractionOutputBuilder.php",
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php",
+        "Modules/Recommendations/resources/views/livewire/⚡genetic-panel.blade.php",
+        "Modules/Supplements/routes/web.php",
+        "Modules/Reports/app/Http/Controllers/SupplementReportController.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s6",
+        "genetics-module:s8",
+        "genetics-module:s11",
+        "genetics-module:s12",
+        "genetics-module:s19",
+        "genetics-module:s23",
+        "genetics-module:s29",
+        "genetics-module:s34",
+        "genetics-module:s35",
+        "genetics-module:s36",
+        "genetics-module:s39",
+        "genetics-module:s40",
+        "genetics-module:s48",
+        "genetics-module:s49",
+        "genetics-module:s50",
+        "genetics-module:s55",
+        "genetics-module:s56",
+        "genetics-module:s61",
+        "genetics-module:s62",
+        "genetics-module:s65",
+        "genetics-module:s70",
+        "genetics-module:s71",
+        "genetics-module:s78",
+        "genetics-module:s79",
+        "genetics-module:s80",
+        "genetics-module:s85"
+      ],
+      "at": "2026-10-24T21:12:39.568Z"
+    },
+    {
+      "id": "s88",
+      "area": "tests",
+      "text": "Deeper Genetics tests: full-page guest/other-user checks on /supplements/{id}, real temp-disk and sidecar cleanup, reaper edge cases, multi-page lab PDF, real Chrome render with genetics, consolidate per-module arch tests under tests/Arch (allow-lists, Shared namespaces), FakeWebResearcher per-call queue, large-parse through the full job, misc missing cases",
+      "where": [
+        "tests/Feature/Auth/**",
+        "tests/Feature/Auth/LoginTest.php",
+        "Modules/Intelligence/app/Testing/FakeWebResearcher.php",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php",
+        "Modules/*/tests/Unit/BoundaryTest.php",
+        "Modules/Genetics/tests/Feature/UserVariantTest.php",
+        "Modules/Genetics/tests/Feature/ProfilePageTest.php",
+        "Modules/Genetics/tests/**",
+        "Modules/Genetics/tests/Feature/UploadPageTest.php",
+        "Modules/Genetics/tests/Feature/LookupTest.php",
+        "Modules/Genetics/tests/Feature/ExtractionTest.php",
+        "Modules/Recommendations/tests/**",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php",
+        "Modules/Reports/tests/Unit/BoundaryTest.php",
+        "Modules/Genetics/tests/Feature/ReapStaleTest.php",
+        "Modules/Genetics/tests/Feature/DemoFilesTest.php",
+        "Modules/Genetics/tests/Unit/BoundaryTest.php",
+        "Modules/Genetics/tests/Feature/LargeParseTest.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s5",
+        "genetics-module:s10",
+        "genetics-module:s13",
+        "genetics-module:s14",
+        "genetics-module:s18",
+        "genetics-module:s21",
+        "genetics-module:s27",
+        "genetics-module:s28",
+        "genetics-module:s30",
+        "genetics-module:s32",
+        "genetics-module:s37",
+        "genetics-module:s45",
+        "genetics-module:s51",
+        "genetics-module:s58",
+        "genetics-module:s59",
+        "genetics-module:s60",
+        "genetics-module:s64",
+        "genetics-module:s66",
+        "genetics-module:s68",
+        "genetics-module:s73",
+        "genetics-module:s76",
+        "genetics-module:s77",
+        "genetics-module:s83"
+      ],
+      "at": "2026-10-24T21:12:39.701Z"
+    },
+    {
+      "id": "s89",
+      "area": "quality",
+      "text": "Genetics code-quality cleanups: Genotype edge cases (empty allele, one known allele flips), unique-race retry in AddVariant, revert LookingUp claim on dispatch failure, upload-retry cap accounting, bounded line reads and UTF-8 scrub, URL de-dup normalisation, cap gene_interactions per run, genetics_checked_at only when the gene search ran, shared throttle helper, small view/provider tidies",
+      "where": [
+        "resources/views/pages/⚡login.blade.php",
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Genetics/app/Data/Genotype.php",
+        "Modules/Genetics/app/Actions/AddVariant.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/app/Support/Parsing/Lines.php",
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php",
+        "Modules/Genetics/app/Actions/LookupVariant.php",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php",
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php",
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php",
+        "Modules/Reports/resources/views/sections/genetics.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s9",
+        "genetics-module:s16",
+        "genetics-module:s17",
+        "genetics-module:s20",
+        "genetics-module:s24",
+        "genetics-module:s25",
+        "genetics-module:s26",
+        "genetics-module:s31",
+        "genetics-module:s33",
+        "genetics-module:s38",
+        "genetics-module:s41",
+        "genetics-module:s42",
+        "genetics-module:s44",
+        "genetics-module:s46",
+        "genetics-module:s47",
+        "genetics-module:s52",
+        "genetics-module:s53",
+        "genetics-module:s54",
+        "genetics-module:s57",
+        "genetics-module:s63",
+        "genetics-module:s67",
+        "genetics-module:s69",
+        "genetics-module:s72",
+        "genetics-module:s81"
+      ],
+      "at": "2026-10-24T21:12:39.831Z"
+    },
+    {
+      "id": "s90",
+      "area": "ux",
+      "text": "Genetics UX polish: show stored lookup errors and per-row loading on Look up, My genetics nav link, re-run action beside the interactions hint",
+      "where": [
+        "resources/views/layouts/app.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s7",
+        "genetics-module:s15",
+        "genetics-module:s43",
+        "genetics-module:s82"
+      ],
+      "at": "2026-10-24T21:12:39.962Z"
+    },
+    {
+      "id": "s91",
+      "area": "docs",
+      "text": "Docs touch-ups: boundary-enforcement paragraph, auth/logout wording, allele-convention single source, RESEARCH_GENE_LIMIT description, singleAllele docblock",
+      "where": [
+        "CLAUDE.md",
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-module:s22",
+        "genetics-module:s74",
+        "genetics-module:s75",
+        "genetics-module:s84",
+        "genetics-module:s86"
+      ],
+      "at": "2026-10-24T21:12:40.108Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "ship",
+    "name": "approving",
+    "at": "2026-10-24T21:13:38.557Z"
+  }
 }
