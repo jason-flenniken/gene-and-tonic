@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:25:43.643Z",
+  "updated": "2026-10-24T15:25:53.890Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "foundations",
       "name": "Foundations",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "module-foundations",
@@ -115,7 +115,7 @@
     {
       "id": "engines",
       "name": "Intelligence and catalog",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "intelligence-text-generation",
@@ -393,6 +393,11 @@
       "at": "2026-10-24T15:25:43.643Z",
       "event": "task done",
       "detail": "Module foundations"
+    },
+    {
+      "at": "2026-10-24T15:25:53.890Z",
+      "event": "phase finished",
+      "detail": "Foundations (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
