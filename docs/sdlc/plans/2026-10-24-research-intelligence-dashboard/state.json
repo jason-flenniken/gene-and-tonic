@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:05:31.664Z",
+  "updated": "2026-10-24T15:14:36.325Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -31,7 +31,221 @@
       "hash": "78e7de5d7478f2cd"
     }
   },
-  "phases": [],
+  "phases": [
+    {
+      "id": "foundations",
+      "name": "Foundations",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "module-foundations",
+          "name": "Module foundations",
+          "covers": [
+            "FR-18",
+            "FR-21"
+          ],
+          "blockedBy": [],
+          "scope": [
+            ".gitignore",
+            "AGENTS.md",
+            "boost.json",
+            "CLAUDE.md",
+            "composer.json",
+            "composer.lock",
+            "modules_statuses.json",
+            ".env.example",
+            "tests/TestCase.php",
+            "Modules/Shared/**",
+            "Modules/Intelligence/**",
+            "Modules/Supplements/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "adds the laravel/ai dependency and API-key env vars"
+        },
+        {
+          "id": "dashboard-shell",
+          "name": "Dashboard shell",
+          "covers": [
+            "FR-01"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "routes/web.php",
+            "resources/views/**",
+            "tests/Feature/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        }
+      ]
+    },
+    {
+      "id": "engines",
+      "name": "Intelligence and catalog",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "intelligence-text-generation",
+          "name": "Intelligence text generation",
+          "covers": [
+            "FR-12",
+            "FR-13",
+            "FR-14",
+            "FR-16",
+            "FR-18",
+            "FR-20"
+          ],
+          "blockedBy": [
+            "module-foundations"
+          ],
+          "scope": [
+            "Modules/Intelligence/**"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new external AI integration, model output, a migration, and secrets that must never be logged"
+        },
+        {
+          "id": "supplements-catalog",
+          "name": "Supplements catalog",
+          "covers": [
+            "FR-03",
+            "FR-04",
+            "FR-11",
+            "FR-20",
+            "FR-21"
+          ],
+          "blockedBy": [
+            "module-foundations",
+            "dashboard-shell"
+          ],
+          "scope": [
+            "Modules/Supplements/**",
+            "resources/views/pages/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted input, new migrations, and deletes"
+        },
+        {
+          "id": "intelligence-web-research",
+          "name": "Intelligence web research",
+          "covers": [
+            "FR-15",
+            "FR-16",
+            "FR-18"
+          ],
+          "blockedBy": [
+            "intelligence-text-generation"
+          ],
+          "scope": [
+            "Modules/Intelligence/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new external integration returning untrusted scraped content; API key handling"
+        },
+        {
+          "id": "supplement-page",
+          "name": "Supplement page and reader",
+          "covers": [
+            "FR-10",
+            "FR-19"
+          ],
+          "blockedBy": [
+            "supplements-catalog"
+          ],
+          "scope": [
+            "Modules/Supplements/app/Contracts/**",
+            "Modules/Supplements/app/Data/**",
+            "Modules/Supplements/app/Repositories/**",
+            "Modules/Supplements/app/Providers/**",
+            "Modules/Supplements/resources/views/livewire/⚡show*",
+            "Modules/Supplements/resources/views/components/**",
+            "Modules/Supplements/routes/**",
+            "Modules/Supplements/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "renders model output and scraped titles to the browser"
+        }
+      ]
+    },
+    {
+      "id": "research",
+      "name": "Research end to end",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "research-pipeline",
+          "name": "Research pipeline",
+          "covers": [
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09",
+            "FR-11"
+          ],
+          "blockedBy": [
+            "intelligence-web-research",
+            "supplement-page"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/config/**",
+            "Modules/Supplements/resources/views/prompts/**",
+            "Modules/Supplements/resources/views/livewire/⚡catalog*",
+            "Modules/Supplements/tests/Feature/Research*",
+            "Modules/Supplements/tests/Feature/Catalog*",
+            "Modules/Supplements/tests/Unit/**"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "sends untrusted scraped content to the model, persists model output, controls API spend"
+        },
+        {
+          "id": "overview-and-usage",
+          "name": "Overview and AI usage tabs",
+          "covers": [
+            "FR-02",
+            "FR-17"
+          ],
+          "blockedBy": [
+            "intelligence-web-research",
+            "supplements-catalog"
+          ],
+          "scope": [
+            "resources/views/pages/**",
+            "Modules/Intelligence/resources/views/livewire/**",
+            "Modules/Intelligence/app/Repositories/**",
+            "Modules/Intelligence/tests/**",
+            "Modules/Supplements/resources/views/livewire/⚡stats*",
+            "Modules/Supplements/tests/Feature/Stats*"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        }
+      ]
+    }
+  ],
   "evidence": {},
   "drift": [],
   "log": [
@@ -58,8 +272,14 @@
       "at": "2026-10-24T15:05:31.664Z",
       "event": "advanced",
       "detail": "plan"
+    },
+    {
+      "at": "2026-10-24T15:14:36.325Z",
+      "event": "plan loaded",
+      "detail": "3 phases, 8 tasks"
     }
   ],
   "cairnVersion": "0.3.0",
-  "level": "standard"
+  "level": "standard",
+  "planHash": "817c86a75d041b52"
 }

@@ -121,3 +121,13 @@ _2026-10-24 15:00_
 **Decision:** The user has both OpenAI and Firecrawl keys and will set OPENAI_API_KEY and FIRECRAWL_API_KEY in .env before the live check; build and tests use fakes.
 **Why:** user has both
 _2026-10-24 15:01_
+
+### 25. Firecrawl client: official SDK or Laravel Http client?
+**Decision:** Laravel Http client. The Intelligence Firecrawl driver posts to Firecrawl's v2 /search REST endpoint with Laravel's Http client; no SDK dependency. This supersedes the 'official firecrawl-sdk' part of the Firecrawl ownership decision.
+**Why:** user picked it: the SDK forces Guzzle 8 down to 7, bypasses Http::fake and stray-request prevention, and silently falls back to a keyless tier on a missing key
+_2026-10-24 15:11_
+
+### 26. Commit Boost's AGENTS.md and boost.json?
+**Decision:** Yes: un-ignore and commit them in the first task, so task checkouts get the guidelines CLAUDE.md imports and composer post-update scripts run cleanly.
+**Why:** user picked commit; task checkouts were missing them
+_2026-10-24 15:11_

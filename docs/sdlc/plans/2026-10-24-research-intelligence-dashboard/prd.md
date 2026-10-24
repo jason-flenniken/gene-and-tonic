@@ -14,7 +14,7 @@ The home page becomes a dashboard with three tabs: Overview, Supplements and AI 
 
 Every AI and search call is logged with tokens, latency and an estimated cost. Three new modules carry the work:
 - **Shared:** a tiny kernel.
-- **Intelligence:** a provider-agnostic layer for AI and web research. It uses `laravel/ai` and the Firecrawl SDK behind its own contracts, with prompts, models and effort set in config profiles.
+- **Intelligence:** a provider-agnostic layer for AI and web research. It uses `laravel/ai` and Firecrawl's REST API behind its own contracts, with prompts, models and effort set in config profiles.
 - **Supplements:** the catalog and research, persisted through repositories.
 
 ## Requirements
@@ -51,7 +51,7 @@ Intelligence
 - **FR-12** `Intelligence\Contracts\TextGenerator::generate(PromptRequest): GenerationResult`. It resolves a named profile (provider, model, effort, max tokens, prompt view), renders the caller's prompt view with variables, and calls `laravel/ai` with structured output and the reasoning effort. Check: test with the `laravel/ai` fake asserts the model, effort, schema and rendered prompt passed through, and the DTO returned.
 - **FR-13** Profiles live in config. Every value can be overridden by env var, and the calling module contributes its own profile and prompt view, so domain prompts stay out of Intelligence. An unknown profile throws a typed Intelligence exception. Check: config test for an env override and the exception.
 - **FR-14** Switching a profile's provider to another `laravel/ai` provider needs only a config change. Check: test sets the provider to a second provider and asserts it is the one passed to `laravel/ai`.
-- **FR-15** `Intelligence\Contracts\WebResearcher::search(SearchQuery): SourceDocument[]` (id, url, title, domain, markdown truncated to a configured length). The Firecrawl driver uses the official SDK, selected by config. Check: driver test with a faked Firecrawl response asserts the request (query, includeDomains, limit, scrape format) and the mapped DTOs.
+- **FR-15** `Intelligence\Contracts\WebResearcher::search(SearchQuery): SourceDocument[]` (id, url, title, domain, markdown truncated to a configured length). The Firecrawl driver calls Firecrawl's v2 `/search` REST endpoint through Laravel's Http client, with no SDK. It is selected by config, and a missing API key fails with a clear error. Check: driver test with `Http::fake` asserts the request (query, includeDomains, limit, scrape format, bearer key) and the mapped DTOs.
 - **FR-16** Every TextGenerator and WebResearcher call writes an `ai_requests` row: provider, operation, profile, model, effort, input/output tokens, latency ms, estimated cost (from a config price table), status and error. Prompt bodies and keys are never stored. Check: tests assert one row per call for success and failure, with no prompt text column.
 - **FR-17** The AI Usage tab lists calls newest first, paginated, with totals. Check: Livewire test asserts order, pagination and totals.
 - **FR-18** `Intelligence\Testing` provides `FakeTextGenerator` and `FakeWebResearcher`. Every test runs with stray HTTP requests prevented. Check: the full suite passes with no network access.
@@ -74,7 +74,7 @@ Structure
 
 ## Open questions
 - [x] Which AI layer? (answer: `laravel/ai` behind Intelligence contracts, OpenAI first)
-- [x] Who owns Firecrawl? (answer: Intelligence, as a `WebResearcher` driver on the official SDK)
+- [x] Who owns Firecrawl? (answer: Intelligence, as a `WebResearcher` driver calling the REST API through Laravel's Http client. The official SDK was dropped: it downgrades Guzzle, bypasses Http::fake, and silently uses a keyless tier.)
 - [x] How are prompts, models and effort configured? (answer: config profiles with env overrides; the calling module owns its prompt views)
 - [x] Default research model? (answer: a balanced OpenAI model, gpt-6.1-sol class, at medium effort. The exact model ID is checked against OpenAI's models page during the build, since its docs disagree.)
 - [x] API keys for the live demo? (answer: the user has both and sets them in `.env`)
