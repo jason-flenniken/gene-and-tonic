@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:03:47.154Z",
+  "updated": "2026-10-24T17:06:50.912Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -144,10 +144,19 @@
             "Modules/Reports/tests/Feature/TemplatesTest.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "new template renders model and scraped text into HTML that Chrome executes"
+          "riskReason": "new template renders model and scraped text into HTML that Chrome executes",
+          "branch": "task/supplement-pdf-reports/modern-template",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--modern-template",
+          "base": "0186ebab7911209f71262c4e419228f10e8ded36",
+          "startedAt": "2026-10-24T17:04:06.049Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T17:06:50.911Z",
+          "tip": "cd3c5f8",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "79584cdfc280129d4e2081ac258082704c1eb0af"
         },
         {
           "id": "download-menu",
@@ -165,9 +174,15 @@
             "Modules/Reports/tests/Feature/DownloadMenuTest.php"
           ],
           "complexity": "simple",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "substep": "reviewing",
+          "branch": "task/supplement-pdf-reports/download-menu",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--download-menu",
+          "base": "0186ebab7911209f71262c4e419228f10e8ded36",
+          "startedAt": "2026-10-24T17:04:11.125Z",
+          "level": "standard"
         },
         {
           "id": "chrome-render-and-docs",
@@ -314,6 +329,46 @@
       "at": "2026-10-24T17:03:47.153Z",
       "event": "phase finished",
       "detail": "First PDF end to end (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T17:04:06.049Z",
+      "event": "task started",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:04:11.125Z",
+      "event": "task started",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:04:28.431Z",
+      "event": "task implementing",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:04:28.502Z",
+      "event": "task implementing",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:06:03.298Z",
+      "event": "task reviewing",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:06:35.547Z",
+      "event": "task reviewing",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:06:45.847Z",
+      "event": "task merging",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:06:50.912Z",
+      "event": "task done",
+      "detail": "Modern template and section overrides"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -504,6 +559,66 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T17:03:23.761Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Header/footer horizontal padding is hard-coded per template to match margins; derive from config margins",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/header.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:03.225Z"
+    },
+    {
+      "id": "s17",
+      "area": "tests",
+      "text": "Browser test that changes the template select and checks the download link href (Alpine behaviour is only asserted by markup)",
+      "where": [
+        "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:11.234Z"
+    },
+    {
+      "id": "s18",
+      "area": "ux",
+      "text": "Give the template select a visible label (aria-label only today)",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:11.309Z"
+    },
+    {
+      "id": "s19",
+      "area": "tests",
+      "text": "Assert the real download menu appears in the completed supplement page header via the slot (integration, not just the view)",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:35.481Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Widen hostile-render absence list (<iframe, <object, <embed, @import, single <style block) and add hostile summary/mechanism/design/sourceKey fields to the template loop",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:06:40.758Z"
+    },
+    {
+      "id": "s21",
+      "area": "tests",
+      "text": "TemplatesTest can't run alone (helpers live in SupplementReportTest) and defines a global const TEMPLATE_DISCLAIMER; move helpers/constants to a loaded Pest helpers file",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:06:45.782Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
