@@ -2,14 +2,13 @@
 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
+use Modules\Reports\Tests\Support\ReportFixtures;
 use Modules\Supplements\Data\EffectData;
 use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Testing\FakeSupplementResearchReader;
 use Spatie\LaravelPdf\Facades\Pdf;
-
-const TEMPLATE_DISCLAIMER = 'This is a research summary generated from published sources, not medical advice. Talk to a qualified clinician before starting a supplement.';
 
 beforeEach(function () {
     Pdf::fake();
@@ -25,9 +24,9 @@ function configuredTemplateKeys(): array
 }
 
 it('downloads the modern report as Letter with studies as cards', function () {
-    $this->reader->with(reportResearch());
+    $this->reader->with(ReportFixtures::research());
 
-    $this->get(reportUrl(query: ['template' => 'modern']))->assertOk();
+    $this->get(ReportFixtures::url(query: ['template' => 'modern']))->assertOk();
 
     Pdf::assertRespondedWithPdf(function ($pdf) {
         $html = $pdf->getHtml();
@@ -37,32 +36,32 @@ it('downloads the modern report as Letter with studies as cards', function () {
             ->and($pdf->orientation)->toBe('portrait')
             ->and($pdf->margins)->toEqual(['top' => 20, 'right' => 18, 'bottom' => 20, 'left' => 18, 'unit' => 'mm'])
             ->and($html)->toContain('class="study-card"', 'Magnesium and insomnia in the elderly', 'PMID 23853635', 'Improved sleep efficiency', 'Modern');
-        expectAbsent($html, '<table', 'class="studies"');
+        ReportFixtures::expectAbsent($html, '<table', 'class="studies"');
 
         return true;
     });
 });
 
 it('keeps the shared studies table for the clinical template', function () {
-    $this->reader->with(reportResearch());
+    $this->reader->with(ReportFixtures::research());
 
-    $this->get(reportUrl(query: ['template' => 'clinical']))->assertOk();
+    $this->get(ReportFixtures::url(query: ['template' => 'clinical']))->assertOk();
 
     Pdf::assertRespondedWithPdf(function ($pdf) {
         expect($pdf->getHtml())->toContain('<table class="studies">');
-        expectAbsent($pdf->getHtml(), 'study-card');
+        ReportFixtures::expectAbsent($pdf->getHtml(), 'study-card');
 
         return true;
     });
 });
 
-it('gives every configured template the disclaimer, header, footer and inlined CSS', function () {
-    $this->reader->with(reportResearch());
+it('gives every configured template the visible title block, disclaimer, header, footer and inlined CSS', function () {
+    $this->reader->with(ReportFixtures::research());
 
     foreach (configuredTemplateKeys() as $key) {
         $config = config("reports.templates.{$key}");
 
-        $this->get(reportUrl(query: ['template' => $key]))->assertOk();
+        $this->get(ReportFixtures::url(query: ['template' => $key]))->assertOk();
 
         Pdf::assertRespondedWithPdf(function ($pdf) use ($key, $config) {
             if ($pdf->downloadName !== "magnesium-{$key}.pdf") {
@@ -70,7 +69,9 @@ it('gives every configured template the disclaimer, header, footer and inlined C
             }
 
             expect($pdf->format)->toBe($config['format'])
-                ->and($pdf->getHtml())->toContain(TEMPLATE_DISCLAIMER, '<style')
+                ->and($pdf->getHtml())->toContain(ReportFixtures::DISCLAIMER, '<style')
+                ->and(preg_replace('#<head>.*</head>#s', '', $pdf->getHtml()))
+                ->toContain('<p class="eyebrow">Supplement research report</p>', now()->format('F j, Y'), $config['label'])
                 ->and($pdf->getHeaderHtml())->toContain('Magnesium', 'font-size')
                 ->and($pdf->getFooterHtml())->toContain('class="pageNumber"', 'class="totalPages"', 'font-size');
 
@@ -82,9 +83,9 @@ it('gives every configured template the disclaimer, header, footer and inlined C
 it('renders a test-only template that is just a view folder and a config line', function () {
     View::prependNamespace('reports', __DIR__.'/../fixtures/views');
     config(['reports.templates.testing' => ['label' => 'Testing', 'format' => 'a5', 'margins' => [5, 6, 7, 8], 'orientation' => 'portrait']]);
-    $this->reader->with(reportResearch());
+    $this->reader->with(ReportFixtures::research());
 
-    $this->get(reportUrl(query: ['template' => 'testing']))->assertOk();
+    $this->get(ReportFixtures::url(query: ['template' => 'testing']))->assertOk();
 
     Pdf::assertRespondedWithPdf(function ($pdf) {
         expect($pdf->format)->toBe('a5')
@@ -96,7 +97,7 @@ it('renders a test-only template that is just a view folder and a config line', 
 });
 
 it('escapes hostile text in every template with no scripts, links or remote assets', function () {
-    $this->reader->with(reportResearch([
+    $this->reader->with(ReportFixtures::research([
         'name' => '<script>alert(1)</script>',
         'effects' => [new EffectData('Claim <img src=http://169.254.169.254/>', null, EvidenceGrade::Strong, ['S1'])],
         'studies' => [new StudyData('<script>study()</script>', 'RCT <b>x</b>', '<img src=x>', 5, 2020, '<img src=http://169.254.169.254/>', EvidenceGrade::Limited, 'S1', '1<script>')],
@@ -104,7 +105,7 @@ it('escapes hostile text in every template with no scripts, links or remote asse
     ]));
 
     foreach (configuredTemplateKeys() as $key) {
-        $this->get(reportUrl(query: ['template' => $key]))->assertOk();
+        $this->get(ReportFixtures::url(query: ['template' => $key]))->assertOk();
 
         Pdf::assertRespondedWithPdf(function ($pdf) use ($key) {
             if ($pdf->downloadName !== Str::slug('<script>alert(1)</script>')."-{$key}.pdf") {
@@ -112,7 +113,7 @@ it('escapes hostile text in every template with no scripts, links or remote asse
             }
 
             foreach ([$pdf->getHtml(), $pdf->getHeaderHtml(), $pdf->getFooterHtml()] as $html) {
-                expectAbsent($html, '<script', '<link', 'src="http', 'url(http', '<img', '<b>x</b>', 'javascript:', 'href="javascript');
+                ReportFixtures::expectAbsent($html, '<script', '<link', 'src="http', 'url(http', '<img', '<b>x</b>', 'javascript:', 'href="javascript');
             }
 
             expect($pdf->getHtml())->toContain('&lt;script&gt;study()&lt;/script&gt;', '&lt;script&gt;alert(2)&lt;/script&gt;')

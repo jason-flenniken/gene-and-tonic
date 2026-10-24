@@ -1,5 +1,5 @@
 <header class="hero">
-    <p class="eyebrow">Supplement research</p>
+    <p class="eyebrow">Supplement research report</p>
     <h1>{{ $research->name }}</h1>
     <p class="hero-meta"><span class="pill">{{ $label }}</span> Generated {{ $generatedAt->format('F j, Y') }}</p>
 </header>
