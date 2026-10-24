@@ -4,6 +4,7 @@ namespace Modules\Supplements\Repositories;
 
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementResearch;
+use Modules\Supplements\Support\ResearchFindings;
 
 interface ResearchRepository
 {
@@ -18,4 +19,15 @@ interface ResearchRepository
 
     /** Advisory only (e.g. UI); never use it to decide whether to dispatch. */
     public function hasActiveRun(Supplement $supplement): bool;
+
+    /** No-ops when the supplement (or its research row) no longer exists. */
+    public function markSearching(int $supplementId): void;
+
+    public function markAnalyzing(int $supplementId): void;
+
+    /** Keeps the first reason if the run already failed. The reason is truncated to 500 characters. */
+    public function markFailed(int $supplementId, string $reason): void;
+
+    /** Replace all previous findings and mark the run Complete, in one transaction. */
+    public function replaceFindings(int $supplementId, ResearchFindings $findings): void;
 }

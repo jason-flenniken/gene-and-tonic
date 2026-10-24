@@ -3,6 +3,7 @@
 namespace Modules\Supplements\Providers;
 
 use Livewire\Livewire;
+use Modules\Intelligence\Contracts\ProfileRegistry;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Repositories\EloquentResearchRepository;
 use Modules\Supplements\Repositories\EloquentSupplementRepository;
@@ -45,6 +46,8 @@ class SupplementsServiceProvider extends ModuleServiceProvider
             classPath: module_path($this->name, 'app/Livewire'),
             classViewPath: module_path($this->name, 'resources/views/livewire'),
         );
+
+        $this->app->make(ProfileRegistry::class)->register('supplements.research', config('supplements.research_profile'));
     }
 
     public function register(): void
