@@ -6,7 +6,7 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:11:19.676Z",
+  "updated": "2026-10-24T17:16:39.036Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -235,6 +235,12 @@
       "result": "pass",
       "at": "2026-10-24T17:11:19.561Z",
       "note": "tests: 171 passing, 2 skipped (opt-in Chrome; run once: both templates %PDF-, 0.6-0.9s); 20 FRs + 2 NFRs: 21 met, 1 met but untested (FR-17 page-level/browser); build ok; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-24T17:16:39.036Z",
+      "note": "2 Required fixed (test helper isolation, Modern title text); 27 follow-ups logged this plan",
+      "blocking": 0
     }
   },
   "drift": [
@@ -471,6 +477,26 @@
       "at": "2026-10-24T17:11:19.676Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-24T17:11:34.979Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-24T17:14:53.020Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-24T17:16:08.958Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-24T17:16:39.036Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (test helper isolation, Modern title text); 27 follow-ups logged this plan"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -791,8 +817,43 @@
       ],
       "from": "check",
       "at": "2026-10-24T17:11:19.487Z"
+    },
+    {
+      "id": "s29",
+      "area": "security",
+      "text": "When auth lands: put the PDF route behind auth, key the reports limiter by user id, and cap concurrent Chrome renders (Cache::lock)",
+      "where": [
+        "Modules/Reports/routes/web.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:12:41.622Z"
+    },
+    {
+      "id": "s30",
+      "area": "quality",
+      "text": "Invalid REPORTS_DEFAULT_TEMPLATE makes default downloads 404 and preselects nothing; fall back to the first configured template or log a warning",
+      "where": [
+        "Modules/Reports/app/Services/TemplateRegistry.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:12:41.698Z"
+    },
+    {
+      "id": "s31",
+      "area": "quality",
+      "text": "Rename Reports tests/fixtures to tests/Fixtures to match Supplements",
+      "where": [
+        "Modules/Reports/tests/fixtures/**"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T17:14:52.948Z"
     }
   ],
   "planHash": "5bc9c3ce6894effc",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "review",
+    "name": "rechecking",
+    "at": "2026-10-24T17:16:08.957Z"
+  }
 }
