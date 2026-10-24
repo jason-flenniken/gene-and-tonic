@@ -2,8 +2,13 @@
 
 namespace Modules\Supplements\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Livewire;
 use Modules\Intelligence\Contracts\ProfileRegistry;
+use Modules\Supplements\Console\ReapStaleResearch;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Repositories\EloquentResearchRepository;
 use Modules\Supplements\Repositories\EloquentSupplementRepository;
@@ -48,11 +53,18 @@ class SupplementsServiceProvider extends ModuleServiceProvider
         );
 
         $this->app->make(ProfileRegistry::class)->register('supplements.research', config('supplements.research_profile'));
+
+        RateLimiter::for('supplements-add', fn (Request $request) => Limit::perMinute(10)->by((string) $request->ip()));
+        RateLimiter::for('supplements-run', fn (Request $request) => Limit::perMinute(10)->by((string) $request->ip()));
+
+        $this->app->booted(fn () => $this->app->make(Schedule::class)->command('supplements:reap-stale')->everyFiveMinutes());
     }
 
     public function register(): void
     {
         parent::register();
+
+        $this->commands([ReapStaleResearch::class]);
 
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 

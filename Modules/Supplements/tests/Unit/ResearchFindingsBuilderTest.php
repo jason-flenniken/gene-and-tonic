@@ -106,3 +106,22 @@ it('treats missing or malformed gene_interactions as none', function (mixed $val
 
     expect($findings->geneInteractions)->toBe([]);
 })->with([[null], ['nope'], [['not-an-array']]]);
+
+it('drops sources with unsafe urls and anything citing only them', function () {
+    $sources = [
+        new SourceDocument('S1', 'https://user:pw@evil.com/x', 'Bad', 'evil.com', null, 'md'),
+        new SourceDocument('S2', 'https://ods.od.nih.gov/factsheets/Zinc/', 'Fact sheet', 'ods.od.nih.gov', null, 'md'),
+    ];
+
+    $findings = ResearchFindingsBuilder::build(unitOutput([
+        'effects' => [
+            ['claim' => 'A', 'outcome' => 'o', 'evidence_grade' => 'strong', 'source_ids' => ['S1']],
+            ['claim' => 'B', 'outcome' => 'o', 'evidence_grade' => 'strong', 'source_ids' => ['S1', 'S2']],
+        ],
+    ]), $sources);
+
+    expect(array_column($findings->sources, 'source_key'))->toBe(['S2'])
+        ->and($findings->effects)->toHaveCount(1)
+        ->and($findings->effects[0]['claim'])->toBe('B')
+        ->and($findings->effects[0]['source_keys'])->toBe(['S2']);
+});

@@ -1,12 +1,15 @@
 <?php
 
+use Flux\Flux;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Actions\StartResearch;
 use Modules\Supplements\Repositories\SupplementRepository;
+use Modules\Supplements\Support\ActionThrottle;
 
 new #[Title('Supplement')] class extends Component
 {
@@ -33,6 +36,27 @@ new #[Title('Supplement')] class extends Component
     public function updatedTab(): void
     {
         $this->normalizeTab();
+    }
+
+    public function rerun(SupplementRepository $supplements, StartResearch $startResearch): void
+    {
+        $supplement = $supplements->find($this->supplementId);
+
+        if ($supplement === null) {
+            return;
+        }
+
+        if (! ActionThrottle::attempt('supplements-run')) {
+            Flux::toast(text: ActionThrottle::MESSAGE, variant: 'danger');
+
+            return;
+        }
+
+        if ($startResearch->handle($supplement)) {
+            Flux::toast(text: 'Research started.', variant: 'success');
+        } else {
+            Flux::toast(text: 'Research is already running.', variant: 'warning');
+        }
     }
 
     #[Computed]
@@ -74,6 +98,9 @@ new #[Title('Supplement')] class extends Component
                 <flux:badge color="{{ $research->status->color() }}" size="sm">{{ $research->status->label() }}</flux:badge>
             @endif
             <div class="ml-auto flex items-center gap-3">
+                @if ($research && ! $research->status->isActive())
+                    <flux:button size="sm" wire:click="rerun">Re-run</flux:button>
+                @endif
                 @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.header') as $actionView)
                     @include($actionView, ['supplementId' => $supplementId, 'status' => $research?->status])
                 @endforeach

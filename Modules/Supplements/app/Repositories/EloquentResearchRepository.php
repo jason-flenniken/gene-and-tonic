@@ -2,6 +2,7 @@
 
 namespace Modules\Supplements\Repositories;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use Modules\Supplements\Enums\ResearchStatus;
@@ -77,6 +78,14 @@ class EloquentResearchRepository implements ResearchRepository
         SupplementResearch::query()
             ->where('supplement_id', $supplementId)
             ->where('status', '!=', ResearchStatus::Failed)
+            ->update(['status' => ResearchStatus::Failed, 'error' => mb_substr($reason, 0, 500)]);
+    }
+
+    public function failStaleRuns(CarbonInterface $before, string $reason): int
+    {
+        return SupplementResearch::query()
+            ->whereIn('status', $this->activeStatuses())
+            ->whereRaw('coalesce(started_at, queued_at) < ?', [$before->toDateTimeString()])
             ->update(['status' => ResearchStatus::Failed, 'error' => mb_substr($reason, 0, 500)]);
     }
 
