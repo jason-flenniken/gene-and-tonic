@@ -1,0 +1,1035 @@
+{
+  "schema": 1,
+  "slug": "supplement-pdf-reports",
+  "title": "Supplement PDF reports",
+  "track": "feature",
+  "branch": "feature/supplement-pdf-reports",
+  "base": "main",
+  "created": "2026-10-24T16:33:31.229Z",
+  "updated": "2026-10-24T17:20:22.708Z",
+  "stage": "closed",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-24T16:33:31.229Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-24T16:42:54.158Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-24T16:44:14.917Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-24T16:47:44.465Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-24T17:10:16.737Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-24T17:11:19.675Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-24T17:16:39.151Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-24T17:20:07.938Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-24T17:20:22.707Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {
+    "prd": {
+      "at": "2026-10-24T16:44:12.198Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "38be9999825d6762"
+    },
+    "plan": {
+      "at": "2026-10-24T16:47:41.685Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "5bc9c3ce6894effc"
+    },
+    "ship": {
+      "at": "2026-10-24T17:20:00.462Z",
+      "via": "human",
+      "source": "mod"
+    }
+  },
+  "phases": [
+    {
+      "id": "first-pdf",
+      "name": "First PDF end to end",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "shared-page-actions",
+          "name": "Shared page-action slot",
+          "covers": [
+            "FR-16"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Shared/**",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/tests/Feature/PageActionsSlotTest.php",
+            "Modules/Supplements/tests/Unit/BoundaryTest.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/supplement-pdf-reports/shared-page-actions",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--shared-page-actions",
+          "base": "5573914c25e80d09872349f58b245b066ed59e3c",
+          "startedAt": "2026-10-24T16:47:53.963Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T16:50:21.045Z",
+          "tip": "e44bf0d",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "5096bbf6dcd9d5801b4330b829fead946367748a"
+        },
+        {
+          "id": "clinical-report",
+          "name": "Clinical PDF report",
+          "covers": [
+            "FR-01",
+            "FR-02",
+            "FR-03",
+            "FR-04",
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09",
+            "FR-10",
+            "FR-11",
+            "FR-12",
+            "FR-13",
+            "FR-15",
+            "FR-18"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Reports/**",
+            "modules_statuses.json",
+            "Modules/Supplements/app/Testing/**",
+            "Modules/Supplements/tests/Feature/FakeSupplementResearchReaderTest.php"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new public route taking untrusted input, model and scraped text rendered into HTML that Chrome executes, launches a local process",
+          "branch": "task/supplement-pdf-reports/clinical-report",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--clinical-report",
+          "base": "5573914c25e80d09872349f58b245b066ed59e3c",
+          "startedAt": "2026-10-24T16:47:59.185Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T17:03:38.088Z",
+          "tip": "399bd31",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "156b9a4ee509d1e68a9c1af1903d20c3e191433f"
+        }
+      ]
+    },
+    {
+      "id": "templates-and-button",
+      "name": "Second template, download button, docs",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "modern-template",
+          "name": "Modern template and section overrides",
+          "covers": [
+            "FR-11",
+            "FR-12",
+            "FR-13",
+            "FR-14",
+            "FR-15"
+          ],
+          "blockedBy": [
+            "clinical-report"
+          ],
+          "scope": [
+            "Modules/Reports/resources/views/templates/**",
+            "Modules/Reports/resources/views/sections/**",
+            "Modules/Reports/config/**",
+            "Modules/Reports/app/Services/**",
+            "Modules/Reports/tests/Feature/TemplatesTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new template renders model and scraped text into HTML that Chrome executes",
+          "branch": "task/supplement-pdf-reports/modern-template",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--modern-template",
+          "base": "0186ebab7911209f71262c4e419228f10e8ded36",
+          "startedAt": "2026-10-24T17:04:06.049Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T17:06:50.911Z",
+          "tip": "cd3c5f8",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "79584cdfc280129d4e2081ac258082704c1eb0af"
+        },
+        {
+          "id": "download-menu",
+          "name": "Download menu on the detail page",
+          "covers": [
+            "FR-17"
+          ],
+          "blockedBy": [
+            "shared-page-actions",
+            "clinical-report"
+          ],
+          "scope": [
+            "Modules/Reports/resources/views/components/**",
+            "Modules/Reports/app/Providers/ReportsServiceProvider.php",
+            "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/supplement-pdf-reports/download-menu",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--download-menu",
+          "base": "0186ebab7911209f71262c4e419228f10e8ded36",
+          "startedAt": "2026-10-24T17:04:11.125Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T17:07:20.297Z",
+          "tip": "815c52a",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "7725e27805bafc32d2f523fc091df62c7b411872"
+        },
+        {
+          "id": "chrome-render-and-docs",
+          "name": "Real Chrome render test and docs",
+          "covers": [
+            "FR-19",
+            "FR-20"
+          ],
+          "blockedBy": [
+            "modern-template",
+            "download-menu"
+          ],
+          "scope": [
+            "CLAUDE.md",
+            ".env.example",
+            "Modules/Reports/tests/Feature/ChromeRenderTest.php",
+            "Modules/Supplements/app/Data/SupplementResearchData.php",
+            "Modules/Supplements/app/Contracts/SupplementResearchReader.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/supplement-pdf-reports/chrome-render-and-docs",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-supplement-pdf-reports--chrome-render-and-docs",
+          "base": "e0f38f34a6a6930e72aed7472b924f399cd11557",
+          "startedAt": "2026-10-24T17:07:39.254Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T17:10:11.600Z",
+          "tip": "6f4f26f",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "aa1e1d0a3266fb7169eb4a8ae4c46ec47d7411ce"
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-24T17:11:19.561Z",
+      "note": "tests: 171 passing, 2 skipped (opt-in Chrome; run once: both templates %PDF-, 0.6-0.9s); 20 FRs + 2 NFRs: 21 met, 1 met but untested (FR-17 page-level/browser); build ok; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-24T17:16:39.036Z",
+      "note": "2 Required fixed (test helper isolation, Modern title text); 27 follow-ups logged this plan",
+      "blocking": 0
+    }
+  },
+  "drift": [
+    {
+      "path": "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+      "at": "2026-10-24T16:50:21.044Z",
+      "reason": "changed outside task \"Shared page-action slot\" scope (found at task done)",
+      "task": "shared-page-actions"
+    },
+    {
+      "path": "Modules/Supplements/tests/Fixtures/views/header-action.blade.php",
+      "at": "2026-10-24T16:50:21.045Z",
+      "reason": "changed outside task \"Shared page-action slot\" scope (found at task done)",
+      "task": "shared-page-actions"
+    },
+    {
+      "path": "Modules/Shared/tests/Feature/PageActionsBindingTest.php",
+      "at": "2026-10-24T17:07:20.297Z",
+      "reason": "changed outside task \"Download menu on the detail page\" scope (found at task done)",
+      "task": "download-menu"
+    }
+  ],
+  "log": [
+    {
+      "at": "2026-10-24T16:33:31.229Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-24T16:33:31.229Z",
+      "event": "level",
+      "detail": "standard"
+    },
+    {
+      "at": "2026-10-24T16:42:54.158Z",
+      "event": "advanced",
+      "detail": "prd"
+    },
+    {
+      "at": "2026-10-24T16:44:12.198Z",
+      "event": "PRD approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T16:44:14.918Z",
+      "event": "advanced",
+      "detail": "plan"
+    },
+    {
+      "at": "2026-10-24T16:46:33.674Z",
+      "event": "plan loaded",
+      "detail": "2 phases, 5 tasks"
+    },
+    {
+      "at": "2026-10-24T16:47:41.685Z",
+      "event": "plan approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T16:47:44.465Z",
+      "event": "advanced",
+      "detail": "execute"
+    },
+    {
+      "at": "2026-10-24T16:47:53.963Z",
+      "event": "task started",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:47:59.186Z",
+      "event": "task started",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T16:48:29.257Z",
+      "event": "task implementing",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:48:29.347Z",
+      "event": "task implementing",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T16:49:41.634Z",
+      "event": "task reviewing",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:50:13.791Z",
+      "event": "task merging",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T16:50:21.045Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+    },
+    {
+      "at": "2026-10-24T16:50:21.045Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Fixtures/views/header-action.blade.php"
+    },
+    {
+      "at": "2026-10-24T16:50:21.045Z",
+      "event": "task done",
+      "detail": "Shared page-action slot"
+    },
+    {
+      "at": "2026-10-24T17:02:23.864Z",
+      "event": "task reviewing",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T17:03:23.828Z",
+      "event": "task merging",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T17:03:38.088Z",
+      "event": "task done",
+      "detail": "Clinical PDF report"
+    },
+    {
+      "at": "2026-10-24T17:03:47.153Z",
+      "event": "phase finished",
+      "detail": "First PDF end to end (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T17:04:06.049Z",
+      "event": "task started",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:04:11.125Z",
+      "event": "task started",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:04:28.431Z",
+      "event": "task implementing",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:04:28.502Z",
+      "event": "task implementing",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:06:03.298Z",
+      "event": "task reviewing",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:06:35.547Z",
+      "event": "task reviewing",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:06:45.847Z",
+      "event": "task merging",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:06:50.912Z",
+      "event": "task done",
+      "detail": "Modern template and section overrides"
+    },
+    {
+      "at": "2026-10-24T17:07:15.060Z",
+      "event": "task merging",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:07:20.297Z",
+      "event": "drift",
+      "detail": "Modules/Shared/tests/Feature/PageActionsBindingTest.php"
+    },
+    {
+      "at": "2026-10-24T17:07:20.298Z",
+      "event": "task done",
+      "detail": "Download menu on the detail page"
+    },
+    {
+      "at": "2026-10-24T17:07:39.254Z",
+      "event": "task started",
+      "detail": "Real Chrome render test and docs"
+    },
+    {
+      "at": "2026-10-24T17:07:51.836Z",
+      "event": "task implementing",
+      "detail": "Real Chrome render test and docs"
+    },
+    {
+      "at": "2026-10-24T17:09:30.338Z",
+      "event": "task reviewing",
+      "detail": "Real Chrome render test and docs"
+    },
+    {
+      "at": "2026-10-24T17:10:05.946Z",
+      "event": "task merging",
+      "detail": "Real Chrome render test and docs"
+    },
+    {
+      "at": "2026-10-24T17:10:11.601Z",
+      "event": "task done",
+      "detail": "Real Chrome render test and docs"
+    },
+    {
+      "at": "2026-10-24T17:10:16.737Z",
+      "event": "phase finished",
+      "detail": "Second template, download button, docs (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T17:10:16.737Z",
+      "event": "advanced",
+      "detail": "verify"
+    },
+    {
+      "at": "2026-10-24T17:10:25.636Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-24T17:10:37.355Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-24T17:11:19.561Z",
+      "event": "verify pass",
+      "detail": "tests: 171 passing, 2 skipped (opt-in Chrome; run once: both templates %PDF-, 0.6-0.9s); 20 FRs + 2 NFRs: 21 met, 1 met but untested (FR-17 page-level/browser); build ok; secret scan: clean; audit: composer + npm 0 vulnerabilities"
+    },
+    {
+      "at": "2026-10-24T17:11:19.676Z",
+      "event": "advanced",
+      "detail": "review"
+    },
+    {
+      "at": "2026-10-24T17:11:34.979Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-24T17:14:53.020Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-24T17:16:08.958Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-24T17:16:39.036Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (test helper isolation, Modern title text); 27 follow-ups logged this plan"
+    },
+    {
+      "at": "2026-10-24T17:16:39.152Z",
+      "event": "advanced",
+      "detail": "ship"
+    },
+    {
+      "at": "2026-10-24T17:18:07.119Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-24T17:20:00.463Z",
+      "event": "ship approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T17:20:07.939Z",
+      "event": "advanced",
+      "detail": "learn"
+    },
+    {
+      "at": "2026-10-24T17:20:22.708Z",
+      "event": "closed"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "docs",
+      "text": "Resolved research-intelligence-dashboard:s81",
+      "where": [
+        "CLAUDE.md",
+        "Modules/Supplements/app/Contracts/SupplementResearchReader.php",
+        "docs/sdlc/**",
+        ".env.example"
+      ],
+      "from": "user",
+      "resolves": "research-intelligence-dashboard:s81",
+      "note": "brought into supplement-pdf-reports",
+      "at": "2026-10-24T16:36:13.725Z"
+    },
+    {
+      "id": "s2",
+      "area": "ux",
+      "text": "Declined research-intelligence-dashboard:s80",
+      "where": [
+        "resources/views/components/tabs/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Intelligence/config/config.php",
+        "Modules/Supplements/config/config.php",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s80",
+      "at": "2026-10-24T16:36:13.854Z"
+    },
+    {
+      "id": "s3",
+      "area": "security",
+      "text": "Declined research-intelligence-dashboard:s78",
+      "where": [
+        ".gitignore",
+        "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+        "Modules/Supplements/app/Actions/AddSupplement.php",
+        "Modules/Intelligence/app/Exceptions/GenerationFailedException.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Intelligence/app/Services/FirecrawlWebResearcher.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Supplements/app/Actions/ResearchSupplement.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s78",
+      "at": "2026-10-24T16:36:13.854Z"
+    },
+    {
+      "id": "s4",
+      "area": "tests",
+      "text": "Declined research-intelligence-dashboard:s79",
+      "where": [
+        "tests/Feature/ExampleTest.php",
+        "tests/TestCase.php",
+        "tests/Pest.php",
+        "Modules/Supplements/**",
+        "Modules/Intelligence/app/Services/LaravelAiTextGenerator.php",
+        "Modules/Intelligence/tests/Feature/TextGeneratorTest.php",
+        "Modules/Intelligence/**",
+        "Modules/Intelligence/tests/Feature/WebResearcherTest.php",
+        "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Intelligence/database/factories/**",
+        "Modules/Supplements/tests/Feature/StatsTest.php",
+        "Modules/Supplements/tests/**",
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "user",
+      "declines": "research-intelligence-dashboard:s79",
+      "at": "2026-10-24T16:36:13.854Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Page-action slot: assert a registered view receives a null status when research is absent",
+      "where": [
+        "Modules/Supplements/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T16:49:41.429Z"
+    },
+    {
+      "id": "s6",
+      "area": "quality",
+      "text": "Ship a Testing fake for PageActions if another module ever needs to fake the registry",
+      "where": [
+        "Modules/Shared/app/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T16:49:41.493Z"
+    },
+    {
+      "id": "s7",
+      "area": "docs",
+      "text": "Document slot names once more than one slot exists",
+      "where": [
+        "Modules/Shared/app/Contracts/PageActions.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T16:49:41.561Z"
+    },
+    {
+      "id": "s8",
+      "area": "quality",
+      "text": "Skip the empty ml-auto action wrapper when no supplement.header actions are registered",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T16:50:13.637Z"
+    },
+    {
+      "id": "s9",
+      "area": "tests",
+      "text": "Supplements->Reports arch check is trivially true until Reports exists (now it does)",
+      "where": [
+        "Modules/Supplements/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T16:50:13.712Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Report tests declare global helpers (reportResearch, reportUrl, expectAbsent, assertNoPdfResponded); move them to a shared Pest helper file so new test files can't fatal on redeclare",
+      "where": [
+        "Modules/Reports/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:02:23.735Z"
+    },
+    {
+      "id": "s11",
+      "area": "quality",
+      "text": "Disclaimer text is copied into each template layout; extract one shared partial",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/layout.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:02:23.799Z"
+    },
+    {
+      "id": "s12",
+      "area": "quality",
+      "text": "Move the section loop + @includeFirst into a shared reports::partials.sections partial so new layouts only add their title block",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/layout.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:03:18.905Z"
+    },
+    {
+      "id": "s13",
+      "area": "quality",
+      "text": "Unused Livewire namespace registration from the stub (Reports has no Livewire components)",
+      "where": [
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:03:18.971Z"
+    },
+    {
+      "id": "s14",
+      "area": "security",
+      "text": "PDF throttle keys on IP only: confirm trusted proxies at deploy; consider a global concurrency cap or caching the PDF by research completedAt",
+      "where": [
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:03:23.692Z"
+    },
+    {
+      "id": "s15",
+      "area": "security",
+      "text": "safeUrl only checks ^https?://; add FILTER_VALIDATE_URL and a length cap",
+      "where": [
+        "Modules/Supplements/app/Data/SourceData.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:03:23.761Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Header/footer horizontal padding is hard-coded per template to match margins; derive from config margins",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/header.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:03.225Z"
+    },
+    {
+      "id": "s17",
+      "area": "tests",
+      "text": "Browser test that changes the template select and checks the download link href (Alpine behaviour is only asserted by markup)",
+      "where": [
+        "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:11.234Z"
+    },
+    {
+      "id": "s18",
+      "area": "ux",
+      "text": "Give the template select a visible label (aria-label only today)",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:11.309Z"
+    },
+    {
+      "id": "s19",
+      "area": "tests",
+      "text": "Assert the real download menu appears in the completed supplement page header via the slot (integration, not just the view)",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:06:35.481Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Widen hostile-render absence list (<iframe, <object, <embed, @import, single <style block) and add hostile summary/mechanism/design/sourceKey fields to the template loop",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:06:40.758Z"
+    },
+    {
+      "id": "s21",
+      "area": "tests",
+      "text": "TemplatesTest can't run alone (helpers live in SupplementReportTest) and defines a global const TEMPLATE_DISCLAIMER; move helpers/constants to a loaded Pest helpers file",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:06:45.782Z"
+    },
+    {
+      "id": "s22",
+      "area": "quality",
+      "text": "Move route/registry lookups inside the Complete guard in the download menu view",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:07:14.989Z"
+    },
+    {
+      "id": "s23",
+      "area": "ux",
+      "text": "Every section starts a new page, so short research gives sparse 5-page PDFs; consider break-inside: avoid instead of forced breaks (keep a break before Sources)",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/styles.blade.php"
+      ],
+      "from": "plan",
+      "at": "2026-10-24T17:09:30.194Z"
+    },
+    {
+      "id": "s24",
+      "area": "quality",
+      "text": "Boundary rules beyond the two module arch tests aren't enforced; consider Deptrac for the module graph",
+      "where": [
+        "phpstan.neon"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T17:09:30.265Z"
+    },
+    {
+      "id": "s25",
+      "area": "tests",
+      "text": "ChromeRenderTest leaks an empty tempnam() file per run; save to and unlink the tempnam path",
+      "where": [
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:10:05.817Z"
+    },
+    {
+      "id": "s26",
+      "area": "docs",
+      "text": "List REPORTS_PDF_OUTPUT_DIR next to RUN_CHROME_TESTS",
+      "where": [
+        ".env.example"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T17:10:05.882Z"
+    },
+    {
+      "id": "s27",
+      "area": "tests",
+      "text": "FR-17 met but untested end to end: no test loads the real detail page with Reports registered (completed/queued/failed), and select-change is markup-only (needs a browser test)",
+      "where": [
+        "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T17:11:19.415Z"
+    },
+    {
+      "id": "s28",
+      "area": "tests",
+      "text": "Reports arch test is a denylist of Supplements namespaces; switch to an allowlist (only Contracts/Data/Enums/Testing) so new private namespaces are covered",
+      "where": [
+        "Modules/Reports/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-24T17:11:19.487Z"
+    },
+    {
+      "id": "s29",
+      "area": "security",
+      "text": "When auth lands: put the PDF route behind auth, key the reports limiter by user id, and cap concurrent Chrome renders (Cache::lock)",
+      "where": [
+        "Modules/Reports/routes/web.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:12:41.622Z"
+    },
+    {
+      "id": "s30",
+      "area": "quality",
+      "text": "Invalid REPORTS_DEFAULT_TEMPLATE makes default downloads 404 and preselects nothing; fall back to the first configured template or log a warning",
+      "where": [
+        "Modules/Reports/app/Services/TemplateRegistry.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T17:12:41.698Z"
+    },
+    {
+      "id": "s31",
+      "area": "quality",
+      "text": "Rename Reports tests/fixtures to tests/Fixtures to match Supplements",
+      "where": [
+        "Modules/Reports/tests/fixtures/**"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-24T17:14:52.948Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Dismissed supplement-pdf-reports:s10",
+      "where": [
+        "Modules/Reports/tests/**"
+      ],
+      "from": "user",
+      "resolves": "supplement-pdf-reports:s10",
+      "dismissed": true,
+      "note": "fixed in review: helpers moved to ReportFixtures",
+      "at": "2026-10-24T17:17:07.767Z"
+    },
+    {
+      "id": "s33",
+      "area": "tests",
+      "text": "Dismissed supplement-pdf-reports:s21",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "user",
+      "resolves": "supplement-pdf-reports:s21",
+      "dismissed": true,
+      "note": "fixed in review: each Reports test file runs alone",
+      "at": "2026-10-24T17:17:07.887Z"
+    },
+    {
+      "id": "s34",
+      "area": "tests",
+      "text": "Dismissed supplement-pdf-reports:s9",
+      "where": [
+        "Modules/Supplements/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "user",
+      "resolves": "supplement-pdf-reports:s9",
+      "dismissed": true,
+      "note": "Reports now exists, so the arch check is live",
+      "at": "2026-10-24T17:17:08.002Z"
+    },
+    {
+      "id": "s35",
+      "area": "tests",
+      "text": "Deeper Reports tests: real detail-page test for the download menu and a browser test for the template select, allowlist arch test for Reports, wider hostile-render cases, null-status slot case, Chrome test temp-file cleanup",
+      "where": [
+        "Modules/Supplements/tests/**",
+        "Modules/Reports/tests/Feature/DownloadMenuTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Reports/tests/Feature/TemplatesTest.php",
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php",
+        "Modules/Reports/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s5",
+        "supplement-pdf-reports:s17",
+        "supplement-pdf-reports:s19",
+        "supplement-pdf-reports:s20",
+        "supplement-pdf-reports:s25",
+        "supplement-pdf-reports:s27",
+        "supplement-pdf-reports:s28"
+      ],
+      "at": "2026-10-24T17:17:08.125Z"
+    },
+    {
+      "id": "s36",
+      "area": "security",
+      "text": "Harden the PDF endpoint before production: auth plus per-user limiter, concurrent-render cap or cached PDFs, trusted proxies, stricter safeUrl (FILTER_VALIDATE_URL, length cap)",
+      "where": [
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php",
+        "Modules/Supplements/app/Data/SourceData.php",
+        "Modules/Reports/routes/web.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s14",
+        "supplement-pdf-reports:s15",
+        "supplement-pdf-reports:s29"
+      ],
+      "at": "2026-10-24T17:17:08.247Z"
+    },
+    {
+      "id": "s37",
+      "area": "quality",
+      "text": "Template authoring cleanups: shared disclaimer and section-loop partials, header/footer padding from config margins, validate REPORTS_DEFAULT_TEMPLATE, drop unused Livewire namespace, tests/Fixtures naming",
+      "where": [
+        "Modules/Reports/resources/views/templates/*/layout.blade.php",
+        "Modules/Reports/resources/views/templates/*/header.blade.php",
+        "Modules/Reports/app/Services/TemplateRegistry.php",
+        "Modules/Reports/app/Providers/ReportsServiceProvider.php",
+        "Modules/Reports/tests/fixtures/**"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s11",
+        "supplement-pdf-reports:s12",
+        "supplement-pdf-reports:s16",
+        "supplement-pdf-reports:s30",
+        "supplement-pdf-reports:s13",
+        "supplement-pdf-reports:s31"
+      ],
+      "at": "2026-10-24T17:17:08.370Z"
+    },
+    {
+      "id": "s38",
+      "area": "quality",
+      "text": "Small cleanups and docs: skip empty header action wrapper, guard order in download menu, PageActions fake when needed, Deptrac for the module graph, document slot names, list REPORTS_PDF_OUTPUT_DIR",
+      "where": [
+        "Modules/Shared/app/**",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "phpstan.neon",
+        "Modules/Shared/app/Contracts/PageActions.php",
+        ".env.example"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s6",
+        "supplement-pdf-reports:s8",
+        "supplement-pdf-reports:s22",
+        "supplement-pdf-reports:s24",
+        "supplement-pdf-reports:s7",
+        "supplement-pdf-reports:s26"
+      ],
+      "at": "2026-10-24T17:17:08.486Z"
+    },
+    {
+      "id": "s39",
+      "area": "ux",
+      "text": "PDF and menu polish: visible label on the template select; replace forced per-section page breaks with break-inside: avoid so short reports aren't sparse",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "Modules/Reports/resources/views/templates/*/styles.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "supplement-pdf-reports:s18",
+        "supplement-pdf-reports:s23"
+      ],
+      "at": "2026-10-24T17:17:08.610Z"
+    }
+  ],
+  "planHash": "5bc9c3ce6894effc",
+  "configHash": "85d35cf89052f183"
+}

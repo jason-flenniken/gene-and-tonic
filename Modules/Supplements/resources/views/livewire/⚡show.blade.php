@@ -73,6 +73,11 @@ new #[Title('Supplement')] class extends Component
             @if ($research)
                 <flux:badge color="{{ $research->status->color() }}" size="sm">{{ $research->status->label() }}</flux:badge>
             @endif
+            <div class="ml-auto flex items-center gap-3">
+                @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.header') as $actionView)
+                    @include($actionView, ['supplementId' => $supplementId, 'status' => $research?->status])
+                @endforeach
+            </div>
         </div>
     </div>
 
