@@ -6,8 +6,8 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:20:07.939Z",
-  "stage": "learn",
+  "updated": "2026-10-24T17:20:22.708Z",
+  "stage": "closed",
   "stageHistory": [
     {
       "stage": "discover",
@@ -40,6 +40,10 @@
     {
       "stage": "learn",
       "at": "2026-10-24T17:20:07.938Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-24T17:20:22.707Z"
     }
   ],
   "paused": null,
@@ -530,6 +534,10 @@
       "at": "2026-10-24T17:20:07.939Z",
       "event": "advanced",
       "detail": "learn"
+    },
+    {
+      "at": "2026-10-24T17:20:22.708Z",
+      "event": "closed"
     }
   ],
   "cairnVersion": "0.3.0",
