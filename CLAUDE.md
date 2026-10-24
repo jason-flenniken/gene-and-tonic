@@ -66,14 +66,28 @@ Livewire in modules:
 
 | Module | Owns | May depend on |
 |---|---|---|
-| Shared | Kernel: typed IDs, base DTO/enum helpers. Keep it tiny; a type used by only one module doesn't belong here. | nothing |
+| Shared | Kernel: typed IDs, base DTO/enum helpers, and the `PageActions` contract (a named-slot registry: a module registers a view under a slot, e.g. `supplement.header`, and the owning page renders it, so modules add buttons to each other's pages without importing each other). Keep it tiny; a type used by only one module doesn't belong here. | nothing |
 | Genetics | Upload and parsing of genetic results, variants/genotypes. All raw genetic data. | Shared |
-| Supplements | Supplement catalog, research/evidence, gene–supplement interaction knowledge | Shared |
+| Supplements | Supplement catalog, research/evidence, gene–supplement interaction knowledge | Intelligence, Shared |
 | Intelligence | Provider-agnostic AI gateway contract, prompt templates, request/usage logging. No domain knowledge. | Shared |
 | Recommendations | Orchestration: GeneticProfile + supplement evidence → Intelligence → stored recommendation sets | Genetics, Supplements, Intelligence, Shared |
-| Reports | PDF generation from recommendation and profile DTOs, storage, download. A read-only consumer. | Recommendations, Genetics, Shared |
+| Reports | PDF generation from research, recommendation and profile DTOs, storage, download. A read-only consumer. | Supplements, Shared (Recommendations and Genetics later) |
 
-No module exists yet. Build them in this order.
+Shared, Intelligence, Supplements and Reports exist; Genetics and Recommendations come later.
+
+### Adding a report template
+
+A template is a config entry plus a view folder; nothing else changes.
+
+1. Add an entry to `templates` in `Modules/Reports/config/config.php`: `label`, `format`, `margins` (mm, `[top, right, bottom, left]`) and `orientation`.
+2. Create `Modules/Reports/resources/views/templates/<name>/` with `layout.blade.php`, `header.blade.php`, `footer.blade.php` and the styles. Plain inline CSS, system fonts, no scripts or remote assets. Header and footer need their own inline styles with an explicit `font-size` (8pt or more).
+3. The layout must include the five-section loop. Each section resolves with `@includeFirst(['reports::templates.<name>.sections.<section>', 'reports::sections.<section>'])`, so to restyle one section add `templates/<name>/sections/<section>.blade.php`; otherwise the shared one is used.
+
+Real-render check (opt-in, launches Chrome, writes a PDF per template and asserts `%PDF-`; skipped otherwise):
+
+```bash
+RUN_CHROME_TESTS=1 REPORTS_PDF_OUTPUT_DIR=/tmp/pdfs vendor/bin/pest Modules/Reports/tests/Feature/ChromeRenderTest.php
+```
 
 ## Boundary rules
 
