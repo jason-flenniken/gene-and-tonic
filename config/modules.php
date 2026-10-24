@@ -35,19 +35,12 @@ return [
     |
     */
     'stubs' => [
-        'enabled' => false,
-        'path' => base_path('vendor/nwidart/laravel-modules/src/Commands/stubs'),
+        'enabled' => true,
+        'path' => base_path('stubs/nwidart-stubs'),
         'files' => [
             'routes/web' => 'routes/web.php',
-            'routes/api' => 'routes/api.php',
-            'views/index' => 'resources/views/index.blade.php',
-            'views/master' => 'resources/views/components/layouts/master.blade.php',
             'scaffold/config' => 'config/config.php',
             'composer' => 'composer.json',
-            'assets/js/app' => 'resources/assets/js/app.js',
-            'assets/sass/app' => 'resources/assets/sass/app.scss',
-            'vite' => 'vite.config.js',
-            'package' => 'package.json',
         ],
         'replacements' => [
             /**
@@ -156,7 +149,7 @@ return [
             'exceptions' => ['path' => 'app/Exceptions', 'generate' => false],
             'jobs' => ['path' => 'app/Jobs', 'generate' => false],
             'helpers' => ['path' => 'app/Helpers', 'generate' => false],
-            'interfaces' => ['path' => 'app/Interfaces', 'generate' => false],
+            'interfaces' => ['path' => 'app/Contracts', 'generate' => false],
             'listener' => ['path' => 'app/Listeners', 'generate' => false],
             'model' => ['path' => 'app/Models', 'generate' => false],
             'notifications' => ['path' => 'app/Notifications', 'generate' => false],
@@ -172,7 +165,7 @@ return [
             'traits' => ['path' => 'app/Traits', 'generate' => false],
 
             // app/Http/
-            'controller' => ['path' => 'app/Http/Controllers', 'generate' => true],
+            'controller' => ['path' => 'app/Http/Controllers', 'generate' => false],
             'filter' => ['path' => 'app/Http/Middleware', 'generate' => false],
             'request' => ['path' => 'app/Http/Requests', 'generate' => false],
 
@@ -188,7 +181,7 @@ return [
             'lang' => ['path' => 'lang', 'generate' => false],
 
             // resource/
-            'assets' => ['path' => 'resources/assets', 'generate' => true],
+            'assets' => ['path' => 'resources/assets', 'generate' => false],
             'component-view' => ['path' => 'resources/views/components', 'generate' => false],
             'views' => ['path' => 'resources/views', 'generate' => true],
             'inertia' => ['path' => 'resources/js/Pages', 'generate' => false],
@@ -274,10 +267,10 @@ return [
     |
     */
     'composer' => [
-        'vendor' => env('MODULE_VENDOR', 'nwidart'),
+        'vendor' => env('MODULE_VENDOR', 'modules'),
         'author' => [
-            'name' => env('MODULE_AUTHOR_NAME', 'Nicolas Widart'),
-            'email' => env('MODULE_AUTHOR_EMAIL', 'n.widart@gmail.com'),
+            'name' => env('MODULE_AUTHOR_NAME', 'Jason Flenniken'),
+            'email' => env('MODULE_AUTHOR_EMAIL', 'jason.flenniken@gmail.com'),
         ],
         'composer-output' => false,
     ],

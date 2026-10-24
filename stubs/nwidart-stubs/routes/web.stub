@@ -1,0 +1,5 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+// Route::livewire('/$KEBAB_NAME$', '$LOWER_NAME$::index')->name('$LOWER_NAME$.index');
