@@ -1,0 +1,11 @@
+{
+    "name": "Recommendations",
+    "alias": "recommendations",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Recommendations\\Providers\\RecommendationsServiceProvider"
+    ],
+    "files": []
+}

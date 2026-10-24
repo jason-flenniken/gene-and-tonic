@@ -111,6 +111,15 @@ it('renders every view registered for the supplement header slot', function () {
         ->assertSee('Action for '.$supplement->id.' (complete)', false);
 });
 
+it('renders every view registered for the supplement panels slot below the tab panels with only the supplement id', function (string $tab) {
+    View::getFinder()->prependLocation(module_path('Supplements', 'tests/Fixtures/views'));
+    app(PageActions::class)->register('supplement.panels', 'header-action');
+    $supplement = researchedSupplement();
+
+    $this->get(route('supplements.show', $supplement)."?tab=$tab")->assertOk()
+        ->assertSeeInOrder(['data-panel="'.$tab.'"', 'Action for '.$supplement->id.' (none)'], false);
+})->with(['overview', 'genetics']);
+
 it('lists gene interactions with their source markers on the Genetics tab', function () {
     $supplement = researchedSupplement();
     $supplement->research->update(['genetics_checked_at' => now()]);
