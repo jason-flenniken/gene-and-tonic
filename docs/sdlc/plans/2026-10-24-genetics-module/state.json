@@ -6,8 +6,8 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T22:45:24.862Z",
-  "stage": "ship",
+  "updated": "2026-10-24T22:46:07.086Z",
+  "stage": "learn",
   "stageHistory": [
     {
       "stage": "discover",
@@ -36,6 +36,10 @@
     {
       "stage": "ship",
       "at": "2026-10-24T21:12:14.971Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-24T22:46:07.086Z"
     }
   ],
   "paused": null,
@@ -961,6 +965,16 @@
       "at": "2026-10-24T22:45:24.862Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T22:46:06.980Z",
+      "event": "step",
+      "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-24T22:46:07.086Z",
+      "event": "advanced",
+      "detail": "learn"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -2057,10 +2071,5 @@
     }
   ],
   "planHash": "1e04af42eed00fb2",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-24T21:13:38.557Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
