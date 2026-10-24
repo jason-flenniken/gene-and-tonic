@@ -23,7 +23,12 @@ Branch `feature/research-intelligence-dashboard` from `main` · started 2026-10-
 ## Checkpoints
 - PRD approved 2026-10-24 (you, in the terminal)
 
+## Overrides
+- 2026-10-24 override: approve prd: FR-15 edited: Firecrawl via Laravel Http client (decision 25) (you, in the terminal)
+
 ## Recent activity
+- 2026-10-24 15:19 PRD approved: terminal
+- 2026-10-24 15:19 override: approve prd: the plan is in plan, not prd (source: terminal)
 - 2026-10-24 15:14 plan loaded: 3 phases, 8 tasks
 - 2026-10-24 15:05 advanced: plan
 - 2026-10-24 15:05 PRD approved: terminal

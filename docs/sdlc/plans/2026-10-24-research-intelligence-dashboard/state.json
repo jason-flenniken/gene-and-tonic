@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:14:36.325Z",
+  "updated": "2026-10-24T15:19:50.022Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -25,10 +25,10 @@
   "paused": null,
   "approvals": {
     "prd": {
-      "at": "2026-10-24T15:05:21.623Z",
+      "at": "2026-10-24T15:19:50.022Z",
       "via": "human",
       "source": "terminal",
-      "hash": "78e7de5d7478f2cd"
+      "hash": "8010d0795572d915"
     }
   },
   "phases": [
@@ -277,6 +277,17 @@
       "at": "2026-10-24T15:14:36.325Z",
       "event": "plan loaded",
       "detail": "3 phases, 8 tasks"
+    },
+    {
+      "at": "2026-10-24T15:19:50.021Z",
+      "event": "override: approve prd",
+      "detail": "the plan is in plan, not prd (source: terminal)",
+      "override": "FR-15 edited: Firecrawl via Laravel Http client (decision 25)"
+    },
+    {
+      "at": "2026-10-24T15:19:50.022Z",
+      "event": "PRD approved",
+      "detail": "terminal"
     }
   ],
   "cairnVersion": "0.3.0",
