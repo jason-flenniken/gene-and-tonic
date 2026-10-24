@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:53:52.908Z",
+  "updated": "2026-10-24T20:57:14.219Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -354,7 +354,7 @@
     {
       "id": "hardening-and-docs",
       "name": "Hardening, demo files, docs",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "supplements-hardening",
@@ -445,9 +445,18 @@
             "Modules/Genetics/tests/Feature/DemoFilesTest.php"
           ],
           "complexity": "simple",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "branch": "task/genetics-module/docs-and-demo",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--docs-and-demo",
+          "base": "2cdc2e01bf607d30d4fd2b28471e70f1c81781e7",
+          "startedAt": "2026-10-24T20:54:00.211Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:57:14.219Z",
+          "tip": "d6811e9",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "c41cad723a459d9751764cdef38df6b2af7f35ed"
         }
       ]
     }
@@ -471,6 +480,12 @@
       "at": "2026-10-24T20:53:52.907Z",
       "reason": "changed outside task \"Supplements rate limits, reaper, URL validation\" scope (found at task done)",
       "task": "supplements-hardening"
+    },
+    {
+      "path": "Modules/Genetics/config/config.php",
+      "at": "2026-10-24T20:57:14.219Z",
+      "reason": "changed outside task \"Demo files and docs\" scope (found at task done)",
+      "task": "docs-and-demo"
     }
   ],
   "log": [
@@ -822,6 +837,36 @@
       "at": "2026-10-24T20:53:52.908Z",
       "event": "task done",
       "detail": "Supplements rate limits, reaper, URL validation"
+    },
+    {
+      "at": "2026-10-24T20:54:00.212Z",
+      "event": "task started",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:54:20.592Z",
+      "event": "task implementing",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:56:14.240Z",
+      "event": "task reviewing",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:57:00.869Z",
+      "event": "task merging",
+      "detail": "Demo files and docs"
+    },
+    {
+      "at": "2026-10-24T20:57:14.219Z",
+      "event": "drift",
+      "detail": "Modules/Genetics/config/config.php"
+    },
+    {
+      "at": "2026-10-24T20:57:14.219Z",
+      "event": "task done",
+      "detail": "Demo files and docs"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1580,6 +1625,36 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T20:53:32.171Z"
+    },
+    {
+      "id": "s73",
+      "area": "tests",
+      "text": "Write demo files to a temp storage path in tests instead of the real storage/app/demo",
+      "where": [
+        "Modules/Genetics/tests/Feature/DemoFilesTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:56:14.117Z"
+    },
+    {
+      "id": "s74",
+      "area": "docs",
+      "text": "Reword 'boundary rules not enforced automatically yet' now that per-module arch tests enforce them",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:56:14.178Z"
+    },
+    {
+      "id": "s75",
+      "area": "docs",
+      "text": "Say Genetics routes and logout use auth",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:57:00.798Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
