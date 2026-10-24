@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T19:22:33.049Z",
+  "updated": "2026-10-24T19:27:12.677Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -31,7 +31,318 @@
       "hash": "c31e79fdd15760c1"
     }
   },
-  "phases": [],
+  "phases": [
+    {
+      "id": "sign-in-and-profile",
+      "name": "Sign-in, genetic profile, gene interactions",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "auth-login",
+          "name": "Demo-user login",
+          "covers": [
+            "FR-01",
+            "FR-02"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "app/**",
+            "routes/web.php",
+            "resources/views/pages/⚡login.blade.php",
+            "resources/views/layouts/app.blade.php",
+            "tests/Feature/Auth/**",
+            "database/seeders/DemoUserSeeder.php",
+            "config/auth.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "authentication, credentials, session handling"
+        },
+        {
+          "id": "genetics-core",
+          "name": "Genetics module, reference table, profile data",
+          "covers": [
+            "FR-04",
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Genetics/**",
+            "modules_statuses.json",
+            "Modules/Supplements/tests/Unit/BoundaryTest.php",
+            "Modules/Intelligence/tests/Unit/BoundaryTest.php"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "migrations, special-category personal data with an encrypted cast, curated medical reference data"
+        },
+        {
+          "id": "supplement-interactions",
+          "name": "Gene interactions in supplement research",
+          "covers": [
+            "FR-21",
+            "FR-22",
+            "FR-23"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/database/**",
+            "Modules/Supplements/resources/**",
+            "Modules/Supplements/config/**",
+            "Modules/Supplements/tests/Feature/**",
+            "Modules/Supplements/tests/Unit/ResearchFindingsBuilderTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted model output and scraped sources persisted and rendered, migration"
+        },
+        {
+          "id": "genetics-page",
+          "name": "My genetics page, add SNP, dashboard tab",
+          "covers": [
+            "FR-03",
+            "FR-10",
+            "FR-11"
+          ],
+          "blockedBy": [
+            "auth-login",
+            "genetics-core"
+          ],
+          "scope": [
+            "Modules/Genetics/**",
+            "resources/views/pages/⚡dashboard.blade.php",
+            "tests/Feature/DashboardTest.php",
+            "database/seeders/DatabaseSeeder.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "authorization of personal genetic data, untrusted form input"
+        }
+      ]
+    },
+    {
+      "id": "uploads-and-lookups",
+      "name": "Uploads, gene lookups, AI extraction",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "upload-parsing",
+          "name": "Upload with deterministic parsing",
+          "covers": [
+            "FR-12",
+            "FR-13",
+            "FR-14",
+            "FR-17",
+            "FR-18",
+            "FR-28"
+          ],
+          "blockedBy": [
+            "genetics-page"
+          ],
+          "scope": [
+            "Modules/Genetics/**",
+            "config/filesystems.php",
+            "config/livewire.php",
+            ".gitignore"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted file upload, file paths, personal data at rest, deletes raw files"
+        },
+        {
+          "id": "gene-lookup",
+          "name": "Gene lookup with Firecrawl and AI",
+          "covers": [
+            "FR-10",
+            "FR-11",
+            "FR-19",
+            "FR-20",
+            "FR-28"
+          ],
+          "blockedBy": [
+            "upload-parsing"
+          ],
+          "scope": [
+            "Modules/Genetics/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted model output and scraped pages persisted and rendered, paid API spend"
+        },
+        {
+          "id": "pdf-extraction",
+          "name": "AI extraction for PDFs and unknown formats",
+          "covers": [
+            "FR-15",
+            "FR-16"
+          ],
+          "blockedBy": [
+            "gene-lookup"
+          ],
+          "scope": [
+            "Modules/Genetics/**",
+            "composer.json",
+            "composer.lock"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "new dependency, untrusted document text sent to a model, model output persisted"
+        }
+      ]
+    },
+    {
+      "id": "relevance",
+      "name": "Your genetics on supplements and in the PDF",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "recommendations-panel",
+          "name": "Recommendations matching and panel",
+          "covers": [
+            "FR-24",
+            "FR-25",
+            "FR-26"
+          ],
+          "blockedBy": [
+            "genetics-page",
+            "supplement-interactions"
+          ],
+          "scope": [
+            "Modules/Recommendations/**",
+            "modules_statuses.json",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+            "Modules/Supplements/tests/Unit/BoundaryTest.php",
+            "Modules/Genetics/tests/Unit/BoundaryTest.php"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "personal genetic data crosses a module boundary and renders on a public page"
+        },
+        {
+          "id": "pdf-genetics-section",
+          "name": "Genetics section in the PDF",
+          "covers": [
+            "FR-27"
+          ],
+          "blockedBy": [
+            "recommendations-panel"
+          ],
+          "scope": [
+            "Modules/Reports/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "personal genetic data in a download from a public route"
+        }
+      ]
+    },
+    {
+      "id": "hardening-and-docs",
+      "name": "Hardening, demo files, docs",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "supplements-hardening",
+          "name": "Supplements rate limits, reaper, URL validation",
+          "covers": [
+            "FR-28",
+            "FR-29",
+            "FR-30"
+          ],
+          "blockedBy": [
+            "supplement-interactions",
+            "gene-lookup",
+            "recommendations-panel"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/tests/**",
+            "Modules/Shared/app/Support/**",
+            "Modules/Shared/tests/**",
+            "Modules/Genetics/app/Support/LookupResultBuilder.php",
+            "Modules/Genetics/tests/Unit/LookupResultBuilderTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "security controls on public actions and stored URLs"
+        },
+        {
+          "id": "genetics-hardening",
+          "name": "Genetics reaper and large-file parse test",
+          "covers": [
+            "FR-29"
+          ],
+          "blockedBy": [
+            "pdf-extraction"
+          ],
+          "scope": [
+            "Modules/Genetics/app/Console/ReapStaleCommand.php",
+            "Modules/Genetics/app/Providers/GeneticsServiceProvider.php",
+            "Modules/Genetics/tests/Feature/ReapStaleTest.php",
+            "Modules/Genetics/tests/Feature/LargeParseTest.php",
+            "Modules/Genetics/tests/Feature/ProfilePricingTest.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "docs-and-demo",
+          "name": "Demo files and docs",
+          "covers": [
+            "FR-31",
+            "FR-32"
+          ],
+          "blockedBy": [
+            "pdf-genetics-section",
+            "supplements-hardening",
+            "genetics-hardening"
+          ],
+          "scope": [
+            "CLAUDE.md",
+            ".env.example",
+            ".gitignore",
+            "Modules/Genetics/app/Console/DemoFilesCommand.php",
+            "Modules/Genetics/app/Providers/GeneticsServiceProvider.php",
+            "Modules/Genetics/tests/Feature/DemoFilesTest.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        }
+      ]
+    }
+  ],
   "evidence": {},
   "drift": [],
   "log": [
@@ -58,6 +369,11 @@
       "at": "2026-10-24T19:22:33.049Z",
       "event": "advanced",
       "detail": "plan"
+    },
+    {
+      "at": "2026-10-24T19:27:12.677Z",
+      "event": "plan loaded",
+      "detail": "4 phases, 12 tasks"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -137,5 +453,6 @@
       "declines": "supplement-pdf-reports:s39",
       "at": "2026-10-24T18:00:57.788Z"
     }
-  ]
+  ],
+  "planHash": "1e04af42eed00fb2"
 }
