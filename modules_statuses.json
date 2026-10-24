@@ -3,5 +3,6 @@
     "Intelligence": true,
     "Supplements": true,
     "Reports": true,
-    "Genetics": true
+    "Genetics": true,
+    "Recommendations": true
 }

@@ -261,4 +261,8 @@ new #[Title('Supplement')] class extends Component
             @endif
         </div>
     @endif
+
+    @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.panels') as $panelView)
+        @include($panelView, ['supplementId' => $supplementId])
+    @endforeach
 </div>
