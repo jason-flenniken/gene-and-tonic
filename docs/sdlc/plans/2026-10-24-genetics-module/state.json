@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:30:54.761Z",
+  "updated": "2026-10-24T20:31:03.010Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -182,7 +182,7 @@
     {
       "id": "uploads-and-lookups",
       "name": "Uploads, gene lookups, AI extraction",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "upload-parsing",
@@ -285,7 +285,7 @@
     {
       "id": "relevance",
       "name": "Your genetics on supplements and in the PDF",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "recommendations-panel",
@@ -654,6 +654,11 @@
       "at": "2026-10-24T20:30:54.761Z",
       "event": "task done",
       "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:31:03.009Z",
+      "event": "phase finished",
+      "detail": "Uploads, gene lookups, AI extraction (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
