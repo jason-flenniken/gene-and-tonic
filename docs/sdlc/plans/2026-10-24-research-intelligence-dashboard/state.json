@@ -6,7 +6,7 @@
   "branch": "feature/research-intelligence-dashboard",
   "base": "main",
   "created": "2026-10-24T14:18:08.365Z",
-  "updated": "2026-10-24T15:41:39.803Z",
+  "updated": "2026-10-24T15:41:45.060Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -115,7 +115,7 @@
     {
       "id": "engines",
       "name": "Intelligence and catalog",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "intelligence-text-generation",
@@ -251,7 +251,7 @@
     {
       "id": "research",
       "name": "Research end to end",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "research-pipeline",
@@ -615,6 +615,11 @@
       "at": "2026-10-24T15:41:39.803Z",
       "event": "task done",
       "detail": "Supplement page and reader"
+    },
+    {
+      "at": "2026-10-24T15:41:45.059Z",
+      "event": "phase finished",
+      "detail": "Intelligence and catalog (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
