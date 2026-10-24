@@ -158,6 +158,60 @@ it('does not start research while a run is active', function (ResearchStatus $st
     [ResearchStatus::Complete, true],
 ]);
 
+it('dispatches one job when a second start follows the first claim', function () {
+    $supplement = Supplement::factory()->create();
+    SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Complete]);
+
+    $action = app(StartResearch::class);
+
+    expect($action->handle($supplement))->toBeTrue()
+        ->and($action->handle($supplement))->toBeFalse();
+    Queue::assertPushed(RunSupplementResearch::class, 1);
+});
+
+it('does not rely on the advisory pre-check: a stale hasActiveRun cannot cause a second dispatch', function () {
+    $supplement = Supplement::factory()->create();
+    SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Failed]);
+
+    // Simulates two requests that both read "no active run" before either claims.
+    $stale = new class(app(ResearchRepository::class)) implements ResearchRepository
+    {
+        public function __construct(private ResearchRepository $inner) {}
+
+        public function markQueued(Supplement $supplement): SupplementResearch
+        {
+            return $this->inner->markQueued($supplement);
+        }
+
+        public function claimRun(Supplement $supplement): bool
+        {
+            return $this->inner->claimRun($supplement);
+        }
+
+        public function hasActiveRun(Supplement $supplement): bool
+        {
+            return false;
+        }
+    };
+    $action = new StartResearch($stale);
+
+    expect($stale->hasActiveRun($supplement))->toBeFalse()
+        ->and($action->handle($supplement))->toBeTrue()
+        ->and($stale->hasActiveRun($supplement))->toBeFalse()
+        ->and($action->handle($supplement))->toBeFalse();
+    Queue::assertPushed(RunSupplementResearch::class, 1);
+});
+
+it('claims a run for a supplement without a research row exactly once', function () {
+    $supplement = Supplement::factory()->create();
+    $repo = app(ResearchRepository::class);
+
+    expect($repo->claimRun($supplement))->toBeTrue()
+        ->and($repo->claimRun($supplement))->toBeFalse()
+        ->and(SupplementResearch::where('supplement_id', $supplement->id)->count())->toBe(1)
+        ->and($supplement->fresh()->research->status)->toBe(ResearchStatus::Queued);
+});
+
 it('deletes after confirm and cascades to research and findings', function () {
     $supplement = Supplement::factory()->create();
     $research = SupplementResearch::factory()->for($supplement)->create();

@@ -11,15 +11,14 @@ class StartResearch
     public function __construct(private readonly ResearchRepository $research) {}
 
     /**
-     * Queue a research run unless one is already active.
+     * Queue a research run only if this call atomically claimed the run.
      */
     public function handle(Supplement $supplement): bool
     {
-        if ($this->research->hasActiveRun($supplement)) {
+        if (! $this->research->claimRun($supplement)) {
             return false;
         }
 
-        $this->research->markQueued($supplement);
         RunSupplementResearch::dispatch($supplement->getKey());
 
         return true;
