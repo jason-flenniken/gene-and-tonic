@@ -2,11 +2,13 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Modules\Genetics\Database\Seeders\GeneVariantSeeder;
 use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\UploadStatus;
+use Modules\Genetics\Jobs\LookupGeneVariant;
 use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\GeneVariant;
@@ -17,6 +19,8 @@ use Modules\Intelligence\Testing\FakeTextGenerator;
 use Modules\Intelligence\Testing\FakeWebResearcher;
 
 beforeEach(function () {
+    Queue::fake([LookupGeneVariant::class]);
+    config(['genetics.lookup_cap' => 0]);
     Storage::fake('genetics');
     $this->seed(GeneVariantSeeder::class);
     $this->text = FakeTextGenerator::install();

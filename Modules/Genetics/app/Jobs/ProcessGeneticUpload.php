@@ -12,9 +12,12 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Modules\Genetics\Actions\AddVariant;
+use Modules\Genetics\Actions\QueueLookups;
+use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\UploadStatus;
 use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\GeneVariant;
+use Modules\Genetics\Models\UserVariant;
 use Modules\Genetics\Support\Extraction\MarkerExtractor;
 use Modules\Genetics\Support\Parsing\FormatDetector;
 use Modules\Genetics\Support\Parsing\ParsedKind;
@@ -64,7 +67,7 @@ class ProcessGeneticUpload implements ShouldQueue
         return max($this->timeout + 1, $retryAfter - 30);
     }
 
-    public function handle(FormatDetector $detector, MarkerExtractor $extractor, AddVariant $addVariant): void
+    public function handle(FormatDetector $detector, MarkerExtractor $extractor, AddVariant $addVariant, QueueLookups $queueLookups): void
     {
         $upload = GeneticUpload::find($this->uploadId);
 
@@ -75,7 +78,7 @@ class ProcessGeneticUpload implements ShouldQueue
         $retrying = false;
 
         try {
-            $this->process($upload, $detector, $extractor, $addVariant);
+            $this->process($upload, $detector, $extractor, $addVariant, $queueLookups);
         } catch (Throwable $e) {
             if ($this->canRetry()) {
                 $retrying = true;
@@ -110,7 +113,7 @@ class ProcessGeneticUpload implements ShouldQueue
         $this->deleteFile($upload);
     }
 
-    private function process(GeneticUpload $upload, FormatDetector $detector, MarkerExtractor $extractor, AddVariant $addVariant): void
+    private function process(GeneticUpload $upload, FormatDetector $detector, MarkerExtractor $extractor, AddVariant $addVariant, QueueLookups $queueLookups): void
     {
         $upload->update([
             'status' => UploadStatus::Parsing,
@@ -158,9 +161,26 @@ class ProcessGeneticUpload implements ShouldQueue
 
         $upload->update(['status' => UploadStatus::LookingUp, 'found_count' => $found, 'stored_count' => $stored]);
 
-        // Unknown rsIDs stay Pending here; gene lookups are queued at this step.
+        $queued = $queueLookups->handle($this->pendingRsids($upload), (int) config('genetics.lookup_cap'));
 
-        $upload->update(['status' => UploadStatus::Complete, 'completed_at' => now()]);
+        $upload->update(['status' => UploadStatus::Complete, 'queued_lookups' => $queued, 'completed_at' => now()]);
+    }
+
+    /**
+     * The upload's rsIDs whose reference row still awaits a lookup, in a stable order.
+     *
+     * @return list<string>
+     */
+    private function pendingRsids(GeneticUpload $upload): array
+    {
+        $rsids = GeneVariant::where('status', LookupStatus::Pending)
+            ->whereIn('rsid', UserVariant::select('rsid')->where('genetic_upload_id', $upload->id))
+            ->orderBy('rsid')
+            ->get(['rsid'])
+            ->map(fn (GeneVariant $reference): string => $reference->rsid)
+            ->all();
+
+        return array_values($rsids);
     }
 
     /**

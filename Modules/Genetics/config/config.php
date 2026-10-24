@@ -15,4 +15,32 @@ return [
     | fails before anything is written. Raw DNA exports have no such cap.
     */
     'max_marker_rows' => (int) env('GENETICS_MAX_MARKER_ROWS', 1000),
+
+    /*
+    | AI profile used to turn scraped SNP pages into a reference row. Registered
+    | with Intelligence as "genetics.lookup" when the module boots.
+    */
+    'lookup_profile' => [
+        'provider' => env('AI_GENETICS_LOOKUP_PROVIDER', 'openai'),
+        'model' => env('AI_GENETICS_LOOKUP_MODEL', 'gpt-6-luna'),
+        'effort' => env('AI_GENETICS_LOOKUP_EFFORT', 'low'),
+        'max_tokens' => (int) env('AI_GENETICS_LOOKUP_MAX_TOKENS', 3000),
+        'timeout' => (int) env('AI_GENETICS_LOOKUP_TIMEOUT', 60),
+        'instructions' => 'genetics::prompts.lookup-instructions',
+        'prompt' => 'genetics::prompts.lookup',
+    ],
+
+    'lookup' => [
+        'domains' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', (string) env('GENETICS_LOOKUP_DOMAINS', 'snpedia.com,ncbi.nlm.nih.gov,ebi.ac.uk')),
+        ))),
+        'limit' => 5,
+    ],
+
+    /*
+    | Most lookups one upload queues. The rest of its unknown SNPs stay pending
+    | until someone presses Look up, which bounds search and model spend.
+    */
+    'lookup_cap' => (int) env('GENETICS_LOOKUP_CAP', 15),
 ];

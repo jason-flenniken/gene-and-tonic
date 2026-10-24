@@ -13,6 +13,7 @@ use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use Modules\Genetics\Actions\AddVariant;
+use Modules\Genetics\Actions\QueueLookups;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\Genotype;
 use Modules\Genetics\Data\VariantData;
@@ -20,6 +21,7 @@ use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\UploadStatus;
 use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
+use Modules\Genetics\Models\UserVariant;
 
 new #[Title('My genetics')] class extends Component
 {
@@ -33,7 +35,7 @@ new #[Title('My genetics')] class extends Component
 
     public string $gene = '';
 
-    public function addVariant(AddVariant $addVariant): void
+    public function addVariant(AddVariant $addVariant, QueueLookups $queueLookups): void
     {
         $userId = auth()->id();
         abort_if($userId === null, 401);
@@ -58,7 +60,7 @@ new #[Title('My genetics')] class extends Component
             'gene.regex' => 'Use a gene symbol such as MTHFR.',
         ]);
 
-        $limiterKey = 'genetics-add-variant:'.$userId;
+        $limiterKey = 'genetics-add:'.$userId;
 
         if (RateLimiter::tooManyAttempts($limiterKey, 20)) {
             throw ValidationException::withMessages(['rsid' => 'Too many requests, try again in a minute.']);
@@ -67,14 +69,44 @@ new #[Title('My genetics')] class extends Component
         RateLimiter::hit($limiterKey, 60);
 
         try {
-            $addVariant->handle($userId, $this->rsid, $this->genotype, $this->gene);
+            $reference = $addVariant->handle($userId, $this->rsid, $this->genotype, $this->gene);
         } catch (\InvalidArgumentException) {
             throw ValidationException::withMessages(['rsid' => 'That SNP could not be saved. Check the values and try again.']);
         }
 
+        if ($reference->status === LookupStatus::Pending) {
+            $queueLookups->handle([$reference->rsid], 1);
+        }
+
         $this->reset('rsid', 'genotype', 'gene');
-        unset($this->variants);
+        unset($this->variants, $this->hasLookingUp);
         Flux::toast(text: 'SNP saved.', variant: 'success');
+    }
+
+    /**
+     * Queues one lookup for an SNP in the user's own profile. A row that is already
+     * being looked up is ignored.
+     */
+    public function lookUp(string $rsid, QueueLookups $queueLookups): void
+    {
+        $userId = auth()->id();
+        abort_if($userId === null, 401);
+
+        if (! UserVariant::where('user_id', $userId)->where('rsid', $rsid)->exists()) {
+            return;
+        }
+
+        $limiterKey = 'genetics-lookup:'.$userId;
+
+        if (RateLimiter::tooManyAttempts($limiterKey, 10)) {
+            throw ValidationException::withMessages(['lookup' => 'Too many requests, try again in a minute.']);
+        }
+
+        RateLimiter::hit($limiterKey, 60);
+
+        $queueLookups->handle([$rsid], 1);
+
+        unset($this->variants, $this->hasLookingUp);
     }
 
     /**
@@ -166,14 +198,26 @@ new #[Title('My genetics')] class extends Component
         return $variants;
     }
 
+    #[Computed]
+    public function hasLookingUp(): bool
+    {
+        foreach ($this->variants as $variant) {
+            if ($variant->status === LookupStatus::LookingUp) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isLookedUp(VariantData $variant): bool
     {
-        return ! in_array($variant->status, [LookupStatus::Pending, LookupStatus::Failed], true);
+        return ! in_array($variant->status, [LookupStatus::Pending, LookupStatus::LookingUp, LookupStatus::Failed], true);
     }
 };
 ?>
 
-<div class="space-y-6" @if ($this->hasActiveUploads) wire:poll.3s @endif>
+<div class="space-y-6" @if ($this->hasActiveUploads || $this->hasLookingUp) wire:poll.3s @endif>
     <flux:callout icon="information-circle">
         <flux:callout.text>Educational summary of published research, not medical advice or a diagnosis. Talk to a qualified clinician before acting on genetic results.</flux:callout.text>
     </flux:callout>
@@ -235,6 +279,8 @@ new #[Title('My genetics')] class extends Component
     </flux:card>
 
     <flux:card>
+        <flux:error name="lookup" />
+
         @if ($this->variants === [])
             <flux:text>No SNPs yet. Add one above.</flux:text>
         @else
@@ -247,7 +293,8 @@ new #[Title('My genetics')] class extends Component
                             <th class="py-2 pr-4 font-medium">Genotype</th>
                             <th class="py-2 pr-4 font-medium">Category</th>
                             <th class="py-2 pr-4 font-medium">Affects</th>
-                            <th class="py-2 font-medium">Your genotype</th>
+                            <th class="py-2 pr-4 font-medium">Your genotype</th>
+                            <th class="py-2 font-medium"><span class="sr-only">Actions</span></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
@@ -259,9 +306,23 @@ new #[Title('My genetics')] class extends Component
                                 @if ($this->isLookedUp($variant))
                                     <td class="py-2 pr-4">{{ $variant->category }}</td>
                                     <td class="py-2 pr-4">{{ $variant->affects }}</td>
-                                    <td class="py-2">{{ $variant->genotypeEffect }}</td>
+                                    <td class="py-2 pr-4">{{ $variant->genotypeEffect }}</td>
+                                    <td class="py-2"></td>
                                 @else
-                                    <td class="py-2 text-zinc-500" colspan="3">Not looked up yet</td>
+                                    <td class="py-2 pr-4 text-zinc-500" colspan="3">
+                                        @if ($variant->status === LookupStatus::LookingUp)
+                                            Looking up…
+                                        @elseif ($variant->status === LookupStatus::Failed)
+                                            Lookup failed
+                                        @else
+                                            Not looked up yet
+                                        @endif
+                                    </td>
+                                    <td class="py-2">
+                                        @if ($variant->status !== LookupStatus::LookingUp)
+                                            <flux:button size="sm" wire:click="lookUp('{{ $variant->rsid }}')">Look up</flux:button>
+                                        @endif
+                                    </td>
                                 @endif
                             </tr>
                         @endforeach

@@ -7,6 +7,7 @@ use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
 use Modules\Genetics\Support\Extraction\MarkerExtractor;
 use Modules\Genetics\Support\Extraction\NullMarkerExtractor;
+use Modules\Intelligence\Contracts\ProfileRegistry;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class GeneticsServiceProvider extends ModuleServiceProvider
@@ -43,6 +44,8 @@ class GeneticsServiceProvider extends ModuleServiceProvider
             classPath: module_path($this->name, 'app/Livewire'),
             classViewPath: module_path($this->name, 'resources/views/livewire'),
         );
+
+        $this->app->make(ProfileRegistry::class)->register('genetics.lookup', config('genetics.lookup_profile'));
     }
 
     public function register(): void
