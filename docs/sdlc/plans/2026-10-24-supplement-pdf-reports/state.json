@@ -6,8 +6,8 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:10:11.601Z",
-  "stage": "execute",
+  "updated": "2026-10-24T17:10:16.737Z",
+  "stage": "verify",
   "stageHistory": [
     {
       "stage": "discover",
@@ -24,6 +24,10 @@
     {
       "stage": "execute",
       "at": "2026-10-24T16:47:44.465Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-24T17:10:16.737Z"
     }
   ],
   "paused": null,
@@ -121,7 +125,7 @@
     {
       "id": "templates-and-button",
       "name": "Second template, download button, docs",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "modern-template",
@@ -427,6 +431,16 @@
       "at": "2026-10-24T17:10:11.601Z",
       "event": "task done",
       "detail": "Real Chrome render test and docs"
+    },
+    {
+      "at": "2026-10-24T17:10:16.737Z",
+      "event": "phase finished",
+      "detail": "Second template, download button, docs (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-24T17:10:16.737Z",
+      "event": "advanced",
+      "detail": "verify"
     }
   ],
   "cairnVersion": "0.3.0",
