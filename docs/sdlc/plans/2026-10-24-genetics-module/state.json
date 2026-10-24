@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:46:44.361Z",
+  "updated": "2026-10-24T20:49:29.377Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -285,7 +285,7 @@
     {
       "id": "relevance",
       "name": "Your genetics on supplements and in the PDF",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "recommendations-panel",
@@ -335,10 +335,19 @@
             "Modules/Reports/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "personal genetic data in a download from a public route"
+          "riskReason": "personal genetic data in a download from a public route",
+          "branch": "task/genetics-module/pdf-genetics-section",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--pdf-genetics-section",
+          "base": "902a181fb45b35dfb06f98e13dc80a3b2d02723b",
+          "startedAt": "2026-10-24T20:46:58.578Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:49:29.375Z",
+          "tip": "62da5d9",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "3aaff0d1c3ed9989cfc14b23868f2631a2a21f05"
         }
       ]
     },
@@ -704,6 +713,31 @@
       "at": "2026-10-24T20:46:44.361Z",
       "event": "task done",
       "detail": "Recommendations matching and panel"
+    },
+    {
+      "at": "2026-10-24T20:46:58.579Z",
+      "event": "task started",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:47:14.446Z",
+      "event": "task implementing",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:48:28.744Z",
+      "event": "task reviewing",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:49:16.834Z",
+      "event": "task merging",
+      "detail": "Genetics section in the PDF"
+    },
+    {
+      "at": "2026-10-24T20:49:29.377Z",
+      "event": "task done",
+      "detail": "Genetics section in the PDF"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1372,6 +1406,46 @@
       ],
       "from": "task-review",
       "at": "2026-10-24T20:46:29.736Z"
+    },
+    {
+      "id": "s64",
+      "area": "tests",
+      "text": "Add a signed-in-with-match case to the opt-in real Chrome render test",
+      "where": [
+        "Modules/Reports/tests/Feature/ChromeRenderTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:48:28.620Z"
+    },
+    {
+      "id": "s65",
+      "area": "security",
+      "text": "Send Cache-Control: private, no-store on PDF downloads now that they can carry per-user genetics",
+      "where": [
+        "Modules/Reports/app/Http/Controllers/SupplementReportController.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:48:28.682Z"
+    },
+    {
+      "id": "s66",
+      "area": "tests",
+      "text": "Invert the Recommendations rule to an allow-list (Contracts, Data, Testing) so new private namespaces trip it",
+      "where": [
+        "Modules/Reports/tests/Unit/BoundaryTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:49:16.709Z"
+    },
+    {
+      "id": "s67",
+      "area": "quality",
+      "text": "Use dedicated CSS classes for the genotype line and disclaimer instead of reusing grade/empty",
+      "where": [
+        "Modules/Reports/resources/views/sections/genetics.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:49:16.773Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
