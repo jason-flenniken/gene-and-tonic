@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T20:27:11.818Z",
+  "updated": "2026-10-24T20:30:54.761Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -182,7 +182,7 @@
     {
       "id": "uploads-and-lookups",
       "name": "Uploads, gene lookups, AI extraction",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "upload-parsing",
@@ -266,10 +266,19 @@
             "composer.lock"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "new dependency, untrusted document text sent to a model, model output persisted"
+          "riskReason": "new dependency, untrusted document text sent to a model, model output persisted",
+          "branch": "task/genetics-module/pdf-extraction",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--pdf-extraction",
+          "base": "fa53c853a9610c9018a03081bf5c065a525fdac5",
+          "startedAt": "2026-10-24T20:27:26.208Z",
+          "level": "standard",
+          "doneAt": "2026-10-24T20:30:54.760Z",
+          "tip": "da6d22b",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "836da959b56db09da88aa0595f7507c29a85ff50"
         }
       ]
     },
@@ -620,6 +629,31 @@
       "at": "2026-10-24T20:27:11.818Z",
       "event": "task done",
       "detail": "Gene lookup with Firecrawl and AI"
+    },
+    {
+      "at": "2026-10-24T20:27:26.209Z",
+      "event": "task started",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:27:43.250Z",
+      "event": "task implementing",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:29:41.724Z",
+      "event": "task reviewing",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:30:40.573Z",
+      "event": "task merging",
+      "detail": "AI extraction for PDFs and unknown formats"
+    },
+    {
+      "at": "2026-10-24T20:30:54.761Z",
+      "event": "task done",
+      "detail": "AI extraction for PDFs and unknown formats"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1158,6 +1192,76 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T20:26:59.992Z"
+    },
+    {
+      "id": "s51",
+      "area": "tests",
+      "text": "Real-render check against a multi-page lab-style PDF with embedded fonts (synthetic data)",
+      "where": [
+        "Modules/Genetics/tests/Feature/ExtractionTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:29:41.527Z"
+    },
+    {
+      "id": "s52",
+      "area": "perf",
+      "text": "Page/size guard before pdfparser loads a large PDF into memory",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:29:41.592Z"
+    },
+    {
+      "id": "s53",
+      "area": "quality",
+      "text": "Cache the reference gene list used for line filtering",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T20:29:41.657Z"
+    },
+    {
+      "id": "s54",
+      "area": "quality",
+      "text": "Drop a line that doesn't fit whole under max_chars instead of truncating mid-token",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T20:30:27.594Z"
+    },
+    {
+      "id": "s55",
+      "area": "security",
+      "text": "Keep only extracted rsIDs that appear in the lines sent to the model (blocks invented/injected rows); add a test",
+      "where": [
+        "Modules/Genetics/app/Support/ExtractionOutputBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:30:40.366Z"
+    },
+    {
+      "id": "s56",
+      "area": "security",
+      "text": "Size/page pre-check for PDFs and a worker memory guard; pdfparser is unbounded on crafted files",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/LocalTextExtractor.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:30:40.430Z"
+    },
+    {
+      "id": "s57",
+      "area": "quality",
+      "text": "Scrub invalid UTF-8 before the /u regexes; optionally strip non-marker tokens (names) from sent lines",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/AiMarkerExtractor.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T20:30:40.506Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
