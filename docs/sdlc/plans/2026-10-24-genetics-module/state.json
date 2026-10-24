@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "slug": "genetics-module",
+  "title": "Genetics module",
+  "track": "feature",
+  "branch": "feature/genetics-module",
+  "base": "main",
+  "created": "2026-10-24T17:56:37.442Z",
+  "updated": "2026-10-24T17:56:37.442Z",
+  "stage": "discover",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-24T17:56:37.442Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {},
+  "phases": [],
+  "evidence": {},
+  "drift": [],
+  "log": [
+    {
+      "at": "2026-10-24T17:56:37.442Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-24T17:56:37.442Z",
+      "event": "level",
+      "detail": "standard"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard"
+}
