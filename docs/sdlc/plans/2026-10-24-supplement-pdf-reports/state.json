@@ -6,8 +6,8 @@
   "branch": "feature/supplement-pdf-reports",
   "base": "main",
   "created": "2026-10-24T16:33:31.229Z",
-  "updated": "2026-10-24T17:20:00.463Z",
-  "stage": "ship",
+  "updated": "2026-10-24T17:20:07.939Z",
+  "stage": "learn",
   "stageHistory": [
     {
       "stage": "discover",
@@ -36,6 +36,10 @@
     {
       "stage": "ship",
       "at": "2026-10-24T17:16:39.151Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-24T17:20:07.938Z"
     }
   ],
   "paused": null,
@@ -521,6 +525,11 @@
       "at": "2026-10-24T17:20:00.463Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-24T17:20:07.939Z",
+      "event": "advanced",
+      "detail": "learn"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1014,10 +1023,5 @@
     }
   ],
   "planHash": "5bc9c3ce6894effc",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-24T17:18:07.119Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
