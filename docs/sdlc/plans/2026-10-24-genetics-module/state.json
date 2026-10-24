@@ -6,7 +6,7 @@
   "branch": "feature/genetics-module",
   "base": "main",
   "created": "2026-10-24T17:56:37.442Z",
-  "updated": "2026-10-24T19:34:27.743Z",
+  "updated": "2026-10-24T19:36:02.666Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -127,16 +127,19 @@
             "Modules/Supplements/tests/Unit/ResearchFindingsBuilderTest.php"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "untrusted model output and scraped sources persisted and rendered, migration",
-          "substep": "implementing",
           "branch": "task/genetics-module/supplement-interactions",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-module--supplement-interactions",
           "base": "5a7f328485ef4812f9b66c8da275cb1f3e2733b8",
           "startedAt": "2026-10-24T19:31:37.778Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-24T19:36:02.665Z",
+          "tip": "fce4e7b",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "6e601ba9cf2aa206b3b056e4fa92aceeea998662"
         },
         {
           "id": "genetics-page",
@@ -460,6 +463,21 @@
       "at": "2026-10-24T19:34:27.743Z",
       "event": "task done",
       "detail": "Demo-user login"
+    },
+    {
+      "at": "2026-10-24T19:35:01.075Z",
+      "event": "task reviewing",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:35:53.900Z",
+      "event": "task merging",
+      "detail": "Gene interactions in supplement research"
+    },
+    {
+      "at": "2026-10-24T19:36:02.666Z",
+      "event": "task done",
+      "detail": "Gene interactions in supplement research"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -628,6 +646,76 @@
       ],
       "from": "security-review",
       "at": "2026-10-24T19:34:17.089Z"
+    },
+    {
+      "id": "s14",
+      "area": "tests",
+      "text": "Let FakeWebResearcher queue a different result or failure per call so multi-search tests need no inline researcher",
+      "where": [
+        "Modules/Intelligence/app/Testing/FakeWebResearcher.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:35:00.927Z"
+    },
+    {
+      "id": "s15",
+      "area": "ux",
+      "text": "Put a re-run action next to the 'Re-run research to check genetic interactions' hint",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-24T19:35:01.002Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Delete/create gene interactions through the supplement relation for consistency with other child rows",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentResearchRepository.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:35:44.140Z"
+    },
+    {
+      "id": "s17",
+      "area": "quality",
+      "text": "Normalise URLs (trailing slash, fragment) when de-duplicating merged sources",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:35:44.212Z"
+    },
+    {
+      "id": "s18",
+      "area": "tests",
+      "text": "Cover a gene search that returns an empty list",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-24T19:35:44.280Z"
+    },
+    {
+      "id": "s19",
+      "area": "security",
+      "text": "Cap the number of gene_interactions accepted per run (e.g. 30) with a test",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:35:53.776Z"
+    },
+    {
+      "id": "s20",
+      "area": "quality",
+      "text": "Guard the gene_query sprintf against a misconfigured format (catch ValueError, skip the gene search) or document the single %s",
+      "where": [
+        "Modules/Supplements/app/Actions/ResearchSupplement.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-24T19:35:53.838Z"
     }
   ],
   "planHash": "1e04af42eed00fb2",
