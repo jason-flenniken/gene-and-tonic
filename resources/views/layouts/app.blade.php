@@ -17,8 +17,20 @@
     </head>
     <body class="min-h-screen bg-white antialiased dark:bg-zinc-800">
         <header class="border-b border-zinc-200 dark:border-zinc-700">
-            <div class="mx-auto max-w-5xl px-4 py-4">
+            <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
                 <flux:heading size="lg">{{ config('app.name', 'Laravel') }}</flux:heading>
+
+                @auth
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-zinc-600 dark:text-zinc-300">{{ auth()->user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <flux:button type="submit" size="sm" variant="ghost">Sign out</flux:button>
+                        </form>
+                    </div>
+                @else
+                    <flux:link href="{{ route('login') }}">Sign in</flux:link>
+                @endauth
             </div>
         </header>
 
