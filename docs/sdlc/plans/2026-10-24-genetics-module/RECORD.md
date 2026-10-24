@@ -3,7 +3,7 @@
 ## Links
 - PRD: docs/sdlc/plans/2026-10-24-genetics-module/prd.md
 - Plan: docs/sdlc/plans/2026-10-24-genetics-module/plan.md
-- PR: <pending>
+- PR: none (repo has no remote); merged locally into main
 - Tracker: none
 
 ## Why
