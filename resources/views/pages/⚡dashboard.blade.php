@@ -40,9 +40,10 @@ new #[Title('Dashboard')] class extends Component
     @if ($tab === 'overview')
         <div role="tabpanel" data-panel="overview">
             {{-- panel:overview --}}
-            <flux:card>
-                <flux:text>Overview will appear here.</flux:text>
-            </flux:card>
+            <div class="grid gap-6 md:grid-cols-2">
+                <livewire:supplements::stats />
+                <livewire:intelligence::usage-summary />
+            </div>
         </div>
     @elseif ($tab === 'supplements')
         <div role="tabpanel" data-panel="supplements">
@@ -52,9 +53,7 @@ new #[Title('Dashboard')] class extends Component
     @else
         <div role="tabpanel" data-panel="usage">
             {{-- panel:usage --}}
-            <flux:card>
-                <flux:text>AI usage will appear here.</flux:text>
-            </flux:card>
+            <livewire:intelligence::usage-log />
         </div>
     @endif
 </div>
