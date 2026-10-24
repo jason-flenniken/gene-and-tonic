@@ -114,4 +114,20 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Demo User
+    |--------------------------------------------------------------------------
+    |
+    | The single account created by DemoUserSeeder. Override the defaults with
+    | DEMO_USER_NAME, DEMO_USER_EMAIL and DEMO_USER_PASSWORD.
+    |
+    */
+
+    'demo' => [
+        'name' => env('DEMO_USER_NAME', 'Demo User'),
+        'email' => env('DEMO_USER_EMAIL', 'demo@example.com'),
+        'password' => env('DEMO_USER_PASSWORD', 'password'),
+    ],
+
 ];
