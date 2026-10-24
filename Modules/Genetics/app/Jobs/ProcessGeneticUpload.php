@@ -32,6 +32,8 @@ class ProcessGeneticUpload implements ShouldQueue
 
     public const NO_MARKERS = 'No genetic markers found in this file.';
 
+    public const TOO_MANY_MARKERS = 'This file has too many markers. Upload a raw DNA export or a shorter marker list.';
+
     public const GENERIC_ERROR = 'Processing failed unexpectedly. Try uploading the file again.';
 
     private const CHUNK = 1000;
@@ -130,9 +132,23 @@ class ProcessGeneticUpload implements ShouldQueue
             $upload->user_id, $variant->rsid, $variant->genotype, $variant->gene, $upload->original_name, $upload->id,
         );
 
-        [$found, $stored] = $parser?->kind() === ParsedKind::RawExport
-            ? $this->storeKnown($parser->parse($absolutePath), $store)
-            : $this->storeAll($parser?->parse($absolutePath) ?? $extractor->extract($absolutePath, $extension), $store);
+        if ($parser?->kind() === ParsedKind::RawExport) {
+            [$found, $stored] = $this->storeKnown($parser->parse($absolutePath), $store);
+        } else {
+            $variants = $this->boundedList($parser?->parse($absolutePath) ?? $extractor->extract($absolutePath, $extension));
+
+            if ($variants === null) {
+                $this->markFailed($upload, self::TOO_MANY_MARKERS);
+
+                return;
+            }
+
+            foreach ($variants as $variant) {
+                $store($variant);
+            }
+
+            $found = $stored = count($variants);
+        }
 
         if ($found === 0) {
             $this->markFailed($upload, self::NO_MARKERS);
@@ -198,22 +214,26 @@ class ProcessGeneticUpload implements ShouldQueue
     }
 
     /**
-     * A marker list or extractor result: keep every row.
+     * A marker list or extractor result, read in full before anything is
+     * written. Null when it holds more rows than genetics.max_marker_rows.
      *
      * @param  iterable<ParsedVariant>  $variants
-     * @param  callable(ParsedVariant): mixed  $store
-     * @return array{int, int} found and stored counts
+     * @return list<ParsedVariant>|null
      */
-    private function storeAll(iterable $variants, callable $store): array
+    private function boundedList(iterable $variants): ?array
     {
-        $count = 0;
+        $max = (int) config('genetics.max_marker_rows');
+        $list = [];
 
         foreach ($variants as $variant) {
-            $store($variant);
-            $count++;
+            if (count($list) === $max) {
+                return null;
+            }
+
+            $list[] = $variant;
         }
 
-        return [$count, $count];
+        return $list;
     }
 
     private function markFailed(GeneticUpload $upload, string $message): void

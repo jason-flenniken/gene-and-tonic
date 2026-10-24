@@ -88,6 +88,19 @@ it('detects an FTDNA CSV without comment lines', function () {
         ->and(geneticsParsedRows($parser, $path))->toBe([['rs4680', 'AG', null]]);
 });
 
+it('detects a genome CSV with chromosome and position columns as a raw export', function (string $header, array $expected) {
+    $path = geneticsTempFile($header."\n".'rs1801133,1,11796321,AG,X'."\n");
+
+    $parser = (new FormatDetector)->detect($path, 'csv');
+
+    expect($parser)->toBeInstanceOf(VendorCsvParser::class)
+        ->and($parser->kind())->toBe(ParsedKind::RawExport)
+        ->and(geneticsParsedRows($parser, $path))->toBe($expected);
+})->with([
+    'lowercase' => ['rsid,chromosome,position,genotype', [['rs1801133', 'AG', null]]],
+    'aliases and extra column' => ['SNP,Chromosome,Position,Result,Note', [['rs1801133', 'AG', null]]],
+]);
+
 it('detects a marker CSV by header aliases, keeping rows with a bad gene but no others that are invalid', function () {
     $parser = (new FormatDetector)->detect(geneticsFixture('markers.csv'), 'csv');
 

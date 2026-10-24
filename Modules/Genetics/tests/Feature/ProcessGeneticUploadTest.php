@@ -119,6 +119,62 @@ it('stores 1 of 1 known and 5 unknown rsIDs from a raw export, and all 6 from a 
     'marker CSV' => ["rsid,genotype\nrs1801133,AG\nrs90000051,AG\nrs90000052,AG\nrs90000053,AG\nrs90000054,AG\nrs90000055,AG\n", 'csv', 6, 5],
 ]);
 
+it('fails a marker list over the row cap without writing any rows', function () {
+    config(['genetics.max_marker_rows' => 5]);
+    $rows = array_map(fn (int $i): string => 'rs'.(90000060 + $i).',AG', range(1, 6));
+    $upload = queuedUpload($this->user, "rsid,genotype\n".implode("\n", $rows)."\n", 'csv', isFixture: false);
+    $referenceRows = GeneVariant::count();
+
+    ProcessGeneticUpload::dispatchSync($upload->id);
+
+    expect($upload->refresh()->status)->toBe(UploadStatus::Failed)
+        ->and($upload->error)->toBe('This file has too many markers. Upload a raw DNA export or a shorter marker list.')
+        ->and($upload->path)->toBeNull()
+        ->and(GeneVariant::count())->toBe($referenceRows)
+        ->and(UserVariant::count())->toBe(0);
+});
+
+it('applies the row cap to extractor results too', function () {
+    config(['genetics.max_marker_rows' => 1]);
+    app()->instance(MarkerExtractor::class, new class implements MarkerExtractor
+    {
+        public function extract(string $absolutePath, string $extension): array
+        {
+            return [new ParsedVariant('rs90000071', 'AG', null), new ParsedVariant('rs90000072', 'AG', null)];
+        }
+    });
+    $upload = queuedUpload($this->user, '23andme.txt', 'pdf');
+    $referenceRows = GeneVariant::count();
+
+    ProcessGeneticUpload::dispatchSync($upload->id);
+
+    expect($upload->refresh()->error)->toBe('This file has too many markers. Upload a raw DNA export or a shorter marker list.')
+        ->and(GeneVariant::count())->toBe($referenceRows)
+        ->and(UserVariant::count())->toBe(0);
+});
+
+it('stores a marker list exactly at the row cap', function () {
+    config(['genetics.max_marker_rows' => 6]);
+    $upload = queuedUpload($this->user, 'markers.csv', 'csv');
+
+    ProcessGeneticUpload::dispatchSync($upload->id);
+
+    expect($upload->refresh()->status)->toBe(UploadStatus::Complete)
+        ->and(UserVariant::count())->toBe(6);
+});
+
+it('treats a CSV with chromosome and position columns as a raw export', function () {
+    $upload = queuedUpload($this->user, "rsid,chromosome,position,genotype\nrs1801133,1,1,AG\nrs90000081,1,2,AG\nrs90000082,1,3,AG\nrs90000083,1,4,AG\nrs90000084,1,5,AG\nrs90000085,1,6,AG\n", 'csv', isFixture: false);
+    $referenceRows = GeneVariant::count();
+
+    ProcessGeneticUpload::dispatchSync($upload->id);
+
+    expect(storedGenotypes($this->user))->toBe(['rs1801133' => 'AG'])
+        ->and($upload->refresh()->found_count)->toBe(6)
+        ->and(GeneVariant::count())->toBe($referenceRows)
+        ->and(GeneVariant::where('status', LookupStatus::Pending)->count())->toBe(0);
+});
+
 it('lets a second upload update an existing genotype so the newest wins', function () {
     $first = queuedUpload($this->user, "rsid,genotype\nrs90000031,AG\nrs90000032,CC\n", 'csv', 'first.csv', isFixture: false);
     ProcessGeneticUpload::dispatchSync($first->id);

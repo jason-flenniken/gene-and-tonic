@@ -5,14 +5,18 @@ namespace Modules\Genetics\Support\Parsing;
 /**
  * A short marker list: a comma-separated header naming an rsID column and a
  * genotype column (case-insensitive aliases), with an optional gene column.
- * Checked last, because a vendor CSV header also matches these aliases.
+ * Checked last: a header that also has chromosome and position columns is a
+ * whole-genome export, which VendorCsvParser claims first.
  */
 final class MarkerCsvParser implements RowParser
 {
-    private const RSID = ['rsid', 'snp', 'marker', 'variant'];
+    /** @var list<string> */
+    public const RSID = ['rsid', 'snp', 'marker', 'variant'];
 
-    private const GENOTYPE = ['genotype', 'result', 'call', 'alleles'];
+    /** @var list<string> */
+    public const GENOTYPE = ['genotype', 'result', 'call', 'alleles'];
 
+    /** @var list<string> */
     private const GENE = ['gene', 'symbol'];
 
     public function matches(array $headLines): bool
@@ -62,23 +66,13 @@ final class MarkerCsvParser implements RowParser
     {
         $names = array_map(strtolower(...), Lines::csv($header));
 
-        $find = function (array $aliases) use ($names): ?int {
-            foreach ($names as $index => $name) {
-                if (in_array($name, $aliases, true)) {
-                    return $index;
-                }
-            }
-
-            return null;
-        };
-
-        $rsid = $find(self::RSID);
-        $genotype = $find(self::GENOTYPE);
+        $rsid = Lines::columnIndex($names, self::RSID);
+        $genotype = Lines::columnIndex($names, self::GENOTYPE);
 
         if ($rsid === null || $genotype === null) {
             return null;
         }
 
-        return ['rsid' => $rsid, 'genotype' => $genotype, 'gene' => $find(self::GENE)];
+        return ['rsid' => $rsid, 'genotype' => $genotype, 'gene' => Lines::columnIndex($names, self::GENE)];
     }
 }

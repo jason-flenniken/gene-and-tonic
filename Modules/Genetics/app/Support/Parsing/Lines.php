@@ -72,4 +72,21 @@ final class Lines
     {
         return array_map(fn (?string $field): string => trim((string) $field), str_getcsv($line, ',', '"', ''));
     }
+
+    /**
+     * The position of the first header name that is one of the aliases.
+     *
+     * @param  list<string>  $names  lowercase header names
+     * @param  list<string>  $aliases
+     */
+    public static function columnIndex(array $names, array $aliases): ?int
+    {
+        foreach ($names as $index => $name) {
+            if (in_array($name, $aliases, true)) {
+                return $index;
+            }
+        }
+
+        return null;
+    }
 }
