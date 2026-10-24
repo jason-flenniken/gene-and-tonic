@@ -17,6 +17,11 @@ return [
         'prompt' => 'supplements::prompts.research',
     ],
 
+    /*
+    | Research runs active longer than this are failed by supplements:reap-stale.
+    */
+    'reap_after_minutes' => (int) env('RESEARCH_REAP_AFTER_MINUTES', 15),
+
     'research' => [
         'domains' => [
             'pubmed.ncbi.nlm.nih.gov',

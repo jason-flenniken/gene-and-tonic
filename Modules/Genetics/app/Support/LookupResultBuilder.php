@@ -5,6 +5,7 @@ namespace Modules\Genetics\Support;
 use InvalidArgumentException;
 use Modules\Genetics\Data\Genotype;
 use Modules\Intelligence\Data\SourceDocument;
+use Modules\Shared\Support\SourceUrl;
 
 /**
  * Turns the model's untrusted structured answer into a LookupResult, keeping only valid, cited data.
@@ -73,25 +74,20 @@ final class LookupResultBuilder
         foreach ($ids as $id) {
             $source = is_string($id) ? ($byId[$id] ?? null) : null;
 
-            if ($source === null || ! self::isHttpUrl($source->url)) {
+            $url = $source === null ? null : SourceUrl::sanitize($source->url);
+
+            if ($source === null || $url === null) {
                 continue;
             }
 
-            $kept[$source->url] ??= [
-                'url' => mb_substr($source->url, 0, 2000),
+            $kept[$url] ??= [
+                'url' => $url,
                 'title' => mb_substr(trim($source->title), 0, 500),
                 'domain' => mb_substr(trim($source->domain), 0, 255),
             ];
         }
 
         return array_values($kept);
-    }
-
-    private static function isHttpUrl(string $url): bool
-    {
-        return mb_strlen($url) <= 2000
-            && filter_var($url, FILTER_VALIDATE_URL) !== false
-            && in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true);
     }
 
     private static function gene(mixed $value): ?string

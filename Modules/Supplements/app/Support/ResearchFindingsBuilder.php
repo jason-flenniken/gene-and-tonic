@@ -3,6 +3,7 @@
 namespace Modules\Supplements\Support;
 
 use Modules\Intelligence\Data\SourceDocument;
+use Modules\Shared\Support\SourceUrl;
 use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Enums\GeneRelation;
 
@@ -28,6 +29,12 @@ final class ResearchFindingsBuilder
             || ! is_array($output['studies'] ?? null)) {
             throw new UnusableResearchOutput('Missing or mistyped top-level keys.');
         }
+
+        // Sources with an unsafe URL are dropped, so nothing can cite them either.
+        $sources = array_values(array_filter(
+            $sources,
+            fn (SourceDocument $s): bool => SourceUrl::sanitize($s->url) !== null,
+        ));
 
         $byId = [];
         foreach ($sources as $source) {
