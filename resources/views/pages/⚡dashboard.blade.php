@@ -46,7 +46,7 @@ new #[Title('Home')] class extends Component
     #[Computed]
     public function subtitle(): string
     {
-        $supplements = count(app(SupplementResearchReader::class)->all());
+        $supplements = app(SupplementResearchReader::class)->count();
         $parts = [now()->format('l, F j'), $supplements.' '.str('supplement')->plural($supplements)];
 
         $userId = auth()->id();

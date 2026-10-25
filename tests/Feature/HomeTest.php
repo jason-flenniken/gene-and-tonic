@@ -106,3 +106,13 @@ it('shows a user with no profile the add-results prompt', function () {
         ->assertSeeHtml('href="'.route('genetics.profile').'"')
         ->assertSee('0 variants');
 });
+
+it('shows the same supplement total in the subtitle and the stat, including a supplement with no research', function () {
+    homeSupplement();
+    Supplement::factory()->create();
+
+    $this->actingAs(homeUser())->get('/')
+        ->assertOk()
+        ->assertSee('· 2 supplements · 2 variants')
+        ->assertSeeInOrder(['data-stat="supplements"', 'Supplements', '2']);
+});
