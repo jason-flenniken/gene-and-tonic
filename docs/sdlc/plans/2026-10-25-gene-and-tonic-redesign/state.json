@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:36:14.809Z",
+  "updated": "2026-10-25T19:45:28.239Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -594,7 +594,7 @@
     {
       "id": "polish",
       "name": "Polish",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "polish-a11y",
@@ -613,9 +613,18 @@
             "Modules/*/tests/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/polish-a11y",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--polish-a11y",
+          "base": "2d605a7bd0469666d5e2bbe64d7364100251653b",
+          "startedAt": "2026-10-25T19:36:39.098Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:45:28.239Z",
+          "tip": "fa8ddbe",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "13e24399df1d2ef31a2aa10c5305baf1727b2836"
         }
       ]
     }
@@ -705,6 +714,24 @@
       "at": "2026-10-25T19:31:37.944Z",
       "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
       "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php",
+      "at": "2026-10-25T19:45:28.239Z",
+      "reason": "changed outside task \"Phone, keyboard and loading-state pass\" scope (found at task done)",
+      "task": "polish-a11y"
+    },
+    {
+      "path": "Modules/Supplements/app/Data/SupplementSummaryData.php",
+      "at": "2026-10-25T19:45:28.239Z",
+      "reason": "changed outside task \"Phone, keyboard and loading-state pass\" scope (found at task done)",
+      "task": "polish-a11y"
+    },
+    {
+      "path": "resources/css/app.css",
+      "at": "2026-10-25T19:45:28.239Z",
+      "reason": "changed outside task \"Phone, keyboard and loading-state pass\" scope (found at task done)",
+      "task": "polish-a11y"
     }
   ],
   "log": [
@@ -1236,6 +1263,46 @@
       "at": "2026-10-25T19:36:14.809Z",
       "event": "phase finished",
       "detail": "Home (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:36:39.099Z",
+      "event": "task started",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:36:39.234Z",
+      "event": "task implementing",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:43:30.865Z",
+      "event": "task reviewing",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:45:08.910Z",
+      "event": "task merging",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "drift",
+      "detail": "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Data/SupplementSummaryData.php"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "drift",
+      "detail": "resources/css/app.css"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "task done",
+      "detail": "Phone, keyboard and loading-state pass"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1712,6 +1779,66 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:35:53.135Z"
+    },
+    {
+      "id": "s48",
+      "area": "perf",
+      "text": "your-genes reads the profile twice per render (itself + VariantLinks); let VariantLinks reuse it or add a write-flushed Genetics memo",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:43:30.738Z"
+    },
+    {
+      "id": "s49",
+      "area": "quality",
+      "text": "Fold hasProfile into one reader call so the no-match case is one profile read",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡top-match.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:43:30.801Z"
+    },
+    {
+      "id": "s50",
+      "area": "tests",
+      "text": "Two-user test on one reader instance proving the profile cache never serves user A's data to user B",
+      "where": [
+        "Modules/Recommendations/tests/Feature/GeneticRelevanceReaderTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:44:14.311Z"
+    },
+    {
+      "id": "s51",
+      "area": "perf",
+      "text": "forUserAndSupplement loads the whole research listing even on the single-supplement page; use forSupplement when the listing isn't loaded yet",
+      "where": [
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:45:08.716Z"
+    },
+    {
+      "id": "s52",
+      "area": "tests",
+      "text": "Document/helper for forgetScopedInstances() in read-write-read tests now that the relevance reader is scoped",
+      "where": [
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:45:08.779Z"
+    },
+    {
+      "id": "s53",
+      "area": "ux",
+      "text": "loading targets by bare action name disable every retry/lookUp button at once; target with parameters",
+      "where": [
+        "resources/views/components/ui/button.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:45:08.847Z"
     }
   ]
 }
