@@ -81,3 +81,13 @@ _2026-10-25 18:30_
 **Decision:** Outcome: Gene & Tonic redesign (sidebar shell, 5 real routes, tokens/Figtree/brand, x-ui components, every screen rebuilt to the mocks) plus new data: effect titles, topic tags + kicker + effect categories (fixed enum), variant names, linked-to-supplement chips/filter, gene-match counts on cards, sources count, AI usage period control and cost by task | User: signed-in demo user (owns genetic data) and guests (Home, Supplements, a supplement, AI usage) | Why now: demo to show off clean Laravel code and product design; design approved | Success: HANDOFF §11 checklist (screens match at 1440/390, Figtree only, light only, keyboard nav, honest data, correct allele pairs, ?tab= redirects, favicon/title/PDF say Gene & Tonic, composer test green) | Constraint: CLAUDE.md module boundaries and genetic-data rules win; new model fields shown only when present (no backfill spend); genotypes owner-only | Out of scope: AI call subject, CSV export, Add to stack, Home search, dark theme, backfill command, mid-plan review stop
 **Why:** confirmed by the user
 _2026-10-25 18:30_
+
+### 17. How does Genetics get variant→supplement links for the chips and the Linked filter?
+**Decision:** A small contract in Shared (VariantLinks) taking the user's rsIDs and gene symbols only (no genotypes) and returning rsID → list of linked supplement id+name; Shared binds an empty default, Recommendations rebinds it using a new public Supplements listing method; Genetics depends only on Shared
+**Why:** Genetics may not depend on Recommendations; a slot can draw chips but cannot feed the filter; dependency inversion through Shared keeps the module map intact
+_2026-10-25 18:39_
+
+### 18. What counts as 'linked'?
+**Decision:** A variant is linked to a supplement when it is one of that supplement's gene matches for the user (same rules as the Your genes panel), so the contract takes the user id and Recommendations reads the profile itself; amends decision 17's input shape
+**Why:** keeps 'linked', 'gene matches' and the Home hero on one definition; still no genotypes pass through Shared
+_2026-10-25 18:39_
