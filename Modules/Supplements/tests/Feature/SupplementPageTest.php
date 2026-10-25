@@ -268,3 +268,13 @@ it('shows a guest no genotype or allele pair for matches that belong to another 
         ->assertSee('data-allele', false)
         ->assertSee('How does Magnesium fit my genes?');
 });
+
+it('hides the genes link from a signed-in user with no profile', function () {
+    $supplement = researchedSupplement();
+    FakeGeneticProfileReader::install();
+
+    $this->actingAs(User::factory()->create())
+        ->get(route('supplements.show', $supplement))->assertOk()
+        ->assertDontSee('data-genes-link', false)
+        ->assertDontSee('How does Magnesium fit my genes?');
+});

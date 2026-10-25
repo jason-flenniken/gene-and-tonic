@@ -247,13 +247,9 @@ new #[Title('Supplement')] class extends Component
                     @endif
                 </div>
             @else
-                @auth
-                    <button type="button" wire:click="$set('tab', 'genetics')" class="flex min-h-[52px] w-full items-center gap-3 rounded-row bg-lime-tint px-4 text-left text-[15px] font-medium text-ink hover:brightness-95" data-genes-link>
-                        <x-icon.helix class="size-5 shrink-0 text-juniper" />
-                        <span class="flex-1">How does {{ $research->name }} fit my genes?</span>
-                        <span aria-hidden="true" class="text-ink-subtle">&rsaquo;</span>
-                    </button>
-                @endauth
+                @foreach ($slotViews('supplement.overview-links') as $linkView)
+                    @include($linkView, ['supplementId' => $supplementId, 'name' => $research->name])
+                @endforeach
 
                 <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))]">
                     <section class="flex flex-col gap-3" data-section="effects">
