@@ -35,6 +35,18 @@ it('lists a user\'s variants with gene, genotype, category, affects and effect',
         ->assertSee('not medical advice or a diagnosis');
 });
 
+it('drops the Your genotype column and shows the effect under Affects', function () {
+    $this->seed(GeneVariantSeeder::class);
+    $user = User::factory()->create();
+    app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG');
+    $mthfr = GeneVariant::where('rsid', 'rs1801133')->sole();
+
+    $this->actingAs($user)->get('/?tab=genetics')
+        ->assertDontSee('Your genotype')
+        ->assertSee('Your AG')
+        ->assertSee($mthfr->genotype_effects['AG']);
+});
+
 it('sorts the list by gene', function () {
     $user = User::factory()->create();
     GeneVariant::factory()->create(['rsid' => 'rs1', 'gene' => 'ZZZ1']);

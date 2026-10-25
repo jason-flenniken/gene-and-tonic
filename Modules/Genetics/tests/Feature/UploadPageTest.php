@@ -166,5 +166,5 @@ it('shows a user only their own uploads', function () {
 it('exposes no client-settable upload id', function () {
     $component = Livewire::actingAs($this->user)->test('genetics::profile');
 
-    expect(array_keys($component->instance()->all()))->toEqualCanonicalizing(['rsid', 'genotype', 'gene', 'file']);
+    expect(array_keys($component->instance()->all()))->toEqualCanonicalizing(['rsid', 'genotype', 'gene', 'group', 'search', 'file']);
 });
