@@ -6,7 +6,7 @@
   "branch": "fix/genetics-dashboard-tab",
   "base": "main",
   "created": "2026-10-25T13:17:08.989Z",
-  "updated": "2026-10-25T13:21:14.774Z",
+  "updated": "2026-10-25T13:21:21.715Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -136,6 +136,11 @@
       "at": "2026-10-25T13:21:14.773Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T13:21:21.715Z",
+      "event": "step",
+      "detail": "opening-pr"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -189,7 +194,7 @@
   ],
   "step": {
     "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-25T13:20:29.614Z"
+    "name": "opening-pr",
+    "at": "2026-10-25T13:21:21.715Z"
   }
 }
