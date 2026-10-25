@@ -2,6 +2,7 @@
 
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Data\SupplementSummaryData;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Testing\FakeSupplementResearchReader;
 
@@ -39,4 +40,12 @@ it('returns null for a supplement it does not know', function () {
     FakeSupplementResearchReader::install()->with(fakeReaderResearch(7));
 
     expect(app(SupplementResearchReader::class)->forSupplement(99))->toBeNull();
+});
+
+it('lists the summaries it was given', function () {
+    $summary = new SupplementSummaryData(7, 'Magnesium', ResearchStatus::Complete, null, 1, 2, 3);
+
+    FakeSupplementResearchReader::install()->withSummary($summary);
+
+    expect(app(SupplementResearchReader::class)->all())->toBe([$summary]);
 });

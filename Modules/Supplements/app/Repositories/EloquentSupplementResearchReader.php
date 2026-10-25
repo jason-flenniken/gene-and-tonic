@@ -10,6 +10,7 @@ use Modules\Supplements\Data\MechanismData;
 use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Data\SupplementSummaryData;
 use Modules\Supplements\Enums\HealthTopic;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
@@ -69,18 +70,58 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
             ))->all()),
             completedAt: $research->completed_at !== null ? CarbonImmutable::instance($research->completed_at) : null,
             error: $research->error,
-            geneInteractions: array_values($supplement->geneInteractions->sortBy('position')->map(fn (SupplementGeneInteraction $g): GeneInteractionData => new GeneInteractionData(
-                gene: $g->gene,
-                rsid: $g->rsid,
-                allele: $g->allele,
-                relation: $g->relation,
-                explanation: $g->explanation,
-                sourceKeys: $this->keys($g->source_keys),
-            ))->all()),
+            geneInteractions: $this->interactions($supplement),
             geneticsChecked: $research->genetics_checked_at !== null,
             kicker: $research->kicker,
             topics: $this->topics($research->topics),
         );
+    }
+
+    public function all(): array
+    {
+        $supplements = Supplement::query()
+            ->with(['research', 'geneInteractions'])
+            ->withCount(['effects', 'studies', 'sources'])
+            ->whereHas('research')
+            ->orderBy('name')
+            ->get();
+
+        $summaries = [];
+
+        foreach ($supplements as $supplement) {
+            $research = $supplement->research;
+
+            if ($research === null) {
+                continue;
+            }
+
+            $summaries[] = new SupplementSummaryData(
+                supplementId: $supplement->id,
+                name: $supplement->name,
+                status: $research->status,
+                completedAt: $research->completed_at !== null ? CarbonImmutable::instance($research->completed_at) : null,
+                effectsCount: (int) $supplement->effects_count,
+                studiesCount: (int) $supplement->studies_count,
+                sourcesCount: (int) $supplement->sources_count,
+                topics: $this->topics($research->topics),
+                geneInteractions: $this->interactions($supplement),
+            );
+        }
+
+        return $summaries;
+    }
+
+    /** @return list<GeneInteractionData> */
+    private function interactions(Supplement $supplement): array
+    {
+        return array_values($supplement->geneInteractions->sortBy('position')->map(fn (SupplementGeneInteraction $g): GeneInteractionData => new GeneInteractionData(
+            gene: $g->gene,
+            rsid: $g->rsid,
+            allele: $g->allele,
+            relation: $g->relation,
+            explanation: $g->explanation,
+            sourceKeys: $this->keys($g->source_keys),
+        ))->all());
     }
 
     /** @return list<HealthTopic> */

@@ -4,6 +4,7 @@ namespace Modules\Supplements\Testing;
 
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Data\SupplementSummaryData;
 
 /**
  * In-memory SupplementResearchReader for other modules' tests.
@@ -12,6 +13,9 @@ class FakeSupplementResearchReader implements SupplementResearchReader
 {
     /** @var array<int, SupplementResearchData> */
     private array $research = [];
+
+    /** @var array<int, SupplementSummaryData> */
+    private array $summaries = [];
 
     public static function install(): self
     {
@@ -29,8 +33,20 @@ class FakeSupplementResearchReader implements SupplementResearchReader
         return $this;
     }
 
+    public function withSummary(SupplementSummaryData $summary): self
+    {
+        $this->summaries[$summary->supplementId] = $summary;
+
+        return $this;
+    }
+
     public function forSupplement(int $supplementId): ?SupplementResearchData
     {
         return $this->research[$supplementId] ?? null;
+    }
+
+    public function all(): array
+    {
+        return array_values($this->summaries);
     }
 }

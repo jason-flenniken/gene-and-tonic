@@ -40,11 +40,22 @@ class EloquentSupplementRepository implements SupplementRepository
         $supplement->delete();
     }
 
-    public function paginateWithResearch(int $perPage): LengthAwarePaginator
+    public function paginateWithResearch(int $perPage, string $status = 'all'): LengthAwarePaginator
     {
+        $statuses = match ($status) {
+            'complete' => [ResearchStatus::Complete],
+            'active' => [ResearchStatus::Queued, ResearchStatus::Searching, ResearchStatus::Analyzing],
+            'failed' => [ResearchStatus::Failed],
+            default => null,
+        };
+
         return Supplement::query()
             ->with('research')
-            ->withCount(['effects', 'studies'])
+            ->withCount(['effects', 'studies', 'sources'])
+            ->when($statuses !== null, fn ($query) => $query->whereHas(
+                'research',
+                fn ($research) => $research->whereIn('status', $statuses),
+            ))
             ->orderBy('name')
             ->paginate($perPage);
     }
