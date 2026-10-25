@@ -108,7 +108,7 @@ new class extends Component
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
-                    <thead class="border-b border-zinc-200 text-zinc-500 dark:border-zinc-700">
+                    <thead class="border-b border-zinc-200 text-zinc-500">
                         <tr>
                             <th class="py-2 pr-4 font-medium">Name</th>
                             <th class="py-2 pr-4 font-medium">Status</th>
@@ -117,7 +117,7 @@ new class extends Component
                             <th class="py-2"><span class="sr-only">Actions</span></th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <tbody class="divide-y divide-zinc-100">
                         @foreach ($this->supplements as $supplement)
                             <tr wire:key="supplement-{{ $supplement->id }}">
                                 <td class="py-2 pr-4">
@@ -127,7 +127,7 @@ new class extends Component
                                     @if ($supplement->research)
                                         <flux:badge color="{{ $supplement->research->status->color() }}" size="sm">{{ $supplement->research->status->label() }}</flux:badge>
                                         @if ($supplement->research->error)
-                                            <flux:text size="sm" class="mt-1 text-red-600 dark:text-red-400">{{ $supplement->research->error }}</flux:text>
+                                            <flux:text size="sm" class="mt-1 text-red-600">{{ $supplement->research->error }}</flux:text>
                                         @endif
                                     @endif
                                 </td>

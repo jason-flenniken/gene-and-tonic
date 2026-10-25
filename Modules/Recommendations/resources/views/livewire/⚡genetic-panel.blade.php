@@ -48,7 +48,7 @@ new class extends Component
         @else
             <div class="space-y-3">
                 @foreach ($relevance->matches as $match)
-                    <div wire:key="match-{{ $loop->index }}" class="rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
+                    <div wire:key="match-{{ $loop->index }}" class="rounded-lg border border-zinc-200 p-3">
                         <div class="flex flex-wrap items-center gap-2">
                             <flux:heading>{{ $match->gene }}</flux:heading>
                             <flux:badge size="sm">{{ $match->rsid }}</flux:badge>

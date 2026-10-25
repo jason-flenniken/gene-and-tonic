@@ -1,11 +1,102 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    /* Type */
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    /* Surfaces */
+    --color-canvas: #F6F4F0;          /* page background behind the white panel */
+    --color-surface: #FFFFFF;         /* the main content panel, cards */
+    --color-surface-muted: #FAF9F6;   /* list pane, table header, collapsed-group header */
+    --color-surface-sunken: #F1EFEA;  /* segmented-control track, secondary buttons */
+    --color-surface-input: #F6F4F0;   /* search and text inputs */
+
+    /* Lines */
+    --color-line: #ECE8E2;            /* card and panel borders */
+    --color-line-soft: #EFECE7;       /* row dividers inside cards */
+    --color-line-input: #E5E1DA;      /* input and chip borders */
+
+    /* Text */
+    --color-ink: #1E2421;             /* headings, primary text */
+    --color-ink-body: #2F3833;        /* long-form body copy */
+    --color-ink-muted: #55605B;       /* secondary text, captions (4.5:1+ on white and canvas) */
+    --color-ink-subtle: #6A726E;      /* meta lines, chevrons (4.5:1 on white) */
+    --color-ink-nav: #4A5550;         /* inactive sidebar links */
+
+    /* Brand: juniper (primary) and lime (accent) */
+    --color-juniper: #275E4B;         /* primary buttons, active nav, effect-allele fill */
+    --color-juniper-hover: #1A4436;
+    --color-juniper-tint: #EEF5F0;    /* hero cards, "your genotype" notes */
+    --color-juniper-line: #D9E8DF;    /* borders on juniper-tint surfaces, tags */
+    --color-lime: #C6E06A;            /* the mark only; never text */
+    --color-lime-pith: #EEF6D0;       /* the mark only */
+    --color-lime-tint: #F3F8E4;       /* notices, "ask" rows, lookup banner */
+
+    /* Status (dot + text pairs; dots are decorative, text carries meaning) */
+    --color-ok: #2C9A63;
+    --color-ok-text: #1F6B47;
+    --color-warn: #D98A2B;
+    --color-warn-text: #A65A12;
+    --color-bad: #C2412C;
+    --color-bad-text: #A3331F;
+
+    /* Variant-group tones: tile background / icon stroke (see HANDOFF.md, VariantGroup table) */
+    --color-tone-green-bg: #E4F1E9;  --color-tone-green-fg: #275E4B;
+    --color-tone-butter-bg: #FBF3D9; --color-tone-butter-fg: #8A6A10;
+    --color-tone-peach-bg: #FBEDE5;  --color-tone-peach-fg: #9E4824;  /* darkened from the mock (#B0532A) to pass 4.5:1 for tile labels */
+    --color-tone-coral-bg: #FDE9E4;  --color-tone-coral-fg: #B23A2E;
+    --color-tone-blue-bg: #E9F0FA;   --color-tone-blue-fg: #2F5E9E;
+    --color-tone-rose-bg: #FBE7EA;   --color-tone-rose-fg: #A33A4F;
+    --color-tone-teal-bg: #E3F2F2;   --color-tone-teal-fg: #2A6E6E;
+    --color-tone-indigo-bg: #E8ECF6; --color-tone-indigo-fg: #3F4F86;
+    --color-tone-leaf-bg: #EAF4E1;   --color-tone-leaf-fg: #4C7A2A;
+    --color-tone-stone-bg: #F1EFEA;  --color-tone-stone-fg: #55605B;
+
+    /* Flux theming: accent drives variant="primary" buttons, links, focus rings */
+    --color-accent: #275E4B;
+    --color-accent-content: #275E4B;
+    --color-accent-foreground: #FFFFFF;
+
+    /*
+     * Optional: warm the zinc scale Flux uses for its inputs, borders and text so
+     * stock Flux components sit on the canvas without looking cold. Remove this
+     * block if it fights a Flux component you rely on.
+     */
+    --color-zinc-50: #FAF9F6;
+    --color-zinc-100: #F1EFEA;
+    --color-zinc-200: #E5E1DA;
+    --color-zinc-300: #D3CEC5;
+    --color-zinc-400: #9C9F99;
+    --color-zinc-500: #6A726E;
+    --color-zinc-600: #55605B;
+    --color-zinc-700: #3B4440;
+    --color-zinc-800: #1E2421;
+    --color-zinc-900: #161B18;
+    --color-zinc-950: #0E1210;
+
+    /* Radii (rounded-panel, rounded-section, ...) */
+    --radius-panel: 24px;    /* the white page panel */
+    --radius-section: 18px;  /* hero card, section cards, split list */
+    --radius-card: 16px;     /* stat cards, effect cards, supplement cards */
+    --radius-row: 14px;      /* link rows, notices */
+    --radius-tile: 10px;     /* icon tiles, filter chips */
+
+    /* Shadows */
+    --shadow-segment: 0 1px 3px rgba(30, 36, 33, 0.12);  /* active segmented-control pill */
+}
+
+@layer base {
+    html {
+        color: var(--color-ink);
+        background: var(--color-canvas);
+        font-feature-settings: 'tnum' 0;
+    }
+}
+
+@utility tabular {
+    font-variant-numeric: tabular-nums;
 }
