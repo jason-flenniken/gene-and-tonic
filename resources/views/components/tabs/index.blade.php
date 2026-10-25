@@ -1,3 +1,3 @@
-<div role="tablist" {{ $attributes->class('flex gap-1 border-b border-zinc-200') }}>
+<x-ui.segmented {{ $attributes }}>
     {{ $slot }}
-</div>
+</x-ui.segmented>
