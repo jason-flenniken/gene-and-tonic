@@ -135,6 +135,12 @@ it('shows the Gene & Tonic brand as inline-styled text at 8pt or more in every t
                 return false;
             }
 
+            expect($pdf->getHeaderHtml())->toContain(config("reports.templates.{$key}.label"));
+
+            if ($key === 'clinical') {
+                expect($pdf->getHeaderHtml())->toContain('Supplement research report');
+            }
+
             foreach ([$pdf->getHeaderHtml(), $pdf->getFooterHtml()] as $html) {
                 expect($html)->toContain('Gene &amp; Tonic');
                 preg_match_all('/font-size:\s*([\d.]+)pt/', $html, $sizes);
