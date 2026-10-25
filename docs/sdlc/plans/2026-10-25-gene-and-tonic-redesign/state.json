@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:55:31.442Z",
+  "updated": "2026-10-25T18:56:47.018Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -104,7 +104,7 @@
           "status": "in_progress",
           "fixRound": 0,
           "risky": false,
-          "substep": "implementing",
+          "substep": "reviewing",
           "branch": "task/gene-and-tonic-redesign/ui-components",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--ui-components",
           "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
@@ -162,16 +162,19 @@
             "Modules/Genetics/tests/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
-          "fixRound": 0,
+          "status": "done",
+          "fixRound": 1,
           "risky": true,
           "riskReason": "model output, a migration, and a paid bulk lookup action over a user's genetic data",
-          "substep": "reviewing",
           "branch": "task/gene-and-tonic-redesign/variant-names-lookups",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--variant-names-lookups",
           "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
           "startedAt": "2026-10-25T18:51:47.225Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T18:56:47.017Z",
+          "tip": "f02cfe1",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "873957b16e9027776cfe818b4fe96b6e083d4962"
         },
         {
           "id": "usage-data",
@@ -193,9 +196,15 @@
             "Modules/Supplements/config/config.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "substep": "implementing",
+          "branch": "task/gene-and-tonic-redesign/usage-data",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--usage-data",
+          "base": "99996ce3891ca7b89acaf2f9f4edb1700a5955c3",
+          "startedAt": "2026-10-25T18:56:02.422Z",
+          "level": "standard"
         },
         {
           "id": "pdf-brand",
@@ -516,7 +525,14 @@
     }
   ],
   "evidence": {},
-  "drift": [],
+  "drift": [
+    {
+      "path": "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+      "at": "2026-10-25T18:56:47.017Z",
+      "reason": "changed outside task \"Variant names, looked-up rule, LookUpAll action\" scope (found at task done)",
+      "task": "variant-names-lookups"
+    }
+  ],
   "log": [
     {
       "at": "2026-10-25T18:16:31.084Z",
@@ -631,6 +647,41 @@
       "at": "2026-10-25T18:55:31.442Z",
       "event": "task done",
       "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:55:42.778Z",
+      "event": "task fixing",
+      "detail": "Variant names, looked-up rule, LookUpAll action (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T18:55:55.390Z",
+      "event": "task reviewing",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:56:02.423Z",
+      "event": "task started",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:56:02.585Z",
+      "event": "task implementing",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:56:29.880Z",
+      "event": "task merging",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:56:47.017Z",
+      "event": "drift",
+      "detail": "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+    },
+    {
+      "at": "2026-10-25T18:56:47.018Z",
+      "event": "task done",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -697,6 +748,56 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T18:55:14.602Z"
+    },
+    {
+      "id": "s7",
+      "area": "security",
+      "text": "Limiter is hit before the pending query; consider hitting only when rows were queued; Livewire callers must pass auth()->id() only",
+      "where": [
+        "Modules/Genetics/app/Actions/LookUpAll.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:42.847Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "variant_name is model output without a character allowlist; consider letters/digits/.-_>* and space only",
+      "where": [
+        "Modules/Genetics/app/Support/LookupResultBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:42.922Z"
+    },
+    {
+      "id": "s9",
+      "area": "quality",
+      "text": "Add LookupStatus::isQueueable() for the [Pending, Failed] claimable rule used in QueueLookups and LookUpAll",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:55:42.997Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Add a mixed LookingUp + Pending case to show the skip",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookUpAllTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:55:43.073Z"
+    },
+    {
+      "id": "s11",
+      "area": "tests",
+      "text": "Add a no-dark: guard test over app and module views",
+      "where": [
+        "tests/Feature/Ui"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T18:55:43.151Z"
     }
   ]
 }
