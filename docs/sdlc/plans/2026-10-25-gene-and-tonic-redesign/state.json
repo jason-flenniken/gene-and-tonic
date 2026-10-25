@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T20:20:41.904Z",
+  "updated": "2026-10-25T20:34:04.594Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -642,6 +642,12 @@
       "result": "pass",
       "at": "2026-10-25T20:20:41.794Z",
       "note": "tests: 788 passing, 3 skipped (pint, phpstan level 7 clean); build ok; 48 FRs + 2 NFRs met after fixes (NFR-01 your-genes profile read memoized per request, flushed on writes and after QueueLookups); FR-47 browser pass done at 1440px and 390px (iframe) on a copy DB: fixed OS-dark Flux styling and empty effect tiles; untested: FR-47 code-level a11y, FR-30 add toast (logged); secret scan: clean; audit: composer + npm clean; no manifest changes"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-25T20:34:04.594Z",
+      "note": "2 Required fixed (duplicate relevance profile cache, dead 24h usage fields); 12 branch-review and 1 security-review follow-ups logged",
+      "blocking": 0
     }
   },
   "drift": [
@@ -1352,6 +1358,26 @@
       "at": "2026-10-25T20:20:41.904Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-25T20:20:47.864Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-25T20:31:24.809Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-25T20:33:36.353Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-25T20:34:04.594Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (duplicate relevance profile cache, dead 24h usage fields); 12 branch-review and 1 security-review follow-ups logged"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1938,6 +1964,131 @@
       ],
       "from": "check",
       "at": "2026-10-25T20:20:41.727Z"
+    },
+    {
+      "id": "s59",
+      "area": "tests",
+      "text": "Escape tests with a <script> effect title and variant name on the real supplement page and genetic panel",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T20:22:34.233Z"
+    },
+    {
+      "id": "s60",
+      "area": "ux",
+      "text": "Greeting uses now()->hour in UTC, so US evenings read Good morning; use a display timezone or pick it client-side",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.115Z"
+    },
+    {
+      "id": "s61",
+      "area": "ux",
+      "text": "Waiting banner counts LookingUp rows and Home doesn't poll; count Pending/Failed for the button and show queued count",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.179Z"
+    },
+    {
+      "id": "s62",
+      "area": "perf",
+      "text": "all() runs three times per Home render; memoize per request or use forSupplement() for single-supplement relevance",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.243Z"
+    },
+    {
+      "id": "s63",
+      "area": "quality",
+      "text": "Genotype split into alleles four different ways; add Genotype::alleles() and use it everywhere",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.309Z"
+    },
+    {
+      "id": "s64",
+      "area": "quality",
+      "text": "Home subtitle reads module contracts directly and hand-copies x-ui.panel classes; use x-ui.panel and move counts into widgets or update the plan wording",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.375Z"
+    },
+    {
+      "id": "s65",
+      "area": "security",
+      "text": "Public view helper methods (labelFor, title, meta, abbreviation, tone) are callable as Livewire actions; make them protected",
+      "where": [
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.441Z"
+    },
+    {
+      "id": "s66",
+      "area": "quality",
+      "text": "'All supplements' spelled ALL=1000 and PHP_INT_MAX; use one name or a nullable limit",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.502Z"
+    },
+    {
+      "id": "s67",
+      "area": "tests",
+      "text": "Fake count() ignores with() research while all() includes it",
+      "where": [
+        "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.566Z"
+    },
+    {
+      "id": "s68",
+      "area": "ux",
+      "text": "Supplement page title is always 'Supplement'; use the supplement name",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.626Z"
+    },
+    {
+      "id": "s69",
+      "area": "ux",
+      "text": "Brand mark role=img label duplicates the visible app name for screen readers; mark it decorative there",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.688Z"
+    },
+    {
+      "id": "s70",
+      "area": "docs",
+      "text": "Boundary test line says each module; Shared has none — say each domain module or add a Shared test",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.748Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "review",
+    "name": "rechecking",
+    "at": "2026-10-25T20:33:36.353Z"
+  }
 }
