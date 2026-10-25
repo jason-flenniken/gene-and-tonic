@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:17:18.070Z",
-  "stage": "learn",
+  "updated": "2026-10-25T15:17:40.609Z",
+  "stage": "closed",
   "stageHistory": [
     {
       "stage": "discover",
@@ -40,6 +40,10 @@
     {
       "stage": "learn",
       "at": "2026-10-25T15:17:18.069Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-25T15:17:40.608Z"
     }
   ],
   "paused": null,
@@ -405,6 +409,10 @@
       "at": "2026-10-25T15:17:18.069Z",
       "event": "advanced",
       "detail": "learn"
+    },
+    {
+      "at": "2026-10-25T15:17:40.609Z",
+      "event": "closed"
     }
   ],
   "cairnVersion": "0.3.0",
