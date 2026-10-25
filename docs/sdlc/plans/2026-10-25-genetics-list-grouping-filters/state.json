@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:49:34.388Z",
+  "updated": "2026-10-25T14:51:54.795Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -31,7 +31,102 @@
       "hash": "df34c3b428d5d4df"
     }
   },
-  "phases": [],
+  "phases": [
+    {
+      "id": "groups-data",
+      "name": "Groups in the data",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "variant-groups",
+          "name": "Variant groups in data and lookup",
+          "covers": [
+            "FR-01",
+            "FR-02",
+            "FR-03"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Genetics/app/Enums/**",
+            "Modules/Genetics/database/**",
+            "Modules/Genetics/app/Models/GeneVariant.php",
+            "Modules/Genetics/app/Data/VariantData.php",
+            "Modules/Genetics/app/Repositories/EloquentGeneticProfileReader.php",
+            "Modules/Genetics/app/Actions/LookupVariant.php",
+            "Modules/Genetics/app/Support/LookupResultBuilder.php",
+            "Modules/Genetics/app/Support/LookupResult.php",
+            "Modules/Genetics/resources/views/prompts/lookup-instructions.blade.php",
+            "Modules/Genetics/tests/**",
+            "Modules/Recommendations/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "add-only migration on gene_variants and new model-output field"
+        }
+      ]
+    },
+    {
+      "id": "list-and-backfill",
+      "name": "Grouped list and backfill",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "grouped-list-ui",
+          "name": "Grouped list with filter and search",
+          "covers": [
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09",
+            "FR-10",
+            "FR-11",
+            "FR-12"
+          ],
+          "blockedBy": [
+            "variant-groups"
+          ],
+          "scope": [
+            "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+            "Modules/Genetics/resources/views/components/variant-list.blade.php",
+            "Modules/Genetics/tests/Feature/ProfilePageTest.php",
+            "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted search and dropdown input over the user's genetic rows"
+        },
+        {
+          "id": "group-backfill",
+          "name": "Group backfill command",
+          "covers": [
+            "FR-04"
+          ],
+          "blockedBy": [
+            "variant-groups"
+          ],
+          "scope": [
+            "Modules/Genetics/app/Console/GroupVariantsCommand.php",
+            "Modules/Genetics/app/Providers/GeneticsServiceProvider.php",
+            "Modules/Genetics/config/config.php",
+            "Modules/Genetics/resources/views/prompts/group*.blade.php",
+            "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php",
+            ".env.example",
+            "CLAUDE.md"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "outbound AI prompt and model output written to the shared reference table"
+        }
+      ]
+    }
+  ],
   "evidence": {},
   "drift": [],
   "log": [
@@ -58,6 +153,11 @@
       "at": "2026-10-25T14:49:34.388Z",
       "event": "advanced",
       "detail": "plan"
+    },
+    {
+      "at": "2026-10-25T14:51:54.794Z",
+      "event": "plan loaded",
+      "detail": "2 phases, 3 tasks"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -73,5 +173,6 @@
       "from": "user",
       "at": "2026-10-25T14:39:53.383Z"
     }
-  ]
+  ],
+  "planHash": "dd634ff18e0753eb"
 }
