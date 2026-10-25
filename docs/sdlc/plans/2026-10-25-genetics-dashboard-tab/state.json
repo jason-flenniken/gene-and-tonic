@@ -6,8 +6,8 @@
   "branch": "fix/genetics-dashboard-tab",
   "base": "main",
   "created": "2026-10-25T13:17:08.989Z",
-  "updated": "2026-10-25T13:20:19.619Z",
-  "stage": "review",
+  "updated": "2026-10-25T13:20:19.722Z",
+  "stage": "ship",
   "stageHistory": [
     {
       "stage": "repro",
@@ -20,6 +20,10 @@
     {
       "stage": "review",
       "at": "2026-10-25T13:19:35.201Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-25T13:20:19.721Z"
     }
   ],
   "paused": null,
@@ -111,6 +115,11 @@
       "at": "2026-10-25T13:20:19.619Z",
       "event": "review pass",
       "detail": "4 follow-ups logged"
+    },
+    {
+      "at": "2026-10-25T13:20:19.722Z",
+      "event": "advanced",
+      "detail": "ship"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -161,10 +170,5 @@
       "from": "security-review",
       "at": "2026-10-25T13:20:15.079Z"
     }
-  ],
-  "step": {
-    "stage": "review",
-    "name": "reviewing",
-    "at": "2026-10-25T13:19:35.313Z"
-  }
+  ]
 }
