@@ -24,7 +24,7 @@ it('lists a user\'s variants with gene, genotype, category, affects and effect',
     app(AddVariant::class)->handle($user->id, 'rs4680', 'AA');
     $mthfr = GeneVariant::where('rsid', 'rs1801133')->sole();
 
-    $this->actingAs($user)->get('/genetics')
+    $this->actingAs($user)->get('/?tab=genetics')
         ->assertOk()
         ->assertSee('rs1801133')
         ->assertSee('rs4680')
@@ -42,14 +42,14 @@ it('sorts the list by gene', function () {
     UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs1', 'genotype' => 'AG']);
     UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs2', 'genotype' => 'AG']);
 
-    $this->actingAs($user)->get('/genetics')->assertSeeInOrder(['AAA1', 'ZZZ1']);
+    $this->actingAs($user)->get('/?tab=genetics')->assertSeeInOrder(['AAA1', 'ZZZ1']);
 });
 
 it('shows "Not looked up yet" for a pending variant', function () {
     $user = User::factory()->create();
     app(AddVariant::class)->handle($user->id, 'rs999', 'AG');
 
-    $this->actingAs($user)->get('/genetics')->assertSee('rs999')->assertSee('Not looked up yet');
+    $this->actingAs($user)->get('/?tab=genetics')->assertSee('rs999')->assertSee('Not looked up yet');
 });
 
 it('adds a variant by hand, normalising the genotype', function () {
@@ -103,7 +103,7 @@ it('never shows another user\'s variants', function () {
     app(AddVariant::class)->handle($a->id, 'rs111', 'AG');
     app(AddVariant::class)->handle($b->id, 'rs222', 'CT');
 
-    $this->actingAs($a)->get('/genetics')->assertSee('rs111')->assertDontSee('rs222');
+    $this->actingAs($a)->get('/?tab=genetics')->assertSee('rs111')->assertDontSee('rs222');
     Livewire::actingAs($a)->test('genetics::profile')->assertSee('rs111')->assertDontSee('rs222')->assertDontSee('CT');
 });
 

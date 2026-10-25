@@ -312,7 +312,7 @@ it('renders model-written text escaped', function () {
     GeneVariant::factory()->create(['rsid' => 'rs123', 'affects' => '<script>alert(1)</script>']);
     UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs123', 'genotype' => 'AG']);
 
-    $this->actingAs($user)->get('/genetics')
+    $this->actingAs($user)->get('/?tab=genetics')
         ->assertDontSee('<script>alert(1)</script>', false)
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false);
 });
