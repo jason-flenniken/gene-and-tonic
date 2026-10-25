@@ -53,3 +53,19 @@ it('counts copies of an allele across strands', function (string $genotype, stri
     'strand-ambiguous pair counts as given' => ['AT', 'T', 'A', 'T', 1],
     'hemizygous' => ['A', 'A', 'G', 'A', 1],
 ]);
+
+it('resolves an effect allele to the plus strand', function (string $allele, ?string $ref, ?string $risk, ?string $expected) {
+    expect(Genotype::effectAlleleOnPlusStrand($allele, $ref, $risk))->toBe($expected);
+})->with([
+    'gene-strand T maps to plus-strand A' => ['T', 'G', 'A', 'A'],
+    'already plus' => ['A', 'G', 'A', 'A'],
+    'lower case with spaces' => [' t ', 'G', 'A', 'A'],
+    'unknown reference alleles' => ['T', null, null, 'T'],
+    'strand-ambiguous pair left as given' => ['T', 'A', 'T', 'T'],
+    'fits neither strand' => ['A', 'G', null, 'A'],
+    'deletion' => ['D', 'I', 'D', 'D'],
+]);
+
+it('returns null for an effect allele that is not one allele', function (string $allele) {
+    expect(Genotype::effectAlleleOnPlusStrand($allele, 'G', 'A'))->toBeNull();
+})->with(['empty' => '', 'blank' => '  ', 'two letters' => 'TT', 'HGVS-style' => 'C677T', 'outside the alphabet' => 'N']);

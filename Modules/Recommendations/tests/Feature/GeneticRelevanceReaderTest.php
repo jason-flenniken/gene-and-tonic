@@ -9,9 +9,11 @@ use Modules\Intelligence\Testing\FakeTextGenerator;
 use Modules\Recommendations\Contracts\GeneticRelevanceReader;
 use Modules\Recommendations\Data\GeneticMatchData;
 use Modules\Recommendations\Data\GeneticRelevanceData;
+use Modules\Recommendations\Data\SupplementMatchesData;
 use Modules\Recommendations\Services\RuleBasedGeneticRelevanceReader;
 use Modules\Supplements\Data\GeneInteractionData;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Data\SupplementSummaryData;
 use Modules\Supplements\Enums\GeneRelation;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Testing\FakeSupplementResearchReader;
@@ -29,7 +31,7 @@ afterEach(function () {
     expect($this->text->requests())->toBe([]);
 });
 
-function relevanceVariant(string $rsid, ?string $gene, string $genotype, ?string $ref = 'G', ?string $risk = 'A'): VariantData
+function relevanceVariant(string $rsid, ?string $gene, string $genotype, ?string $ref = 'G', ?string $risk = 'A', ?string $variantName = null): VariantData
 {
     return new VariantData(
         rsid: $rsid,
@@ -42,6 +44,7 @@ function relevanceVariant(string $rsid, ?string $gene, string $genotype, ?string
         genotypeEffect: null,
         status: LookupStatus::Seeded,
         source: 'manual',
+        variantName: $variantName,
     );
 }
 
@@ -107,8 +110,31 @@ it('matches a gene-strand allele against a plus-strand heterozygote with one cop
                 explanation: 'MTHFR explanation',
                 sourceKeys: ['S1'],
                 matchedOn: 'allele',
+                allele: 'A',
             ),
         ]);
+});
+
+it('carries the plus-strand effect allele and the variant name on an allele match', function () {
+    $relevance = relevanceFor(
+        [relevanceVariant('rs1801131', 'MTHFR', 'GT', 'T', 'G', 'A1298C')],
+        [relevanceInteraction('MTHFR', 'rs1801131', 'G')],
+    );
+
+    expect($relevance->matches)->toHaveCount(1)
+        ->and($relevance->matches[0]->allele)->toBe('G')
+        ->and($relevance->matches[0]->copies)->toBe(1)
+        ->and($relevance->matches[0]->variantName)->toBe('A1298C');
+});
+
+it('leaves the allele null on rsID-only and gene-only matches', function () {
+    $relevance = relevanceFor(
+        [relevanceVariant('rs1801133', 'MTHFR', 'AG', variantName: 'C677T'), relevanceVariant('rs601338', 'FUT2', 'AG')],
+        [relevanceInteraction('MTHFR', 'rs1801133', 'C677T'), relevanceInteraction('FUT2', null, null)],
+    );
+
+    expect(array_map(fn (GeneticMatchData $match) => [$match->rsid, $match->matchedOn, $match->allele, $match->variantName], $relevance->matches))
+        ->toBe([['rs1801133', 'rsid', null, 'C677T'], ['rs601338', 'gene', null, null]]);
 });
 
 it('counts two copies for a homozygous risk genotype', function () {
@@ -236,4 +262,68 @@ it('only reads the requested user\'s profile', function () {
     $relevance = relevanceFor([relevanceVariant('rs1801133', 'MTHFR', 'GG')], [relevanceInteraction('MTHFR', 'rs1801133', 'A')]);
 
     expect($relevance->matches)->toBe([]);
+});
+
+/**
+ * @param  list<GeneInteractionData>  $interactions
+ */
+function relevanceSummary(int $supplementId, string $name, array $interactions, ResearchStatus $status = ResearchStatus::Complete): SupplementSummaryData
+{
+    return new SupplementSummaryData($supplementId, $name, $status, null, 0, 0, 0, [], $interactions);
+}
+
+/**
+ * @return list<VariantData>
+ */
+function rankingVariants(): array
+{
+    return [
+        relevanceVariant('rs1801133', 'MTHFR', 'AG'),
+        relevanceVariant('rs1801131', 'MTHFR', 'GT', 'T', 'G'),
+        relevanceVariant('rs1805087', 'MTR', 'AG'),
+    ];
+}
+
+/**
+ * @param  list<SupplementMatchesData>  $top
+ * @return list<array{int, string, int}>
+ */
+function rankingRows(array $top): array
+{
+    return array_map(fn (SupplementMatchesData $supplement) => [$supplement->supplementId, $supplement->name, count($supplement->matches)], $top);
+}
+
+it('ranks supplements by match count and leaves out those with no matches', function () {
+    $this->profiles->for(RELEVANCE_USER, new GeneticProfileData(RELEVANCE_USER, rankingVariants()));
+    $this->research
+        ->withSummary(relevanceSummary(1, 'B12', [relevanceInteraction('MTHFR', 'rs1801133', 'T'), relevanceInteraction('MTR', 'rs1805087', null)]))
+        ->withSummary(relevanceSummary(2, 'Methylfolate', [relevanceInteraction('MTHFR', null, null), relevanceInteraction('MTR', 'rs1805087', null)], ResearchStatus::Searching))
+        ->withSummary(relevanceSummary(3, 'Zinc', [relevanceInteraction('ZIP4', null, null)]));
+
+    $top = app(GeneticRelevanceReader::class)->topForUser(RELEVANCE_USER, 5);
+
+    expect(rankingRows($top))->toBe([[2, 'Methylfolate', 3], [1, 'B12', 2]])
+        ->and($top[0]->status)->toBe(ResearchStatus::Searching)
+        ->and($top[1]->matches[0])->toBeInstanceOf(GeneticMatchData::class)
+        ->and($top[1]->matches[0]->allele)->toBe('A');
+});
+
+it('breaks a tie in match count by name and returns one supplement by default', function () {
+    $this->profiles->for(RELEVANCE_USER, new GeneticProfileData(RELEVANCE_USER, rankingVariants()));
+    $this->research
+        ->withSummary(relevanceSummary(1, 'Riboflavin', [relevanceInteraction('MTR', 'rs1805087', null)]))
+        ->withSummary(relevanceSummary(2, 'B12', [relevanceInteraction('MTR', 'rs1805087', null)]))
+        ->withSummary(relevanceSummary(3, 'methylfolate', [relevanceInteraction('MTR', 'rs1805087', null)]));
+
+    $reader = app(GeneticRelevanceReader::class);
+
+    expect(rankingRows($reader->topForUser(RELEVANCE_USER, 2)))->toBe([[2, 'B12', 1], [3, 'methylfolate', 1]])
+        ->and(rankingRows($reader->topForUser(RELEVANCE_USER)))->toBe([[2, 'B12', 1]]);
+});
+
+it('returns no top supplements for a user with no profile', function () {
+    $this->profiles->for(99, new GeneticProfileData(99, rankingVariants()));
+    $this->research->withSummary(relevanceSummary(1, 'B12', [relevanceInteraction('MTR', 'rs1805087', null)]));
+
+    expect(app(GeneticRelevanceReader::class)->topForUser(RELEVANCE_USER, 5))->toBe([]);
 });

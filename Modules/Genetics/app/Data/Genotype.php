@@ -58,13 +58,32 @@ final class Genotype
      */
     public static function copiesOf(string $genotype, string $allele, ?string $ref, ?string $risk): int
     {
+        $allele = self::effectAlleleOnPlusStrand($allele, $ref, $risk);
+
+        return $allele === null ? 0 : substr_count(self::toPlusStrand($genotype, $ref, $risk), $allele);
+    }
+
+    /**
+     * One allele (e.g. a research finding's effect allele) on the plus strand:
+     * flipped to its complement when it doesn't fit the reference row but the
+     * complement does. Null when it isn't a single allele from A C G T D I
+     * (e.g. "TT" or "C677T").
+     */
+    public static function effectAlleleOnPlusStrand(string $allele, ?string $ref, ?string $risk): ?string
+    {
+        $allele = strtoupper(trim($allele));
+
+        if (preg_match('/^[ACGTDI]$/', $allele) !== 1) {
+            return null;
+        }
+
         $known = self::known($ref, $risk);
 
         if (! in_array($allele, $known, true) && in_array(self::complement($allele), $known, true)) {
-            $allele = self::complement($allele);
+            return self::complement($allele);
         }
 
-        return substr_count(self::toPlusStrand($genotype, $ref, $risk), $allele);
+        return $allele;
     }
 
     /** @return list<string> */
