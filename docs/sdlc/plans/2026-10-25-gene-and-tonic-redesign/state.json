@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:56:47.018Z",
+  "updated": "2026-10-25T18:57:31.126Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -101,15 +101,18 @@
             "tests/Feature/Ui/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": false,
-          "substep": "reviewing",
           "branch": "task/gene-and-tonic-redesign/ui-components",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--ui-components",
           "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
           "startedAt": "2026-10-25T18:51:35.820Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T18:57:31.126Z",
+          "tip": "a8d9c82",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "455e3e6de8353d194682f9f46caee22cd45e1803"
         },
         {
           "id": "research-topics",
@@ -220,9 +223,15 @@
             "Modules/Reports/tests/Feature/TemplatesTest.php"
           ],
           "complexity": "simple",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "substep": "implementing",
+          "branch": "task/gene-and-tonic-redesign/pdf-brand",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--pdf-brand",
+          "base": "0b362bc609d8999753ae9b10966721060d7f75c7",
+          "startedAt": "2026-10-25T18:57:00.525Z",
+          "level": "standard"
         },
         {
           "id": "supplement-listing",
@@ -682,6 +691,26 @@
       "at": "2026-10-25T18:56:47.018Z",
       "event": "task done",
       "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:57:00.526Z",
+      "event": "task started",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T18:57:00.668Z",
+      "event": "task implementing",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T18:57:12.054Z",
+      "event": "task merging",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:57:31.126Z",
+      "event": "task done",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -798,6 +827,36 @@
       ],
       "from": "implementer",
       "at": "2026-10-25T18:55:43.151Z"
+    },
+    {
+      "id": "s12",
+      "area": "ux",
+      "text": "Dropzone has no upload progress; add an optional progress prop (0-100) with a thin bar",
+      "where": [
+        "resources/views/components/ui/dropzone.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:57:11.836Z"
+    },
+    {
+      "id": "s13",
+      "area": "ux",
+      "text": "Segmented item is ~36px tall; HANDOFF wants 44px hit targets (min-h-11), also affects x-tabs",
+      "where": [
+        "resources/views/components/ui/segmented/item.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:57:11.910Z"
+    },
+    {
+      "id": "s14",
+      "area": "tests",
+      "text": "Showcase test list omits x-ui.page-header, x-ui.section, x-ui.copies",
+      "where": [
+        "tests/Feature/Ui/UiShowcaseRouteTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:57:11.983Z"
     }
   ]
 }
