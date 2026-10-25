@@ -6,7 +6,7 @@
   "branch": "fix/genetics-upload-complex-csv",
   "base": "main",
   "created": "2026-10-25T13:26:58.864Z",
-  "updated": "2026-10-25T13:54:23.896Z",
+  "updated": "2026-10-25T13:54:51.314Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -35,7 +35,13 @@
     }
   ],
   "paused": null,
-  "approvals": {},
+  "approvals": {
+    "ship": {
+      "at": "2026-10-25T13:54:51.314Z",
+      "via": "human",
+      "source": "mod"
+    }
+  },
   "phases": [
     {
       "id": "fix",
@@ -180,6 +186,16 @@
       "at": "2026-10-25T13:54:23.896Z",
       "event": "advanced",
       "detail": "ship"
+    },
+    {
+      "at": "2026-10-25T13:54:33.038Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-25T13:54:51.314Z",
+      "event": "ship approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -250,5 +266,10 @@
       "from": "task-review",
       "at": "2026-10-25T13:51:28.787Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "ship",
+    "name": "approving",
+    "at": "2026-10-25T13:54:33.037Z"
+  }
 }
