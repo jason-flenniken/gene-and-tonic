@@ -3,7 +3,7 @@
 namespace Modules\Genetics\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\JsonSchema\JsonSchema;
+use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Log;
 use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Models\GeneVariant;
