@@ -13,7 +13,7 @@ class GeneVariantSeeder extends Seeder
 {
     public function run(): void
     {
-        /** @var list<array{rsid: string, gene: string, reference_allele: string, risk_allele: string, category: string, affects: string, genotype_effects: array<string, string>}> $variants */
+        /** @var list<array{rsid: string, gene: string, reference_allele: string, risk_allele: string, category: string, category_group: string, affects: string, genotype_effects: array<string, string>}> $variants */
         $variants = require module_path('Genetics', 'database/data/seed_variants.php');
 
         foreach ($variants as $variant) {

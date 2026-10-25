@@ -2,6 +2,7 @@
 
 use Modules\Genetics\Database\Seeders\GeneVariantSeeder;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Models\GeneVariant;
 
 it('is idempotent', function () {
@@ -25,6 +26,7 @@ it('seeds well-formed plus-strand rows with a dbSNP source', function () {
             ->and($row->risk_allele)->not->toBe($row->reference_allele)
             ->and($row->status)->toBe(LookupStatus::Seeded)
             ->and($row->category)->not->toBeEmpty()
+            ->and($row->category_group)->toBeInstanceOf(VariantGroup::class)
             ->and($row->affects)->not->toBeEmpty()
             ->and($row->sources)->toContain([
                 'url' => "https://www.ncbi.nlm.nih.gov/snp/{$row->rsid}",
@@ -70,4 +72,10 @@ it('restores a seeded row that a user add created as pending', function () {
 
     expect($row->status)->toBe(LookupStatus::Seeded)
         ->and($row->gene)->toBe('COMT');
+});
+
+it('files MTHFR C677T under Methylation', function () {
+    $this->seed(GeneVariantSeeder::class);
+
+    expect(GeneVariant::where('rsid', 'rs1801133')->sole()->category_group)->toBe(VariantGroup::Methylation);
 });
