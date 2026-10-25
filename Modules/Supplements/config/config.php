@@ -8,6 +8,7 @@ return [
     | "supplements.research" when the module boots.
     */
     'research_profile' => [
+        'label' => 'Supplement research',
         'provider' => env('AI_RESEARCH_PROVIDER', 'openai'),
         'model' => env('AI_RESEARCH_MODEL', 'gpt-6.1-sol'),
         'effort' => env('AI_RESEARCH_EFFORT', 'medium'),

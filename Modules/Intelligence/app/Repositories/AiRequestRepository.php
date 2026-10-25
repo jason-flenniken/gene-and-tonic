@@ -3,6 +3,7 @@
 namespace Modules\Intelligence\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Modules\Intelligence\Enums\UsageWindow;
 use Modules\Intelligence\Models\AiRequest;
 
 interface AiRequestRepository
@@ -12,8 +13,11 @@ interface AiRequestRepository
      */
     public function record(array $attributes): void;
 
-    public function summary(): UsageSummary;
+    public function summary(UsageWindow $window = UsageWindow::All): UsageSummary;
 
     /** @return LengthAwarePaginator<int, AiRequest> */
-    public function paginateLatest(int $perPage): LengthAwarePaginator;
+    public function paginateLatest(int $perPage, UsageWindow $window = UsageWindow::All): LengthAwarePaginator;
+
+    /** @return list<ProfileCost> */
+    public function costByProfile(UsageWindow $window = UsageWindow::All): array;
 }

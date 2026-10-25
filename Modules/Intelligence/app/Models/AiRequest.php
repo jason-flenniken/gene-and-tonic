@@ -2,13 +2,18 @@
 
 namespace Modules\Intelligence\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Intelligence\Database\Factories\AiRequestFactory;
 
 /**
  * Private to Intelligence. One row per provider call; never holds prompt or response bodies.
  */
 class AiRequest extends Model
 {
+    /** @use HasFactory<AiRequestFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'operation',
         'profile',
@@ -23,6 +28,11 @@ class AiRequest extends Model
         'status',
         'error',
     ];
+
+    protected static function newFactory(): AiRequestFactory
+    {
+        return AiRequestFactory::new();
+    }
 
     protected function casts(): array
     {
