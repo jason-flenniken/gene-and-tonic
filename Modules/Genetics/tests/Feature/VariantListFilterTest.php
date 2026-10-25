@@ -8,6 +8,8 @@ use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
+use Modules\Shared\Data\LinkedSupplementData;
+use Modules\Shared\Testing\FakeVariantLinks;
 
 beforeEach(function () {
     $this->withoutVite();
@@ -24,14 +26,14 @@ function seedVariant(User $user, array $reference, string $genotype = 'GG'): voi
 /** @return list<string> the gene cells of the rendered list */
 function genes($component): array
 {
-    preg_match_all('/<td class="py-2 pr-4 font-medium">(.*?)<\/td>/', $component->html(), $matches);
+    preg_match_all('/data-variant-gene="(.*?)"/', $component->html(), $matches);
 
     return $matches[1];
 }
 
 function sectionIsOpen($component, string $key): bool
 {
-    return preg_match('/<details[^>]*wire:key="section-'.$key.'"[^>]*\sopen\s/', $component->html()) === 1;
+    return preg_match('/<details[^>]*data-section="'.$key.'"[^>]*\sopen[\s>]/', $component->html()) === 1;
 }
 
 function seedList(User $user): void
@@ -48,7 +50,7 @@ it('renders sections in enum order with counts, Other for ungrouped and pending 
     seedVariant($this->user, ['rsid' => 'rs5', 'gene' => 'ABC1', 'category_group' => VariantGroup::Methylation]);
 
     Livewire::actingAs($this->user)->test('genetics::profile')
-        ->assertSeeInOrder(['Methylation', '>2<', 'Brain & mood', '>1<', 'Other', 'Not looked up yet'])
+        ->assertSeeInOrder(['Methylation', '2 variants', 'Brain & mood', '1 variant', 'Other', 'Not looked up yet'])
         ->assertSeeInOrder(['Other', 'ZZZ9'])
         ->assertSeeHtml('wire:key="section-unlooked"');
 });
@@ -258,4 +260,60 @@ it('finds rows by rsID, category text and genotype effect text', function () {
     expect(genes($component->set('search', 'rs22')))->toBe(['COMT'])
         ->and(genes($component->set('search', 'folate cycle')))->toBe(['MTHFR'])
         ->and(genes($component->set('search', 'reduced enzyme')))->toBe(['MTHFR']);
+});
+
+it('shows Linked chips and filters to linked variants only', function () {
+    seedList($this->user);
+    FakeVariantLinks::install()->for($this->user->id, ['rs1' => [new LinkedSupplementData(7, 'Methylfolate')]]);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')
+        ->assertSee('Linked: Methylfolate')
+        ->assertSeeHtml(route('supplements.show', 7));
+
+    expect($component->instance()->counts['linked'])->toBe(1);
+
+    $component->set('group', 'linked');
+    expect(genes($component))->toBe(['MTHFR']);
+});
+
+it('filters to two-copy variants and to not looked up', function () {
+    seedVariant($this->user, ['rsid' => 'rs1', 'gene' => 'AAA1', 'risk_allele' => 'A', 'category_group' => VariantGroup::Methylation], 'AA');
+    seedVariant($this->user, ['rsid' => 'rs2', 'gene' => 'BBB2', 'risk_allele' => 'A', 'category_group' => VariantGroup::Methylation], 'AG');
+    GeneVariant::factory()->pending()->create(['rsid' => 'rs3']);
+    UserVariant::factory()->create(['user_id' => $this->user->id, 'rsid' => 'rs3', 'genotype' => 'AA']);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile');
+
+    expect($component->instance()->counts)->toMatchArray(['all' => 3, 'two_copies' => 1, 'unlooked' => 1]);
+    expect(genes($component->set('group', 'two_copies')))->toBe(['AAA1']);
+    $component->assertSee('Your AA, two copies')->set('group', 'unlooked')->assertSee('rs3')->assertDontSee('AAA1');
+    $component->set('group', 'methylation')->assertSee('Your AG', false);
+});
+
+it('opens the section named by ?group on load', function () {
+    seedList($this->user);
+
+    $component = Livewire::withQueryParams(['group' => 'methylation'])->actingAs($this->user)->test('genetics::profile');
+
+    expect(sectionIsOpen($component, 'methylation'))->toBeTrue()
+        ->and(sectionIsOpen($component, 'brain_mood'))->toBeFalse()
+        ->and(genes($component))->toBe(['MTHFR']);
+});
+
+it('treats a hostile ?group as All and never echoes it', function () {
+    seedList($this->user);
+
+    $component = Livewire::withQueryParams(['group' => '<script>alert(1)</script>'])->actingAs($this->user)->test('genetics::profile');
+
+    expect(genes($component))->toHaveCount(4)->and(preg_match('/<details[^>]*\sopen[\s>]/', $component->html()))->toBe(0);
+    $component->assertDontSeeHtml('<script>alert(1)</script>');
+});
+
+it('never shows another user\'s linked chips or genotype', function () {
+    $other = User::factory()->create();
+    seedVariant($other, ['rsid' => 'rs777', 'gene' => 'OTHERGENE', 'category_group' => VariantGroup::Methylation]);
+    seedList($this->user);
+    FakeVariantLinks::install()->for($other->id, ['rs777' => [new LinkedSupplementData(9, 'Secret supp')]]);
+
+    Livewire::actingAs($this->user)->test('genetics::profile')->assertDontSee('Secret supp')->assertDontSee('OTHERGENE');
 });

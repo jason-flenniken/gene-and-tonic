@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\JsonSchema\JsonSchemaTypeFactory;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
@@ -426,4 +427,44 @@ it('asks for a variant name in a strict schema and sends no genotype in the prom
         ->and(array_keys($request->variables))->toHaveCount(3)
         ->and($prompt)->toContain('rs123')->toContain('MTHFR')
         ->and($prompt)->not->toContain('CT')->not->toContain('genotype');
+});
+
+it('toasts the queued count from lookUpAll', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+    foreach (range(1, 3) as $i) {
+        pendingRow("rs{$i}");
+        UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => "rs{$i}", 'genotype' => 'AG']);
+    }
+
+    Livewire::actingAs($user)->test('genetics::profile')->call('lookUpAll')
+        ->assertDispatched('toast-show', fn ($event, $params) => str_contains(json_encode($params), '3 variants queued for lookup.'));
+
+    Queue::assertPushed(LookupGeneVariant::class, 3);
+});
+
+it('toasts Nothing to look up from lookUpAll and queues nothing', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+
+    Livewire::actingAs($user)->test('genetics::profile')->call('lookUpAll')
+        ->assertDispatched('toast-show', fn ($event, $params) => str_contains(json_encode($params), 'Nothing to look up.'));
+
+    Queue::assertNothingPushed();
+});
+
+it('toasts the limiter message from a rate-limited lookUpAll and queues nothing', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+    $key = 'genetics-lookup-all:'.$user->id;
+    foreach (range(1, 3) as $i) {
+        RateLimiter::hit($key, 60);
+    }
+    pendingRow('rs1');
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs1', 'genotype' => 'AG']);
+
+    Livewire::actingAs($user)->test('genetics::profile')->call('lookUpAll')
+        ->assertDispatched('toast-show', fn ($event, $params) => str_contains(json_encode($params), 'Too many requests, try again in a minute.'));
+
+    Queue::assertNothingPushed();
 });

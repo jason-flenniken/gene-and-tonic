@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Database\Seeders\GeneVariantSeeder;
+use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
 
@@ -129,4 +130,20 @@ it('stops adding after 20 attempts a minute', function () {
 
     $component->assertHasErrors('rsid');
     expect(UserVariant::count())->toBe(20);
+});
+
+it('shows the header copy for upload-only and mixed sources', function () {
+    $user = User::factory()->create();
+    $upload = GeneticUpload::factory()->complete()->create(['user_id' => $user->id]);
+    GeneVariant::factory()->create(['rsid' => 'rs1']);
+    GeneVariant::factory()->create(['rsid' => 'rs2']);
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs1', 'source' => 'file.csv']);
+
+    $this->actingAs($user)->get('/genetics')
+        ->assertSee('1 variant from one upload.')
+        ->assertSee('Raw files are deleted after processing; only marker lines ever reach the AI model.');
+
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs2', 'source' => 'manual']);
+
+    $this->actingAs($user)->get('/genetics')->assertSee('1 variant from one upload and 1 added by hand.');
 });

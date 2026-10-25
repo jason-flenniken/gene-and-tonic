@@ -9,11 +9,13 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use Modules\Genetics\Actions\AddVariant;
+use Modules\Genetics\Actions\LookUpAll;
 use Modules\Genetics\Actions\QueueLookups;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\Genotype;
@@ -24,6 +26,9 @@ use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\UserVariant;
+use Modules\Genetics\Support\VariantGrouping;
+use Modules\Shared\Contracts\VariantLinks;
+use Modules\Shared\Data\LinkedSupplementData;
 
 new #[Title('My genetics')] class extends Component
 {
@@ -37,13 +42,21 @@ new #[Title('My genetics')] class extends Component
 
     public string $gene = '';
 
+    #[Url]
     public string $group = '';
 
+    #[Url]
     public string $search = '';
 
     /** @var list<string> Section keys the user has opened; filtered against the allowed keys on read. */
     #[Locked]
     public array $openSections = [];
+
+    public function mount(): void
+    {
+        $this->search = mb_substr($this->search, 0, 100);
+        $this->syncOpenSections();
+    }
 
     public function updatedGroup(): void
     {
@@ -116,7 +129,7 @@ new #[Title('My genetics')] class extends Component
         }
 
         $this->reset('rsid', 'genotype', 'gene');
-        unset($this->variants, $this->groupedVariants, $this->hasLookingUp);
+        $this->forgetVariants();
         Flux::toast(text: 'SNP saved.', variant: 'success');
     }
 
@@ -143,7 +156,29 @@ new #[Title('My genetics')] class extends Component
 
         $queueLookups->handle([$rsid], 1);
 
-        unset($this->variants, $this->groupedVariants, $this->hasLookingUp);
+        $this->forgetVariants();
+    }
+
+    /**
+     * Queues lookups for the user's own pending and failed variants and toasts the outcome.
+     * The action enforces the cap and its own rate limit.
+     */
+    public function lookUpAll(LookUpAll $lookUpAll): void
+    {
+        $userId = auth()->id();
+        abort_if($userId === null, 401);
+
+        $result = $lookUpAll->handle($userId);
+
+        $this->forgetVariants();
+
+        if ($result->limited) {
+            Flux::toast(text: 'Too many requests, try again in a minute.', variant: 'danger');
+        } elseif ($result->nothingPending || $result->queued === 0) {
+            Flux::toast(text: 'Nothing to look up.');
+        } else {
+            Flux::toast(text: $result->queued.' '.Str::plural('variant', $result->queued).' queued for lookup.', variant: 'success');
+        }
     }
 
     /**
@@ -194,7 +229,8 @@ new #[Title('My genetics')] class extends Component
 
         ProcessGeneticUpload::dispatch($upload->id);
 
-        unset($this->uploads, $this->hasActiveUploads, $this->variants, $this->groupedVariants);
+        unset($this->uploads, $this->hasActiveUploads, $this->uploadCount);
+        $this->forgetVariants();
         Flux::toast(text: 'Upload received. Processing it now.', variant: 'success');
     }
 
@@ -247,15 +283,31 @@ new #[Title('My genetics')] class extends Component
         return false;
     }
 
-    /** The dropdown value as a group key, 'unlooked', or null (All) for anything else. */
+    /** @return array<string, list<LinkedSupplementData>> */
+    #[Computed]
+    public function links(): array
+    {
+        return app(VariantLinks::class)->forUser((int) auth()->id());
+    }
+
+    #[Computed]
+    public function grouping(): VariantGrouping
+    {
+        return new VariantGrouping($this->variants, $this->links);
+    }
+
+    /** @return array{all: int, linked: int, two_copies: int, unlooked: int, looking_up: int, groups: array<string, int>} */
+    #[Computed]
+    public function counts(): array
+    {
+        return $this->grouping->counts();
+    }
+
+    /** The filter as a known key (a group, 'linked', 'two_copies' or 'unlooked'), or null (All) for anything else. */
     #[Computed]
     public function activeGroup(): ?string
     {
-        if ($this->group === 'unlooked') {
-            return 'unlooked';
-        }
-
-        return VariantGroup::tryFrom($this->group)?->value;
+        return VariantGrouping::normalizeGroup($this->group);
     }
 
     /** The search text, trimmed and capped at 100 characters. */
@@ -266,90 +318,48 @@ new #[Title('My genetics')] class extends Component
     }
 
     /**
-     * The dropdown choices: only groups that have rows, then the not-looked-up section.
+     * The group choices: only groups that have rows, then the not-looked-up section.
      *
      * @return array<string, string>
      */
     #[Computed]
     public function groupOptions(): array
     {
-        $options = [];
-        $hasPending = false;
-
-        foreach ($this->variants as $variant) {
-            if ($this->isLookedUpVariant($variant)) {
-                $group = $variant->group ?? VariantGroup::Other;
-                $options[$group->value] = $group->label();
-            } else {
-                $hasPending = true;
-            }
-        }
-
-        $ordered = [];
-
-        foreach (VariantGroup::cases() as $case) {
-            if (isset($options[$case->value])) {
-                $ordered[$case->value] = $case->label();
-            }
-        }
-
-        if ($hasPending) {
-            $ordered['unlooked'] = 'Not looked up yet';
-        }
-
-        return $ordered;
+        return $this->grouping->options();
     }
 
     /**
-     * Sections in group order with "Not looked up yet" last, after the dropdown and search are applied.
+     * Sections in group order with "Not looked up yet" last, after the filter and search are applied.
      *
      * @return list<array{key: string, label: string, variants: list<VariantData>}>
      */
     #[Computed]
     public function groupedVariants(): array
     {
-        $group = $this->activeGroup;
-        $needle = mb_strtolower($this->activeSearch);
-        $buckets = [];
-        $unlooked = [];
+        return $this->grouping->sections($this->activeGroup, $this->activeSearch);
+    }
 
-        foreach ($this->variants as $variant) {
-            $isLookedUp = $this->isLookedUpVariant($variant);
-            $variantGroup = $isLookedUp ? ($variant->group ?? VariantGroup::Other) : null;
-            $key = $variantGroup->value ?? 'unlooked';
+    #[Computed]
+    public function uploadCount(): int
+    {
+        return GeneticUpload::where('user_id', (int) auth()->id())->where('status', '!=', UploadStatus::Failed)->count();
+    }
 
-            if ($group !== null && $group !== $key) {
-                continue;
-            }
+    /** "{n} variants from {u} uploads", plus " and {m} added by hand" when any were. */
+    #[Computed]
+    public function sourceSummary(): string
+    {
+        $manual = count(array_filter($this->variants, fn (VariantData $variant): bool => $variant->source === 'manual'));
+        $uploaded = count($this->variants) - $manual;
 
-            if ($needle !== '') {
-                $haystack = [$variant->gene, $variant->rsid, $variantGroup?->label(), $variant->category, $variant->affects, $variant->genotypeEffect];
-
-                if (! collect($haystack)->contains(fn (?string $field): bool => $field !== null && mb_stripos($field, $needle) !== false)) {
-                    continue;
-                }
-            }
-
-            if ($variantGroup === null) {
-                $unlooked[] = $variant;
-            } else {
-                $buckets[$key][] = $variant;
-            }
+        if ($uploaded === 0) {
+            return $manual === 0 ? 'No variants yet.' : $manual.' '.Str::plural('variant', $manual).' added by hand.';
         }
 
-        $sections = [];
+        $uploads = max(1, $this->uploadCount);
+        $text = $uploaded.' '.Str::plural('variant', $uploaded).' from '.($uploads === 1 ? 'one upload' : $uploads.' uploads');
 
-        foreach (VariantGroup::cases() as $case) {
-            if (isset($buckets[$case->value])) {
-                $sections[] = ['key' => $case->value, 'label' => $case->label(), 'variants' => $buckets[$case->value]];
-            }
-        }
-
-        if ($unlooked !== []) {
-            $sections[] = ['key' => 'unlooked', 'label' => 'Not looked up yet', 'variants' => $unlooked];
-        }
-
-        return $sections;
+        return $text.($manual > 0 ? ' and '.$manual.' added by hand.' : '.');
     }
 
     /** @return list<string> */
@@ -376,100 +386,112 @@ new #[Title('My genetics')] class extends Component
         unset($this->openSectionKeys);
     }
 
-    private function isLookedUpVariant(VariantData $variant): bool
+    private function forgetVariants(): void
     {
-        return $variant->status->isLookedUp();
+        unset($this->variants, $this->links, $this->grouping, $this->counts, $this->groupOptions, $this->groupedVariants, $this->hasLookingUp);
     }
 };
 ?>
 
-<div class="space-y-6" @if ($this->hasActiveUploads || $this->hasLookingUp) wire:poll.3s @endif>
-    <flux:callout icon="information-circle">
-        <flux:callout.text>Educational summary of published research, not medical advice or a diagnosis. Talk to a qualified clinician before acting on genetic results.</flux:callout.text>
-    </flux:callout>
+<div @if ($this->hasActiveUploads || $this->hasLookingUp) wire:poll.3s @endif>
+<x-ui.panel>
+    <header class="flex flex-col gap-1.5">
+        <h1 class="text-[30px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">Genetics</h1>
+        <p class="text-[15px] text-ink-muted">{{ $this->sourceSummary }}</p>
+        <p class="text-[15px] text-ink-muted">Raw files are deleted after processing; only marker lines ever reach the AI model.</p>
+    </header>
 
-    <flux:card class="space-y-4">
-        <form wire:submit="uploadResults" class="grid items-start gap-3 md:grid-cols-4">
-            <div class="md:col-span-3">
-                <flux:input
-                    type="file"
+    <x-ui.notice>Educational summary of published research, not medical advice or a diagnosis. Talk to a qualified clinician before acting on genetic results.</x-ui.notice>
+
+    <div class="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr))]">
+        <section class="flex flex-col gap-3.5 rounded-section border border-line p-5">
+            <h2 class="text-[18px] font-bold">Upload results</h2>
+            <form wire:submit="uploadResults" class="flex flex-col gap-3"
+                x-data="{ uploading: false, progress: 0 }"
+                x-on:livewire-upload-start="uploading = true; progress = 0"
+                x-on:livewire-upload-progress="progress = $event.detail.progress"
+                x-on:livewire-upload-finish="uploading = false"
+                x-on:livewire-upload-error="uploading = false"
+            >
+                <x-ui.dropzone
                     wire:model="file"
                     accept=".txt,.csv,.pdf"
-                    label="Upload results"
-                    description="A 23andMe, AncestryDNA, MyHeritage or FamilyTreeDNA raw data file, a CSV of markers, or a PDF report. TXT, CSV or PDF, up to {{ intdiv((int) config('genetics.max_upload_kb'), 1024) }} MB."
+                    label="Drop a raw data file or a PDF report"
+                    help="23andMe, AncestryDNA, MyHeritage, FamilyTreeDNA, a marker CSV or a PDF · up to {{ intdiv((int) config('genetics.max_upload_kb'), 1024) }} MB"
+                    :filename="$file?->getClientOriginalName()"
                 />
-            </div>
-            <flux:button type="submit" variant="primary" class="mt-6" wire:loading.attr="disabled" wire:target="file,uploadResults">Upload</flux:button>
-        </form>
+                <div x-show="uploading" x-cloak class="h-1.5 overflow-hidden rounded-full bg-surface-sunken" role="progressbar" aria-label="Upload progress">
+                    <div class="h-full bg-juniper transition-[width]" x-bind:style="'width: ' + progress + '%'"></div>
+                </div>
+                <flux:error name="file" />
+                <button type="submit" wire:loading.attr="disabled" wire:target="file,uploadResults" class="inline-flex h-[46px] items-center justify-center self-start rounded-full bg-juniper px-6 text-[15px] font-semibold text-white hover:bg-juniper-hover disabled:opacity-60">Upload</button>
+            </form>
 
-        @if ($this->uploads->isNotEmpty())
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="border-b border-zinc-200 text-zinc-500">
-                        <tr>
-                            <th class="py-2 pr-4 font-medium">File</th>
-                            <th class="py-2 pr-4 font-medium">Status</th>
-                            <th class="py-2 pr-4 font-medium">Found</th>
-                            <th class="py-2 pr-4 font-medium">Stored</th>
-                            <th class="py-2 font-medium">Queued for lookup</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-zinc-100">
-                        @foreach ($this->uploads as $upload)
-                            <tr wire:key="upload-{{ $upload->id }}">
-                                <td class="py-2 pr-4 break-all">{{ $upload->original_name }}</td>
-                                <td class="py-2 pr-4">
-                                    {{ $upload->status->label() }}
-                                    @if ($upload->readSummary() !== null)
-                                        <span class="block text-zinc-500">{{ $upload->readSummary() }}</span>
-                                    @endif
-                                    @if ($upload->error !== null)
-                                        <span class="block text-red-600">{{ $upload->error }}</span>
-                                    @endif
-                                </td>
-                                <td class="py-2 pr-4">{{ $upload->found_count }}</td>
-                                <td class="py-2 pr-4">{{ $upload->stored_count }}</td>
-                                <td class="py-2">{{ $upload->queued_lookups }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
-    </flux:card>
+            @foreach ($this->uploads as $upload)
+                <div wire:key="upload-{{ $upload->id }}" class="flex items-center gap-3 border-t border-line-soft pt-3.5">
+                    <span class="flex size-9 shrink-0 items-center justify-center rounded-tile bg-surface-sunken text-ink-muted"><x-icon.file class="size-5" /></span>
+                    <span class="flex min-w-0 flex-1 flex-col gap-0.5">
+                        <span class="text-[14px] font-semibold break-all">{{ $upload->original_name }}</span>
+                        <span class="text-[13px] text-ink-muted">
+                            @if ($upload->readSummary() !== null){{ $upload->readSummary() }} · @endif{{ $upload->queued_lookups }} queued for lookup
+                        </span>
+                        <span class="sr-only">Found {{ $upload->found_count }}, stored {{ $upload->stored_count }}</span>
+                        @if ($upload->error !== null)
+                            <span class="text-[13px] text-bad-text">{{ $upload->error }}</span>
+                        @endif
+                    </span>
+                    <x-ui.status :tone="$upload->status->tone()" :label="$upload->status->label()" />
+                </div>
+            @endforeach
+        </section>
 
-    <flux:card>
-        <form wire:submit="addVariant" class="grid items-start gap-3 md:grid-cols-4">
-            <flux:input wire:model="rsid" label="rsID" placeholder="rs1801133" maxlength="12" />
-            <flux:input wire:model="genotype" label="Genotype" placeholder="A/G" maxlength="5" />
-            <flux:input wire:model="gene" label="Gene (optional)" placeholder="MTHFR" maxlength="15" />
-            <flux:button type="submit" variant="primary" class="mt-6">Add SNP</flux:button>
-        </form>
-    </flux:card>
+        <section class="flex flex-col gap-3.5 rounded-section border border-line p-5">
+            <h2 class="text-[18px] font-bold">Add a single SNP</h2>
+            <p class="text-[14px] leading-normal text-ink-muted">Know a result that wasn't in your file? Add it by hand and we'll look it up.</p>
+            <form wire:submit="addVariant" class="flex flex-1 flex-col gap-3">
+                <div class="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(min(130px,100%),1fr))]">
+                    <flux:input wire:model="rsid" label="rsID" placeholder="rs1801133" maxlength="12" />
+                    <flux:input wire:model="genotype" label="Genotype" placeholder="A/G" maxlength="5" />
+                    <flux:input wire:model="gene" label="Gene (optional)" placeholder="MTHFR" maxlength="15" />
+                </div>
+                <button type="submit" class="mt-auto inline-flex h-[46px] items-center justify-center self-start rounded-full bg-surface-sunken px-[22px] text-[15px] font-semibold text-ink hover:bg-line">Add SNP</button>
+            </form>
+        </section>
+    </div>
 
-    <flux:card>
+    <section class="flex flex-col gap-3.5">
         <flux:error name="lookup" />
 
         @if ($this->variants === [])
-            <flux:text>No SNPs yet. Add one above.</flux:text>
+            <p class="text-[15px] text-ink-muted">No SNPs yet. Add one above.</p>
         @else
-            <div class="mb-4 grid gap-3 md:grid-cols-3">
-                <flux:select wire:model.live="group" aria-label="Filter by group">
-                    <flux:select.option value="">All</flux:select.option>
-                    @foreach ($this->groupOptions as $value => $label)
-                        <flux:select.option value="{{ $value }}">{{ $label }}</flux:select.option>
-                    @endforeach
-                </flux:select>
-                <div class="md:col-span-2">
-                    <flux:input wire:model.live.debounce.300ms="search" type="search" icon="magnifying-glass" placeholder="Search gene, rsID, group, category or effect" aria-label="Search variants" maxlength="100" />
-                </div>
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <h2 class="text-[20px] font-bold">Your variants</h2>
+                <label class="flex h-[46px] flex-[0_1_360px] items-center gap-2.5 rounded-full border border-line bg-surface-input px-4">
+                    <x-icon.search class="size-[18px] shrink-0 text-ink-subtle" />
+                    <span class="sr-only">Search variants</span>
+                    <input wire:model.live.debounce.300ms="search" type="search" placeholder="Search gene, rsID or effect" maxlength="100" class="min-w-0 flex-1 border-0 bg-transparent p-0 text-[15px] text-ink outline-none focus:ring-0" />
+                </label>
+            </div>
+
+            <div class="flex flex-wrap gap-2" data-filter-chips>
+                <x-ui.chip :active="$this->activeGroup === null" :count="$this->counts['all']" wire:click="$set('group', '')">All</x-ui.chip>
+                <x-ui.chip :active="$this->activeGroup === 'linked'" :count="$this->counts['linked']" wire:click="$set('group', 'linked')">Linked to a supplement</x-ui.chip>
+                <x-ui.chip :active="$this->activeGroup === 'two_copies'" :count="$this->counts['two_copies']" wire:click="$set('group', 'two_copies')">Two copies</x-ui.chip>
+                <x-ui.chip :active="$this->activeGroup === 'unlooked'" :count="$this->counts['unlooked']" wire:click="$set('group', 'unlooked')">Not looked up</x-ui.chip>
+                @foreach ($this->groupOptions as $value => $label)
+                    @if ($value !== 'unlooked')
+                        <x-ui.chip wire:key="chip-{{ $value }}" :active="$this->activeGroup === $value" :count="$this->counts['groups'][$value] ?? 0" wire:click="$set('group', '{{ $value }}')">{{ $label }}</x-ui.chip>
+                    @endif
+                @endforeach
             </div>
 
             @if ($this->groupedVariants === [])
-                <flux:text>No variants match.</flux:text>
+                <p class="text-[15px] text-ink-muted">No variants match.</p>
             @else
-                <x-genetics::variant-list :sections="$this->groupedVariants" :open-keys="$this->openSectionKeys" />
+                <x-genetics::variant-list :sections="$this->groupedVariants" :open-keys="$this->openSectionKeys" :links="$this->links" :looking-up="$this->counts['looking_up']" />
             @endif
         @endif
-    </flux:card>
+    </section>
+</x-ui.panel>
 </div>
