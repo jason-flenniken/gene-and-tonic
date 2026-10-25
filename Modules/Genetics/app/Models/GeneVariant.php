@@ -18,6 +18,7 @@ use Modules\Genetics\Enums\VariantGroup;
  * @property string|null $reference_allele
  * @property string|null $risk_allele
  * @property string|null $category
+ * @property string|null $variant_name
  * @property VariantGroup|null $category_group
  * @property string|null $affects
  * @property array<string, string>|null $genotype_effects
@@ -32,7 +33,7 @@ class GeneVariant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rsid', 'gene', 'reference_allele', 'risk_allele', 'category', 'category_group', 'affects',
+        'rsid', 'gene', 'reference_allele', 'risk_allele', 'category', 'variant_name', 'category_group', 'affects',
         'genotype_effects', 'sources', 'status', 'error', 'looked_up_at',
     ];
 

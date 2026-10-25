@@ -22,5 +22,6 @@ final readonly class LookupResult
         public ?string $riskAllele,
         public array $genotypeEffects,
         public array $sources,
+        public ?string $variantName = null,
     ) {}
 }

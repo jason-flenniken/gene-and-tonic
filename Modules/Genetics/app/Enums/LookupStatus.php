@@ -18,6 +18,14 @@ enum LookupStatus: string
         return $this === self::LookingUp;
     }
 
+    /**
+     * True once a lookup has finished or the row was seeded: every status except Pending, LookingUp and Failed.
+     */
+    public function isLookedUp(): bool
+    {
+        return ! in_array($this, [self::Pending, self::LookingUp, self::Failed], true);
+    }
+
     public function label(): string
     {
         return ucfirst(str_replace('_', ' ', $this->value));
