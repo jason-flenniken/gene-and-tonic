@@ -6,12 +6,16 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:34:57.259Z",
-  "stage": "discover",
+  "updated": "2026-10-25T14:47:45.987Z",
+  "stage": "prd",
   "stageHistory": [
     {
       "stage": "discover",
       "at": "2026-10-25T14:34:57.259Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-25T14:47:45.986Z"
     }
   ],
   "paused": null,
@@ -28,8 +32,25 @@
       "at": "2026-10-25T14:34:57.259Z",
       "event": "level",
       "detail": "standard"
+    },
+    {
+      "at": "2026-10-25T14:47:45.987Z",
+      "event": "advanced",
+      "detail": "prd"
     }
   ],
   "cairnVersion": "0.3.0",
-  "level": "standard"
+  "level": "standard",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "ux",
+      "text": "Lookups rarely fill genotype effects (1 of 21): add genotype-level sources such as SNPedia/ClinVar to the lookup research",
+      "where": [
+        "Modules/Genetics/resources/views/prompts/lookup-instructions.blade.php"
+      ],
+      "from": "user",
+      "at": "2026-10-25T14:39:53.383Z"
+    }
+  ]
 }
