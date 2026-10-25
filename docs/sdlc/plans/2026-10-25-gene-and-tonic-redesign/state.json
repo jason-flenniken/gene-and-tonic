@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T20:34:04.697Z",
+  "updated": "2026-10-25T20:36:55.266Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -51,6 +51,11 @@
       "via": "human",
       "source": "mod",
       "hash": "76bf7d973871e427"
+    },
+    "ship": {
+      "at": "2026-10-25T20:36:55.266Z",
+      "via": "human",
+      "source": "mod"
     }
   },
   "phases": [
@@ -1387,6 +1392,16 @@
       "at": "2026-10-25T20:34:04.697Z",
       "event": "advanced",
       "detail": "ship"
+    },
+    {
+      "at": "2026-10-25T20:36:01.600Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-25T20:36:55.266Z",
+      "event": "ship approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -2093,6 +2108,337 @@
       ],
       "from": "branch-review",
       "at": "2026-10-25T20:31:24.748Z"
+    },
+    {
+      "id": "s71",
+      "area": "ux",
+      "text": "Dismissed gene-and-tonic-redesign:s13",
+      "where": [
+        "resources/views/components/ui/segmented/item.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s13",
+      "dismissed": true,
+      "note": "44px targets added in the polish task",
+      "at": "2026-10-25T20:34:23.913Z"
+    },
+    {
+      "id": "s72",
+      "area": "tests",
+      "text": "Dismissed gene-and-tonic-redesign:s15",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsageWindowTest.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s15",
+      "dismissed": true,
+      "note": "24h fields removed in the review fix",
+      "at": "2026-10-25T20:34:24.099Z"
+    },
+    {
+      "id": "s73",
+      "area": "ux",
+      "text": "Dismissed gene-and-tonic-redesign:s24",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s24",
+      "dismissed": true,
+      "note": "sidebar 210px and user row sizes fixed in polish",
+      "at": "2026-10-25T20:34:24.274Z"
+    },
+    {
+      "id": "s74",
+      "area": "quality",
+      "text": "Dismissed gene-and-tonic-redesign:s27",
+      "where": [
+        "resources/views/components/ui/button.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s27",
+      "dismissed": true,
+      "note": "type prop added in polish",
+      "at": "2026-10-25T20:34:24.458Z"
+    },
+    {
+      "id": "s75",
+      "area": "quality",
+      "text": "Dismissed gene-and-tonic-redesign:s39",
+      "where": [
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s39",
+      "dismissed": true,
+      "note": "label() now drives the view",
+      "at": "2026-10-25T20:34:24.658Z"
+    },
+    {
+      "id": "s76",
+      "area": "quality",
+      "text": "Dismissed gene-and-tonic-redesign:s40",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s40",
+      "dismissed": true,
+      "note": "count() added to the Supplements contract",
+      "at": "2026-10-25T20:34:24.854Z"
+    },
+    {
+      "id": "s77",
+      "area": "perf",
+      "text": "Dismissed gene-and-tonic-redesign:s48",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s48",
+      "dismissed": true,
+      "note": "profile reader memoized per request",
+      "at": "2026-10-25T20:34:25.057Z"
+    },
+    {
+      "id": "s78",
+      "area": "perf",
+      "text": "Dismissed gene-and-tonic-redesign:s21",
+      "where": [
+        "Modules/Recommendations/app/Services/GeneMatchVariantLinks.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s21",
+      "dismissed": true,
+      "note": "profile and listing memoized per request",
+      "at": "2026-10-25T20:34:25.276Z"
+    },
+    {
+      "id": "s79",
+      "area": "ux",
+      "text": "Dismissed gene-and-tonic-redesign:s12",
+      "where": [
+        "resources/views/components/ui/dropzone.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s12",
+      "dismissed": true,
+      "note": "Genetics page shows upload progress itself",
+      "at": "2026-10-25T20:34:25.491Z"
+    },
+    {
+      "id": "s80",
+      "area": "tests",
+      "text": "Dismissed gene-and-tonic-redesign:s25",
+      "where": [
+        "tests/Feature/ShellRoutesTest.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s25",
+      "dismissed": true,
+      "note": "covered by the page title follow-up",
+      "at": "2026-10-25T20:34:25.695Z"
+    },
+    {
+      "id": "s81",
+      "area": "tests",
+      "text": "Tighten the redesign's tests: real-page escaping for kicker/title/variant name, non-vacuous guest guards (seed fakes at id 0), a11y and favicon checks, exact stat assertions, and a guest Livewire-update rejection test",
+      "where": [
+        "tests/Feature/LayoutTest.php",
+        "Modules/Supplements/tests/Feature/ResearchTopicsTest.php",
+        "Modules/Genetics/tests/Feature/LookUpAllTest.php",
+        "tests/Feature/Ui",
+        "tests/Feature/Ui/UiShowcaseRouteTest.php",
+        "Modules/Reports/tests/Feature/TemplatesTest.php",
+        "Modules/Shared/tests/**",
+        "tests/Feature/ShellRoutesTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php",
+        "Modules/Genetics/tests/Feature/LookupTest.php",
+        "Modules/Recommendations/tests/Feature/GeneticPanelTest.php",
+        "Modules/Intelligence/tests/Feature/UsagePageTest.php",
+        "Modules/Recommendations/tests/Feature/TopMatchTest.php",
+        "Modules/Genetics/tests/Feature/HomeWidgetsTest.php",
+        "tests/Feature/HomeTest.php",
+        "Modules/Recommendations/tests/Feature/GeneticRelevanceReaderTest.php",
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php",
+        "tests/Feature/**",
+        "Modules/Supplements/tests/Feature/CatalogTest.php",
+        "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s1",
+        "gene-and-tonic-redesign:s5",
+        "gene-and-tonic-redesign:s10",
+        "gene-and-tonic-redesign:s11",
+        "gene-and-tonic-redesign:s14",
+        "gene-and-tonic-redesign:s19",
+        "gene-and-tonic-redesign:s20",
+        "gene-and-tonic-redesign:s23",
+        "gene-and-tonic-redesign:s29",
+        "gene-and-tonic-redesign:s30",
+        "gene-and-tonic-redesign:s31",
+        "gene-and-tonic-redesign:s35",
+        "gene-and-tonic-redesign:s37",
+        "gene-and-tonic-redesign:s38",
+        "gene-and-tonic-redesign:s41",
+        "gene-and-tonic-redesign:s45",
+        "gene-and-tonic-redesign:s47",
+        "gene-and-tonic-redesign:s50",
+        "gene-and-tonic-redesign:s52",
+        "gene-and-tonic-redesign:s54",
+        "gene-and-tonic-redesign:s55",
+        "gene-and-tonic-redesign:s59",
+        "gene-and-tonic-redesign:s67"
+      ],
+      "at": "2026-10-25T20:34:43.570Z"
+    },
+    {
+      "id": "s82",
+      "area": "security",
+      "text": "Harden model-output text (strip tags and control chars, variant-name allowlist), hit the lookUpAll limiter only when rows queue, empty relevance for userId <= 0, and make public view helpers protected",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/LookUpAll.php",
+        "Modules/Genetics/app/Support/LookupResultBuilder.php",
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php",
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s4",
+        "gene-and-tonic-redesign:s7",
+        "gene-and-tonic-redesign:s8",
+        "gene-and-tonic-redesign:s28",
+        "gene-and-tonic-redesign:s65"
+      ],
+      "at": "2026-10-25T20:34:43.753Z"
+    },
+    {
+      "id": "s83",
+      "area": "ux",
+      "text": "UX polish: local-time greeting, Look up now only when something is pending, Home waiting banner and empty states, supplement page title, per-row loading targets, 390px wrapping, decorative logo label",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php",
+        "Modules/Genetics/resources/views/components/variant-list.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php",
+        "resources/views/components/ui/button.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "resources/views/pages/⚡dashboard.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php",
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s32",
+        "gene-and-tonic-redesign:s34",
+        "gene-and-tonic-redesign:s36",
+        "gene-and-tonic-redesign:s43",
+        "gene-and-tonic-redesign:s46",
+        "gene-and-tonic-redesign:s53",
+        "gene-and-tonic-redesign:s56",
+        "gene-and-tonic-redesign:s57",
+        "gene-and-tonic-redesign:s60",
+        "gene-and-tonic-redesign:s61",
+        "gene-and-tonic-redesign:s68",
+        "gene-and-tonic-redesign:s69"
+      ],
+      "at": "2026-10-25T20:34:43.940Z"
+    },
+    {
+      "id": "s84",
+      "area": "perf",
+      "text": "Batch and memoize the relevance and research-listing reads (catalog match counts, match-stat, single-supplement page, Home's three all() calls)",
+      "where": [
+        "Modules/Recommendations/resources/views/slots/match-count.blade.php",
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s26",
+        "gene-and-tonic-redesign:s42",
+        "gene-and-tonic-redesign:s51",
+        "gene-and-tonic-redesign:s62"
+      ],
+      "at": "2026-10-25T20:34:44.128Z"
+    },
+    {
+      "id": "s85",
+      "area": "quality",
+      "text": "Code tidy-ups: shared Genotype::alleles(), LookupStatus::isQueueable(), one 'all supplements' limit, Home via x-ui.panel and widgets, small helper extractions, favicon metadata, stray [S8] markers, CLAUDE.md boundary wording",
+      "where": [
+        "public/favicon.svg",
+        "resources/views/layouts/app.blade.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php",
+        "Modules/Recommendations/app/Testing/FakeGeneticRelevanceReader.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/app/Support/VariantGrouping.php",
+        "Modules/Genetics/app/Data/Genotype.php",
+        "resources/views/pages/⚡dashboard.blade.php",
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+        "CLAUDE.md"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s2",
+        "gene-and-tonic-redesign:s3",
+        "gene-and-tonic-redesign:s6",
+        "gene-and-tonic-redesign:s9",
+        "gene-and-tonic-redesign:s16",
+        "gene-and-tonic-redesign:s17",
+        "gene-and-tonic-redesign:s18",
+        "gene-and-tonic-redesign:s22",
+        "gene-and-tonic-redesign:s33",
+        "gene-and-tonic-redesign:s44",
+        "gene-and-tonic-redesign:s58",
+        "gene-and-tonic-redesign:s63",
+        "gene-and-tonic-redesign:s64",
+        "gene-and-tonic-redesign:s66",
+        "gene-and-tonic-redesign:s70"
+      ],
+      "at": "2026-10-25T20:34:44.322Z"
+    },
+    {
+      "id": "s86",
+      "area": "quality",
+      "text": "Code tidy-ups: shared Genotype::alleles(), LookupStatus::isQueueable(), one 'all supplements' limit, one profile read in top-match's no-match case, Home via x-ui.panel and widgets, small helper extractions, favicon metadata, stray [S8] markers, CLAUDE.md boundary wording",
+      "where": [
+        "public/favicon.svg",
+        "resources/views/layouts/app.blade.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php",
+        "Modules/Recommendations/app/Testing/FakeGeneticRelevanceReader.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/app/Support/VariantGrouping.php",
+        "Modules/Genetics/app/Data/Genotype.php",
+        "resources/views/pages/⚡dashboard.blade.php",
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+        "CLAUDE.md",
+        "Modules/Recommendations/resources/views/livewire/⚡top-match.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s85",
+        "gene-and-tonic-redesign:s49"
+      ],
+      "at": "2026-10-25T20:34:53.902Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "ship",
+    "name": "approving",
+    "at": "2026-10-25T20:36:01.599Z"
+  }
 }
