@@ -55,13 +55,13 @@ it('decrypts the genetic profile at most once per component render', function (s
     'match-stat' => ['recommendations::match-stat'],
 ]);
 
-it('decrypts the profile at most twice in your-genes: its own read, then the shared Recommendations reader', function () {
+it('decrypts the profile at most once in your-genes: the scoped reader serves Recommendations from cache', function () {
     $user = User::factory()->create();
     seedHome($user, 4);
 
     $queries = homeQueries(fn () => Livewire::actingAs($user)->test('genetics::your-genes'));
 
-    expect(queriesOn($queries, 'user_variants'))->toBeLessThanOrEqual(2);
+    expect(queriesOn($queries, 'user_variants'))->toBeLessThanOrEqual(1);
 });
 
 it('keeps Home queries flat as supplements grow from 1 to 4', function () {

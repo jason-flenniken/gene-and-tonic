@@ -8,6 +8,8 @@ use Modules\Genetics\Console\DemoFilesCommand;
 use Modules\Genetics\Console\GroupVariantsCommand;
 use Modules\Genetics\Console\ReapStaleCommand;
 use Modules\Genetics\Contracts\GeneticProfileReader;
+use Modules\Genetics\Models\GeneVariant;
+use Modules\Genetics\Models\UserVariant;
 use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
 use Modules\Genetics\Support\Extraction\AiMarkerExtractor;
 use Modules\Genetics\Support\Extraction\LocalTextExtractor;
@@ -51,6 +53,8 @@ class GeneticsServiceProvider extends ModuleServiceProvider
             classViewPath: module_path($this->name, 'resources/views/livewire'),
         );
 
+        $this->flushProfileCacheOnWrites();
+
         $registry = $this->app->make(ProfileRegistry::class);
         $registry->register('genetics.extract', config('genetics.extract_profile'));
         $registry->register('genetics.lookup', config('genetics.lookup_profile'));
@@ -71,8 +75,24 @@ class GeneticsServiceProvider extends ModuleServiceProvider
 
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 
-        $this->app->bind(GeneticProfileReader::class, EloquentGeneticProfileReader::class);
+        $this->app->scoped(EloquentGeneticProfileReader::class);
+        $this->app->scoped(GeneticProfileReader::class, fn (): EloquentGeneticProfileReader => $this->app->make(EloquentGeneticProfileReader::class));
         $this->app->bind(TextExtractor::class, LocalTextExtractor::class);
         $this->app->bind(MarkerExtractor::class, AiMarkerExtractor::class);
+    }
+
+    /**
+     * Keep the request-scoped profile cache honest: any saved or deleted variant row invalidates it.
+     */
+    private function flushProfileCacheOnWrites(): void
+    {
+        $flush = function (): void {
+            $this->app->make(EloquentGeneticProfileReader::class)->flush();
+        };
+
+        foreach ([UserVariant::class, GeneVariant::class] as $model) {
+            $model::saved($flush);
+            $model::deleted($flush);
+        }
     }
 }

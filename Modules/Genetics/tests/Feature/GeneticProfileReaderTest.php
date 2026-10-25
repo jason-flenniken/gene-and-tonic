@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\VariantData;
@@ -95,4 +96,53 @@ it('returns an empty profile for a user with no variants', function () {
     expect($profile->isEmpty())->toBeTrue()
         ->and($profile->count())->toBe(0)
         ->and($profile->variants)->toBe([]);
+});
+
+it('decrypts once for repeated reads in the same request', function () {
+    $user = User::factory()->create();
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs4680']);
+    $reader = app(GeneticProfileReader::class);
+
+    DB::enableQueryLog();
+    $first = $reader->forUser($user->id);
+    $second = $reader->forUser($user->id);
+    $userVariantQueries = collect(DB::getQueryLog())->filter(fn (array $q): bool => str_contains($q['query'], 'user_variants'));
+    DB::disableQueryLog();
+
+    expect($second)->toBe($first)
+        ->and($userVariantQueries)->toHaveCount(1);
+});
+
+it('returns fresh data after a variant write in the same request', function () {
+    $user = User::factory()->create();
+    GeneVariant::factory()->create(['rsid' => 'rs4680']);
+    $variant = UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs4680', 'genotype' => 'AG']);
+    $reader = app(GeneticProfileReader::class);
+
+    expect($reader->forUser($user->id)->variants[0]->genotype)->not->toBe('GG');
+
+    $variant->update(['genotype' => 'GG']);
+    expect($reader->forUser($user->id)->variants[0]->genotype)->toBe('GG');
+
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs9999999']);
+    expect($reader->forUser($user->id)->count())->toBe(2);
+
+    GeneVariant::query()->where('rsid', 'rs4680')->first()->update(['gene' => 'COMT']);
+    expect($reader->forUser($user->id)->variants[0]->gene)->toBe('COMT');
+
+    $variant->delete();
+    expect($reader->forUser($user->id)->count())->toBe(1);
+});
+
+it('never serves one user\'s cached profile to another user', function () {
+    [$a, $b] = User::factory()->count(2)->create();
+    UserVariant::factory()->create(['user_id' => $a->id, 'rsid' => 'rs4680']);
+    $reader = app(GeneticProfileReader::class);
+
+    $reader->forUser($a->id);
+    $profileB = $reader->forUser($b->id);
+
+    expect($profileB->userId)->toBe($b->id)
+        ->and($profileB->isEmpty())->toBeTrue()
+        ->and($reader->forUser($a->id)->count())->toBe(1);
 });
