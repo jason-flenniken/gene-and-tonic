@@ -6,7 +6,7 @@
   "branch": "fix/genetics-upload-complex-csv",
   "base": "main",
   "created": "2026-10-25T13:26:58.864Z",
-  "updated": "2026-10-25T13:54:51.314Z",
+  "updated": "2026-10-25T13:55:02.798Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -196,6 +196,11 @@
       "at": "2026-10-25T13:54:51.314Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T13:55:02.798Z",
+      "event": "step",
+      "detail": "opening-pr"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -269,7 +274,7 @@
   ],
   "step": {
     "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-25T13:54:33.037Z"
+    "name": "opening-pr",
+    "at": "2026-10-25T13:55:02.798Z"
   }
 }
