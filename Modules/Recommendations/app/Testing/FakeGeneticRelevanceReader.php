@@ -52,7 +52,7 @@ class FakeGeneticRelevanceReader implements GeneticRelevanceReader
     {
         $top = array_values(array_filter($this->top[$userId] ?? [], fn (SupplementMatchesData $supplement): bool => $supplement->matches !== []));
 
-        usort($top, fn (SupplementMatchesData $a, SupplementMatchesData $b): int => [count($b->matches), $a->name] <=> [count($a->matches), $b->name]);
+        usort($top, fn (SupplementMatchesData $a, SupplementMatchesData $b): int => count($b->matches) <=> count($a->matches) ?: strcasecmp($a->name, $b->name));
 
         return array_slice($top, 0, max(0, $limit));
     }

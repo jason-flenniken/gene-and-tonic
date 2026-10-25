@@ -50,7 +50,7 @@ final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
             }
         }
 
-        usort($top, fn (SupplementMatchesData $a, SupplementMatchesData $b): int => [count($b->matches), $a->name] <=> [count($a->matches), $b->name]);
+        usort($top, fn (SupplementMatchesData $a, SupplementMatchesData $b): int => count($b->matches) <=> count($a->matches) ?: strcasecmp($a->name, $b->name));
 
         return array_slice($top, 0, max(0, $limit));
     }

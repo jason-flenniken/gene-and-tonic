@@ -313,11 +313,11 @@ it('breaks a tie in match count by name and returns one supplement by default', 
     $this->research
         ->withSummary(relevanceSummary(1, 'Riboflavin', [relevanceInteraction('MTR', 'rs1805087', null)]))
         ->withSummary(relevanceSummary(2, 'B12', [relevanceInteraction('MTR', 'rs1805087', null)]))
-        ->withSummary(relevanceSummary(3, 'Methylfolate', [relevanceInteraction('MTR', 'rs1805087', null)]));
+        ->withSummary(relevanceSummary(3, 'methylfolate', [relevanceInteraction('MTR', 'rs1805087', null)]));
 
     $reader = app(GeneticRelevanceReader::class);
 
-    expect(rankingRows($reader->topForUser(RELEVANCE_USER, 2)))->toBe([[2, 'B12', 1], [3, 'Methylfolate', 1]])
+    expect(rankingRows($reader->topForUser(RELEVANCE_USER, 2)))->toBe([[2, 'B12', 1], [3, 'methylfolate', 1]])
         ->and(rankingRows($reader->topForUser(RELEVANCE_USER)))->toBe([[2, 'B12', 1]]);
 });
 

@@ -52,12 +52,12 @@ it('ranks the stored top supplements by match count then name, without empty one
         fakeTop(1, 'Zinc', 2),
         fakeTop(2, 'Methylfolate', 3),
         fakeTop(3, 'B12', 0),
-        fakeTop(4, 'Riboflavin', 2),
+        fakeTop(4, 'riboflavin', 2),
     ]);
 
     $top = app(GeneticRelevanceReader::class)->topForUser(3, 5);
 
-    expect(array_map(fn (SupplementMatchesData $supplement) => $supplement->name, $top))->toBe(['Methylfolate', 'Riboflavin', 'Zinc']);
+    expect(array_map(fn (SupplementMatchesData $supplement) => $supplement->name, $top))->toBe(['Methylfolate', 'riboflavin', 'Zinc']);
 });
 
 it('applies the limit, one by default', function () {
