@@ -50,8 +50,28 @@ class FakeSupplementResearchReader implements SupplementResearchReader
         return count($this->summaries);
     }
 
+    /**
+     * Explicit summaries first; research added with with() fills in a derived summary for any id without one.
+     */
     public function all(): array
     {
-        return array_values($this->summaries);
+        $summaries = $this->summaries;
+
+        foreach ($this->research as $id => $research) {
+            $summaries[$id] ??= new SupplementSummaryData(
+                supplementId: $id,
+                name: $research->name,
+                status: $research->status,
+                completedAt: $research->completedAt,
+                effectsCount: count($research->effects),
+                studiesCount: count($research->studies),
+                sourcesCount: count($research->sources),
+                topics: $research->topics,
+                geneInteractions: $research->geneInteractions,
+                geneticsChecked: $research->geneticsChecked,
+            );
+        }
+
+        return array_values($summaries);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\CarbonImmutable;
+use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\VariantData;
 use Modules\Genetics\Enums\LookupStatus;
@@ -326,4 +327,28 @@ it('returns no top supplements for a user with no profile', function () {
     $this->research->withSummary(relevanceSummary(1, 'B12', [relevanceInteraction('MTR', 'rs1805087', null)]));
 
     expect(app(GeneticRelevanceReader::class)->topForUser(RELEVANCE_USER, 5))->toBe([]);
+});
+
+it('reads the profile and the research listing once per request however often it is asked', function () {
+    $reads = 0;
+    $profiles = new class($reads) extends FakeGeneticProfileReader
+    {
+        public function __construct(public int &$reads) {}
+
+        public function forUser(int $userId): GeneticProfileData
+        {
+            $this->reads++;
+
+            return new GeneticProfileData($userId, [relevanceVariant('rs1801133', 'MTHFR', 'AG')]);
+        }
+    };
+    app()->instance(GeneticProfileReader::class, $profiles);
+    $this->research->with(relevanceResearch([new GeneInteractionData('MTHFR', 'rs1801133', 'A', GeneRelation::Helps, 'x', ['S1'])]));
+
+    $reader = app(GeneticRelevanceReader::class);
+    $reader->forUserAndSupplement(RELEVANCE_USER, RELEVANCE_SUPPLEMENT);
+    $reader->forUserAndSupplement(RELEVANCE_USER, RELEVANCE_SUPPLEMENT);
+    $reader->topForUser(RELEVANCE_USER, 5);
+
+    expect($reads)->toBe(1)->and(app(GeneticRelevanceReader::class))->toBe($reader);
 });

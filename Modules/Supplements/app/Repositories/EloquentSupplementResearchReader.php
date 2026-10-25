@@ -110,6 +110,7 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
                 sourcesCount: (int) $supplement->sources_count,
                 topics: $this->topics($research->topics),
                 geneInteractions: $this->interactions($supplement),
+                geneticsChecked: $research->genetics_checked_at !== null,
             );
         }
 

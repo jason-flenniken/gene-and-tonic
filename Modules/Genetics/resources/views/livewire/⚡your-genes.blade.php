@@ -106,7 +106,7 @@ new class extends Component
                 @if ($this->summary['waiting'] > 0)
                     <div class="mt-2 flex flex-wrap items-center justify-between gap-3 rounded-row bg-lime-tint px-4 py-3" data-lookup-banner>
                         <span class="text-[14px] text-ink-body">{{ $this->summary['waiting'] }} {{ str('variant')->plural($this->summary['waiting']) }} {{ $this->summary['waiting'] === 1 ? 'is' : 'are' }} waiting for a lookup</span>
-                        <x-ui.button variant="on-tint" class="!h-[38px] !px-4 !text-[14px]" wire:click="lookUpAll">Look up now</x-ui.button>
+                        <x-ui.button variant="on-tint" class="!h-11 !px-4 !text-[14px]" wire:click="lookUpAll" loading="lookUpAll">Look up now</x-ui.button>
                     </div>
                 @endif
             @endif

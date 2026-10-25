@@ -1,4 +1,4 @@
-@props(['variant' => 'primary', 'href' => null])
+@props(['variant' => 'primary', 'href' => null, 'type' => 'button', 'loading' => null])
 
 @php
     $classes = [
@@ -12,5 +12,9 @@
 @if ($href)
     <a href="{{ $href }}" {{ $attributes->class($classes) }}>{{ $slot }}</a>
 @else
-    <button type="button" {{ $attributes->class($classes) }}>{{ $slot }}</button>
+    <button
+        type="{{ $type }}"
+        @if ($loading) wire:loading.attr="disabled" wire:target="{{ $loading }}" @endif
+        {{ $attributes->class([...$classes, 'disabled:cursor-not-allowed disabled:opacity-60']) }}
+    >{{ $slot }}</button>
 @endif

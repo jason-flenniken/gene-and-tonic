@@ -57,7 +57,8 @@ class RecommendationsServiceProvider extends ModuleServiceProvider
 
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 
-        $this->app->bind(GeneticRelevanceReader::class, RuleBasedGeneticRelevanceReader::class);
-        $this->app->bind(VariantLinks::class, GeneMatchVariantLinks::class);
+        // Scoped: one reader per request memoizes the profile and research reads. GeneMatchVariantLinks resolves the same reader.
+        $this->app->scoped(GeneticRelevanceReader::class, RuleBasedGeneticRelevanceReader::class);
+        $this->app->scoped(VariantLinks::class, GeneMatchVariantLinks::class);
     }
 }

@@ -29,7 +29,7 @@
                         {{ $section['label'] }}
                         <span class="font-normal text-ink-subtle">· {{ $count }} {{ $count === 1 ? 'variant' : 'variants' }}, {{ $lookingUp }} queued</span>
                     </span>
-                    <x-ui.button wire:click.stop="lookUpAll">Look up now</x-ui.button>
+                    <x-ui.button wire:click.stop="lookUpAll" loading="lookUpAll">Look up now</x-ui.button>
                 @else
                     <x-ui.icon-tile :tone="$group->tone()"><x-dynamic-component :component="'icon.'.$group->icon()" /></x-ui.icon-tile>
                     <span class="flex-1 text-[16px] font-semibold group-open:font-bold">
@@ -85,7 +85,7 @@
                                 @endif
                             </span>
                             @if ($variant->status !== LookupStatus::LookingUp)
-                                <flux:button size="sm" wire:click="lookUp('{{ $variant->rsid }}')">Look up</flux:button>
+                                <x-ui.button variant="secondary" wire:click="lookUp('{{ $variant->rsid }}')" loading="lookUp" class="!h-11 !px-4 !text-[14px]">Look up</x-ui.button>
                             @endif
                         </div>
                     @endif

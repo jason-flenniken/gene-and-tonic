@@ -3,6 +3,7 @@
 namespace Modules\Recommendations\Services;
 
 use Modules\Genetics\Contracts\GeneticProfileReader;
+use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\Genotype;
 use Modules\Genetics\Data\VariantData;
 use Modules\Recommendations\Contracts\GeneticRelevanceReader;
@@ -11,9 +12,22 @@ use Modules\Recommendations\Data\GeneticRelevanceData;
 use Modules\Recommendations\Data\SupplementMatchesData;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\GeneInteractionData;
+use Modules\Supplements\Data\SupplementSummaryData;
 
 final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
 {
+    /**
+     * Bound as scoped: one instance per request, so the profile is read once per
+     * user and the research listing once. This module only reads genetic data,
+     * so nothing here goes stale inside a request.
+     *
+     * @var array<int, GeneticProfileData>
+     */
+    private array $profileCache = [];
+
+    /** @var array<int, SupplementSummaryData>|null */
+    private ?array $summaryCache = null;
+
     public function __construct(
         private GeneticProfileReader $profiles,
         private SupplementResearchReader $research,
@@ -21,20 +35,43 @@ final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
 
     public function forUserAndSupplement(int $userId, int $supplementId): GeneticRelevanceData
     {
-        $profile = $this->profiles->forUser($userId);
-        $research = $this->research->forSupplement($supplementId);
+        $profile = $this->profile($userId);
+        $summary = $this->summaries()[$supplementId] ?? null;
+
+        if ($summary === null) {
+            return new GeneticRelevanceData($supplementId, ! $profile->isEmpty(), false, []);
+        }
 
         return new GeneticRelevanceData(
             supplementId: $supplementId,
             hasProfile: ! $profile->isEmpty(),
-            geneticsChecked: $research->geneticsChecked ?? false,
-            matches: $this->matchesForAll($research->geneInteractions ?? [], $profile->variants),
+            geneticsChecked: $summary->geneticsChecked,
+            matches: $this->matchesForAll($summary->geneInteractions, $profile->variants),
         );
+    }
+
+    private function profile(int $userId): GeneticProfileData
+    {
+        return $this->profileCache[$userId] ??= $this->profiles->forUser($userId);
+    }
+
+    /** @return array<int, SupplementSummaryData> */
+    private function summaries(): array
+    {
+        if ($this->summaryCache === null) {
+            $this->summaryCache = [];
+
+            foreach ($this->research->all() as $summary) {
+                $this->summaryCache[$summary->supplementId] = $summary;
+            }
+        }
+
+        return $this->summaryCache;
     }
 
     public function topForUser(int $userId, int $limit = 1): array
     {
-        $profile = $this->profiles->forUser($userId);
+        $profile = $this->profile($userId);
 
         if ($profile->isEmpty()) {
             return [];
@@ -42,7 +79,7 @@ final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
 
         $top = [];
 
-        foreach ($this->research->all() as $supplement) {
+        foreach ($this->summaries() as $supplement) {
             $matches = $this->matchesForAll($supplement->geneInteractions, $profile->variants);
 
             if ($matches !== []) {

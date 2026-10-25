@@ -44,7 +44,7 @@
             <x-ui.button :href="route('supplements.show', $supplement)" class="h-12 flex-[1_1_200px]">Open {{ $supplement->name }}</x-ui.button>
         @endif
         @if ($status && ! $status->isActive())
-            <button type="button" wire:click="retry({{ $supplement->id }})" class="h-12 rounded-full bg-surface-sunken px-5 text-[15px] font-semibold text-ink hover:bg-line">{{ $status === \Modules\Supplements\Enums\ResearchStatus::Failed ? 'Retry' : 'Re-run' }}</button>
+            <x-ui.button variant="secondary" wire:click="retry({{ $supplement->id }})" loading="retry" class="!h-12 !px-5">{{ $status === \Modules\Supplements\Enums\ResearchStatus::Failed ? 'Retry' : 'Re-run' }}</x-ui.button>
         @endif
         @if ($status)
             @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.header') as $headerView)

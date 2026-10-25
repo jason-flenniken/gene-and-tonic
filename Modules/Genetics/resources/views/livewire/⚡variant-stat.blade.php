@@ -8,34 +8,31 @@ use Modules\Genetics\Data\VariantData;
 new class extends Component
 {
     /**
-     * Zero for guests: nothing is read without a signed-in user.
+     * One profile read per render. Zeros for guests: nothing is read without a signed-in user.
+     *
+     * @return array{total: int, lookedUp: int}
      */
     #[Computed]
-    public function total(): int
-    {
-        $userId = auth()->id();
-
-        return $userId === null ? 0 : app(GeneticProfileReader::class)->forUser((int) $userId)->count();
-    }
-
-    #[Computed]
-    public function lookedUp(): int
+    public function counts(): array
     {
         $userId = auth()->id();
 
         if ($userId === null) {
-            return 0;
+            return ['total' => 0, 'lookedUp' => 0];
         }
 
         $variants = app(GeneticProfileReader::class)->forUser((int) $userId)->variants;
 
-        return count(array_filter($variants, fn (VariantData $variant): bool => $variant->status->isLookedUp()));
+        return [
+            'total' => count($variants),
+            'lookedUp' => count(array_filter($variants, fn (VariantData $variant): bool => $variant->status->isLookedUp())),
+        ];
     }
 };
 ?>
 
 <div class="contents">
     @auth
-        <x-ui.stat label="Variants" :value="number_format($this->total)" :caption="number_format($this->lookedUp).' looked up'" data-stat="variants" />
+        <x-ui.stat label="Variants" :value="number_format($this->counts['total'])" :caption="number_format($this->counts['lookedUp']).' looked up'" data-stat="variants" />
     @endauth
 </div>

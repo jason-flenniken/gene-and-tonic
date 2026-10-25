@@ -424,7 +424,7 @@ new #[Title('My genetics')] class extends Component
                     <div class="h-full bg-juniper transition-[width]" x-bind:style="'width: ' + progress + '%'"></div>
                 </div>
                 <flux:error name="file" />
-                <button type="submit" wire:loading.attr="disabled" wire:target="file,uploadResults" class="inline-flex h-[46px] items-center justify-center self-start rounded-full bg-juniper px-6 text-[15px] font-semibold text-white hover:bg-juniper-hover disabled:opacity-60">Upload</button>
+                <x-ui.button type="submit" loading="file,uploadResults" class="self-start">Upload</x-ui.button>
             </form>
 
             @foreach ($this->uploads as $upload)
@@ -454,7 +454,7 @@ new #[Title('My genetics')] class extends Component
                     <flux:input wire:model="genotype" label="Genotype" placeholder="A/G" maxlength="5" />
                     <flux:input wire:model="gene" label="Gene (optional)" placeholder="MTHFR" maxlength="15" />
                 </div>
-                <button type="submit" class="mt-auto inline-flex h-[46px] items-center justify-center self-start rounded-full bg-surface-sunken px-[22px] text-[15px] font-semibold text-ink hover:bg-line">Add SNP</button>
+                <x-ui.button type="submit" variant="secondary" loading="addVariant" class="mt-auto self-start !px-[22px]">Add SNP</x-ui.button>
             </form>
         </section>
     </div>
@@ -467,7 +467,7 @@ new #[Title('My genetics')] class extends Component
         @else
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <h2 class="text-[20px] font-bold">Your variants</h2>
-                <label class="flex h-[46px] flex-[0_1_360px] items-center gap-2.5 rounded-full border border-line bg-surface-input px-4">
+                <label class="flex h-[46px] flex-[0_1_360px] items-center gap-2.5 rounded-full border border-line bg-surface-input px-4 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-juniper">
                     <x-icon.search class="size-[18px] shrink-0 text-ink-subtle" />
                     <span class="sr-only">Search variants</span>
                     <input wire:model.live.debounce.300ms="search" type="search" placeholder="Search gene, rsID or effect" maxlength="100" class="min-w-0 flex-1 border-0 bg-transparent p-0 text-[15px] text-ink outline-none focus:ring-0" />
