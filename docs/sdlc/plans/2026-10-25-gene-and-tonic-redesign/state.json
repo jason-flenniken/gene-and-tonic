@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:23:18.076Z",
+  "updated": "2026-10-25T19:25:50.347Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -358,7 +358,7 @@
     {
       "id": "screens",
       "name": "Screens",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "supplements-index",
@@ -489,16 +489,19 @@
             "Modules/Intelligence/tests/Feature/UsagePageTest.php"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "public page that takes an untrusted window parameter",
-          "substep": "implementing",
           "branch": "task/gene-and-tonic-redesign/usage-page",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--usage-page",
           "base": "14316d4a1a587a0832337af9a9d61c4fcfdc4189",
           "startedAt": "2026-10-25T19:21:37.099Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T19:25:50.346Z",
+          "tip": "c777165",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "55957015fb00a88b3c0cbff199b14f2a19c58278"
         }
       ]
     },
@@ -1069,6 +1072,21 @@
       "at": "2026-10-25T19:23:18.076Z",
       "event": "task done",
       "detail": "Supplement hero, tabs, Overview grid, genetic panel"
+    },
+    {
+      "at": "2026-10-25T19:24:44.123Z",
+      "event": "task reviewing",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:25:30.919Z",
+      "event": "task merging",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:25:50.347Z",
+      "event": "task done",
+      "detail": "AI usage page with period, cost by task, table"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1435,6 +1453,36 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:21:29.915Z"
+    },
+    {
+      "id": "s37",
+      "area": "tests",
+      "text": "Bogus window test should assert usageWindow resolves to All, or normalise $window on mount/update",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsagePageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:25:24.323Z"
+    },
+    {
+      "id": "s38",
+      "area": "tests",
+      "text": "Per-window calls test uses assertSeeInOrder(['Calls','1']); assert on the data-stat=calls value (1 vs 2)",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsagePageTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:25:30.786Z"
+    },
+    {
+      "id": "s39",
+      "area": "quality",
+      "text": "Use UsageWindow::label() instead of an inline label array in the template",
+      "where": [
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:25:30.852Z"
     }
   ]
 }
