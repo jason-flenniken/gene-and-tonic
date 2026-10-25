@@ -4,6 +4,7 @@ namespace Modules\Genetics\Data;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Shared\Data\Concerns\ArrayableData;
 
 /**
@@ -28,5 +29,6 @@ final readonly class VariantData implements Arrayable
         public ?string $genotypeEffect,
         public LookupStatus $status,
         public string $source,
+        public ?VariantGroup $group = null,
     ) {}
 }

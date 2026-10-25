@@ -1,0 +1,686 @@
+{
+  "schema": 1,
+  "slug": "genetics-list-grouping-filters",
+  "title": "Genetics list grouping and filters",
+  "track": "feature",
+  "branch": "feature/genetics-list-grouping-filters",
+  "base": "main",
+  "created": "2026-10-25T14:34:57.259Z",
+  "updated": "2026-10-25T15:17:40.609Z",
+  "stage": "closed",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-25T14:34:57.259Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-25T14:47:45.986Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-25T14:49:34.388Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-25T14:52:22.984Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-25T15:01:17.242Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-25T15:06:14.304Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-25T15:15:32.565Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-25T15:17:18.069Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-25T15:17:40.608Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {
+    "prd": {
+      "at": "2026-10-25T14:49:31.813Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "df34c3b428d5d4df"
+    },
+    "plan": {
+      "at": "2026-10-25T14:52:20.577Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "dd634ff18e0753eb"
+    },
+    "ship": {
+      "at": "2026-10-25T15:17:14.087Z",
+      "via": "human",
+      "source": "mod"
+    }
+  },
+  "phases": [
+    {
+      "id": "groups-data",
+      "name": "Groups in the data",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "variant-groups",
+          "name": "Variant groups in data and lookup",
+          "covers": [
+            "FR-01",
+            "FR-02",
+            "FR-03"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "Modules/Genetics/app/Enums/**",
+            "Modules/Genetics/database/**",
+            "Modules/Genetics/app/Models/GeneVariant.php",
+            "Modules/Genetics/app/Data/VariantData.php",
+            "Modules/Genetics/app/Repositories/EloquentGeneticProfileReader.php",
+            "Modules/Genetics/app/Actions/LookupVariant.php",
+            "Modules/Genetics/app/Support/LookupResultBuilder.php",
+            "Modules/Genetics/app/Support/LookupResult.php",
+            "Modules/Genetics/resources/views/prompts/lookup-instructions.blade.php",
+            "Modules/Genetics/tests/**",
+            "Modules/Recommendations/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "add-only migration on gene_variants and new model-output field",
+          "branch": "task/genetics-list-grouping-filters/variant-groups",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--variant-groups",
+          "base": "f9d81fec1af5f82293fa13e698f1cd7c66270ea2",
+          "startedAt": "2026-10-25T14:52:34.413Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T14:55:36.728Z",
+          "tip": "73823f0",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "abdca4f82731494948ae31af05bc1221aaacdfce"
+        }
+      ]
+    },
+    {
+      "id": "list-and-backfill",
+      "name": "Grouped list and backfill",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "grouped-list-ui",
+          "name": "Grouped list with filter and search",
+          "covers": [
+            "FR-05",
+            "FR-06",
+            "FR-07",
+            "FR-08",
+            "FR-09",
+            "FR-10",
+            "FR-11",
+            "FR-12"
+          ],
+          "blockedBy": [
+            "variant-groups"
+          ],
+          "scope": [
+            "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+            "Modules/Genetics/resources/views/components/variant-list.blade.php",
+            "Modules/Genetics/tests/Feature/ProfilePageTest.php",
+            "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "untrusted search and dropdown input over the user's genetic rows",
+          "branch": "task/genetics-list-grouping-filters/grouped-list-ui",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--grouped-list-ui",
+          "base": "1b8182f9e77211869249d11744636b9fc90e5d0c",
+          "startedAt": "2026-10-25T14:55:51.359Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T15:01:11.385Z",
+          "tip": "0f98973",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "eb86bba99e18dc7289eeb4462c7aecba60efd0b4"
+        },
+        {
+          "id": "group-backfill",
+          "name": "Group backfill command",
+          "covers": [
+            "FR-04"
+          ],
+          "blockedBy": [
+            "variant-groups"
+          ],
+          "scope": [
+            "Modules/Genetics/app/Console/GroupVariantsCommand.php",
+            "Modules/Genetics/app/Providers/GeneticsServiceProvider.php",
+            "Modules/Genetics/config/config.php",
+            "Modules/Genetics/resources/views/prompts/group*.blade.php",
+            "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php",
+            ".env.example",
+            "CLAUDE.md"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "outbound AI prompt and model output written to the shared reference table",
+          "branch": "task/genetics-list-grouping-filters/group-backfill",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--group-backfill",
+          "base": "1b8182f9e77211869249d11744636b9fc90e5d0c",
+          "startedAt": "2026-10-25T14:55:57.107Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T14:59:39.065Z",
+          "tip": "06b4b9a",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "45e530d9cae21a4a922657a3067a9eb23f819f3a"
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-25T15:06:14.194Z",
+      "note": "tests: 564 passing, 3 skipped; 12 requirements met (FR-07 fixed: open state now server-owned, survives re-render), 2 partial-coverage gaps logged; secret scan: clean; audit: composer + npm clean; no lockfile changes"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-25T15:15:32.448Z",
+      "note": "2 Required fixed (header close under filter; browser check done: sections stayed open across 3 polls, closed header stayed closed under search); 13 follow-ups logged",
+      "blocking": 0
+    }
+  },
+  "drift": [
+    {
+      "path": "Modules/Genetics/tests/Feature/UploadPageTest.php",
+      "at": "2026-10-25T15:01:11.384Z",
+      "reason": "changed outside task \"Grouped list with filter and search\" scope (found at task done)",
+      "task": "grouped-list-ui"
+    }
+  ],
+  "log": [
+    {
+      "at": "2026-10-25T14:34:57.259Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-25T14:34:57.259Z",
+      "event": "level",
+      "detail": "standard"
+    },
+    {
+      "at": "2026-10-25T14:47:45.987Z",
+      "event": "advanced",
+      "detail": "prd"
+    },
+    {
+      "at": "2026-10-25T14:49:31.814Z",
+      "event": "PRD approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T14:49:34.388Z",
+      "event": "advanced",
+      "detail": "plan"
+    },
+    {
+      "at": "2026-10-25T14:51:54.794Z",
+      "event": "plan loaded",
+      "detail": "2 phases, 3 tasks"
+    },
+    {
+      "at": "2026-10-25T14:52:20.578Z",
+      "event": "plan approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T14:52:22.984Z",
+      "event": "advanced",
+      "detail": "execute"
+    },
+    {
+      "at": "2026-10-25T14:52:34.414Z",
+      "event": "task started",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:52:57.084Z",
+      "event": "task implementing",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:54:29.460Z",
+      "event": "task reviewing",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:55:19.947Z",
+      "event": "task merging",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:55:36.729Z",
+      "event": "task done",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:55:45.102Z",
+      "event": "phase finished",
+      "detail": "Groups in the data (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T14:55:51.360Z",
+      "event": "task started",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T14:55:57.108Z",
+      "event": "task started",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:56:48.629Z",
+      "event": "task implementing",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T14:56:48.700Z",
+      "event": "task implementing",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:58:32.717Z",
+      "event": "task reviewing",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:59:23.798Z",
+      "event": "task merging",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:59:39.065Z",
+      "event": "task done",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:59:46.291Z",
+      "event": "task reviewing",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T15:00:56.376Z",
+      "event": "task merging",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T15:01:11.385Z",
+      "event": "drift",
+      "detail": "Modules/Genetics/tests/Feature/UploadPageTest.php"
+    },
+    {
+      "at": "2026-10-25T15:01:11.385Z",
+      "event": "task done",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T15:01:17.242Z",
+      "event": "phase finished",
+      "detail": "Grouped list and backfill (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T15:01:17.242Z",
+      "event": "advanced",
+      "detail": "verify"
+    },
+    {
+      "at": "2026-10-25T15:01:24.250Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-25T15:01:45.606Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-25T15:03:47.621Z",
+      "event": "step",
+      "detail": "fixing (1)"
+    },
+    {
+      "at": "2026-10-25T15:06:14.195Z",
+      "event": "verify pass",
+      "detail": "tests: 564 passing, 3 skipped; 12 requirements met (FR-07 fixed: open state now server-owned, survives re-render), 2 partial-coverage gaps logged; secret scan: clean; audit: composer + npm clean; no lockfile changes"
+    },
+    {
+      "at": "2026-10-25T15:06:14.305Z",
+      "event": "advanced",
+      "detail": "review"
+    },
+    {
+      "at": "2026-10-25T15:06:19.813Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-25T15:12:02.217Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-25T15:13:40.922Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-25T15:15:32.448Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (header close under filter; browser check done: sections stayed open across 3 polls, closed header stayed closed under search); 13 follow-ups logged"
+    },
+    {
+      "at": "2026-10-25T15:15:32.565Z",
+      "event": "advanced",
+      "detail": "ship"
+    },
+    {
+      "at": "2026-10-25T15:16:49.765Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-25T15:17:14.087Z",
+      "event": "ship approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T15:17:18.069Z",
+      "event": "advanced",
+      "detail": "learn"
+    },
+    {
+      "at": "2026-10-25T15:17:40.609Z",
+      "event": "closed"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "ux",
+      "text": "Lookups rarely fill genotype effects (1 of 21): add genotype-level sources such as SNPedia/ClinVar to the lookup research",
+      "where": [
+        "Modules/Genetics/resources/views/prompts/lookup-instructions.blade.php"
+      ],
+      "from": "user",
+      "at": "2026-10-25T14:39:53.383Z"
+    },
+    {
+      "id": "s2",
+      "area": "tests",
+      "text": "Render the lookup instructions view in a test and assert the group rule lists every VariantGroup value",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:54:29.381Z"
+    },
+    {
+      "id": "s3",
+      "area": "security",
+      "text": "Make the category_group cast tolerant (fromModel/tryFrom fallback) so one out-of-enum value in the shared table can't break every profile read",
+      "where": [
+        "Modules/Genetics/app/Models/GeneVariant.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T14:55:19.801Z"
+    },
+    {
+      "id": "s4",
+      "area": "tests",
+      "text": "Assert group is null in the pending-row reader test",
+      "where": [
+        "Modules/Genetics/tests/Feature/GeneticProfileReaderTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T14:55:19.875Z"
+    },
+    {
+      "id": "s5",
+      "area": "perf",
+      "text": "Chunk group-backfill items (e.g. 150 per call) if distinct gene/category pairs grow past one call's output budget",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:58:32.570Z"
+    },
+    {
+      "id": "s6",
+      "area": "tests",
+      "text": "Cover a looked-up row with a null gene in the group backfill",
+      "where": [
+        "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:58:32.645Z"
+    },
+    {
+      "id": "s7",
+      "area": "quality",
+      "text": "Skip empty-string categories and collapse whitespace/newlines in category text before building the group prompt",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T14:59:11.125Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "Group backfill: collapse whitespace/control chars in gene and category, cap gene ~32 chars (second-order injection from earlier model output); test with newline-bearing category",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T14:59:23.647Z"
+    },
+    {
+      "id": "s9",
+      "area": "tests",
+      "text": "Group backfill tests: Log::spy on the failure path (context keys rows+exception only); create a user_variants row and assert its genotype/user id never reach the request",
+      "where": [
+        "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T14:59:23.720Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Browser test that an opened group section stays open across the 3s poll (needs a browser harness)",
+      "where": [
+        "Modules/Genetics/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:59:46.147Z"
+    },
+    {
+      "id": "s11",
+      "area": "ux",
+      "text": "Add an expand-all / collapse-all control for the group sections",
+      "where": [
+        "Modules/Genetics/resources/views/components/variant-list.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:59:46.217Z"
+    },
+    {
+      "id": "s12",
+      "area": "ux",
+      "text": "When the selected group no longer has rows (e.g. last pending lookup finishes), fall back to All instead of showing 'No variants match' with a stale dropdown value",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T15:00:52.522Z"
+    },
+    {
+      "id": "s13",
+      "area": "tests",
+      "text": "Search tests for rsID, specific category and genotype-effect text; one test that sets both filter and search then clears both",
+      "where": [
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T15:03:47.551Z"
+    },
+    {
+      "id": "s14",
+      "area": "security",
+      "text": "Group backfill: cap pairs per run and per call when chunking is added, so a large table can't produce an unbounded prompt or spend",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T15:07:23.467Z"
+    },
+    {
+      "id": "s15",
+      "area": "quality",
+      "text": "Render the group list in both lookup and group prompts from one source (enum description method or shared partial)",
+      "where": [
+        "Modules/Genetics/resources/views/prompts/*instructions.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:12:02.009Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Replace the 'unlooked' string literal (~7 places) with a constant; prefix VariantListFilterTest helpers and match a data- attribute instead of CSS classes",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:12:02.088Z"
+    },
+    {
+      "id": "s17",
+      "area": "ux",
+      "text": "Under an active search, a section that newly gains a match (a lookup finishing) appears collapsed; track user-closed sections while filtered so new matches open",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:15:32.303Z"
+    },
+    {
+      "id": "s18",
+      "area": "quality",
+      "text": "Raw search cap runs before trim (2 leading spaces leave 98 chars); cap raw at 200 and let activeSearch trim then cut to 100",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:15:32.375Z"
+    },
+    {
+      "id": "s19",
+      "area": "tests",
+      "text": "Resolved genetics-list-grouping-filters:s13",
+      "where": [
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+      ],
+      "from": "user",
+      "resolves": "genetics-list-grouping-filters:s13",
+      "note": "search-by-rsID/category/effect and clear-both tests added during verify",
+      "at": "2026-10-25T15:15:59.846Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Deeper tests for variant groups: lookup prompt lists every group, pending reader row has null group, backfill with null gene, failure-log spy and a user_variants row proven absent from the prompt, and a browser test that open sections survive polling",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php",
+        "Modules/Genetics/tests/Feature/GeneticProfileReaderTest.php",
+        "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php",
+        "Modules/Genetics/tests/**"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s2",
+        "genetics-list-grouping-filters:s4",
+        "genetics-list-grouping-filters:s6",
+        "genetics-list-grouping-filters:s9",
+        "genetics-list-grouping-filters:s10"
+      ],
+      "at": "2026-10-25T15:16:00.069Z"
+    },
+    {
+      "id": "s21",
+      "area": "security",
+      "text": "Harden the group backfill: chunk with a per-run pair cap, skip blank categories, collapse whitespace/control characters and cap gene length before building the prompt",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s5",
+        "genetics-list-grouping-filters:s7",
+        "genetics-list-grouping-filters:s8",
+        "genetics-list-grouping-filters:s14"
+      ],
+      "at": "2026-10-25T15:16:00.303Z"
+    },
+    {
+      "id": "s22",
+      "area": "ux",
+      "text": "Genetics list polish: expand/collapse-all control, fall back to All when the selected group empties, open sections that newly match under an active search",
+      "where": [
+        "Modules/Genetics/resources/views/components/variant-list.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s11",
+        "genetics-list-grouping-filters:s12",
+        "genetics-list-grouping-filters:s17"
+      ],
+      "at": "2026-10-25T15:16:00.528Z"
+    },
+    {
+      "id": "s23",
+      "area": "quality",
+      "text": "Variant groups tidy: tolerant category_group cast, one source for the group list in both prompts, an 'unlooked' constant and safer test helpers, trim the search before the 100-character cut",
+      "where": [
+        "Modules/Genetics/app/Models/GeneVariant.php",
+        "Modules/Genetics/resources/views/prompts/*instructions.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s3",
+        "genetics-list-grouping-filters:s15",
+        "genetics-list-grouping-filters:s16",
+        "genetics-list-grouping-filters:s18"
+      ],
+      "at": "2026-10-25T15:16:00.741Z"
+    }
+  ],
+  "planHash": "dd634ff18e0753eb",
+  "configHash": "85d35cf89052f183"
+}

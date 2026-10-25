@@ -22,6 +22,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Methylation',
+        'category_group' => 'methylation',
         'affects' => 'MTHFR C677T (Ala222Val; G>A on the plus strand) makes a heat-labile form of the enzyme that turns folate into 5-methyltetrahydrofolate (methylfolate), the form used to recycle homocysteine.',
         'genotype_effects' => [
             'AA' => 'Two copies of 677T: enzyme activity is roughly 30% of typical, and homocysteine tends to run higher, especially when folate intake is low.',
@@ -35,6 +36,7 @@ return [
         'reference_allele' => 'T',
         'risk_allele' => 'G',
         'category' => 'Methylation',
+        'category_group' => 'methylation',
         'affects' => 'MTHFR A1298C (Glu429Ala; T>G on the plus strand) mildly lowers the activity of the enzyme that makes methylfolate.',
         'genotype_effects' => [
             'GG' => 'Two copies of 1298C: modestly reduced MTHFR activity; on its own it has little effect on homocysteine.',
@@ -48,6 +50,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'G',
         'category' => 'Methylation',
+        'category_group' => 'methylation',
         'affects' => 'MTR A2756G (Asp919Gly) changes methionine synthase, the vitamin B12-dependent enzyme that uses methylfolate to turn homocysteine back into methionine.',
         'genotype_effects' => [
             'AA' => 'No copies of 2756G: typical methionine synthase.',
@@ -61,6 +64,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'G',
         'category' => 'Methylation',
+        'category_group' => 'methylation',
         'affects' => 'MTRR A66G (Ile22Met) changes methionine synthase reductase, which keeps the vitamin B12 cofactor of methionine synthase active.',
         'genotype_effects' => [
             'AA' => 'No copies of 66G: typical methionine synthase reductase.',
@@ -74,6 +78,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Methylation',
+        'category_group' => 'methylation',
         'affects' => 'MTRR C524T (Ser175Leu) is a second common change in methionine synthase reductase, the enzyme that keeps B12-dependent methionine synthase working.',
         'genotype_effects' => [
             'CC' => 'No copies of 524T: typical methionine synthase reductase.',
@@ -87,6 +92,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Methylation',
+        'category_group' => 'methylation',
         'affects' => 'MTHFD1 G1958A (Arg653Gln) affects a folate enzyme that supplies one-carbon units for DNA synthesis and methylation.',
         'genotype_effects' => [
             'AA' => 'Two copies of 1958A: a less stable enzyme; studies link it to higher choline needs and, with low folate, to neural tube defect risk in pregnancy.',
@@ -100,6 +106,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Vitamin B12',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'FUT2 G428A (Trp143Stop) sets secretor status. People with two copies of A do not secrete blood-group sugars into gut mucus, which shapes gut bacteria and vitamin B12 levels.',
         'genotype_effects' => [
             'AA' => 'Non-secretor: linked to higher plasma vitamin B12, a different gut microbiome and resistance to some norovirus strains.',
@@ -113,6 +120,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Neurotransmitters',
+        'category_group' => 'brain_mood',
         'affects' => 'COMT Val158Met lowers the activity of the enzyme that breaks down dopamine, adrenaline and catechol estrogens, using SAMe as its methyl donor.',
         'genotype_effects' => [
             'AA' => 'Met/Met: roughly three to four times lower COMT activity than Val/Val; slower breakdown of catecholamines.',
@@ -126,6 +134,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Vitamin D',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'VDR FokI (start codon, T>C on the gene strand): the f allele keeps an earlier start codon and makes a slightly longer, less active vitamin D receptor.',
         'genotype_effects' => [
             'AA' => 'ff: a longer, less active vitamin D receptor; linked in some studies to lower bone density.',
@@ -139,6 +148,7 @@ return [
         'reference_allele' => 'T',
         'risk_allele' => 'G',
         'category' => 'Vitamin D',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'A variant in GC, the gene for vitamin D-binding protein, and one of the strongest genetic influences on blood 25-hydroxyvitamin D.',
         'genotype_effects' => [
             'GG' => 'Two copies of G: lower 25(OH)D on average and higher odds of vitamin D insufficiency.',
@@ -152,6 +162,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'T',
         'category' => 'Vitamin D',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'GC Thr436Lys marks the Gc2 form of vitamin D-binding protein, which circulates at lower levels.',
         'genotype_effects' => [
             'GG' => 'No Gc2 copies: Gc1 forms of the binding protein and typical 25(OH)D.',
@@ -165,6 +176,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'G',
         'category' => 'Vitamin D',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'Near CYP2R1, the liver enzyme that turns vitamin D into 25-hydroxyvitamin D, the form measured in blood tests.',
         'genotype_effects' => [
             'AA' => 'No copies of G: higher 25(OH)D on average.',
@@ -178,6 +190,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'T',
         'category' => 'Vitamin A',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'BCO1 (formerly BCMO1) Arg267Ser lowers the activity of the enzyme that converts beta-carotene into vitamin A.',
         'genotype_effects' => [
             'AA' => 'No copies of 267Ser: typical beta-carotene conversion.',
@@ -191,6 +204,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Vitamin A',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'BCO1 (formerly BCMO1) Ala379Val also lowers the activity of the enzyme that converts beta-carotene into vitamin A.',
         'genotype_effects' => [
             'CC' => 'No copies of 379Val: typical beta-carotene conversion.',
@@ -204,6 +218,7 @@ return [
         'reference_allele' => 'T',
         'risk_allele' => 'C',
         'category' => 'Lipids',
+        'category_group' => 'heart_lipids',
         'affects' => 'With rs7412 this SNP defines the APOE e2/e3/e4 types; the C allele here marks e4. APOE carries cholesterol and fats in the blood and brain.',
         'genotype_effects' => [
             'CC' => 'Two e4-defining alleles: higher LDL cholesterol on average and the strongest common genetic risk factor for late-onset Alzheimer\'s disease.',
@@ -217,6 +232,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Lipids',
+        'category_group' => 'heart_lipids',
         'affects' => 'With rs429358 this SNP defines the APOE e2/e3/e4 types; the T allele here marks e2.',
         'genotype_effects' => [
             'CC' => 'No e2 allele.',
@@ -230,6 +246,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'C',
         'category' => 'Caffeine',
+        'category_group' => 'detox_drug_response',
         'affects' => 'CYP1A2*1F (-163C>A) changes how inducible CYP1A2, the main caffeine-metabolizing enzyme, is.',
         'genotype_effects' => [
             'AA' => 'Fast, inducible caffeine metabolism.',
@@ -243,6 +260,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Choline',
+        'category_group' => 'methylation',
         'affects' => 'PEMT Val175Met (G>A on the gene strand, C>T on the plus strand) lowers the liver enzyme that makes phosphatidylcholine, the body\'s own source of choline.',
         'genotype_effects' => [
             'CC' => 'Val/Val: typical PEMT activity.',
@@ -256,6 +274,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'G',
         'category' => 'Choline',
+        'category_group' => 'methylation',
         'affects' => 'PEMT promoter variant -744G>C (written on the gene strand; C>G on the plus strand) reduces estrogen-driven PEMT expression and raises choline needs.',
         'genotype_effects' => [
             'CC' => 'No copies of -744C: typical PEMT expression.',
@@ -269,6 +288,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Antioxidant',
+        'category_group' => 'antioxidant_inflammation',
         'affects' => 'SOD2 Val16Ala changes how efficiently manganese superoxide dismutase is imported into mitochondria, where it neutralizes superoxide.',
         'genotype_effects' => [
             'AA' => 'Val/Val: less efficient import into mitochondria and lower SOD2 activity reported.',
@@ -282,6 +302,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Omega-3',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'FADS1 makes delta-5 desaturase, which turns plant omega-3 and omega-6 fats into EPA and arachidonic acid.',
         'genotype_effects' => [
             'CC' => 'Typical fatty-acid conversion.',
@@ -295,6 +316,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Iron',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'HFE C282Y is the main cause of hereditary hemochromatosis (iron overload).',
         'genotype_effects' => [
             'AA' => 'C282Y homozygote: high risk of iron overload; ferritin and transferrin saturation are worth discussing with a clinician.',
@@ -308,6 +330,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'G',
         'category' => 'Iron',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'HFE H63D is a milder hemochromatosis variant.',
         'genotype_effects' => [
             'CC' => 'No H63D copies.',
@@ -321,6 +344,7 @@ return [
         'reference_allele' => 'G',
         'risk_allele' => 'A',
         'category' => 'Iron',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'TMPRSS6 Ala736Val affects matriptase-2, which regulates hepcidin, the hormone that controls iron absorption.',
         'genotype_effects' => [
             'AA' => 'Val/Val: higher hepcidin and lower serum iron and transferrin saturation on average.',
@@ -334,6 +358,7 @@ return [
         'reference_allele' => 'T',
         'risk_allele' => 'A',
         'category' => 'Weight',
+        'category_group' => 'metabolism_weight',
         'affects' => 'An FTO variant with the largest common genetic effect on body mass index, mostly through appetite and food intake.',
         'genotype_effects' => [
             'AA' => 'Two copies of A: about 3 kg heavier on average and higher odds of obesity; physical activity blunts the effect.',
@@ -347,6 +372,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Vitamin C',
+        'category_group' => 'vitamins_minerals',
         'affects' => 'SLC23A1 Val264Met lowers SVCT1, the transporter that absorbs vitamin C and reclaims it in the kidney.',
         'genotype_effects' => [
             'CC' => 'Typical vitamin C transport.',
@@ -360,6 +386,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'G',
         'category' => 'Detoxification',
+        'category_group' => 'detox_drug_response',
         'affects' => 'GSTP1 Ile105Val changes glutathione S-transferase P1, which attaches glutathione to toxins and oxidized molecules so they can be cleared.',
         'genotype_effects' => [
             'AA' => 'Ile/Ile: typical GSTP1 activity.',
@@ -373,6 +400,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'G',
         'category' => 'Lipids',
+        'category_group' => 'heart_lipids',
         'affects' => 'APOA2 promoter variant -265T>C (written on the gene strand; A>G on the plus strand) lowers apolipoprotein A-II expression.',
         'genotype_effects' => [
             'AA' => 'No copies of -265C.',
@@ -386,6 +414,7 @@ return [
         'reference_allele' => 'C',
         'risk_allele' => 'T',
         'category' => 'Blood sugar',
+        'category_group' => 'metabolism_weight',
         'affects' => 'A TCF7L2 variant with the strongest common genetic effect on type 2 diabetes risk, acting mainly through insulin secretion.',
         'genotype_effects' => [
             'CC' => 'No copies of T.',
@@ -399,6 +428,7 @@ return [
         'reference_allele' => 'A',
         'risk_allele' => 'G',
         'category' => 'Lactose',
+        'category_group' => 'metabolism_weight',
         'affects' => 'A variant in MCM6, upstream of the lactase gene LCT (-13910C>T), that decides whether lactase stays switched on in adulthood.',
         'genotype_effects' => [
             'AA' => 'Lactase persistent: lactose is usually well tolerated.',

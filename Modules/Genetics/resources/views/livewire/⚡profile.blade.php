@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
@@ -19,6 +20,7 @@ use Modules\Genetics\Data\Genotype;
 use Modules\Genetics\Data\VariantData;
 use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\UploadStatus;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\UserVariant;
@@ -34,6 +36,41 @@ new #[Title('My genetics')] class extends Component
     public string $genotype = '';
 
     public string $gene = '';
+
+    public string $group = '';
+
+    public string $search = '';
+
+    /** @var list<string> Section keys the user has opened; filtered against the allowed keys on read. */
+    #[Locked]
+    public array $openSections = [];
+
+    public function updatedGroup(): void
+    {
+        $this->syncOpenSections();
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->search = mb_substr($this->search, 0, 100);
+        $this->syncOpenSections();
+    }
+
+    /** Opens or closes one section. Keys that are not a group value or 'unlooked' are ignored. */
+    public function toggleSection(string $key): void
+    {
+        if (! in_array($key, $this->sectionKeys(), true)) {
+            return;
+        }
+
+        $open = $this->openSectionKeys;
+
+        $this->openSections = in_array($key, $open, true)
+            ? array_values(array_diff($open, [$key]))
+            : [...$open, $key];
+
+        unset($this->openSectionKeys);
+    }
 
     public function addVariant(AddVariant $addVariant, QueueLookups $queueLookups): void
     {
@@ -79,7 +116,7 @@ new #[Title('My genetics')] class extends Component
         }
 
         $this->reset('rsid', 'genotype', 'gene');
-        unset($this->variants, $this->hasLookingUp);
+        unset($this->variants, $this->groupedVariants, $this->hasLookingUp);
         Flux::toast(text: 'SNP saved.', variant: 'success');
     }
 
@@ -106,7 +143,7 @@ new #[Title('My genetics')] class extends Component
 
         $queueLookups->handle([$rsid], 1);
 
-        unset($this->variants, $this->hasLookingUp);
+        unset($this->variants, $this->groupedVariants, $this->hasLookingUp);
     }
 
     /**
@@ -157,7 +194,7 @@ new #[Title('My genetics')] class extends Component
 
         ProcessGeneticUpload::dispatch($upload->id);
 
-        unset($this->uploads, $this->hasActiveUploads, $this->variants);
+        unset($this->uploads, $this->hasActiveUploads, $this->variants, $this->groupedVariants);
         Flux::toast(text: 'Upload received. Processing it now.', variant: 'success');
     }
 
@@ -210,7 +247,136 @@ new #[Title('My genetics')] class extends Component
         return false;
     }
 
-    public function isLookedUp(VariantData $variant): bool
+    /** The dropdown value as a group key, 'unlooked', or null (All) for anything else. */
+    #[Computed]
+    public function activeGroup(): ?string
+    {
+        if ($this->group === 'unlooked') {
+            return 'unlooked';
+        }
+
+        return VariantGroup::tryFrom($this->group)?->value;
+    }
+
+    /** The search text, trimmed and capped at 100 characters. */
+    #[Computed]
+    public function activeSearch(): string
+    {
+        return mb_substr(trim($this->search), 0, 100);
+    }
+
+    /**
+     * The dropdown choices: only groups that have rows, then the not-looked-up section.
+     *
+     * @return array<string, string>
+     */
+    #[Computed]
+    public function groupOptions(): array
+    {
+        $options = [];
+        $hasPending = false;
+
+        foreach ($this->variants as $variant) {
+            if ($this->isLookedUpVariant($variant)) {
+                $group = $variant->group ?? VariantGroup::Other;
+                $options[$group->value] = $group->label();
+            } else {
+                $hasPending = true;
+            }
+        }
+
+        $ordered = [];
+
+        foreach (VariantGroup::cases() as $case) {
+            if (isset($options[$case->value])) {
+                $ordered[$case->value] = $case->label();
+            }
+        }
+
+        if ($hasPending) {
+            $ordered['unlooked'] = 'Not looked up yet';
+        }
+
+        return $ordered;
+    }
+
+    /**
+     * Sections in group order with "Not looked up yet" last, after the dropdown and search are applied.
+     *
+     * @return list<array{key: string, label: string, variants: list<VariantData>}>
+     */
+    #[Computed]
+    public function groupedVariants(): array
+    {
+        $group = $this->activeGroup;
+        $needle = mb_strtolower($this->activeSearch);
+        $buckets = [];
+        $unlooked = [];
+
+        foreach ($this->variants as $variant) {
+            $isLookedUp = $this->isLookedUpVariant($variant);
+            $variantGroup = $isLookedUp ? ($variant->group ?? VariantGroup::Other) : null;
+            $key = $variantGroup->value ?? 'unlooked';
+
+            if ($group !== null && $group !== $key) {
+                continue;
+            }
+
+            if ($needle !== '') {
+                $haystack = [$variant->gene, $variant->rsid, $variantGroup?->label(), $variant->category, $variant->affects, $variant->genotypeEffect];
+
+                if (! collect($haystack)->contains(fn (?string $field): bool => $field !== null && mb_stripos($field, $needle) !== false)) {
+                    continue;
+                }
+            }
+
+            if ($variantGroup === null) {
+                $unlooked[] = $variant;
+            } else {
+                $buckets[$key][] = $variant;
+            }
+        }
+
+        $sections = [];
+
+        foreach (VariantGroup::cases() as $case) {
+            if (isset($buckets[$case->value])) {
+                $sections[] = ['key' => $case->value, 'label' => $case->label(), 'variants' => $buckets[$case->value]];
+            }
+        }
+
+        if ($unlooked !== []) {
+            $sections[] = ['key' => 'unlooked', 'label' => 'Not looked up yet', 'variants' => $unlooked];
+        }
+
+        return $sections;
+    }
+
+    /** @return list<string> */
+    private function sectionKeys(): array
+    {
+        return [...array_map(fn (VariantGroup $case): string => $case->value, VariantGroup::cases()), 'unlooked'];
+    }
+
+    /** @return list<string> */
+    #[Computed]
+    public function openSectionKeys(): array
+    {
+        return array_values(array_intersect($this->sectionKeys(), array_filter($this->openSections, 'is_string')));
+    }
+
+    /** Opens the sections the current filter shows, or collapses all when no filter is active. */
+    private function syncOpenSections(): void
+    {
+        unset($this->activeGroup, $this->activeSearch, $this->groupedVariants);
+
+        $filtered = $this->activeGroup !== null || $this->activeSearch !== '';
+
+        $this->openSections = $filtered ? array_column($this->groupedVariants, 'key') : [];
+        unset($this->openSectionKeys);
+    }
+
+    private function isLookedUpVariant(VariantData $variant): bool
     {
         return ! in_array($variant->status, [LookupStatus::Pending, LookupStatus::LookingUp, LookupStatus::Failed], true);
     }
@@ -287,51 +453,23 @@ new #[Title('My genetics')] class extends Component
         @if ($this->variants === [])
             <flux:text>No SNPs yet. Add one above.</flux:text>
         @else
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="border-b border-zinc-200 text-zinc-500 dark:border-zinc-700">
-                        <tr>
-                            <th class="py-2 pr-4 font-medium">Gene</th>
-                            <th class="py-2 pr-4 font-medium">rsID</th>
-                            <th class="py-2 pr-4 font-medium">Genotype</th>
-                            <th class="py-2 pr-4 font-medium">Category</th>
-                            <th class="py-2 pr-4 font-medium">Affects</th>
-                            <th class="py-2 pr-4 font-medium">Your genotype</th>
-                            <th class="py-2 font-medium"><span class="sr-only">Actions</span></th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
-                        @foreach ($this->variants as $variant)
-                            <tr wire:key="variant-{{ $variant->rsid }}">
-                                <td class="py-2 pr-4 font-medium">{{ $variant->gene }}</td>
-                                <td class="py-2 pr-4">{{ $variant->rsid }}</td>
-                                <td class="py-2 pr-4">{{ $variant->genotype }}</td>
-                                @if ($this->isLookedUp($variant))
-                                    <td class="py-2 pr-4">{{ $variant->category }}</td>
-                                    <td class="py-2 pr-4">{{ $variant->affects }}</td>
-                                    <td class="py-2 pr-4">{{ $variant->genotypeEffect }}</td>
-                                    <td class="py-2"></td>
-                                @else
-                                    <td class="py-2 pr-4 text-zinc-500" colspan="3">
-                                        @if ($variant->status === LookupStatus::LookingUp)
-                                            Looking up…
-                                        @elseif ($variant->status === LookupStatus::Failed)
-                                            Lookup failed
-                                        @else
-                                            Not looked up yet
-                                        @endif
-                                    </td>
-                                    <td class="py-2">
-                                        @if ($variant->status !== LookupStatus::LookingUp)
-                                            <flux:button size="sm" wire:click="lookUp('{{ $variant->rsid }}')">Look up</flux:button>
-                                        @endif
-                                    </td>
-                                @endif
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="mb-4 grid gap-3 md:grid-cols-3">
+                <flux:select wire:model.live="group" aria-label="Filter by group">
+                    <flux:select.option value="">All</flux:select.option>
+                    @foreach ($this->groupOptions as $value => $label)
+                        <flux:select.option value="{{ $value }}">{{ $label }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+                <div class="md:col-span-2">
+                    <flux:input wire:model.live.debounce.300ms="search" type="search" icon="magnifying-glass" placeholder="Search gene, rsID, group, category or effect" aria-label="Search variants" maxlength="100" />
+                </div>
             </div>
+
+            @if ($this->groupedVariants === [])
+                <flux:text>No variants match.</flux:text>
+            @else
+                <x-genetics::variant-list :sections="$this->groupedVariants" :open-keys="$this->openSectionKeys" />
+            @endif
         @endif
     </flux:card>
 </div>

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Genetics\Database\Factories\GeneVariantFactory;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\VariantGroup;
 
 /**
  * Global, user-independent reference data for one SNP. Alleles are plus strand.
@@ -17,6 +18,7 @@ use Modules\Genetics\Enums\LookupStatus;
  * @property string|null $reference_allele
  * @property string|null $risk_allele
  * @property string|null $category
+ * @property VariantGroup|null $category_group
  * @property string|null $affects
  * @property array<string, string>|null $genotype_effects
  * @property list<array{url: string, title: string, domain: string}>|null $sources
@@ -30,7 +32,7 @@ class GeneVariant extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rsid', 'gene', 'reference_allele', 'risk_allele', 'category', 'affects',
+        'rsid', 'gene', 'reference_allele', 'risk_allele', 'category', 'category_group', 'affects',
         'genotype_effects', 'sources', 'status', 'error', 'looked_up_at',
     ];
 
@@ -46,6 +48,7 @@ class GeneVariant extends Model
             'genotype_effects' => 'array',
             'sources' => 'array',
             'status' => LookupStatus::class,
+            'category_group' => VariantGroup::class,
             'looked_up_at' => 'datetime',
         ];
     }
