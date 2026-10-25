@@ -6,8 +6,8 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T20:36:55.266Z",
-  "stage": "ship",
+  "updated": "2026-10-25T20:37:37.114Z",
+  "stage": "learn",
   "stageHistory": [
     {
       "stage": "discover",
@@ -36,6 +36,10 @@
     {
       "stage": "ship",
       "at": "2026-10-25T20:34:04.697Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-25T20:37:37.113Z"
     }
   ],
   "paused": null,
@@ -1402,6 +1406,16 @@
       "at": "2026-10-25T20:36:55.266Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T20:36:59.401Z",
+      "event": "step",
+      "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-25T20:37:37.114Z",
+      "event": "advanced",
+      "detail": "learn"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -2435,10 +2449,5 @@
       ],
       "at": "2026-10-25T20:34:53.902Z"
     }
-  ],
-  "step": {
-    "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-25T20:36:01.599Z"
-  }
+  ]
 }

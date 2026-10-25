@@ -96,3 +96,8 @@ _2026-10-25 18:39_
 **Decision:** Keep @custom-variant dark bound to a .dark class that nothing sets, instead of deleting it
 **Why:** deleting it made dark: follow the OS colour scheme, so Flux's own components rendered dark on a dark-mode Mac; the class binding is what actually pins light
 _2026-10-25 20:17_
+
+### 20. How does the branch land?
+**Decision:** Merge locally into main; no PR
+**Why:** the repo has no git remote; earlier plans were merged the same way
+_2026-10-25 20:37_
