@@ -18,7 +18,10 @@ beforeEach(function () {
     SupplementResearch::factory()->for($this->supplement)->create(['status' => ResearchStatus::Complete]);
 
     $match = new GeneticMatchData('MTHFR', 'rs1801133', 'AG', 1, GeneRelation::cases()[0], 'Reduced enzyme.', [], GeneticMatchData::MATCHED_ON_ALLELE, 'A');
-    FakeGeneticRelevanceReader::install()->for($this->user->id, $this->supplement->id, new GeneticRelevanceData($this->supplement->id, true, true, [$match]));
+    $populated = new GeneticRelevanceData($this->supplement->id, true, true, [$match]);
+    $this->fake = FakeGeneticRelevanceReader::install()
+        ->for($this->user->id, $this->supplement->id, $populated)
+        ->for(0, $this->supplement->id, $populated);
 });
 
 it('registers the preview and card slots', function () {
@@ -54,4 +57,16 @@ it('shows a guest no genotype markup and no match count', function () {
         ->assertDontSee('gene match')
         ->assertDontSee('sits on this pathway')
         ->assertDontSee('sit on this pathway');
+});
+
+it('shows a different signed-in user none of the owner data', function () {
+    $other = User::factory()->create();
+    $this->fake->for($other->id, $this->supplement->id, new GeneticRelevanceData($this->supplement->id, false, false, []));
+    $this->actingAs($other);
+
+    Livewire::test('supplements::catalog')
+        ->assertDontSeeHtml('data-genotype')
+        ->assertDontSeeHtml('data-allele')
+        ->assertDontSee('gene match')
+        ->assertDontSee('MTHFR');
 });

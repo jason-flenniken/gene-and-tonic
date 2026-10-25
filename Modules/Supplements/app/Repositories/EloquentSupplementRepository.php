@@ -60,6 +60,14 @@ class EloquentSupplementRepository implements SupplementRepository
             ->paginate($perPage);
     }
 
+    public function firstComplete(): ?Supplement
+    {
+        return Supplement::query()
+            ->whereHas('research', fn ($research) => $research->where('status', ResearchStatus::Complete))
+            ->orderBy('name')
+            ->first();
+    }
+
     public function countByStatus(): array
     {
         /** @var array<string, int> $counts */

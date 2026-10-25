@@ -26,6 +26,9 @@ interface SupplementRepository
      */
     public function paginateWithResearch(int $perPage, string $status = 'all'): LengthAwarePaginator;
 
+    /** The first supplement by name whose research is complete, regardless of any paginator page. */
+    public function firstComplete(): ?Supplement;
+
     /** @return array<string, int> */
     public function countByStatus(): array;
 

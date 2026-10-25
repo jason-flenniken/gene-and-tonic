@@ -112,6 +112,11 @@ it('turns a unique constraint race into a validation error', function () {
             return $this->inner->paginateWithResearch($perPage, $status);
         }
 
+        public function firstComplete(): ?Supplement
+        {
+            return $this->inner->firstComplete();
+        }
+
         public function countByStatus(): array
         {
             return $this->inner->countByStatus();
@@ -337,6 +342,30 @@ it('falls back to All for an unknown status and resets pagination on a filter', 
         ->assertSee('Alpha');
 
     Livewire::test('supplements::catalog')->set('status', 'bogus')->assertSet('status', 'all');
+});
+
+it('resets to page one when the filter changes', function () {
+    foreach (range(1, 12) as $i) {
+        catalogRow(sprintf('Item %02d', $i), ResearchStatus::Complete);
+    }
+
+    Livewire::test('supplements::catalog')
+        ->call('gotoPage', 2)
+        ->assertSet('paginators.page', 2)
+        ->set('status', 'complete')
+        ->assertSet('paginators.page', 1);
+});
+
+it('keeps the default preview on the first complete supplement on any list page', function () {
+    foreach (range(1, 12) as $i) {
+        catalogRow(sprintf('Item %02d', $i), ResearchStatus::Complete);
+    }
+
+    Livewire::test('supplements::catalog')
+        ->call('gotoPage', 2)
+        ->assertSee('TOP EFFECTS IN')
+        ->assertSeeHtml('ITEM 01</span>')
+        ->assertDontSeeHtml('ITEM 11</span>');
 });
 
 it('previews the selected supplement top three effects, strongest first', function () {

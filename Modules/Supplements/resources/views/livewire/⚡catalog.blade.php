@@ -147,7 +147,7 @@ new #[Title('Supplements')] class extends Component
         $supplements = app(SupplementRepository::class);
         $selected = $this->selectedId !== null ? $supplements->find($this->selectedId) : null;
 
-        return $selected ?? $supplements->paginateWithResearch(1, 'complete')->first();
+        return $selected ?? $supplements->firstComplete();
     }
 
     #[Computed]
