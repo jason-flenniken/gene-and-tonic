@@ -4,7 +4,7 @@
     type="button"
     aria-pressed="{{ $active ? 'true' : 'false' }}"
     {{ $attributes->class([
-        'inline-flex h-9 items-center gap-1.5 rounded-tile border px-3.5 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-juniper',
+        'relative inline-flex h-9 items-center after:absolute after:-inset-x-0.5 after:-inset-y-1 after:content-[\'\'] gap-1.5 rounded-tile border px-3.5 text-[13px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-juniper',
         'border-juniper bg-juniper text-white' => $active,
         'border-line-input bg-surface text-ink hover:bg-surface-muted' => ! $active,
     ]) }}

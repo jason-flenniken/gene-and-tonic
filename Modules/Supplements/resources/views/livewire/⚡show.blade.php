@@ -198,7 +198,7 @@ new #[Title('Supplement')] class extends Component
                 <div x-data="{ open: false }" class="max-w-[680px]" data-summary>
                     <p class="text-[15px] leading-[1.6] whitespace-pre-line text-ink-body" x-bind:class="open ? '' : 'line-clamp-3'">{{ $summary }}</p>
                     @if (mb_strlen($summary) > 240)
-                        <button type="button" class="mt-1 text-[14px] font-semibold text-juniper hover:text-juniper-hover" x-on:click="open = ! open" x-text="open ? 'Show less' : 'Read more'">Read more</button>
+                        <button type="button" class="mt-1 min-h-11 text-[14px] font-semibold text-juniper hover:text-juniper-hover" x-on:click="open = ! open" x-text="open ? 'Show less' : 'Read more'">Read more</button>
                     @endif
                 </div>
             @else
@@ -211,7 +211,7 @@ new #[Title('Supplement')] class extends Component
                 @include($actionView, ['supplementId' => $supplementId, 'status' => $research?->status])
             @endforeach
             @if ($research)
-                <x-ui.button variant="on-tint" wire:click="rerun" :disabled="$active">Re-run</x-ui.button>
+                <x-ui.button variant="on-tint" wire:click="rerun" loading="rerun" :disabled="$active">Re-run</x-ui.button>
             @endif
         </div>
     </section>

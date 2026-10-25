@@ -196,7 +196,7 @@ new #[Title('Supplements')] class extends Component
             placeholder="e.g. Vitamin D3, Creatine, Omega-3"
             class="box-border h-[52px] min-w-0 flex-[1_1_300px] rounded-full border border-line-input bg-surface-input px-5 text-base text-ink placeholder:text-ink-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-juniper"
         >
-        <button type="submit" class="h-[52px] rounded-full bg-juniper px-7 text-base font-semibold text-white hover:bg-juniper-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-juniper">Research it</button>
+        <x-ui.button type="submit" loading="add" class="!h-[52px] !px-7 !text-base">Research it</x-ui.button>
         @error('name')
             <p class="basis-full px-5 text-[13px] text-bad-text" role="alert">{{ $message }}</p>
         @enderror
@@ -251,9 +251,9 @@ new #[Title('Supplements')] class extends Component
             <div class="flex gap-2">
                 <flux:spacer />
                 <flux:modal.close>
-                    <flux:button variant="ghost">Cancel</flux:button>
+                    <flux:button variant="ghost" class="!h-11">Cancel</flux:button>
                 </flux:modal.close>
-                <flux:button variant="danger" wire:click="delete">Delete</flux:button>
+                <flux:button variant="danger" wire:click="delete" class="!h-11">Delete</flux:button>
             </div>
         </div>
     </flux:modal>

@@ -35,7 +35,7 @@
             <flux:sidebar.toggle icon="bars-2" inset="right" aria-label="Open menu" />
         </flux:header>
 
-        <flux:sidebar collapsible="mobile" class="!border-r-0 !bg-canvas lg:!w-[240px] lg:shrink-0 lg:!px-5 lg:!py-7">
+        <flux:sidebar collapsible="mobile" class="!border-r-0 !bg-canvas lg:!w-[210px] lg:shrink-0 lg:!px-5 lg:!py-7">
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 text-lg font-bold tracking-tight text-ink">
                 <x-brand.mark :size="34" />
                 <span>{{ config('app.name', 'Laravel') }}</span>
@@ -63,12 +63,12 @@
             <div class="flex flex-col gap-1">
                 @auth
                     <div class="flex min-h-11 items-center gap-3 px-2">
-                        <span class="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-[#E3DED6] text-[11px] font-bold text-ink" aria-hidden="true">{{ auth()->user()->initials() }}</span>
-                        <span class="truncate text-sm font-medium text-ink">{{ auth()->user()->name }}</span>
+                        <span class="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-[#E3DED6] text-[10px] font-bold text-ink" aria-hidden="true">{{ auth()->user()->initials() }}</span>
+                        <span class="truncate text-base font-medium text-ink">{{ auth()->user()->name }}</span>
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="flex min-h-11 w-full items-center px-2 text-sm font-semibold text-ink-nav hover:text-ink">Sign out</button>
+                        <button type="submit" class="flex min-h-11 w-full items-center rounded-row px-2 text-sm font-semibold text-ink-nav hover:text-ink">Sign out</button>
                     </form>
                 @else
                     <a href="{{ route('login') }}" class="flex min-h-11 items-center px-2 text-sm font-semibold text-juniper hover:underline">Sign in</a>

@@ -90,6 +90,11 @@
 }
 
 @layer base {
+    :where(a, button, summary, select, input, textarea, [tabindex]):focus-visible {
+        outline: 2px solid var(--color-juniper);
+        outline-offset: 2px;
+    }
+
     html {
         color: var(--color-ink);
         background: var(--color-canvas);

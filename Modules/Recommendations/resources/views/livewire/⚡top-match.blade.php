@@ -48,12 +48,7 @@ new class extends Component
             <x-ui.button :href="route('login')">Sign in</x-ui.button>
         </section>
     @else
-        @if (! $this->hasProfile)
-            <section class="flex flex-wrap items-center justify-between gap-4 rounded-section bg-juniper-tint p-6" data-hero="add-results">
-                <p class="text-[15px] font-semibold text-ink">Add your genetic results to see how supplements relate to them.</p>
-                <x-ui.button :href="route('genetics.profile')">Add your genetic results</x-ui.button>
-            </section>
-        @elseif ($this->top !== null)
+        @if ($this->top !== null)
             @php
                 $top = $this->top;
                 $count = count($top->matches);
@@ -82,6 +77,11 @@ new class extends Component
                         </div>
                     @endforeach
                 </div>
+            </section>
+        @elseif (! $this->hasProfile)
+            <section class="flex flex-wrap items-center justify-between gap-4 rounded-section bg-juniper-tint p-6" data-hero="add-results">
+                <p class="text-[15px] font-semibold text-ink">Add your genetic results to see how supplements relate to them.</p>
+                <x-ui.button :href="route('genetics.profile')">Add your genetic results</x-ui.button>
             </section>
         @endif
     @endguest

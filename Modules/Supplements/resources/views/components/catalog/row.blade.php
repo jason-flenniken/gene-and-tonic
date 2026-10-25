@@ -43,6 +43,6 @@
     </a>
 
     @if ($isFailed)
-        <button type="button" wire:click="retry({{ $supplement->id }})" class="h-9 shrink-0 rounded-full bg-surface-sunken px-4 text-[13px] font-semibold text-ink hover:bg-line">Retry</button>
+        <x-ui.button variant="secondary" wire:click="retry({{ $supplement->id }})" loading="retry" class="relative !h-9 shrink-0 !px-4 !text-[13px] after:absolute after:-inset-y-1 after:inset-x-0 after:content-['']">Retry</x-ui.button>
     @endif
 </div>
