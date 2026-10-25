@@ -1,0 +1,10 @@
+Category,Category Context,Marker,rsID,Gene / Locus,Variant / Marker Name,Genotype / Result,Status / Zygosity,Marker Type,Impact / Significance,Interpretation / Notes,Raw Source Entry
+METHYLATION,"Folate, B12 and homocysteine","MTHFR C677T (rs1801133 A/G, +/-)",rs1801133,MTHFR,C677T,A/G,Heterozygous,SNP,High Impact,"Synthetic note: reduced enzyme activity, see sources.","MTHFR C677T (rs1801133 A/G, +/-) synthetic"
+METHYLATION,"Folate, B12 and homocysteine",MTHFR A1298C (rs1801131 T/T),rs1801131,MTHFR,A1298C,T/T,Homozygous,SNP,Moderate Impact,Synthetic note.,MTHFR A1298C rs1801131 T/T synthetic
+DOPAMINE,"Motivation, focus",COMT V158M (rs4680 A/A),rs4680,COMT,V158M,A/A,Homozygous,SNP,High Impact,Synthetic note.,COMT V158M rs4680 A/A synthetic
+METHYLATION,"Folate, B12 and homocysteine",MTR A2756G,rs1805087,MTR,A2756G,GRCh38 genomic A/G; protein Asp919Gly,Heterozygous,SNP,Moderate Impact,Synthetic note.,MTR rs1805087 synthetic
+METHYLATION,"Folate, B12 and homocysteine",MTRR A66G,rs1801394,MTRR,A66G,A/G (as reported),Heterozygous,SNP,Moderate Impact,Synthetic note.,MTRR rs1801394 synthetic
+B12,"Absorption",FUT2 secretor,rs601338,FUT2,W154X,G/A,Heterozygous,SNP,Moderate Impact,Synthetic note.,FUT2 rs601338 synthetic
+DOPAMINE,"Motivation, focus",MAOA uVNTR,,MAOA,uVNTR,4-repeat,,VNTR,Moderate Impact,Synthetic note: not an SNP.,MAOA uVNTR synthetic
+DETOX,"Drug metabolism",CYP2C19*2,rs4244285,CYP2C19,*2,*2/*2,Homozygous,Star allele,High Impact,Synthetic note.,CYP2C19 rs4244285 synthetic
+LIPIDS,"Cardiovascular",APOE,,APOE,E3/E4,E3/E4,Heterozygous,Haplotype,High Impact,Synthetic note: no rsID.,APOE synthetic
