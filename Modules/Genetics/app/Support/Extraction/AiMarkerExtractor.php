@@ -22,9 +22,9 @@ final class AiMarkerExtractor implements MarkerExtractor
         private readonly TextGenerator $generator,
     ) {}
 
-    public function extract(string $absolutePath, string $extension): array
+    public function extract(string $absolutePath, string $extension): Extraction
     {
-        return $this->extractLines($this->markerLines($this->text->extract($absolutePath, $extension)))->variants;
+        return $this->extractLines($this->markerLines($this->text->extract($absolutePath, $extension)));
     }
 
     /**
@@ -59,10 +59,11 @@ final class AiMarkerExtractor implements MarkerExtractor
                 'lines' => count($lines),
                 'sent' => count($sent),
                 'chunks' => count($chunks),
+                'unsent' => count($lines) - count($sent),
             ]);
         }
 
-        return new Extraction(array_values($variants), $sent, $truncated);
+        return new Extraction(array_values($variants), $sent, $truncated, count($lines) - count($sent));
     }
 
     /**

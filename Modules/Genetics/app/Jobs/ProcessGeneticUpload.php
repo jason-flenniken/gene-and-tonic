@@ -248,13 +248,15 @@ class ProcessGeneticUpload implements ShouldQueue
 
     /**
      * A file no parser recognises (and every pdf), read by the marker extractor.
-     * Null when it returns more rows than genetics.max_marker_rows.
+     * Null when it returns more rows than genetics.max_marker_rows. Marker lines
+     * the extractor could not send (past max_chunks) are recorded as skipped.
      */
     private function extracted(MarkerExtractor $extractor, string $absolutePath, string $extension): ?ReadOutcome
     {
-        $variants = $this->boundedList($extractor->extract($absolutePath, $extension));
+        $extraction = $extractor->extract($absolutePath, $extension);
+        $variants = $this->boundedList($extraction->variants);
 
-        return $variants === null ? null : new ReadOutcome($variants, ParseMethod::Ai, 0, count($variants), 0);
+        return $variants === null ? null : new ReadOutcome($variants, ParseMethod::Ai, 0, count($variants), $extraction->unsentCount);
     }
 
     /**
