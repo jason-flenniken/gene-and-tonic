@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:31:37.944Z",
+  "updated": "2026-10-25T19:36:12.439Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -508,7 +508,7 @@
     {
       "id": "home",
       "name": "Home",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "home-hero-stats",
@@ -575,10 +575,19 @@
             "Modules/Genetics/tests/Feature/HomeWidgetsTest.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "triggers the paid Look up now action from a public page"
+          "riskReason": "triggers the paid Look up now action from a public page",
+          "branch": "task/gene-and-tonic-redesign/home-sections",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--home-sections",
+          "base": "c6b1b4cfda6f96a54ecb7ed05139fe5d04fe460e",
+          "startedAt": "2026-10-25T19:31:45.749Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:36:12.439Z",
+          "tip": "80ff50f",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "809e08ff104cae52722a486b171b450cfffe3b95"
         }
       ]
     },
@@ -1197,6 +1206,31 @@
       "at": "2026-10-25T19:31:37.944Z",
       "event": "task done",
       "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:31:45.749Z",
+      "event": "task started",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:31:45.894Z",
+      "event": "task implementing",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:34:44.098Z",
+      "event": "task reviewing",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:35:53.198Z",
+      "event": "task merging",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:36:12.439Z",
+      "event": "task done",
+      "detail": "Latest research, your genes, your supplements"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1623,6 +1657,56 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:30:17.515Z"
+    },
+    {
+      "id": "s43",
+      "area": "ux",
+      "text": "Cap the Home supplement card grid (e.g. 8) with a see-all link",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:34:43.973Z"
+    },
+    {
+      "id": "s44",
+      "area": "quality",
+      "text": "Move the per-group linked tally from the your-genes widget into VariantGrouping",
+      "where": [
+        "Modules/Genetics/app/Support/VariantGrouping.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:34:44.036Z"
+    },
+    {
+      "id": "s45",
+      "area": "tests",
+      "text": "Home-level test for the lookUpAll rate-limited toast (4 calls, at most 3 queue)",
+      "where": [
+        "Modules/Genetics/tests/Feature/HomeWidgetsTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:35:23.498Z"
+    },
+    {
+      "id": "s46",
+      "area": "ux",
+      "text": "Empty state says No supplements yet when all are still researching; show in-progress cards or reword",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:35:53.069Z"
+    },
+    {
+      "id": "s47",
+      "area": "tests",
+      "text": "Remove unused $other = homeUser() or use it in guest assertions",
+      "where": [
+        "tests/Feature/HomeTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:35:53.135Z"
     }
   ]
 }
