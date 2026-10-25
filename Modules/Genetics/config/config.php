@@ -43,6 +43,20 @@ return [
     ],
 
     /*
+    | AI profile used to file looked-up reference rows under a broad group
+    | (genetics:group-variants). Registered with Intelligence as "genetics.group".
+    */
+    'group_profile' => [
+        'provider' => env('AI_GENETICS_GROUP_PROVIDER', 'openai'),
+        'model' => env('AI_GENETICS_GROUP_MODEL', 'gpt-6-luna'),
+        'effort' => env('AI_GENETICS_GROUP_EFFORT', 'low'),
+        'max_tokens' => (int) env('AI_GENETICS_GROUP_MAX_TOKENS', 4000),
+        'timeout' => (int) env('AI_GENETICS_GROUP_TIMEOUT', 60),
+        'instructions' => 'genetics::prompts.group-instructions',
+        'prompt' => 'genetics::prompts.group',
+    ],
+
+    /*
     | AI profile used to pull markers out of a pdf or unrecognised file.
     | Registered with Intelligence as "genetics.extract" when the module boots.
     */
