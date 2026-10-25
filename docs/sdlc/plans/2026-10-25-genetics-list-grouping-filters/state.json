@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:55:36.729Z",
+  "updated": "2026-10-25T14:55:45.102Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "groups-data",
       "name": "Groups in the data",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "variant-groups",
@@ -89,7 +89,7 @@
     {
       "id": "list-and-backfill",
       "name": "Grouped list and backfill",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "grouped-list-ui",
@@ -212,6 +212,11 @@
       "at": "2026-10-25T14:55:36.729Z",
       "event": "task done",
       "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:55:45.102Z",
+      "event": "phase finished",
+      "detail": "Groups in the data (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
