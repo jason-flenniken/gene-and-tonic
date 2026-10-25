@@ -6,8 +6,8 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:45:28.239Z",
-  "stage": "execute",
+  "updated": "2026-10-25T19:45:30.555Z",
+  "stage": "verify",
   "stageHistory": [
     {
       "stage": "discover",
@@ -24,6 +24,10 @@
     {
       "stage": "execute",
       "at": "2026-10-25T18:47:59.780Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-25T19:45:30.555Z"
     }
   ],
   "paused": null,
@@ -594,7 +598,7 @@
     {
       "id": "polish",
       "name": "Polish",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "polish-a11y",
@@ -1303,6 +1307,16 @@
       "at": "2026-10-25T19:45:28.239Z",
       "event": "task done",
       "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:45:30.555Z",
+      "event": "phase finished",
+      "detail": "Polish (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:45:30.555Z",
+      "event": "advanced",
+      "detail": "verify"
     }
   ],
   "cairnVersion": "0.3.0",
