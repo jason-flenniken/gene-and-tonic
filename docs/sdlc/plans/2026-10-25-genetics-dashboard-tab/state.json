@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "slug": "genetics-dashboard-tab",
+  "title": "Genetics page is isolated from the dashboard",
+  "track": "fix",
+  "branch": "fix/genetics-dashboard-tab",
+  "base": "main",
+  "created": "2026-10-25T13:17:08.989Z",
+  "updated": "2026-10-25T13:17:08.990Z",
+  "stage": "repro",
+  "stageHistory": [
+    {
+      "stage": "repro",
+      "at": "2026-10-25T13:17:08.989Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {},
+  "phases": [],
+  "evidence": {},
+  "drift": [],
+  "log": [
+    {
+      "at": "2026-10-25T13:17:08.989Z",
+      "event": "created"
+    }
+  ],
+  "cairnVersion": "0.3.0"
+}
