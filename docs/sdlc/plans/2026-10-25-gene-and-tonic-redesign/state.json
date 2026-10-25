@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:59:32.277Z",
+  "updated": "2026-10-25T18:59:56.614Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -251,15 +251,18 @@
             "Modules/Supplements/tests/**"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": false,
-          "substep": "reviewing",
           "branch": "task/gene-and-tonic-redesign/supplement-listing",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplement-listing",
           "base": "01a8872b64232b870683479fcf61f2a1bcf9eec3",
           "startedAt": "2026-10-25T18:57:44.376Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T18:59:56.614Z",
+          "tip": "d0d2fed",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "2373964eeb141300b2114f711121980a476a9499"
         },
         {
           "id": "relevance-contracts",
@@ -760,6 +763,16 @@
       "at": "2026-10-25T18:59:32.277Z",
       "event": "task done",
       "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:59:39.806Z",
+      "event": "task merging",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:59:56.614Z",
+      "event": "task done",
+      "detail": "Supplements listing contract, sources count, status filter"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -926,6 +939,26 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T18:59:14.523Z"
+    },
+    {
+      "id": "s17",
+      "area": "quality",
+      "text": "Build the active status list from ResearchStatus::isActive() instead of hard-coding it",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:39.665Z"
+    },
+    {
+      "id": "s18",
+      "area": "quality",
+      "text": "Replace the phpstan-only null research continue with an assert",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:39.736Z"
     }
   ]
 }
