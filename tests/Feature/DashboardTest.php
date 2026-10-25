@@ -57,3 +57,23 @@ it('shows the variant count and a link on the genetics tab for a signed-in user'
         ->assertSeeInOrder(['data-stat="variants"', '2'], false)
         ->assertSee(route('genetics.profile'), false);
 });
+
+it('shows the genetics upload and add-SNP tools inside the dashboard genetics tab', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->get('/?tab=genetics')
+        ->assertOk()
+        ->assertSee('data-panel="genetics"', false)
+        ->assertSee('Upload results')
+        ->assertSee('Add SNP');
+});
+
+it('sends the old genetics page to the dashboard genetics tab', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->get('/genetics')->assertRedirect(route('home', ['tab' => 'genetics']));
+});
+
+it('links the app name in the header back to the dashboard', function () {
+    $this->get('/?tab=genetics')->assertOk()->assertSee('href="'.route('home').'"', false);
+});
