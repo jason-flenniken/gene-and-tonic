@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:36:12.439Z",
+  "updated": "2026-10-25T19:36:14.809Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -508,7 +508,7 @@
     {
       "id": "home",
       "name": "Home",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "home-hero-stats",
@@ -594,7 +594,7 @@
     {
       "id": "polish",
       "name": "Polish",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "polish-a11y",
@@ -1231,6 +1231,11 @@
       "at": "2026-10-25T19:36:12.439Z",
       "event": "task done",
       "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:36:14.809Z",
+      "event": "phase finished",
+      "detail": "Home (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
