@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:09:09.070Z",
+  "updated": "2026-10-25T19:09:16.630Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "foundations",
       "name": "Foundations and data",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "theme-light",
@@ -306,7 +306,7 @@
     {
       "id": "shell",
       "name": "Shell and routes",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "shell-routes",
@@ -820,6 +820,11 @@
       "at": "2026-10-25T19:09:09.070Z",
       "event": "task done",
       "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:09:16.629Z",
+      "event": "phase finished",
+      "detail": "Foundations and data (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
