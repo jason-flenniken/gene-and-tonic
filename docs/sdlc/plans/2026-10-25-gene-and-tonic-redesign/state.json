@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:21:11.527Z",
+  "updated": "2026-10-25T19:22:40.067Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -382,16 +382,19 @@
             "Modules/Recommendations/tests/Feature/SlotsTest.php"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 1,
           "risky": true,
           "riskReason": "public page that renders an owner-only gene strip through a slot",
-          "substep": "fixing",
           "branch": "task/gene-and-tonic-redesign/supplements-index",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplements-index",
           "base": "53d92dcf12c7e0cfb2b527db71364fa4242350dd",
           "startedAt": "2026-10-25T19:14:47.184Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T19:22:40.067Z",
+          "tip": "7905a07",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "3114885035804f375efacc3ee40a4ba3ca087cc0"
         },
         {
           "id": "supplement-page",
@@ -417,10 +420,10 @@
           ],
           "complexity": "standard",
           "status": "in_progress",
-          "fixRound": 0,
+          "fixRound": 1,
           "risky": true,
           "riskReason": "public page showing model output and owner-only genotypes",
-          "substep": "reviewing",
+          "substep": "fixing",
           "branch": "task/gene-and-tonic-redesign/supplement-page",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplement-page",
           "base": "53d92dcf12c7e0cfb2b527db71364fa4242350dd",
@@ -483,10 +486,16 @@
             "Modules/Intelligence/tests/Feature/UsagePageTest.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "public page that takes an untrusted window parameter"
+          "riskReason": "public page that takes an untrusted window parameter",
+          "substep": "implementing",
+          "branch": "task/gene-and-tonic-redesign/usage-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--usage-page",
+          "base": "14316d4a1a587a0832337af9a9d61c4fcfdc4189",
+          "startedAt": "2026-10-25T19:21:37.099Z",
+          "level": "standard"
         }
       ]
     },
@@ -606,6 +615,24 @@
       "at": "2026-10-25T19:14:28.799Z",
       "reason": "changed outside task \"Sidebar shell, real routes, tab redirects\" scope (found at task done)",
       "task": "shell-routes"
+    },
+    {
+      "path": "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+      "at": "2026-10-25T19:22:40.067Z",
+      "reason": "changed outside task \"Supplements split view, filter, preview and card slots\" scope (found at task done)",
+      "task": "supplements-index"
+    },
+    {
+      "path": "Modules/Supplements/app/Repositories/SupplementRepository.php",
+      "at": "2026-10-25T19:22:40.067Z",
+      "reason": "changed outside task \"Supplements split view, filter, preview and card slots\" scope (found at task done)",
+      "task": "supplements-index"
+    },
+    {
+      "path": "Modules/Supplements/tests/Feature/ResearchPipelineTest.php",
+      "at": "2026-10-25T19:22:40.067Z",
+      "reason": "changed outside task \"Supplements split view, filter, preview and card slots\" scope (found at task done)",
+      "task": "supplements-index"
     }
   ],
   "log": [
@@ -967,6 +994,46 @@
       "at": "2026-10-25T19:21:11.527Z",
       "event": "task done",
       "detail": "Genetics page, chips, variant list, Look up now"
+    },
+    {
+      "at": "2026-10-25T19:21:29.771Z",
+      "event": "task fixing",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T19:21:37.099Z",
+      "event": "task started",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:21:37.243Z",
+      "event": "task implementing",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:22:18.375Z",
+      "event": "task merging",
+      "detail": "Supplements split view, filter, preview and card slots"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Repositories/SupplementRepository.php"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "task done",
+      "detail": "Supplements split view, filter, preview and card slots"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1313,6 +1380,26 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:20:50.433Z"
+    },
+    {
+      "id": "s35",
+      "area": "tests",
+      "text": "Render recommendations::genetic-panel as a guest directly; assert no data-genotype/data-allele and the sign-in prompt",
+      "where": [
+        "Modules/Recommendations/tests/Feature/GeneticPanelTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:21:29.844Z"
+    },
+    {
+      "id": "s36",
+      "area": "ux",
+      "text": "Your genes panel is absent on Overview while research is null/active/failed; decide whether to show a placeholder",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:21:29.915Z"
     }
   ]
 }
