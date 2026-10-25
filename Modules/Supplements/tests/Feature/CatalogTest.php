@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Livewire;
 use Modules\Supplements\Actions\AddSupplement;
 use Modules\Supplements\Actions\StartResearch;
+use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Jobs\RunSupplementResearch;
 use Modules\Supplements\Models\Supplement;
@@ -54,7 +55,7 @@ it('renders the catalog on its page with rows and links', function () {
         ->assertSee('Complete')
         ->assertSee('/supplements/'.$supplement->id);
 
-    Livewire::test('supplements::catalog')->assertSeeInOrder(['Zinc', 'Complete', '2', '1']);
+    Livewire::test('supplements::catalog')->assertSeeInOrder(['Zinc', '2 effects', '1 study', '0 sources']);
 });
 
 it('rejects invalid names', function (string $name) {
@@ -294,4 +295,88 @@ it('filters the catalog by status and counts sources', function () {
         ->and($names('failed'))->toBe(['D'])
         ->and($names('nonsense'))->toBe(['A', 'B', 'C', 'D'])
         ->and($repo->paginateWithResearch(10)->first()->sources_count)->toBe(3);
+});
+
+function catalogRow(string $name, ResearchStatus $status, array $research = []): SupplementResearch
+{
+    return SupplementResearch::factory()->for(Supplement::factory()->create(['name' => $name]))->create(['status' => $status] + $research);
+}
+
+it('shows only active rows under In progress, with the step', function () {
+    $alpha = catalogRow('Alpha', ResearchStatus::Complete);
+    $beta = catalogRow('Beta', ResearchStatus::Complete);
+    $gamma = catalogRow('Gamma', ResearchStatus::Searching);
+
+    Livewire::test('supplements::catalog')
+        ->assertSee('In progress')
+        ->set('status', 'active')
+        ->assertSeeHtml('wire:key="supplement-'.$gamma->supplement_id.'"')
+        ->assertSee('Searching sources')
+        ->assertSee('step 2 of 4')
+        ->assertDontSeeHtml('wire:key="supplement-'.$alpha->supplement_id.'"')
+        ->assertDontSeeHtml('wire:key="supplement-'.$beta->supplement_id.'"');
+});
+
+it('shows chip counts and the Failed chip only when something failed', function () {
+    catalogRow('Alpha', ResearchStatus::Complete);
+    catalogRow('Gamma', ResearchStatus::Queued);
+
+    $component = Livewire::test('supplements::catalog')->assertDontSee('Failed');
+    expect($component->get('counts'))->toBe(['all' => 2, 'complete' => 1, 'active' => 1, 'failed' => 0]);
+
+    catalogRow('Delta', ResearchStatus::Failed, ['error' => 'No sources']);
+
+    Livewire::test('supplements::catalog')->assertSee('Failed')->assertSee('No sources')->assertSee('Retry');
+});
+
+it('falls back to All for an unknown status and resets pagination on a filter', function () {
+    catalogRow('Alpha', ResearchStatus::Complete);
+
+    Livewire::withQueryParams(['status' => 'bogus'])->test('supplements::catalog')
+        ->assertSet('status', 'all')
+        ->assertSee('Alpha');
+
+    Livewire::test('supplements::catalog')->set('status', 'bogus')->assertSet('status', 'all');
+});
+
+it('previews the selected supplement top three effects, strongest first', function () {
+    $research = catalogRow('Methylfolate', ResearchStatus::Complete, ['completed_at' => now()]);
+    foreach ([['Limited one', EvidenceGrade::Limited], ['Moderate one', EvidenceGrade::Moderate], ['Strong one', EvidenceGrade::Strong], ['Dropped fourth', EvidenceGrade::Limited]] as [$title, $grade]) {
+        SupplementEffect::factory()->for($research, 'research')->create(['title' => $title, 'evidence_grade' => $grade]);
+    }
+    $other = catalogRow('Aardvark', ResearchStatus::Complete);
+
+    Livewire::withQueryParams(['selected' => $research->supplement_id])->test('supplements::catalog')
+        ->assertSet('selectedId', $research->supplement_id)
+        ->assertSeeInOrder(['TOP EFFECTS IN', 'METHYLFOLATE', 'Strong one', 'Moderate one', 'Limited one'])
+        ->assertDontSee('Dropped fourth')
+        ->call('selectSupplement', $other->supplement_id)
+        ->assertSeeInOrder(['TOP EFFECTS IN', 'AARDVARK']);
+});
+
+it('previews the first complete supplement for an unknown selection, or the empty state', function () {
+    Livewire::withQueryParams(['selected' => 99999])->test('supplements::catalog')
+        ->assertSee('No supplements yet')
+        ->assertSee('Nothing to preview');
+
+    catalogRow('Queued one', ResearchStatus::Queued);
+    catalogRow('Zinc', ResearchStatus::Complete);
+
+    Livewire::withQueryParams(['selected' => 99999])->test('supplements::catalog')
+        ->assertSee('TOP EFFECTS IN')
+        ->assertSee('ZINC');
+});
+
+it('keeps phones on the supplement page and offers the preview only from md up', function () {
+    $research = catalogRow('Zinc', ResearchStatus::Complete);
+
+    $this->get('/supplements')
+        ->assertSee('href="'.route('supplements.show', $research->supplement_id).'"', false)
+        ->assertSeeHtml('hidden md:block');
+});
+
+it('survives a non-numeric selected parameter', function () {
+    catalogRow('Zinc', ResearchStatus::Complete);
+
+    $this->get('/supplements?selected=abc')->assertOk()->assertSee('ZINC');
 });

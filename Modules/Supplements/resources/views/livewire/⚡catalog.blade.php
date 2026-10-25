@@ -3,12 +3,16 @@
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Flux\Flux;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Supplements\Actions\AddSupplement;
 use Modules\Supplements\Actions\DeleteSupplement;
 use Modules\Supplements\Actions\StartResearch;
+use Modules\Supplements\Contracts\SupplementResearchReader;
+use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Repositories\SupplementRepository;
 use Modules\Supplements\Support\ActionThrottle;
@@ -17,9 +21,33 @@ new #[Title('Supplements')] class extends Component
 {
     use WithPagination;
 
+    private const array STATUSES = ['all', 'complete', 'active', 'failed'];
+
     public string $name = '';
 
     public ?int $deleteId = null;
+
+    #[Url]
+    public string $status = 'all';
+
+    #[Url(as: 'selected')]
+    public ?int $selectedId = null;
+
+    public function mount(): void
+    {
+        $this->normalizeStatus();
+    }
+
+    public function updatedStatus(): void
+    {
+        $this->normalizeStatus();
+        $this->resetPage();
+    }
+
+    public function selectSupplement(int $id): void
+    {
+        $this->selectedId = $id;
+    }
 
     public function add(AddSupplement $addSupplement): void
     {
@@ -88,76 +116,131 @@ new #[Title('Supplements')] class extends Component
     #[Computed]
     public function supplements(): LengthAwarePaginator
     {
-        return app(SupplementRepository::class)->paginateWithResearch(10);
+        $this->normalizeStatus();
+
+        return app(SupplementRepository::class)->paginateWithResearch(10, $this->status);
+    }
+
+    /**
+     * Chip counts: all, complete, active (queued, searching or analyzing) and failed.
+     *
+     * @return array{all: int, complete: int, active: int, failed: int}
+     */
+    #[Computed]
+    public function counts(): array
+    {
+        $byStatus = app(SupplementRepository::class)->countByStatus();
+        $active = array_sum(array_map(fn (ResearchStatus $s): int => $byStatus[$s->value] ?? 0, [ResearchStatus::Queued, ResearchStatus::Searching, ResearchStatus::Analyzing]));
+
+        return [
+            'all' => array_sum($byStatus),
+            'complete' => $byStatus[ResearchStatus::Complete->value] ?? 0,
+            'active' => $active,
+            'failed' => $byStatus[ResearchStatus::Failed->value] ?? 0,
+        ];
+    }
+
+    /** The supplement shown in the preview: the selected one if it exists, else the first complete one. */
+    #[Computed]
+    public function selected(): ?Supplement
+    {
+        $supplements = app(SupplementRepository::class);
+        $selected = $this->selectedId !== null ? $supplements->find($this->selectedId) : null;
+
+        return $selected ?? $supplements->paginateWithResearch(1, 'complete')->first();
+    }
+
+    #[Computed]
+    public function selectedResearch(): ?SupplementResearchData
+    {
+        $selected = $this->selected;
+
+        return $selected === null ? null : app(SupplementResearchReader::class)->forSupplement($selected->id);
+    }
+
+    /**
+     * The top three effects, strongest evidence first.
+     *
+     * @return list<\Modules\Supplements\Data\EffectData>
+     */
+    #[Computed]
+    public function topEffects(): array
+    {
+        $effects = $this->selectedResearch?->effects ?? [];
+
+        usort($effects, fn ($a, $b): int => $a->evidenceGrade->rank() <=> $b->evidenceGrade->rank());
+
+        return array_slice($effects, 0, 3);
+    }
+
+    private function normalizeStatus(): void
+    {
+        if (! in_array($this->status, self::STATUSES, true)) {
+            $this->status = 'all';
+        }
     }
 };
 ?>
 
-<div class="space-y-6" @if ($this->hasActiveRuns) wire:poll.3s @endif>
-    <flux:card>
-        <form wire:submit="add" class="flex items-start gap-3">
-            <div class="flex-1">
-                <flux:input wire:model="name" label="Supplement" placeholder="e.g. Magnesium glycinate" maxlength="100" />
-            </div>
-            <flux:button type="submit" variant="primary" class="mt-6">Add supplement</flux:button>
-        </form>
-    </flux:card>
+<div @if ($this->hasActiveRuns) wire:poll.3s @endif>
+<x-ui.panel>
+    <x-ui.page-header title="Supplements" subtitle="Name a supplement. We read the published research and check it against your genes." />
 
-    <flux:card>
-        @if ($this->supplements->isEmpty())
-            <flux:text>No supplements yet. Add one above to start researching.</flux:text>
-        @else
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm">
-                    <thead class="border-b border-zinc-200 text-zinc-500">
-                        <tr>
-                            <th class="py-2 pr-4 font-medium">Name</th>
-                            <th class="py-2 pr-4 font-medium">Status</th>
-                            <th class="py-2 pr-4 font-medium">Effects</th>
-                            <th class="py-2 pr-4 font-medium">Studies</th>
-                            <th class="py-2"><span class="sr-only">Actions</span></th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-zinc-100">
-                        @foreach ($this->supplements as $supplement)
-                            <tr wire:key="supplement-{{ $supplement->id }}">
-                                <td class="py-2 pr-4">
-                                    <a href="{{ route('supplements.show', $supplement) }}" class="font-medium hover:underline">{{ $supplement->name }}</a>
-                                </td>
-                                <td class="py-2 pr-4">
-                                    @if ($supplement->research)
-                                        <flux:badge color="{{ $supplement->research->status->color() }}" size="sm">{{ $supplement->research->status->label() }}</flux:badge>
-                                        @if ($supplement->research->error)
-                                            <flux:text size="sm" class="mt-1 text-red-600">{{ $supplement->research->error }}</flux:text>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td class="py-2 pr-4">{{ $supplement->effects_count }}</td>
-                                <td class="py-2 pr-4">{{ $supplement->studies_count }}</td>
-                                <td class="space-x-1 py-2 text-right">
-                                    @if ($supplement->research)
-                                        @php($active = $supplement->research->status->isActive())
-                                        @if ($supplement->research->status === \Modules\Supplements\Enums\ResearchStatus::Failed)
-                                            <flux:button size="sm" wire:click="retry({{ $supplement->id }})">Retry</flux:button>
-                                        @else
-                                            <flux:button size="xs" variant="ghost" :disabled="$active" wire:click="retry({{ $supplement->id }})">Re-run</flux:button>
-                                        @endif
-                                    @endif
-                                    <flux:modal.trigger name="delete-supplement">
-                                        <flux:button size="sm" variant="ghost" wire:click="confirmDelete({{ $supplement->id }})">Delete</flux:button>
-                                    </flux:modal.trigger>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <form wire:submit="add" class="flex flex-wrap gap-2.5">
+        <label for="new-supplement" class="sr-only">Supplement name</label>
+        <input
+            id="new-supplement"
+            type="text"
+            wire:model="name"
+            maxlength="100"
+            placeholder="e.g. Vitamin D3, Creatine, Omega-3"
+            class="box-border h-[52px] min-w-0 flex-[1_1_300px] rounded-full border border-line-input bg-surface-input px-5 text-base text-ink placeholder:text-ink-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-juniper"
+        >
+        <button type="submit" class="h-[52px] rounded-full bg-juniper px-7 text-base font-semibold text-white hover:bg-juniper-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-juniper">Research it</button>
+        @error('name')
+            <p class="basis-full px-5 text-[13px] text-bad-text" role="alert">{{ $message }}</p>
+        @enderror
+    </form>
+
+    @php($counts = $this->counts)
+    @php($supplements = $this->supplements)
+
+    <div class="grid overflow-hidden rounded-section border border-line md:grid-cols-2">
+        <div class="flex flex-col gap-1 bg-surface-muted px-4 py-5 md:border-r md:border-line">
+            <div class="flex flex-wrap gap-1.5 px-1 pb-3" role="group" aria-label="Filter by status">
+                <x-ui.chip :active="$status === 'all'" :count="$counts['all']" wire:click="$set('status', 'all')">All</x-ui.chip>
+                <x-ui.chip :active="$status === 'complete'" :count="$counts['complete']" wire:click="$set('status', 'complete')">Complete</x-ui.chip>
+                <x-ui.chip :active="$status === 'active'" :count="$counts['active']" wire:click="$set('status', 'active')">In progress</x-ui.chip>
+                @if ($counts['failed'] > 0)
+                    <x-ui.chip :active="$status === 'failed'" :count="$counts['failed']" wire:click="$set('status', 'failed')">Failed</x-ui.chip>
+                @endif
             </div>
 
-            <div class="mt-4">
-                {{ $this->supplements->links() }}
+            @forelse ($supplements as $supplement)
+                <x-supplements::catalog.row :supplement="$supplement" :selected="$this->selected?->id === $supplement->id" wire:key="supplement-{{ $supplement->id }}" />
+            @empty
+                <p class="px-4 py-3 text-[15px] text-ink-muted">
+                    @if ($counts['all'] === 0)
+                        No supplements yet. Add one above to start researching.
+                    @else
+                        No supplements match this filter.
+                    @endif
+                </p>
+            @endforelse
+
+            <div class="mt-2 px-2">
+                {{ $supplements->links() }}
             </div>
-        @endif
-    </flux:card>
+        </div>
+
+        <div class="hidden md:block">
+            @if ($this->selected)
+                <x-supplements::catalog.preview :supplement="$this->selected" :research="$this->selectedResearch" :effects="$this->topEffects" />
+            @else
+                <p class="p-7 text-[15px] text-ink-muted">Nothing to preview yet. Research a supplement to see its top effects here.</p>
+            @endif
+        </div>
+    </div>
 
     <flux:modal name="delete-supplement" class="min-w-[22rem]">
         <div class="space-y-6">
@@ -174,4 +257,5 @@ new #[Title('Supplements')] class extends Component
             </div>
         </div>
     </flux:modal>
+</x-ui.panel>
 </div>
