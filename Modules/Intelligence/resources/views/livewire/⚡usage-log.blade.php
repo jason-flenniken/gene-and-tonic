@@ -68,7 +68,7 @@ new #[Title('AI usage')] class extends Component
                         wire:key="window-{{ $option->value }}"
                         :active="$this->usageWindow === $option"
                         wire:click="$set('window', '{{ $option->value }}')"
-                    >{{ ['24h' => '24 hours', '7d' => '7 days', 'all' => 'All time'][$option->value] }}</x-ui.segmented.item>
+                    >{{ $option->label() }}</x-ui.segmented.item>
                 @endforeach
             </x-ui.segmented>
         </x-slot:actions>

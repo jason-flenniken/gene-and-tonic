@@ -1,10 +1,14 @@
 <?php
 
+use App\Models\User;
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
+use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\VariantData;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
 use Modules\Genetics\Testing\FakeGeneticProfileReader;
 use Modules\Intelligence\Testing\FakeTextGenerator;
 use Modules\Recommendations\Contracts\GeneticRelevanceReader;
@@ -329,26 +333,21 @@ it('returns no top supplements for a user with no profile', function () {
     expect(app(GeneticRelevanceReader::class)->topForUser(RELEVANCE_USER, 5))->toBe([]);
 });
 
-it('reads the profile and the research listing once per request however often it is asked', function () {
-    $reads = 0;
-    $profiles = new class($reads) extends FakeGeneticProfileReader
-    {
-        public function __construct(public int &$reads) {}
+it('loads the stored profile once per request however often it is asked', function () {
+    $user = User::factory()->create();
+    app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG', 'MTHFR');
+    app()->instance(GeneticProfileReader::class, app(EloquentGeneticProfileReader::class));
+    $this->research->with(relevanceResearch([new GeneInteractionData('MTHFR', 'rs1801133', null, GeneRelation::Helps, 'x', ['S1'])]));
 
-        public function forUser(int $userId): GeneticProfileData
-        {
-            $this->reads++;
-
-            return new GeneticProfileData($userId, [relevanceVariant('rs1801133', 'MTHFR', 'AG')]);
-        }
-    };
-    app()->instance(GeneticProfileReader::class, $profiles);
-    $this->research->with(relevanceResearch([new GeneInteractionData('MTHFR', 'rs1801133', 'A', GeneRelation::Helps, 'x', ['S1'])]));
+    $loads = 0;
+    DB::listen(function ($query) use (&$loads): void {
+        $loads += str_contains($query->sql, 'from "user_variants"') ? 1 : 0;
+    });
 
     $reader = app(GeneticRelevanceReader::class);
-    $reader->forUserAndSupplement(RELEVANCE_USER, RELEVANCE_SUPPLEMENT);
-    $reader->forUserAndSupplement(RELEVANCE_USER, RELEVANCE_SUPPLEMENT);
-    $reader->topForUser(RELEVANCE_USER, 5);
+    $reader->forUserAndSupplement($user->id, RELEVANCE_SUPPLEMENT);
+    $reader->forUserAndSupplement($user->id, RELEVANCE_SUPPLEMENT);
+    $reader->topForUser($user->id, 5);
 
-    expect($reads)->toBe(1)->and(app(GeneticRelevanceReader::class))->toBe($reader);
+    expect($loads)->toBe(1)->and(app(GeneticRelevanceReader::class))->toBe($reader);
 });

@@ -16,18 +16,13 @@ class EloquentAiRequestRepository implements AiRequestRepository
 
     public function summary(UsageWindow $window = UsageWindow::All): UsageSummary
     {
-        $since = now()->subDay();
-
         $row = $this->within($window)
             ->selectRaw(
                 "count(*) as calls,
                 sum(case when status = 'failed' then 1 else 0 end) as failed_calls,
                 sum(input_tokens) as input_tokens,
                 sum(output_tokens) as output_tokens,
-                sum(estimated_cost_usd) as cost,
-                sum(case when created_at >= ? then 1 else 0 end) as calls_24h,
-                sum(case when created_at >= ? then estimated_cost_usd else 0 end) as cost_24h",
-                [$since, $since],
+                sum(estimated_cost_usd) as cost",
             )
             ->toBase()
             ->first();
@@ -38,8 +33,6 @@ class EloquentAiRequestRepository implements AiRequestRepository
             inputTokens: (int) ($row->input_tokens ?? 0),
             outputTokens: (int) ($row->output_tokens ?? 0),
             estimatedCostUsd: (float) ($row->cost ?? 0),
-            callsLast24h: (int) ($row->calls_24h ?? 0),
-            costLast24hUsd: (float) ($row->cost_24h ?? 0),
         );
     }
 

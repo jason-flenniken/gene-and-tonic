@@ -56,7 +56,9 @@ it('aggregates cost by profile and operation including search credits', function
 it('exposes window labels and boundaries', function () {
     expect(UsageWindow::All->since())->toBeNull()
         ->and(UsageWindow::Day->since()->lt(now()))->toBeTrue()
-        ->and(UsageWindow::Week->label())->toBe('Last 7 days');
+        ->and(UsageWindow::Week->label())->toBe('7 days')
+        ->and(UsageWindow::Day->label())->toBe('24 hours')
+        ->and(UsageWindow::All->label())->toBe('All time');
 });
 
 it('labels configured profiles and falls back without throwing', function () {

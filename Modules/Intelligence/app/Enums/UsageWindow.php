@@ -13,8 +13,8 @@ enum UsageWindow: string
     public function label(): string
     {
         return match ($this) {
-            self::Day => 'Last 24 hours',
-            self::Week => 'Last 7 days',
+            self::Day => '24 hours',
+            self::Week => '7 days',
             self::All => 'All time',
         };
     }

@@ -3,7 +3,6 @@
 namespace Modules\Recommendations\Services;
 
 use Modules\Genetics\Contracts\GeneticProfileReader;
-use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\Genotype;
 use Modules\Genetics\Data\VariantData;
 use Modules\Recommendations\Contracts\GeneticRelevanceReader;
@@ -17,15 +16,13 @@ use Modules\Supplements\Data\SupplementSummaryData;
 final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
 {
     /**
-     * Bound as scoped: one instance per request, so the profile is read once per
-     * user and the research listing once. This module only reads genetic data,
-     * so nothing here goes stale inside a request.
+     * Bound as scoped: one instance per request. The profile is not cached here:
+     * the Genetics reader memoizes it per request and flushes on writes, so
+     * calling it directly is cheap and never stale. The research listing is read
+     * once per request and does not see Supplements writes made in that request.
      *
-     * @var array<int, GeneticProfileData>
+     * @var array<int, SupplementSummaryData>|null
      */
-    private array $profileCache = [];
-
-    /** @var array<int, SupplementSummaryData>|null */
     private ?array $summaryCache = null;
 
     public function __construct(
@@ -35,7 +32,7 @@ final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
 
     public function forUserAndSupplement(int $userId, int $supplementId): GeneticRelevanceData
     {
-        $profile = $this->profile($userId);
+        $profile = $this->profiles->forUser($userId);
         $summary = $this->summaries()[$supplementId] ?? null;
 
         if ($summary === null) {
@@ -48,11 +45,6 @@ final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
             geneticsChecked: $summary->geneticsChecked,
             matches: $this->matchesForAll($summary->geneInteractions, $profile->variants),
         );
-    }
-
-    private function profile(int $userId): GeneticProfileData
-    {
-        return $this->profileCache[$userId] ??= $this->profiles->forUser($userId);
     }
 
     /** @return array<int, SupplementSummaryData> */
@@ -71,7 +63,7 @@ final class RuleBasedGeneticRelevanceReader implements GeneticRelevanceReader
 
     public function topForUser(int $userId, int $limit = 1): array
     {
-        $profile = $this->profile($userId);
+        $profile = $this->profiles->forUser($userId);
 
         if ($profile->isEmpty()) {
             return [];

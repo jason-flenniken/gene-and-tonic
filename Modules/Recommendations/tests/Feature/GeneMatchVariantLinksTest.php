@@ -1,8 +1,12 @@
 <?php
 
+use App\Models\User;
+use Modules\Genetics\Actions\AddVariant;
+use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\VariantData;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Repositories\EloquentGeneticProfileReader;
 use Modules\Genetics\Testing\FakeGeneticProfileReader;
 use Modules\Intelligence\Testing\FakeTextGenerator;
 use Modules\Recommendations\Services\GeneMatchVariantLinks;
@@ -91,4 +95,19 @@ it('never links rsIDs that only another user holds, and carries no genotypes', f
         ->and($serialized)->not->toContain('genotype')
         ->and($serialized)->not->toContain('"GT"')
         ->and($serialized)->not->toContain('"AA"');
+});
+
+it('links a variant added later in the same request', function () {
+    $user = User::factory()->create();
+    app()->instance(GeneticProfileReader::class, app(EloquentGeneticProfileReader::class));
+    $this->research->withSummary(linksSupplement(11, 'Methylfolate', linksInteraction('MTHFR', 'rs1801133', null)));
+
+    $links = app(VariantLinks::class);
+    expect($links->forUser($user->id))->toBe([]);
+
+    app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG', 'MTHFR');
+
+    expect($links->forUser($user->id))->toEqual([
+        'rs1801133' => [new LinkedSupplementData(11, 'Methylfolate')],
+    ]);
 });

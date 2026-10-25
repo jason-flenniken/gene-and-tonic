@@ -13,7 +13,5 @@ final readonly class UsageSummary
         public int $inputTokens,
         public int $outputTokens,
         public float $estimatedCostUsd,
-        public int $callsLast24h,
-        public float $costLast24hUsd,
     ) {}
 }

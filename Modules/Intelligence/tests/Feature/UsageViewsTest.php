@@ -23,7 +23,7 @@ function aiRequest(array $overrides = []): AiRequest
     ]);
 }
 
-it('summarises totals with failures and the last 24 hours', function () {
+it('summarises totals with failures', function () {
     aiRequest(['input_tokens' => 1000, 'output_tokens' => 200, 'estimated_cost_usd' => 0.5]);
     aiRequest(['status' => 'failed', 'error' => 'boom', 'input_tokens' => 10, 'output_tokens' => 0, 'estimated_cost_usd' => 0.25]);
     aiRequest(['estimated_cost_usd' => 1])->forceFill(['created_at' => now()->subDays(3)])->save();
@@ -34,17 +34,14 @@ it('summarises totals with failures and the last 24 hours', function () {
         ->and($summary->failedCalls)->toBe(1)
         ->and($summary->inputTokens)->toBe(1110)
         ->and($summary->outputTokens)->toBe(250)
-        ->and($summary->estimatedCostUsd)->toBe(1.75)
-        ->and($summary->callsLast24h)->toBe(2)
-        ->and($summary->costLast24hUsd)->toBe(0.75);
+        ->and($summary->estimatedCostUsd)->toBe(1.75);
 });
 
 it('returns zeros for an empty table', function () {
     $summary = app(AiRequestRepository::class)->summary();
 
     expect($summary->calls)->toBe(0)
-        ->and($summary->estimatedCostUsd)->toBe(0.0)
-        ->and($summary->costLast24hUsd)->toBe(0.0);
+        ->and($summary->estimatedCostUsd)->toBe(0.0);
 });
 
 it('lists requests newest first, 20 per page', function () {
