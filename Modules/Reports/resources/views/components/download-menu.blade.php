@@ -12,8 +12,8 @@
             @endforeach
         </flux:select>
 
-        <flux:button size="sm" variant="primary" icon="arrow-down-tray" href="{{ $pdfUrl }}?template={{ urlencode($defaultTemplate) }}" x-bind:href="pdfUrl + '?template=' + encodeURIComponent(template)">
+        <x-ui.button :href="$pdfUrl.'?template='.urlencode($defaultTemplate)" x-bind:href="pdfUrl + '?template=' + encodeURIComponent(template)" class="!h-10 !px-5 !text-[14px]">
             Download PDF
-        </flux:button>
+        </x-ui.button>
     </div>
 @endif
