@@ -6,8 +6,8 @@ use Modules\Genetics\Support\Parsing\ParsedVariant;
 
 /**
  * What the model returned for a set of marker lines (validated, one per rsID),
- * the lines it was actually sent, and whether genetics.extract.max_chunks cut
- * some lines off.
+ * the lines it was actually sent, whether genetics.extract.max_chunks cut
+ * some lines off, and how many lines that left unsent.
  */
 final readonly class Extraction
 {
@@ -19,6 +19,7 @@ final readonly class Extraction
         public array $variants,
         public array $sent,
         public bool $truncated,
+        public int $unsentCount = 0,
     ) {}
 
     /**

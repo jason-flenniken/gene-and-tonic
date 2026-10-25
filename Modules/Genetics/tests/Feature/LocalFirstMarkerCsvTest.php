@@ -273,3 +273,20 @@ it('shows how the rows were read on the upload row', function () {
         ->assertSee('70 read, 4 via AI, 9 skipped')
         ->assertSee('older.csv');
 });
+
+it('records marker lines past max_chunks as skipped on the whole-file AI path', function () {
+    config(['genetics.extract.max_chars' => 100, 'genetics.extract.max_chunks' => 2]);
+    $this->text->respondWith(['variants' => []])->respondWith(['variants' => []]);
+    $upload = markerUpload($this->user, unrecognisedMarkerText(), 'txt');
+
+    ProcessGeneticUpload::dispatchSync($upload->id);
+
+    $sentCount = array_sum(array_map(fn (PromptRequest $request): int => count($request->variables['lines']), $this->text->requests()));
+    $unsent = 10 - $sentCount;
+
+    expect($this->text->requests())->toHaveCount(2)
+        ->and($unsent)->toBeGreaterThan(0)
+        ->and($upload->refresh()->parse_method)->toBe(ParseMethod::Ai)
+        ->and($upload->skipped_count)->toBe($unsent)
+        ->and($upload->readSummary())->toContain($unsent.' skipped');
+});

@@ -13,6 +13,7 @@ use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
+use Modules\Genetics\Support\Extraction\Extraction;
 use Modules\Genetics\Support\Extraction\MarkerExtractor;
 use Modules\Genetics\Support\Parsing\ParsedVariant;
 use Modules\Intelligence\Testing\FakeTextGenerator;
@@ -142,9 +143,9 @@ it('applies the row cap to extractor results too', function () {
     config(['genetics.max_marker_rows' => 1]);
     app()->instance(MarkerExtractor::class, new class implements MarkerExtractor
     {
-        public function extract(string $absolutePath, string $extension): array
+        public function extract(string $absolutePath, string $extension): Extraction
         {
-            return [new ParsedVariant('rs90000071', 'AG', null), new ParsedVariant('rs90000072', 'AG', null)];
+            return new Extraction([new ParsedVariant('rs90000071', 'AG', null), new ParsedVariant('rs90000072', 'AG', null)], [], false);
         }
     });
     $upload = queuedUpload($this->user, '23andme.txt', 'pdf');
@@ -256,9 +257,9 @@ it('fails a known format with no valid rows', function () {
 it('sends a pdf to the marker extractor and stores every extracted row', function () {
     app()->instance(MarkerExtractor::class, new class implements MarkerExtractor
     {
-        public function extract(string $absolutePath, string $extension): array
+        public function extract(string $absolutePath, string $extension): Extraction
         {
-            return [new ParsedVariant('rs90000041', 'AG', 'ABC1')];
+            return new Extraction([new ParsedVariant('rs90000041', 'AG', 'ABC1')], [], false);
         }
     });
     $upload = queuedUpload($this->user, '23andme.txt', 'pdf', 'report.pdf');
@@ -281,7 +282,7 @@ it('leaves the genetics disk empty after success and after failure', function (s
 it('marks the upload failed with a generic message and deletes the file when the last attempt throws', function () {
     app()->instance(MarkerExtractor::class, new class implements MarkerExtractor
     {
-        public function extract(string $absolutePath, string $extension): array
+        public function extract(string $absolutePath, string $extension): Extraction
         {
             throw new RuntimeException('provider detail that must not reach the UI');
         }
@@ -300,7 +301,7 @@ it('marks the upload failed with a generic message and deletes the file when the
 it('keeps the file for a retry when an earlier attempt throws', function () {
     app()->instance(MarkerExtractor::class, new class implements MarkerExtractor
     {
-        public function extract(string $absolutePath, string $extension): array
+        public function extract(string $absolutePath, string $extension): Extraction
         {
             throw new RuntimeException('transient');
         }
