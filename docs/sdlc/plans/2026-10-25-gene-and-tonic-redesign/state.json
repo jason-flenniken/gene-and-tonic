@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:59:56.614Z",
+  "updated": "2026-10-25T19:00:42.193Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -226,15 +226,18 @@
             "Modules/Reports/tests/Feature/TemplatesTest.php"
           ],
           "complexity": "simple",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 1,
           "risky": false,
-          "substep": "fixing",
           "branch": "task/gene-and-tonic-redesign/pdf-brand",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--pdf-brand",
           "base": "0b362bc609d8999753ae9b10966721060d7f75c7",
           "startedAt": "2026-10-25T18:57:00.525Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T19:00:42.193Z",
+          "tip": "ae392ed",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "d4dcf8a6e4302f71d1b24fd61c5b282a85f77fe6"
         },
         {
           "id": "supplement-listing",
@@ -284,10 +287,16 @@
             "Modules/Genetics/tests/Unit/GenotypeTest.php"
           ],
           "complexity": "complex",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "reads users' genotypes and exposes match data across modules"
+          "riskReason": "reads users' genotypes and exposes match data across modules",
+          "substep": "implementing",
+          "branch": "task/gene-and-tonic-redesign/relevance-contracts",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--relevance-contracts",
+          "base": "2000c974a6eb8a296695cc8f11c34ee252c889f5",
+          "startedAt": "2026-10-25T19:00:12.033Z",
+          "level": "standard"
         }
       ]
     },
@@ -773,6 +782,26 @@
       "at": "2026-10-25T18:59:56.614Z",
       "event": "task done",
       "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T19:00:12.033Z",
+      "event": "task started",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:00:12.177Z",
+      "event": "task implementing",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:00:25.528Z",
+      "event": "task merging",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T19:00:42.193Z",
+      "event": "task done",
+      "detail": "Gene & Tonic in PDF headers and footers"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -959,6 +988,16 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T18:59:39.736Z"
+    },
+    {
+      "id": "s19",
+      "area": "tests",
+      "text": "Tie the 8pt check to the brand span rather than the minimum font-size in the markup",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:00:05.912Z"
     }
   ]
 }
