@@ -5,6 +5,11 @@
         'methylation' => 'green', 'heart' => 'rose', 'mood' => 'peach', 'sleep' => 'indigo', 'stress' => 'coral',
         'energy' => 'butter', 'focus' => 'blue', 'blood' => 'coral', 'immune' => 'teal', 'digestion' => 'leaf',
     ];
+    $icons = [
+        'methylation' => 'helix', 'heart' => 'group-heart', 'mood' => 'group-smile', 'sleep' => 'group-moon', 'stress' => 'group-leaf',
+        'energy' => 'group-flame', 'focus' => 'group-smile', 'blood' => 'group-drop', 'immune' => 'group-shield', 'digestion' => 'group-leaf',
+    ];
+    $icon = 'icon.'.($icons[$effect->category?->value] ?? 'capsule');
     $title = filled($effect->title) ? $effect->title : $effect->claim;
     $hasTitle = filled($effect->title);
 @endphp
@@ -30,7 +35,9 @@
     </div>
 @else
     <div {{ $attributes->class('flex min-h-14 items-center gap-3 border-b border-line-soft py-2') }} data-effect>
-        <x-ui.icon-tile :tone="$tones[$effect->category?->value] ?? 'stone'" :size="32" />
+        <x-ui.icon-tile :tone="$tones[$effect->category?->value] ?? 'stone'" :size="32">
+            <x-dynamic-component :component="$icon" />
+        </x-ui.icon-tile>
         <span class="min-w-0 flex-1 text-[15px] font-medium text-ink">{{ $title }}</span>
         <x-ui.grade :grade="$effect->evidenceGrade->value" />
     </div>

@@ -215,6 +215,10 @@ it('falls back for legacy research with no kicker, topics or effect titles', fun
         ->assertSee('Improves sleep quality')
         ->assertSee('Reduces cramps');
 
+    $html = Livewire::test('supplements::show', ['supplement' => $supplement->id])->html();
+    preg_match('#<div[^>]*data-effect>.*?</div>#s', $html, $row);
+    expect($row[0] ?? '')->toContain('<svg');
+
     $this->get(route('supplements.show', $supplement).'?tab=effects')->assertOk()
         ->assertSee('Improves sleep quality')->assertSee('Reduces cramps');
 });
