@@ -2,6 +2,8 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
+use Modules\Genetics\Actions\QueueLookups;
 use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\VariantData;
@@ -145,4 +147,18 @@ it('never serves one user\'s cached profile to another user', function () {
     expect($profileB->userId)->toBe($b->id)
         ->and($profileB->isEmpty())->toBeTrue()
         ->and($reader->forUser($a->id)->count())->toBe(1);
+});
+
+it('returns fresh lookup status after queueing lookups in the same request', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+    GeneVariant::factory()->pending()->create(['rsid' => 'rs4680']);
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs4680']);
+    $reader = app(GeneticProfileReader::class);
+
+    expect($reader->forUser($user->id)->variants[0]->status)->toBe(LookupStatus::Pending);
+
+    app(QueueLookups::class)->handle(['rs4680'], 1);
+
+    expect($reader->forUser($user->id)->variants[0]->status)->toBe(LookupStatus::LookingUp);
 });
