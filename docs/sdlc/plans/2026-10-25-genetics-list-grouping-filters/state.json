@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:01:11.385Z",
-  "stage": "execute",
+  "updated": "2026-10-25T15:01:17.242Z",
+  "stage": "verify",
   "stageHistory": [
     {
       "stage": "discover",
@@ -24,6 +24,10 @@
     {
       "stage": "execute",
       "at": "2026-10-25T14:52:22.984Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-25T15:01:17.242Z"
     }
   ],
   "paused": null,
@@ -89,7 +93,7 @@
     {
       "id": "list-and-backfill",
       "name": "Grouped list and backfill",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "grouped-list-ui",
@@ -297,6 +301,16 @@
       "at": "2026-10-25T15:01:11.385Z",
       "event": "task done",
       "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T15:01:17.242Z",
+      "event": "phase finished",
+      "detail": "Grouped list and backfill (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T15:01:17.242Z",
+      "event": "advanced",
+      "detail": "verify"
     }
   ],
   "cairnVersion": "0.3.0",
