@@ -85,9 +85,9 @@ it('shows an empty state without rows', function () {
     Livewire::test('intelligence::usage-log')->assertSee('No AI calls recorded yet.');
 });
 
-it('renders the usage tab on the dashboard', function () {
+it('renders the usage page', function () {
     $this->withoutVite();
     aiRequest(['model' => 'dash-model']);
 
-    $this->get('/?tab=usage')->assertOk()->assertSee('dash-model')->assertSee('AI usage');
+    $this->get('/usage')->assertOk()->assertSee('dash-model')->assertSee('AI usage');
 });

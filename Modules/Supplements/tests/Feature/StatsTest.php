@@ -49,7 +49,7 @@ it('shows an empty state when nothing is complete', function () {
         ->assertSeeText('Complete: 0');
 });
 
-it('renders both widgets on the overview tab', function () {
+it('renders both widgets on the home page', function () {
     $this->withoutVite();
     researched('Zinc', ResearchStatus::Complete, now());
     AiRequest::query()->create([
@@ -57,7 +57,7 @@ it('renders both widgets on the overview tab', function () {
         'latency_ms' => 1, 'estimated_cost_usd' => 0.5, 'status' => 'success',
     ]);
 
-    $this->get('/?tab=overview')
+    $this->get('/')
         ->assertOk()
         ->assertSee('Zinc')
         ->assertSee('Total supplements')

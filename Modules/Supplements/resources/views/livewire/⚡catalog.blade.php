@@ -3,6 +3,7 @@
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Flux\Flux;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Supplements\Actions\AddSupplement;
@@ -12,7 +13,7 @@ use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Repositories\SupplementRepository;
 use Modules\Supplements\Support\ActionThrottle;
 
-new class extends Component
+new #[Title('Supplements')] class extends Component
 {
     use WithPagination;
 

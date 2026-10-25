@@ -3,12 +3,13 @@
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Modules\Intelligence\Models\AiRequest;
 use Modules\Intelligence\Repositories\AiRequestRepository;
 
-new class extends Component
+new #[Title('AI usage')] class extends Component
 {
     use WithPagination;
 
