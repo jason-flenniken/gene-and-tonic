@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:52:22.984Z",
+  "updated": "2026-10-25T14:55:36.729Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "groups-data",
       "name": "Groups in the data",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "variant-groups",
@@ -70,10 +70,19 @@
             "Modules/Recommendations/tests/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "add-only migration on gene_variants and new model-output field"
+          "riskReason": "add-only migration on gene_variants and new model-output field",
+          "branch": "task/genetics-list-grouping-filters/variant-groups",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--variant-groups",
+          "base": "f9d81fec1af5f82293fa13e698f1cd7c66270ea2",
+          "startedAt": "2026-10-25T14:52:34.413Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T14:55:36.728Z",
+          "tip": "73823f0",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "abdca4f82731494948ae31af05bc1221aaacdfce"
         }
       ]
     },
@@ -178,6 +187,31 @@
       "at": "2026-10-25T14:52:22.984Z",
       "event": "advanced",
       "detail": "execute"
+    },
+    {
+      "at": "2026-10-25T14:52:34.414Z",
+      "event": "task started",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:52:57.084Z",
+      "event": "task implementing",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:54:29.460Z",
+      "event": "task reviewing",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:55:19.947Z",
+      "event": "task merging",
+      "detail": "Variant groups in data and lookup"
+    },
+    {
+      "at": "2026-10-25T14:55:36.729Z",
+      "event": "task done",
+      "detail": "Variant groups in data and lookup"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -192,6 +226,36 @@
       ],
       "from": "user",
       "at": "2026-10-25T14:39:53.383Z"
+    },
+    {
+      "id": "s2",
+      "area": "tests",
+      "text": "Render the lookup instructions view in a test and assert the group rule lists every VariantGroup value",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:54:29.381Z"
+    },
+    {
+      "id": "s3",
+      "area": "security",
+      "text": "Make the category_group cast tolerant (fromModel/tryFrom fallback) so one out-of-enum value in the shared table can't break every profile read",
+      "where": [
+        "Modules/Genetics/app/Models/GeneVariant.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T14:55:19.801Z"
+    },
+    {
+      "id": "s4",
+      "area": "tests",
+      "text": "Assert group is null in the pending-row reader test",
+      "where": [
+        "Modules/Genetics/tests/Feature/GeneticProfileReaderTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T14:55:19.875Z"
     }
   ],
   "planHash": "dd634ff18e0753eb",
