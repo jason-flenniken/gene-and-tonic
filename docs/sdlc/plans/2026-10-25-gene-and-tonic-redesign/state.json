@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:25:52.650Z",
+  "updated": "2026-10-25T19:31:37.944Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -539,10 +539,19 @@
             "Modules/Intelligence/tests/Feature/SpendStatTest.php"
           ],
           "complexity": "standard",
-          "status": "pending",
-          "fixRound": 0,
+          "status": "done",
+          "fixRound": 1,
           "risky": true,
-          "riskReason": "public page that shows owner-only genotypes"
+          "riskReason": "public page that shows owner-only genotypes",
+          "branch": "task/gene-and-tonic-redesign/home-hero-stats",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--home-hero-stats",
+          "base": "8978937dbd0334d798994efbb94c907b0a1102b9",
+          "startedAt": "2026-10-25T19:26:10.587Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:31:37.944Z",
+          "tip": "3bf0b9e",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "bf2eaabc3260838f5814be44a4ede7226cfc8d5c"
         },
         {
           "id": "home-sections",
@@ -651,6 +660,42 @@
       "at": "2026-10-25T19:23:18.076Z",
       "reason": "changed outside task \"Supplement hero, tabs, Overview grid, genetic panel\" scope (found at task done)",
       "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Intelligence/resources/views/livewire/⚡usage-summary.blade.php",
+      "at": "2026-10-25T19:31:37.943Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Intelligence/tests/Feature/UsageViewsTest.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/app/Contracts/SupplementResearchReader.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
     }
   ],
   "log": [
@@ -1092,6 +1137,66 @@
       "at": "2026-10-25T19:25:52.649Z",
       "event": "phase finished",
       "detail": "Screens (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:26:10.588Z",
+      "event": "task started",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:26:10.741Z",
+      "event": "task implementing",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:29:05.964Z",
+      "event": "task reviewing",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:30:17.448Z",
+      "event": "task fixing",
+      "detail": "Home header, gene-match hero, stat row (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T19:31:18.027Z",
+      "event": "task merging",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Intelligence/resources/views/livewire/⚡usage-summary.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Intelligence/tests/Feature/UsageViewsTest.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Contracts/SupplementResearchReader.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "task done",
+      "detail": "Home header, gene-match hero, stat row"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1488,6 +1593,36 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:25:30.852Z"
+    },
+    {
+      "id": "s40",
+      "area": "quality",
+      "text": "Header subtitle counts supplements via all() (research rows only) while the stat uses total(); expose one count on a Supplements contract",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:29:05.895Z"
+    },
+    {
+      "id": "s41",
+      "area": "tests",
+      "text": "Seed fakes at user id 0 in the match-stat, variant-stat and Home guest tests so the computed-property guard is exercised",
+      "where": [
+        "Modules/Recommendations/tests/Feature/TopMatchTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:29:53.007Z"
+    },
+    {
+      "id": "s42",
+      "area": "quality",
+      "text": "match-stat uses a silent ALL=1000 cap and pulls full match payloads to count; add a count method to GeneticRelevanceReader",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:30:17.515Z"
     }
   ]
 }
