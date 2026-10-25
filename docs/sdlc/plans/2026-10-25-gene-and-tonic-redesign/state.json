@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:41:44.067Z",
+  "updated": "2026-10-25T18:47:35.689Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -31,7 +31,450 @@
       "hash": "4427a68190a1d79e"
     }
   },
-  "phases": [],
+  "phases": [
+    {
+      "id": "foundations",
+      "name": "Foundations and data",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "theme-light",
+          "name": "Tokens, Figtree, light only, brand files",
+          "covers": [
+            "FR-01",
+            "FR-02",
+            "FR-03"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "resources/css/**",
+            "vite.config.js",
+            "resources/views/layouts/**",
+            "resources/views/components/tabs/**",
+            "public/favicon.ico",
+            "public/favicon.svg",
+            "public/apple-touch-icon.png",
+            ".env.example",
+            "Modules/*/resources/views/**",
+            "tests/Feature/LayoutTest.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "ui-components",
+          "name": "x-ui, x-icon, x-brand components and /_ui",
+          "covers": [
+            "FR-04",
+            "FR-05",
+            "FR-06",
+            "FR-07"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "resources/views/components/**",
+            "resources/views/pages/⚡ui.blade.php",
+            "routes/web.php",
+            "tests/Feature/Ui/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "research-topics",
+          "name": "Research topics, kicker, effect titles and categories",
+          "covers": [
+            "FR-13",
+            "FR-14",
+            "FR-16",
+            "FR-45"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/database/**",
+            "Modules/Supplements/resources/views/prompts/**",
+            "Modules/Supplements/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "stores new model output and adds migrations"
+        },
+        {
+          "id": "variant-names-lookups",
+          "name": "Variant names, looked-up rule, LookUpAll action",
+          "covers": [
+            "FR-15",
+            "FR-37",
+            "FR-45"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Genetics/app/**",
+            "Modules/Genetics/database/**",
+            "Modules/Genetics/resources/views/prompts/**",
+            "Modules/Genetics/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "model output, a migration, and a paid bulk lookup action over a user's genetic data"
+        },
+        {
+          "id": "usage-data",
+          "name": "Profile labels, usage window, cost by profile",
+          "covers": [
+            "FR-22",
+            "FR-23"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Intelligence/app/**",
+            "Modules/Intelligence/database/**",
+            "Modules/Intelligence/config/**",
+            "Modules/Intelligence/tests/**",
+            "Modules/Intelligence/resources/views/livewire/⚡usage-summary.blade.php",
+            "Modules/Genetics/config/config.php",
+            "Modules/Supplements/config/config.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "pdf-brand",
+          "name": "Gene & Tonic in PDF headers and footers",
+          "covers": [
+            "FR-46"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Reports/resources/views/templates/**",
+            "Modules/Reports/tests/Feature/TemplatesTest.php"
+          ],
+          "complexity": "simple",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "supplement-listing",
+          "name": "Supplements listing contract, sources count, status filter",
+          "covers": [
+            "FR-18",
+            "FR-21"
+          ],
+          "blockedBy": [
+            "research-topics"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        },
+        {
+          "id": "relevance-contracts",
+          "name": "Match allele and name, topForUser, VariantLinks",
+          "covers": [
+            "FR-17",
+            "FR-19",
+            "FR-20"
+          ],
+          "blockedBy": [
+            "supplement-listing",
+            "variant-names-lookups"
+          ],
+          "scope": [
+            "Modules/Recommendations/app/**",
+            "Modules/Recommendations/tests/**",
+            "Modules/Shared/**",
+            "Modules/Genetics/app/Data/Genotype.php",
+            "Modules/Genetics/tests/Unit/GenotypeTest.php"
+          ],
+          "complexity": "complex",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "reads users' genotypes and exposes match data across modules"
+        }
+      ]
+    },
+    {
+      "id": "shell",
+      "name": "Shell and routes",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "shell-routes",
+          "name": "Sidebar shell, real routes, tab redirects",
+          "covers": [
+            "FR-08",
+            "FR-09",
+            "FR-10",
+            "FR-11",
+            "FR-12"
+          ],
+          "blockedBy": [
+            "ui-components",
+            "research-topics",
+            "variant-names-lookups",
+            "usage-data",
+            "pdf-brand",
+            "supplement-listing",
+            "relevance-contracts"
+          ],
+          "scope": [
+            "resources/views/layouts/**",
+            "resources/views/pages/**",
+            "routes/web.php",
+            "Modules/*/routes/web.php",
+            "Modules/Genetics/resources/views/livewire/⚡summary.blade.php",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "tests/Feature/**",
+            "Modules/*/tests/Feature/**",
+            "CLAUDE.md"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "changes auth on /genetics and the public routes"
+        }
+      ]
+    },
+    {
+      "id": "screens",
+      "name": "Screens",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "supplements-index",
+          "name": "Supplements split view, filter, preview and card slots",
+          "covers": [
+            "FR-30",
+            "FR-31",
+            "FR-32",
+            "FR-33"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+            "Modules/Supplements/resources/views/components/catalog/**",
+            "Modules/Supplements/tests/Feature/CatalogTest.php",
+            "Modules/Supplements/tests/Feature/HardeningTest.php",
+            "Modules/Recommendations/resources/views/slots/**",
+            "Modules/Recommendations/app/Providers/**",
+            "Modules/Recommendations/tests/Feature/SlotsTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "public page that renders an owner-only gene strip through a slot"
+        },
+        {
+          "id": "supplement-page",
+          "name": "Supplement hero, tabs, Overview grid, genetic panel",
+          "covers": [
+            "FR-34",
+            "FR-35",
+            "FR-36",
+            "FR-16"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/resources/views/components/show/**",
+            "Modules/Supplements/resources/views/components/source-badges.blade.php",
+            "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+            "Modules/Recommendations/resources/views/livewire/⚡genetic-panel.blade.php",
+            "Modules/Recommendations/tests/Feature/GeneticPanelTest.php",
+            "Modules/Reports/resources/views/components/**",
+            "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "public page showing model output and owner-only genotypes"
+        },
+        {
+          "id": "genetics-page",
+          "name": "Genetics page, chips, variant list, Look up now",
+          "covers": [
+            "FR-37",
+            "FR-38",
+            "FR-39",
+            "FR-40",
+            "FR-41"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+            "Modules/Genetics/resources/views/components/**",
+            "Modules/Genetics/app/Support/VariantGrouping.php",
+            "Modules/Genetics/tests/Feature/VariantListFilterTest.php",
+            "Modules/Genetics/tests/Feature/UploadPageTest.php",
+            "Modules/Genetics/tests/Feature/ProfilePageTest.php",
+            "Modules/Genetics/tests/Feature/ComplexMarkerCsvTest.php",
+            "Modules/Genetics/tests/Feature/LookupTest.php",
+            "Modules/Genetics/tests/Unit/VariantGroupingTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "personal genetic data and the paid Look up now action"
+        },
+        {
+          "id": "usage-page",
+          "name": "AI usage page with period, cost by task, table",
+          "covers": [
+            "FR-42",
+            "FR-43",
+            "FR-44"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Intelligence/resources/views/**",
+            "Modules/Intelligence/tests/Feature/UsageViewsTest.php",
+            "Modules/Intelligence/tests/Feature/UsagePageTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "public page that takes an untrusted window parameter"
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "name": "Home",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "home-hero-stats",
+          "name": "Home header, gene-match hero, stat row",
+          "covers": [
+            "FR-24",
+            "FR-25",
+            "FR-26"
+          ],
+          "blockedBy": [
+            "supplements-index",
+            "supplement-page",
+            "genetics-page",
+            "usage-page"
+          ],
+          "scope": [
+            "resources/views/pages/⚡dashboard.blade.php",
+            "tests/Feature/DashboardTest.php",
+            "tests/Feature/HomeTest.php",
+            "Modules/Recommendations/resources/views/livewire/⚡top-match.blade.php",
+            "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+            "Modules/Recommendations/tests/Feature/TopMatchTest.php",
+            "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+            "Modules/Supplements/tests/Feature/StatsTest.php",
+            "Modules/Genetics/resources/views/livewire/⚡variant-stat.blade.php",
+            "Modules/Genetics/tests/Feature/HomeWidgetsTest.php",
+            "Modules/Intelligence/resources/views/livewire/⚡spend-stat.blade.php",
+            "Modules/Intelligence/tests/Feature/SpendStatTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "public page that shows owner-only genotypes"
+        },
+        {
+          "id": "home-sections",
+          "name": "Latest research, your genes, your supplements",
+          "covers": [
+            "FR-27",
+            "FR-28",
+            "FR-29"
+          ],
+          "blockedBy": [
+            "home-hero-stats"
+          ],
+          "scope": [
+            "resources/views/pages/⚡dashboard.blade.php",
+            "tests/Feature/HomeTest.php",
+            "Modules/Supplements/resources/views/livewire/⚡latest-research.blade.php",
+            "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php",
+            "Modules/Supplements/config/config.php",
+            "Modules/Supplements/tests/Feature/HomeSectionsTest.php",
+            "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php",
+            "Modules/Genetics/tests/Feature/HomeWidgetsTest.php"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "triggers the paid Look up now action from a public page"
+        }
+      ]
+    },
+    {
+      "id": "polish",
+      "name": "Polish",
+      "status": "pending",
+      "tasks": [
+        {
+          "id": "polish-a11y",
+          "name": "Phone, keyboard and loading-state pass",
+          "covers": [
+            "FR-47",
+            "FR-48"
+          ],
+          "blockedBy": [
+            "home-sections"
+          ],
+          "scope": [
+            "resources/views/**",
+            "Modules/*/resources/views/**",
+            "tests/**",
+            "Modules/*/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "pending",
+          "fixRound": 0,
+          "risky": false
+        }
+      ]
+    }
+  ],
   "evidence": {},
   "drift": [],
   "log": [
@@ -58,8 +501,14 @@
       "at": "2026-10-25T18:41:44.067Z",
       "event": "advanced",
       "detail": "plan"
+    },
+    {
+      "at": "2026-10-25T18:47:35.688Z",
+      "event": "plan loaded",
+      "detail": "5 phases, 16 tasks"
     }
   ],
   "cairnVersion": "0.3.0",
-  "level": "standard"
+  "level": "standard",
+  "planHash": "76bf7d973871e427"
 }
