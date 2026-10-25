@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:51:54.795Z",
+  "updated": "2026-10-25T14:52:20.578Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -29,6 +29,12 @@
       "via": "human",
       "source": "mod",
       "hash": "df34c3b428d5d4df"
+    },
+    "plan": {
+      "at": "2026-10-25T14:52:20.577Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "dd634ff18e0753eb"
     }
   },
   "phases": [
@@ -158,6 +164,11 @@
       "at": "2026-10-25T14:51:54.794Z",
       "event": "plan loaded",
       "detail": "2 phases, 3 tasks"
+    },
+    {
+      "at": "2026-10-25T14:52:20.578Z",
+      "event": "plan approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -174,5 +185,6 @@
       "at": "2026-10-25T14:39:53.383Z"
     }
   ],
-  "planHash": "dd634ff18e0753eb"
+  "planHash": "dd634ff18e0753eb",
+  "configHash": "85d35cf89052f183"
 }
