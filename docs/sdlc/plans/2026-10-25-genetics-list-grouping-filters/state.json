@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:49:31.814Z",
-  "stage": "prd",
+  "updated": "2026-10-25T14:49:34.388Z",
+  "stage": "plan",
   "stageHistory": [
     {
       "stage": "discover",
@@ -16,6 +16,10 @@
     {
       "stage": "prd",
       "at": "2026-10-25T14:47:45.986Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-25T14:49:34.388Z"
     }
   ],
   "paused": null,
@@ -49,6 +53,11 @@
       "at": "2026-10-25T14:49:31.814Z",
       "event": "PRD approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T14:49:34.388Z",
+      "event": "advanced",
+      "detail": "plan"
     }
   ],
   "cairnVersion": "0.3.0",
