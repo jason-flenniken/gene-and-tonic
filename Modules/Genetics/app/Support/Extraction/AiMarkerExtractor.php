@@ -3,6 +3,7 @@
 namespace Modules\Genetics\Support\Extraction;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Illuminate\Support\Facades\Log;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Support\ExtractionOutputBuilder;
 use Modules\Intelligence\Contracts\TextGenerator;
@@ -10,7 +11,8 @@ use Modules\Intelligence\Data\PromptRequest;
 
 /**
  * Finds markers in a pdf or unrecognised file. The text is read locally and only
- * lines naming an rsID or a known gene go to the model, in one structured call.
+ * lines naming an rsID or a known gene go to the model, in structured calls of at
+ * most genetics.extract.max_chars each, up to genetics.extract.max_chunks calls.
  * A provider failure propagates so the upload job can retry or fail generically.
  */
 final class AiMarkerExtractor implements MarkerExtractor
@@ -20,21 +22,88 @@ final class AiMarkerExtractor implements MarkerExtractor
         private readonly TextGenerator $generator,
     ) {}
 
-    public function extract(string $absolutePath, string $extension): array
+    public function extract(string $absolutePath, string $extension): Extraction
     {
-        $lines = $this->markerLines($this->text->extract($absolutePath, $extension));
+        return $this->extractLines($this->markerLines($this->text->extract($absolutePath, $extension)));
+    }
 
-        if ($lines === []) {
-            return [];
+    /**
+     * Sends already-filtered marker lines to the model, packed into as few calls
+     * as max_chars allows. Lines past max_chunks calls are not sent; that is
+     * logged with counts only, never line text.
+     *
+     * @param  list<string>  $lines
+     */
+    public function extractLines(array $lines): Extraction
+    {
+        [$chunks, $truncated] = $this->chunks($lines);
+        $variants = [];
+        $sent = [];
+
+        foreach ($chunks as $chunk) {
+            $output = $this->generator->generate(PromptRequest::for(
+                'genetics.extract',
+                ['lines' => $chunk],
+                $this->schema(...),
+            ))->structured;
+
+            foreach (ExtractionOutputBuilder::build($output) as $variant) {
+                $variants[$variant->rsid] ??= $variant;
+            }
+
+            array_push($sent, ...$chunk);
         }
 
-        $output = $this->generator->generate(PromptRequest::for(
-            'genetics.extract',
-            ['lines' => $lines],
-            $this->schema(...),
-        ))->structured;
+        if ($truncated) {
+            Log::warning('Genetic marker extraction hit the chunk cap; some lines were not sent.', [
+                'lines' => count($lines),
+                'sent' => count($sent),
+                'chunks' => count($chunks),
+                'unsent' => count($lines) - count($sent),
+            ]);
+        }
 
-        return ExtractionOutputBuilder::build($output);
+        return new Extraction(array_values($variants), $sent, $truncated, count($lines) - count($sent));
+    }
+
+    /**
+     * Packs lines in order into chunks whose newline-joined length is at most
+     * max_chars. A single longer line is cut to max_chars.
+     *
+     * @param  list<string>  $lines
+     * @return array{list<list<string>>, bool} the chunks, and whether lines were left over
+     */
+    private function chunks(array $lines): array
+    {
+        $maxChars = max(1, (int) config('genetics.extract.max_chars'));
+        $maxChunks = max(1, (int) config('genetics.extract.max_chunks'));
+        $chunks = [];
+        $chunk = [];
+        $used = 0;
+
+        foreach ($lines as $line) {
+            $line = mb_substr($line, 0, $maxChars);
+            $length = mb_strlen($line);
+
+            if ($chunk !== [] && $used + 1 + $length > $maxChars) {
+                $chunks[] = $chunk;
+                $chunk = [];
+                $used = 0;
+            }
+
+            if (count($chunks) === $maxChunks) {
+                return [$chunks, true];
+            }
+
+            $used += ($chunk === [] ? 0 : 1) + $length;
+            $chunk[] = $line;
+        }
+
+        if ($chunk !== []) {
+            $chunks[] = $chunk;
+        }
+
+        return [$chunks, false];
     }
 
     /**
@@ -53,24 +122,7 @@ final class AiMarkerExtractor implements MarkerExtractor
             }
         }
 
-        $max = max(0, (int) config('genetics.extract.max_chars'));
-        $kept = [];
-        $used = 0;
-
-        foreach ($lines as $line) {
-            $room = $max - $used;
-
-            if ($room <= 0) {
-                break;
-            }
-
-            $line = mb_substr($line, 0, $room);
-
-            $kept[] = $line;
-            $used += mb_strlen($line) + 1;
-        }
-
-        return $kept;
+        return $lines;
     }
 
     /**

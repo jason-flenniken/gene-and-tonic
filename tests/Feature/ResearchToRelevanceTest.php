@@ -25,7 +25,7 @@ it('matches a user variant to a model-written HGVS allele end to end', function 
     // The genetics page parses the demo-style TXT into a real stored profile (rs1801133 AG).
     Livewire::actingAs($user)->test('genetics::profile')
         ->set('file', UploadedFile::fake()->createWithContent('genome.txt', file_get_contents(base_path('Modules/Genetics/tests/Fixtures/23andme.txt'))))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasNoErrors();
 
     $supplement = Supplement::factory()->create(['name' => 'Methylfolate']);

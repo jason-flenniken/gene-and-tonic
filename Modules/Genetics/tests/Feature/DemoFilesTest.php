@@ -34,7 +34,7 @@ function uploadDemoFile(string $path, string $name): GeneticUpload
 
     Livewire::actingAs($user)->test('genetics::profile')
         ->set('file', UploadedFile::fake()->createWithContent($name, (string) file_get_contents($path)))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasNoErrors();
 
     $upload = GeneticUpload::sole();

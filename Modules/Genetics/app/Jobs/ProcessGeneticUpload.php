@@ -14,14 +14,18 @@ use Illuminate\Support\Facades\Storage;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Actions\QueueLookups;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\ParseMethod;
 use Modules\Genetics\Enums\UploadStatus;
 use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
 use Modules\Genetics\Support\Extraction\MarkerExtractor;
+use Modules\Genetics\Support\MarkerListReader;
 use Modules\Genetics\Support\Parsing\FormatDetector;
+use Modules\Genetics\Support\Parsing\MarkerCsvParser;
 use Modules\Genetics\Support\Parsing\ParsedKind;
 use Modules\Genetics\Support\Parsing\ParsedVariant;
+use Modules\Genetics\Support\ReadOutcome;
 use RuntimeException;
 use Throwable;
 
@@ -45,7 +49,8 @@ class ProcessGeneticUpload implements ShouldQueue
 
     public int $backoff = 15;
 
-    public int $timeout = 120;
+    /** Room for genetics.extract.max_chunks model calls in a row; stays under the queue's retry_after. */
+    public int $timeout = 200;
 
     public function __construct(public readonly int $uploadId) {}
 
@@ -67,7 +72,7 @@ class ProcessGeneticUpload implements ShouldQueue
         return max($this->timeout + 1, $retryAfter - 30);
     }
 
-    public function handle(FormatDetector $detector, MarkerExtractor $extractor, AddVariant $addVariant, QueueLookups $queueLookups): void
+    public function handle(FormatDetector $detector, MarkerExtractor $extractor, MarkerListReader $reader, AddVariant $addVariant, QueueLookups $queueLookups): void
     {
         $upload = GeneticUpload::find($this->uploadId);
 
@@ -78,7 +83,7 @@ class ProcessGeneticUpload implements ShouldQueue
         $retrying = false;
 
         try {
-            $this->process($upload, $detector, $extractor, $addVariant, $queueLookups);
+            $this->process($upload, $detector, $extractor, $reader, $addVariant, $queueLookups);
         } catch (Throwable $e) {
             if ($this->canRetry()) {
                 $retrying = true;
@@ -113,7 +118,7 @@ class ProcessGeneticUpload implements ShouldQueue
         $this->deleteFile($upload);
     }
 
-    private function process(GeneticUpload $upload, FormatDetector $detector, MarkerExtractor $extractor, AddVariant $addVariant, QueueLookups $queueLookups): void
+    private function process(GeneticUpload $upload, FormatDetector $detector, MarkerExtractor $extractor, MarkerListReader $reader, AddVariant $addVariant, QueueLookups $queueLookups): void
     {
         $upload->update([
             'status' => UploadStatus::Parsing,
@@ -121,6 +126,10 @@ class ProcessGeneticUpload implements ShouldQueue
             'error' => null,
             'found_count' => 0,
             'stored_count' => 0,
+            'parse_method' => null,
+            'local_count' => 0,
+            'ai_count' => 0,
+            'skipped_count' => 0,
         ]);
 
         if ($upload->path === null) {
@@ -135,22 +144,26 @@ class ProcessGeneticUpload implements ShouldQueue
             $upload->user_id, $variant->rsid, $variant->genotype, $variant->gene, $upload->original_name, $upload->id,
         );
 
-        if ($parser?->kind() === ParsedKind::RawExport) {
+        if ($parser !== null && $parser->kind() === ParsedKind::RawExport) {
             [$found, $stored] = $this->storeKnown($parser->parse($absolutePath), $store);
+            $upload->update(['parse_method' => ParseMethod::Local, 'local_count' => $found]);
         } else {
-            $variants = $this->boundedList($parser?->parse($absolutePath) ?? $extractor->extract($absolutePath, $extension));
+            $outcome = $parser instanceof MarkerCsvParser
+                ? $reader->read($parser, $absolutePath)
+                : $this->extracted($extractor, $absolutePath, $extension);
 
-            if ($variants === null) {
+            if ($outcome === null) {
                 $this->markFailed($upload, self::TOO_MANY_MARKERS);
 
                 return;
             }
 
-            foreach ($variants as $variant) {
+            foreach ($outcome->variants as $variant) {
                 $store($variant);
             }
 
-            $found = $stored = count($variants);
+            $found = $stored = count($outcome->variants);
+            $upload->update($outcome->counts());
         }
 
         if ($found === 0) {
@@ -234,8 +247,21 @@ class ProcessGeneticUpload implements ShouldQueue
     }
 
     /**
-     * A marker list or extractor result, read in full before anything is
-     * written. Null when it holds more rows than genetics.max_marker_rows.
+     * A file no parser recognises (and every pdf), read by the marker extractor.
+     * Null when it returns more rows than genetics.max_marker_rows. Marker lines
+     * the extractor could not send (past max_chunks) are recorded as skipped.
+     */
+    private function extracted(MarkerExtractor $extractor, string $absolutePath, string $extension): ?ReadOutcome
+    {
+        $extraction = $extractor->extract($absolutePath, $extension);
+        $variants = $this->boundedList($extraction->variants);
+
+        return $variants === null ? null : new ReadOutcome($variants, ParseMethod::Ai, 0, count($variants), $extraction->unsentCount);
+    }
+
+    /**
+     * An extractor result, read in full before anything is written. Null when
+     * it holds more rows than genetics.max_marker_rows.
      *
      * @param  iterable<ParsedVariant>  $variants
      * @return list<ParsedVariant>|null
