@@ -40,6 +40,35 @@ new #[Title('My genetics')] class extends Component
 
     public string $search = '';
 
+    /** @var list<string> Section keys the user has opened; filtered against the allowed keys on read. */
+    public array $openSections = [];
+
+    public function updatedGroup(): void
+    {
+        $this->collapseWhenUnfiltered();
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->collapseWhenUnfiltered();
+    }
+
+    /** Opens or closes one section. Keys that are not a group value or 'unlooked' are ignored. */
+    public function toggleSection(string $key): void
+    {
+        if (! in_array($key, $this->sectionKeys(), true)) {
+            return;
+        }
+
+        $open = $this->openSectionKeys;
+
+        $this->openSections = in_array($key, $open, true)
+            ? array_values(array_diff($open, [$key]))
+            : [...$open, $key];
+
+        unset($this->openSectionKeys);
+    }
+
     public function addVariant(AddVariant $addVariant, QueueLookups $queueLookups): void
     {
         $userId = auth()->id();
@@ -320,6 +349,29 @@ new #[Title('My genetics')] class extends Component
         return $sections;
     }
 
+    /** @return list<string> */
+    private function sectionKeys(): array
+    {
+        return [...array_map(fn (VariantGroup $case): string => $case->value, VariantGroup::cases()), 'unlooked'];
+    }
+
+    /** @return list<string> */
+    #[Computed]
+    public function openSectionKeys(): array
+    {
+        return array_values(array_intersect($this->sectionKeys(), array_map('strval', $this->openSections)));
+    }
+
+    private function collapseWhenUnfiltered(): void
+    {
+        unset($this->activeGroup, $this->activeSearch, $this->groupedVariants);
+
+        if ($this->activeGroup === null && $this->activeSearch === '') {
+            $this->openSections = [];
+            unset($this->openSectionKeys);
+        }
+    }
+
     private function isLookedUpVariant(VariantData $variant): bool
     {
         return ! in_array($variant->status, [LookupStatus::Pending, LookupStatus::LookingUp, LookupStatus::Failed], true);
@@ -412,7 +464,7 @@ new #[Title('My genetics')] class extends Component
             @if ($this->groupedVariants === [])
                 <flux:text>No variants match.</flux:text>
             @else
-                <x-genetics::variant-list :sections="$this->groupedVariants" :open="$this->activeGroup !== null || $this->activeSearch !== ''" />
+                <x-genetics::variant-list :sections="$this->groupedVariants" :open-keys="$this->openSectionKeys" :force-open="$this->activeGroup !== null || $this->activeSearch !== ''" />
             @endif
         @endif
     </flux:card>

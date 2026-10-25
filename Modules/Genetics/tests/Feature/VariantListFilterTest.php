@@ -158,3 +158,64 @@ it('keeps a looking-up row polling from the unfiltered list', function () {
         ->set('group', 'methylation')
         ->assertSeeHtml('wire:poll.3s');
 });
+
+it('toggles a section open, keeps it open across re-renders and closes it again', function () {
+    seedList($this->user);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')->call('toggleSection', 'methylation');
+
+    expect(sectionIsOpen($component, 'methylation'))->toBeTrue()
+        ->and(sectionIsOpen($component, 'brain_mood'))->toBeFalse();
+
+    $component->call('$refresh');
+    expect(sectionIsOpen($component, 'methylation'))->toBeTrue();
+
+    $component->call('toggleSection', 'methylation');
+    expect(sectionIsOpen($component, 'methylation'))->toBeFalse();
+});
+
+it('ignores invalid section keys and never renders them', function (string $key) {
+    seedList($this->user);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')->call('toggleSection', $key);
+
+    expect($component->get('openSections'))->toBe([])
+        ->and(preg_match('/<details[^>]*\sopen[\s>]/', $component->html()))->toBe(0);
+    $component->assertDontSeeHtml('<script>');
+})->with(['<script>', '../x', 'METHYLATION', '']);
+
+it('keeps an opened section open when another row finishes its lookup', function () {
+    seedList($this->user);
+    GeneVariant::where('rsid', 'rs4')->update(['status' => LookupStatus::LookingUp]);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')->call('toggleSection', 'brain_mood');
+
+    GeneVariant::where('rsid', 'rs4')->update(['status' => LookupStatus::Complete, 'category_group' => VariantGroup::Methylation, 'category' => 'Folate']);
+    $component->call('$refresh');
+
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeTrue()
+        ->and(sectionIsOpen($component, 'methylation'))->toBeFalse()
+        ->and(genes($component))->toHaveCount(4);
+});
+
+it('collapses everything again once both search and dropdown are cleared', function () {
+    seedList($this->user);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')
+        ->set('search', 'comt')->call('toggleSection', 'methylation')
+        ->set('search', '');
+
+    expect($component->get('openSections'))->toBe([])
+        ->and(preg_match('/<details[^>]*\sopen[\s>]/', $component->html()))->toBe(0);
+});
+
+it('finds rows by rsID, category text and genotype effect text', function () {
+    seedVariant($this->user, ['rsid' => 'rs11', 'gene' => 'MTHFR', 'category' => 'Folate cycle', 'affects' => 'Folate use.', 'genotype_effects' => ['T/T' => 'Reduced enzyme activity.']], 'T/T');
+    seedVariant($this->user, ['rsid' => 'rs22', 'gene' => 'COMT', 'category' => 'Dopamine', 'affects' => 'Stress response.']);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile');
+
+    expect(genes($component->set('search', 'rs22')))->toBe(['COMT'])
+        ->and(genes($component->set('search', 'folate cycle')))->toBe(['MTHFR'])
+        ->and(genes($component->set('search', 'reduced enzyme')))->toBe(['MTHFR']);
+});

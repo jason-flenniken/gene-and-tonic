@@ -1,9 +1,9 @@
-@props(['sections', 'open' => false])
+@props(['sections', 'openKeys' => [], 'forceOpen' => false])
 
 <div class="space-y-3">
     @foreach ($sections as $section)
-        <details wire:key="section-{{ $section['key'] }}" @if ($open) open @endif class="rounded-lg border border-zinc-200 dark:border-zinc-700">
-            <summary class="flex cursor-pointer items-center justify-between px-4 py-2 font-medium">
+        <details wire:key="section-{{ $section['key'] }}" @if ($forceOpen || in_array($section['key'], $openKeys, true)) open @endif class="rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <summary wire:click.prevent="toggleSection(@js($section['key']))" class="flex cursor-pointer items-center justify-between px-4 py-2 font-medium">
                 <span>{{ $section['label'] }}</span>
                 <span class="text-sm font-normal text-zinc-500">{{ count($section['variants']) }}</span>
             </summary>
