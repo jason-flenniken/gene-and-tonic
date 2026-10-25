@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:09:16.630Z",
+  "updated": "2026-10-25T19:14:28.799Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -306,7 +306,7 @@
     {
       "id": "shell",
       "name": "Shell and routes",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "shell-routes",
@@ -339,10 +339,19 @@
             "CLAUDE.md"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "changes auth on /genetics and the public routes"
+          "riskReason": "changes auth on /genetics and the public routes",
+          "branch": "task/gene-and-tonic-redesign/shell-routes",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--shell-routes",
+          "base": "2ee64e4b79cd8647499cc0eb2738420bb8955254",
+          "startedAt": "2026-10-25T19:09:29.051Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:14:28.799Z",
+          "tip": "c52c5a8",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "7a05e31ee5bfbbd9b13bcb93c095a8737cf78467"
         }
       ]
     },
@@ -564,6 +573,18 @@
       "at": "2026-10-25T18:56:47.017Z",
       "reason": "changed outside task \"Variant names, looked-up rule, LookUpAll action\" scope (found at task done)",
       "task": "variant-names-lookups"
+    },
+    {
+      "path": "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php",
+      "at": "2026-10-25T19:14:28.798Z",
+      "reason": "changed outside task \"Sidebar shell, real routes, tab redirects\" scope (found at task done)",
+      "task": "shell-routes"
+    },
+    {
+      "path": "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+      "at": "2026-10-25T19:14:28.799Z",
+      "reason": "changed outside task \"Sidebar shell, real routes, tab redirects\" scope (found at task done)",
+      "task": "shell-routes"
     }
   ],
   "log": [
@@ -825,6 +846,41 @@
       "at": "2026-10-25T19:09:16.629Z",
       "event": "phase finished",
       "detail": "Foundations and data (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:09:29.052Z",
+      "event": "task started",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:09:29.210Z",
+      "event": "task implementing",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:13:05.231Z",
+      "event": "task reviewing",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:14:10.069Z",
+      "event": "task merging",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:14:28.799Z",
+      "event": "drift",
+      "detail": "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:14:28.799Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:14:28.799Z",
+      "event": "task done",
+      "detail": "Sidebar shell, real routes, tab redirects"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1051,6 +1107,36 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:08:52.223Z"
+    },
+    {
+      "id": "s23",
+      "area": "tests",
+      "text": "HTTP-level test that a guest Livewire update to genetics::profile (e.g. lookUp) is rejected by persistent auth middleware",
+      "where": [
+        "tests/Feature/ShellRoutesTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:13:48.615Z"
+    },
+    {
+      "id": "s24",
+      "area": "ux",
+      "text": "Sidebar fixed at 240px vs design flex 1 1 210px; user row name should be 16px/500 and initials 10px; check mobile sheet open/close in a browser",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:14:09.918Z"
+    },
+    {
+      "id": "s25",
+      "area": "tests",
+      "text": "Title test misses the supplement show page",
+      "where": [
+        "tests/Feature/ShellRoutesTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:14:09.991Z"
     }
   ]
 }
