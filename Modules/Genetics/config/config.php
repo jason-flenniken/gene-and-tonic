@@ -22,6 +22,13 @@ return [
     'max_marker_rows' => (int) env('GENETICS_MAX_MARKER_ROWS', 1000),
 
     /*
+    | Share (0-1) of a marker CSV's rsID rows the local parser must read for its
+    | result to stand. At or above it, only the unread rows go to the model; below
+    | it, the local result is discarded and every rsID row goes to the model.
+    */
+    'local_min_ratio' => (float) env('GENETICS_LOCAL_MIN_RATIO', 0.8),
+
+    /*
     | AI profile used to turn scraped SNP pages into a reference row. Registered
     | with Intelligence as "genetics.lookup" when the module boots.
     */
@@ -52,6 +59,9 @@ return [
     'extract' => [
         // Most characters of marker lines sent to the model in one call.
         'max_chars' => (int) env('GENETICS_EXTRACT_MAX_CHARS', 20000),
+        // Most calls one upload makes. Calls run one after another inside the
+        // upload job, so this times extract_profile.timeout must fit its timeout.
+        'max_chunks' => (int) env('GENETICS_EXTRACT_MAX_CHUNKS', 3),
     ],
 
     'lookup' => [

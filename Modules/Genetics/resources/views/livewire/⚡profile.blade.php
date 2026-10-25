@@ -254,6 +254,9 @@ new #[Title('My genetics')] class extends Component
                                 <td class="py-2 pr-4 break-all">{{ $upload->original_name }}</td>
                                 <td class="py-2 pr-4">
                                     {{ $upload->status->label() }}
+                                    @if ($upload->readSummary() !== null)
+                                        <span class="block text-zinc-500">{{ $upload->readSummary() }}</span>
+                                    @endif
                                     @if ($upload->error !== null)
                                         <span class="block text-red-600 dark:text-red-400">{{ $upload->error }}</span>
                                     @endif
