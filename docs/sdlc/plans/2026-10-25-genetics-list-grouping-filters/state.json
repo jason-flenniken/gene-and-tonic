@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:06:14.305Z",
+  "updated": "2026-10-25T15:15:32.448Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -177,6 +177,12 @@
       "result": "pass",
       "at": "2026-10-25T15:06:14.194Z",
       "note": "tests: 564 passing, 3 skipped; 12 requirements met (FR-07 fixed: open state now server-owned, survives re-render), 2 partial-coverage gaps logged; secret scan: clean; audit: composer + npm clean; no lockfile changes"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-25T15:15:32.448Z",
+      "note": "2 Required fixed (header close under filter; browser check done: sections stayed open across 3 polls, closed header stayed closed under search); 13 follow-ups logged",
+      "blocking": 0
     }
   },
   "drift": [
@@ -346,6 +352,26 @@
       "at": "2026-10-25T15:06:14.305Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-25T15:06:19.813Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-25T15:12:02.217Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-25T15:13:40.922Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-25T15:15:32.448Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (header close under filter; browser check done: sections stayed open across 3 polls, closed header stayed closed under search); 13 follow-ups logged"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -480,8 +506,63 @@
       ],
       "from": "check",
       "at": "2026-10-25T15:03:47.551Z"
+    },
+    {
+      "id": "s14",
+      "area": "security",
+      "text": "Group backfill: cap pairs per run and per call when chunking is added, so a large table can't produce an unbounded prompt or spend",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T15:07:23.467Z"
+    },
+    {
+      "id": "s15",
+      "area": "quality",
+      "text": "Render the group list in both lookup and group prompts from one source (enum description method or shared partial)",
+      "where": [
+        "Modules/Genetics/resources/views/prompts/*instructions.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:12:02.009Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Replace the 'unlooked' string literal (~7 places) with a constant; prefix VariantListFilterTest helpers and match a data- attribute instead of CSS classes",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:12:02.088Z"
+    },
+    {
+      "id": "s17",
+      "area": "ux",
+      "text": "Under an active search, a section that newly gains a match (a lookup finishing) appears collapsed; track user-closed sections while filtered so new matches open",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:15:32.303Z"
+    },
+    {
+      "id": "s18",
+      "area": "quality",
+      "text": "Raw search cap runs before trim (2 leading spaces leave 98 chars); cap raw at 200 and let activeSearch trim then cut to 100",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T15:15:32.375Z"
     }
   ],
   "planHash": "dd634ff18e0753eb",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "review",
+    "name": "rechecking",
+    "at": "2026-10-25T15:13:40.921Z"
+  }
 }
