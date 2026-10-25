@@ -119,3 +119,9 @@ it('lists summaries with counts, topics and gene interactions in a fixed number 
         ->and($all[0]->completedAt)->toBeInstanceOf(CarbonImmutable::class)
         ->and($queries)->toBe(3);
 });
+
+it('counts every supplement, including one without research', function () {
+    Supplement::factory()->count(2)->create();
+
+    expect(app(SupplementResearchReader::class)->count())->toBe(2);
+});

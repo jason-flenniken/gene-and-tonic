@@ -45,6 +45,11 @@ class FakeSupplementResearchReader implements SupplementResearchReader
         return $this->research[$supplementId] ?? null;
     }
 
+    public function count(): int
+    {
+        return count($this->summaries);
+    }
+
     public function all(): array
     {
         return array_values($this->summaries);

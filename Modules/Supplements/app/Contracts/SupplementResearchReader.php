@@ -24,4 +24,9 @@ interface SupplementResearchReader
      * @return list<SupplementSummaryData>
      */
     public function all(): array;
+
+    /**
+     * Every supplement in the catalog, with or without a research row.
+     */
+    public function count(): int;
 }

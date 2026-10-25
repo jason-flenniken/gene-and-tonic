@@ -77,6 +77,11 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
         );
     }
 
+    public function count(): int
+    {
+        return Supplement::query()->count();
+    }
+
     public function all(): array
     {
         $supplements = Supplement::query()

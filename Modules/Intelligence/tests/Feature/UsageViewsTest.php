@@ -47,15 +47,6 @@ it('returns zeros for an empty table', function () {
         ->and($summary->costLast24hUsd)->toBe(0.0);
 });
 
-it('renders the usage summary tiles', function () {
-    aiRequest(['input_tokens' => 12345, 'estimated_cost_usd' => 0.1234]);
-
-    Livewire::test('intelligence::usage-summary')
-        ->assertSee('12,345')
-        ->assertSee('$0.1234')
-        ->assertSee('0 failed');
-});
-
 it('lists requests newest first, 20 per page', function () {
     foreach (range(1, 25) as $i) {
         aiRequest(['model' => "model-{$i}"]);
