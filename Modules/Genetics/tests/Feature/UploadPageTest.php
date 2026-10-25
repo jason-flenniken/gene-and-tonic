@@ -35,7 +35,7 @@ it('stores a valid upload on the genetics disk, creates a queued row and dispatc
 
     Livewire::actingAs($this->user)->test('genetics::profile')
         ->set('file', uploadFixture('23andme.txt', 'genome.txt'))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasNoErrors()
         ->assertSet('file', null);
 
@@ -55,7 +55,7 @@ it('rejects a disallowed or oversized file without creating a row or dispatching
 
     Livewire::actingAs($this->user)->test('genetics::profile')
         ->set('file', $file)
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasErrors('file');
 
     expect(GeneticUpload::count())->toBe(0)
@@ -72,7 +72,7 @@ it('cuts a long original file name to 255 characters', function () {
 
     Livewire::actingAs($this->user)->test('genetics::profile')
         ->set('file', uploadFixture('23andme.txt', str_repeat('a', 300).'.txt'))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasNoErrors();
 
     expect(mb_strlen(GeneticUpload::sole()->original_name))->toBe(255);
@@ -83,11 +83,11 @@ it('rate-limits the sixth upload in a minute', function () {
     $component = Livewire::actingAs($this->user)->test('genetics::profile');
 
     foreach (range(1, 5) as $i) {
-        $component->set('file', uploadFixture('23andme.txt', "genome-{$i}.txt"))->call('upload')->assertHasNoErrors();
+        $component->set('file', uploadFixture('23andme.txt', "genome-{$i}.txt"))->call('uploadResults')->assertHasNoErrors();
     }
 
     $component->set('file', uploadFixture('23andme.txt', 'genome-6.txt'))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasErrors(['file' => 'Too many requests, try again in a minute.']);
 
     expect(GeneticUpload::count())->toBe(5)
@@ -100,7 +100,7 @@ it('processes an upload end to end and leaves no file behind, on success and on 
 
     Livewire::actingAs($this->user)->test('genetics::profile')
         ->set('file', uploadFixture($fixture, 'upload.txt'))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertHasNoErrors();
 
     expect(GeneticUpload::sole()->status)->toBe($status)
@@ -118,7 +118,7 @@ it('polls while an upload is active and stops once it is complete', function () 
     $component = Livewire::actingAs($this->user)->test('genetics::profile')
         ->assertDontSeeHtml('wire:poll')
         ->set('file', uploadFixture('23andme.txt', 'genome.txt'))
-        ->call('upload')
+        ->call('uploadResults')
         ->assertSeeHtml('wire:poll.3s')
         ->assertSee('Queued');
 

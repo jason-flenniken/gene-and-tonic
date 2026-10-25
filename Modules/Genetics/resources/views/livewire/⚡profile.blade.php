@@ -114,7 +114,7 @@ new #[Title('My genetics')] class extends Component
      * a random name, then queues it for parsing. The temporary copy is always
      * deleted, including when the upload is rejected.
      */
-    public function upload(): void
+    public function uploadResults(): void
     {
         $userId = auth()->id();
         abort_if($userId === null, 401);
@@ -223,7 +223,7 @@ new #[Title('My genetics')] class extends Component
     </flux:callout>
 
     <flux:card class="space-y-4">
-        <form wire:submit="upload" class="grid items-start gap-3 md:grid-cols-4">
+        <form wire:submit="uploadResults" class="grid items-start gap-3 md:grid-cols-4">
             <div class="md:col-span-3">
                 <flux:input
                     type="file"
@@ -233,7 +233,7 @@ new #[Title('My genetics')] class extends Component
                     description="A 23andMe, AncestryDNA, MyHeritage or FamilyTreeDNA raw data file, a CSV of markers, or a PDF report. TXT, CSV or PDF, up to {{ intdiv((int) config('genetics.max_upload_kb'), 1024) }} MB."
                 />
             </div>
-            <flux:button type="submit" variant="primary" class="mt-6" wire:loading.attr="disabled" wire:target="file,upload">Upload</flux:button>
+            <flux:button type="submit" variant="primary" class="mt-6" wire:loading.attr="disabled" wire:target="file,uploadResults">Upload</flux:button>
         </form>
 
         @if ($this->uploads->isNotEmpty())
