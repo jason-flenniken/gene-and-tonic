@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:06:14.195Z",
-  "stage": "verify",
+  "updated": "2026-10-25T15:06:14.305Z",
+  "stage": "review",
   "stageHistory": [
     {
       "stage": "discover",
@@ -28,6 +28,10 @@
     {
       "stage": "verify",
       "at": "2026-10-25T15:01:17.242Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-25T15:06:14.304Z"
     }
   ],
   "paused": null,
@@ -337,6 +341,11 @@
       "at": "2026-10-25T15:06:14.195Z",
       "event": "verify pass",
       "detail": "tests: 564 passing, 3 skipped; 12 requirements met (FR-07 fixed: open state now server-owned, survives re-render), 2 partial-coverage gaps logged; secret scan: clean; audit: composer + npm clean; no lockfile changes"
+    },
+    {
+      "at": "2026-10-25T15:06:14.305Z",
+      "event": "advanced",
+      "detail": "review"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -474,11 +483,5 @@
     }
   ],
   "planHash": "dd634ff18e0753eb",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "verify",
-    "name": "fixing",
-    "count": 1,
-    "at": "2026-10-25T15:03:47.620Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
