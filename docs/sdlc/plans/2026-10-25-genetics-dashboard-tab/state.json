@@ -6,7 +6,7 @@
   "branch": "fix/genetics-dashboard-tab",
   "base": "main",
   "created": "2026-10-25T13:17:08.989Z",
-  "updated": "2026-10-25T13:19:35.201Z",
+  "updated": "2026-10-25T13:20:19.619Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -53,7 +53,14 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "review": {
+      "result": "pass",
+      "at": "2026-10-25T13:20:19.618Z",
+      "note": "4 follow-ups logged",
+      "blocking": 0
+    }
+  },
   "drift": [],
   "log": [
     {
@@ -94,6 +101,16 @@
       "at": "2026-10-25T13:19:35.201Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-25T13:19:35.314Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-25T13:20:19.619Z",
+      "event": "review pass",
+      "detail": "4 follow-ups logged"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -123,6 +140,31 @@
       ],
       "from": "implementer",
       "at": "2026-10-25T13:19:11.853Z"
+    },
+    {
+      "id": "s3",
+      "area": "tests",
+      "text": "Add a guest test for the upload action (401, no GeneticUpload row) now that the profile sits on the public dashboard route",
+      "where": [
+        "Modules/Genetics/tests/Feature/ProfilePageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T13:20:15.015Z"
+    },
+    {
+      "id": "s4",
+      "area": "security",
+      "text": "Send Cache-Control: no-store on authenticated dashboard responses, since genotype HTML is now served from the public / URL",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡summary.blade.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T13:20:15.079Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "review",
+    "name": "reviewing",
+    "at": "2026-10-25T13:19:35.313Z"
+  }
 }
