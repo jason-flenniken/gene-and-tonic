@@ -22,3 +22,10 @@ it('links the brand favicons and apple touch icon', function () {
         ->assertSee('href="/favicon.svg"', false)
         ->assertSee('href="/apple-touch-icon.png"', false);
 });
+
+it('binds the dark variant to a class so the OS colour scheme cannot switch Flux into dark styling', function () {
+    $css = file_get_contents(resource_path('css/app.css'));
+
+    expect($css)->toContain('@custom-variant dark (&:where(.dark, .dark *));')
+        ->and(file_get_contents(resource_path('views/layouts/app.blade.php')))->not->toContain('@fluxAppearance');
+});
