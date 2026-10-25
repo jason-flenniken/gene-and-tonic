@@ -106,9 +106,9 @@ it('turns a unique constraint race into a validation error', function () {
             $this->inner->delete($supplement);
         }
 
-        public function paginateWithResearch(int $perPage): LengthAwarePaginator
+        public function paginateWithResearch(int $perPage, string $status = 'all'): LengthAwarePaginator
         {
-            return $this->inner->paginateWithResearch($perPage);
+            return $this->inner->paginateWithResearch($perPage, $status);
         }
 
         public function countByStatus(): array
@@ -272,4 +272,26 @@ it('shows a Re-run button on completed rows', function () {
     Livewire::test('supplements::catalog')->assertSee('Re-run')->call('retry', $supplement->id);
 
     Queue::assertPushed(RunSupplementResearch::class, 1);
+});
+
+it('filters the catalog by status and counts sources', function () {
+    $make = function (string $name, ResearchStatus $status, int $sources = 0) {
+        $supplement = Supplement::factory()->create(['name' => $name]);
+        $research = SupplementResearch::factory()->create(['supplement_id' => $supplement->id, 'status' => $status]);
+        SupplementSource::factory()->count($sources)->create(['research_id' => $research->id]);
+    };
+    $make('A', ResearchStatus::Complete, 3);
+    $make('B', ResearchStatus::Queued);
+    $make('C', ResearchStatus::Analyzing);
+    $make('D', ResearchStatus::Failed);
+
+    $repo = app(SupplementRepository::class);
+    $names = fn (string $status) => $repo->paginateWithResearch(10, $status)->pluck('name')->all();
+
+    expect($names('all'))->toBe(['A', 'B', 'C', 'D'])
+        ->and($names('complete'))->toBe(['A'])
+        ->and($names('active'))->toBe(['B', 'C'])
+        ->and($names('failed'))->toBe(['D'])
+        ->and($names('nonsense'))->toBe(['A', 'B', 'C', 'D'])
+        ->and($repo->paginateWithResearch(10)->first()->sources_count)->toBe(3);
 });

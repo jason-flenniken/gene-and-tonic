@@ -1,12 +1,14 @@
 <?php
 
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Modules\Supplements\Contracts\SupplementResearchReader;
 use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Data\SupplementResearchData;
 use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Enums\GeneRelation;
+use Modules\Supplements\Enums\HealthTopic;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
@@ -84,4 +86,36 @@ it('returns stored gene interactions in position order and flags unchecked resea
         ->and($data->geneInteractions[0]->relation)->toBe(GeneRelation::Helps)
         ->and($data->geneInteractions[0]->sourceKeys)->toBe(['S1'])
         ->and($data->toArray()['geneInteractions'][1]['relation'])->toBe('related');
+});
+
+it('lists summaries with counts, topics and gene interactions in a fixed number of queries', function () {
+    foreach (['Zinc', 'Folate'] as $name) {
+        $supplement = Supplement::factory()->create(['name' => $name]);
+        $research = SupplementResearch::factory()->create([
+            'supplement_id' => $supplement->id,
+            'status' => ResearchStatus::Complete,
+            'topics' => ['methylation', 'bogus'],
+            'completed_at' => now(),
+        ]);
+        SupplementEffect::factory()->count(2)->create(['research_id' => $research->id]);
+        SupplementStudy::factory()->count(3)->create(['research_id' => $research->id]);
+        SupplementSource::factory()->count(4)->create(['research_id' => $research->id]);
+        SupplementGeneInteraction::factory()->create(['supplement_id' => $supplement->id]);
+    }
+    Supplement::factory()->create(['name' => 'Bare']);
+
+    DB::enableQueryLog();
+    $all = app(SupplementResearchReader::class)->all();
+    $queries = count(DB::getQueryLog());
+    DB::disableQueryLog();
+
+    expect($all)->toHaveCount(2)
+        ->and($all[0]->name)->toBe('Folate')
+        ->and($all[0]->effectsCount)->toBe(2)
+        ->and($all[0]->studiesCount)->toBe(3)
+        ->and($all[0]->sourcesCount)->toBe(4)
+        ->and($all[0]->topics)->toBe([HealthTopic::Methylation])
+        ->and($all[0]->geneInteractions)->toHaveCount(1)
+        ->and($all[0]->completedAt)->toBeInstanceOf(CarbonImmutable::class)
+        ->and($queries)->toBe(3);
 });

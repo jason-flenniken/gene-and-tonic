@@ -3,6 +3,7 @@
 namespace Modules\Supplements\Contracts;
 
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Data\SupplementSummaryData;
 
 /**
  * Read-only access to a supplement's research as a DTO. The `error` field is a
@@ -15,4 +16,12 @@ interface SupplementResearchReader
      * Null when the supplement does not exist or has no research row yet.
      */
     public function forSupplement(int $supplementId): ?SupplementResearchData;
+
+    /**
+     * Every supplement that has a research row, ordered by name, with counts,
+     * topics and gene interactions. Does not load the research bodies.
+     *
+     * @return list<SupplementSummaryData>
+     */
+    public function all(): array;
 }

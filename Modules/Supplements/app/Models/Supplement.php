@@ -43,6 +43,12 @@ class Supplement extends Model
         return $this->hasManyThrough(SupplementEffect::class, SupplementResearch::class, 'supplement_id', 'research_id');
     }
 
+    /** @return HasManyThrough<SupplementSource, SupplementResearch, $this> */
+    public function sources(): HasManyThrough
+    {
+        return $this->hasManyThrough(SupplementSource::class, SupplementResearch::class, 'supplement_id', 'research_id');
+    }
+
     /** @return HasManyThrough<SupplementStudy, SupplementResearch, $this> */
     public function studies(): HasManyThrough
     {
