@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:47:35.689Z",
+  "updated": "2026-10-25T18:47:56.687Z",
   "stage": "plan",
   "stageHistory": [
     {
@@ -29,6 +29,12 @@
       "via": "human",
       "source": "mod",
       "hash": "4427a68190a1d79e"
+    },
+    "plan": {
+      "at": "2026-10-25T18:47:56.687Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "76bf7d973871e427"
     }
   },
   "phases": [
@@ -506,9 +512,15 @@
       "at": "2026-10-25T18:47:35.688Z",
       "event": "plan loaded",
       "detail": "5 phases, 16 tasks"
+    },
+    {
+      "at": "2026-10-25T18:47:56.687Z",
+      "event": "plan approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
   "level": "standard",
-  "planHash": "76bf7d973871e427"
+  "planHash": "76bf7d973871e427",
+  "configHash": "85d35cf89052f183"
 }
