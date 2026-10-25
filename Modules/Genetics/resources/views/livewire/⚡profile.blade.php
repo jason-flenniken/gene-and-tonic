@@ -405,7 +405,7 @@ new #[Title('My genetics')] class extends Component
         @if ($this->uploads->isNotEmpty())
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
-                    <thead class="border-b border-zinc-200 text-zinc-500 dark:border-zinc-700">
+                    <thead class="border-b border-zinc-200 text-zinc-500">
                         <tr>
                             <th class="py-2 pr-4 font-medium">File</th>
                             <th class="py-2 pr-4 font-medium">Status</th>
@@ -414,7 +414,7 @@ new #[Title('My genetics')] class extends Component
                             <th class="py-2 font-medium">Queued for lookup</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <tbody class="divide-y divide-zinc-100">
                         @foreach ($this->uploads as $upload)
                             <tr wire:key="upload-{{ $upload->id }}">
                                 <td class="py-2 pr-4 break-all">{{ $upload->original_name }}</td>
@@ -424,7 +424,7 @@ new #[Title('My genetics')] class extends Component
                                         <span class="block text-zinc-500">{{ $upload->readSummary() }}</span>
                                     @endif
                                     @if ($upload->error !== null)
-                                        <span class="block text-red-600 dark:text-red-400">{{ $upload->error }}</span>
+                                        <span class="block text-red-600">{{ $upload->error }}</span>
                                     @endif
                                 </td>
                                 <td class="py-2 pr-4">{{ $upload->found_count }}</td>

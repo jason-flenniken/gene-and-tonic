@@ -191,7 +191,7 @@ new #[Title('Supplement')] class extends Component
             @else
                 <flux:card class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
-                        <thead class="border-b border-zinc-200 text-zinc-500 dark:border-zinc-700">
+                        <thead class="border-b border-zinc-200 text-zinc-500">
                             <tr>
                                 <th class="py-2 pr-4 font-medium">Title</th>
                                 <th class="py-2 pr-4 font-medium">Design</th>
@@ -203,7 +203,7 @@ new #[Title('Supplement')] class extends Component
                                 <th class="py-2 font-medium">PubMed</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                        <tbody class="divide-y divide-zinc-100">
                             @foreach ($research->studies as $study)
                                 <tr wire:key="study-{{ $loop->index }}" class="align-top">
                                     <td class="py-2 pr-4 font-medium">{{ $study->title }}</td>
@@ -261,14 +261,14 @@ new #[Title('Supplement')] class extends Component
             @else
                 <flux:card class="overflow-x-auto">
                     <table class="w-full text-left text-sm">
-                        <thead class="border-b border-zinc-200 text-zinc-500 dark:border-zinc-700">
+                        <thead class="border-b border-zinc-200 text-zinc-500">
                             <tr>
                                 <th class="py-2 pr-4 font-medium">Key</th>
                                 <th class="py-2 pr-4 font-medium">Title</th>
                                 <th class="py-2 font-medium">Domain</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                        <tbody class="divide-y divide-zinc-100">
                             @foreach ($research->sources as $source)
                                 <tr wire:key="source-{{ $loop->index }}">
                                     <td class="py-2 pr-4">{{ $source->key }}</td>

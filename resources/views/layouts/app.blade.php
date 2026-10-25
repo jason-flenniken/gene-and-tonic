@@ -13,16 +13,15 @@
         @fonts
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
-        @fluxAppearance
     </head>
-    <body class="min-h-screen bg-white antialiased dark:bg-zinc-800">
-        <header class="border-b border-zinc-200 dark:border-zinc-700">
+    <body class="min-h-screen bg-canvas font-sans text-ink antialiased">
+        <header class="border-b border-zinc-200">
             <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
                 <a href="{{ route('home') }}"><flux:heading size="lg">{{ config('app.name', 'Laravel') }}</flux:heading></a>
 
                 @auth
                     <div class="flex items-center gap-3">
-                        <span class="text-sm text-zinc-600 dark:text-zinc-300">{{ auth()->user()->name }}</span>
+                        <span class="text-sm text-zinc-600">{{ auth()->user()->name }}</span>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <flux:button type="submit" size="sm" variant="ghost">Sign out</flux:button>

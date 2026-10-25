@@ -30,7 +30,7 @@ new class extends Component
         @else
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm">
-                    <thead class="border-b border-zinc-200 text-zinc-500 dark:border-zinc-700">
+                    <thead class="border-b border-zinc-200 text-zinc-500">
                         <tr>
                             <th class="py-2 pe-4 font-medium">Time</th>
                             <th class="py-2 pe-4 font-medium">Operation</th>
@@ -43,7 +43,7 @@ new class extends Component
                             <th class="py-2 font-medium">Status</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
+                    <tbody class="divide-y divide-zinc-100">
                         @foreach ($this->rows as $row)
                             <tr wire:key="ai-request-{{ $row->id }}">
                                 <td class="py-2 pe-4 whitespace-nowrap" title="{{ $row->created_at }}">{{ $row->created_at?->diffForHumans() }}</td>
