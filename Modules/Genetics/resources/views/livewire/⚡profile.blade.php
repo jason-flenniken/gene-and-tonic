@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\FileUploadConfiguration;
@@ -41,16 +42,18 @@ new #[Title('My genetics')] class extends Component
     public string $search = '';
 
     /** @var list<string> Section keys the user has opened; filtered against the allowed keys on read. */
+    #[Locked]
     public array $openSections = [];
 
     public function updatedGroup(): void
     {
-        $this->collapseWhenUnfiltered();
+        $this->syncOpenSections();
     }
 
     public function updatedSearch(): void
     {
-        $this->collapseWhenUnfiltered();
+        $this->search = mb_substr($this->search, 0, 100);
+        $this->syncOpenSections();
     }
 
     /** Opens or closes one section. Keys that are not a group value or 'unlooked' are ignored. */
@@ -362,14 +365,15 @@ new #[Title('My genetics')] class extends Component
         return array_values(array_intersect($this->sectionKeys(), array_filter($this->openSections, 'is_string')));
     }
 
-    private function collapseWhenUnfiltered(): void
+    /** Opens the sections the current filter shows, or collapses all when no filter is active. */
+    private function syncOpenSections(): void
     {
         unset($this->activeGroup, $this->activeSearch, $this->groupedVariants);
 
-        if ($this->activeGroup === null && $this->activeSearch === '') {
-            $this->openSections = [];
-            unset($this->openSectionKeys);
-        }
+        $filtered = $this->activeGroup !== null || $this->activeSearch !== '';
+
+        $this->openSections = $filtered ? array_column($this->groupedVariants, 'key') : [];
+        unset($this->openSectionKeys);
     }
 
     private function isLookedUpVariant(VariantData $variant): bool
@@ -464,7 +468,7 @@ new #[Title('My genetics')] class extends Component
             @if ($this->groupedVariants === [])
                 <flux:text>No variants match.</flux:text>
             @else
-                <x-genetics::variant-list :sections="$this->groupedVariants" :open-keys="$this->openSectionKeys" :force-open="$this->activeGroup !== null || $this->activeSearch !== ''" />
+                <x-genetics::variant-list :sections="$this->groupedVariants" :open-keys="$this->openSectionKeys" />
             @endif
         @endif
     </flux:card>

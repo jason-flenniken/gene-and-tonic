@@ -76,6 +76,13 @@ class GroupVariantsCommand extends Command
 
         $grouped = $this->apply($output, $items);
 
+        if ($grouped === 0) {
+            Log::warning('Variant grouping returned no usable answers', ['rows' => $rowCount]);
+            $this->error("Grouping returned no usable answers; {$rowCount} row(s) left ungrouped.");
+
+            return self::FAILURE;
+        }
+
         $this->info("{$rowCount} to group, {$grouped} grouped, ".($rowCount - $grouped).' left ungrouped.');
         Log::info('Variant grouping finished', ['rows' => $rowCount, 'grouped' => $grouped]);
 

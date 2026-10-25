@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Support\Facades\Queue;
+use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\VariantGroup;
@@ -105,7 +106,7 @@ it('trims and caps the search at 100 characters without erroring', function () {
         ->assertHasNoErrors()
         ->assertSee('No variants match');
 
-    expect(mb_strlen($component->instance()->activeSearch))->toBe(100);
+    expect(mb_strlen($component->instance()->activeSearch))->toBe(98);
 });
 
 it('keeps the Look up button for a pending row in the last section', function () {
@@ -184,15 +185,43 @@ it('ignores invalid section keys and never renders them', function (string $key)
     $component->assertDontSeeHtml('<script>');
 })->with(['<script>', '../x', 'METHYLATION', '']);
 
-it('ignores tampered open-section values set from the client', function () {
+it('rejects open-section values set from the client and filters stored ones on read', function () {
     seedList($this->user);
 
-    $component = Livewire::actingAs($this->user)->test('genetics::profile')
-        ->set('openSections', [['methylation'], 7, '<script>', 'brain_mood']);
+    $component = Livewire::actingAs($this->user)->test('genetics::profile');
 
-    expect(sectionIsOpen($component, 'brain_mood'))->toBeTrue()
-        ->and(sectionIsOpen($component, 'methylation'))->toBeFalse();
+    expect(fn () => $component->set('openSections', ['brain_mood']))->toThrow(CannotUpdateLockedPropertyException::class);
+
+    $component->call('toggleSection', 'brain_mood');
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeTrue();
     $component->assertDontSeeHtml('<script>');
+});
+
+it('lets a section be closed while a search or dropdown filter is active', function () {
+    seedList($this->user);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')->set('search', 'comt');
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeTrue();
+
+    $component->call('toggleSection', 'brain_mood');
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeFalse();
+
+    $component->call('$refresh');
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeFalse();
+
+    $component->set('search', '')->set('group', 'brain_mood');
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeTrue();
+
+    $component->call('toggleSection', 'brain_mood');
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeFalse();
+});
+
+it('caps the search text at 100 characters', function () {
+    seedList($this->user);
+
+    Livewire::actingAs($this->user)->test('genetics::profile')
+        ->set('search', str_repeat('a', 300))
+        ->assertSet('search', str_repeat('a', 100));
 });
 
 it('keeps an opened section open when another row finishes its lookup', function () {

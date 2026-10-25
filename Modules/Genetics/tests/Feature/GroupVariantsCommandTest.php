@@ -98,6 +98,17 @@ it('applies only sent ids, turns invalid groups into other and leaves omitted ro
         ->and($this->text->requests()[1]->variables['items'])->toBe([['id' => 1, 'gene' => 'COMT', 'category' => 'Dopamine']]);
 });
 
+it('exits non-zero when rows were sent but no usable answers came back', function () {
+    groupless('rs1', 'MTHFR', 'Methylation');
+    $this->text->respondWith(['items' => []]);
+
+    $this->artisan('genetics:group-variants')
+        ->expectsOutputToContain('no usable answers; 1 row(s) left ungrouped')
+        ->assertFailed();
+
+    expect(GeneVariant::first()->category_group)->toBeNull();
+});
+
 it('exits non-zero with a count-only message when generation fails', function () {
     $row = groupless('rs1', 'MTHFR', 'Methylation');
     $this->text->failWith('provider said MTHFR is bad');
