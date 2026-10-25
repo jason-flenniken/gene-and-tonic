@@ -18,7 +18,7 @@
     <body class="min-h-screen bg-white antialiased dark:bg-zinc-800">
         <header class="border-b border-zinc-200 dark:border-zinc-700">
             <div class="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-                <flux:heading size="lg">{{ config('app.name', 'Laravel') }}</flux:heading>
+                <a href="{{ route('home') }}"><flux:heading size="lg">{{ config('app.name', 'Laravel') }}</flux:heading></a>
 
                 @auth
                     <div class="flex items-center gap-3">

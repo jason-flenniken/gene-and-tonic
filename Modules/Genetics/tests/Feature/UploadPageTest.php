@@ -141,7 +141,7 @@ it('lists the upload status, counts and error', function () {
         'path' => null, 'error' => 'No genetic markers found in this file.',
     ]);
 
-    $this->actingAs($this->user)->get('/genetics')
+    $this->actingAs($this->user)->get('/?tab=genetics')
         ->assertOk()
         ->assertSee('done.txt')
         ->assertSee('812')
@@ -155,12 +155,12 @@ it('shows a user only their own uploads', function () {
     $other = User::factory()->create();
     GeneticUpload::factory()->create(['user_id' => $other->id, 'original_name' => 'alice-genome.txt']);
 
-    $this->actingAs($this->user)->get('/genetics')
+    $this->actingAs($this->user)->get('/?tab=genetics')
         ->assertOk()
         ->assertDontSee('alice-genome.txt')
         ->assertDontSee('wire:poll', escape: false);
 
-    $this->actingAs($other)->get('/genetics')->assertSee('alice-genome.txt');
+    $this->actingAs($other)->get('/?tab=genetics')->assertSee('alice-genome.txt');
 });
 
 it('exposes no client-settable upload id', function () {

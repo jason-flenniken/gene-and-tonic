@@ -45,17 +45,25 @@ it('shows a sign-in prompt on the genetics tab for a guest', function () {
         ->assertDontSee('SNPs on file');
 });
 
-it('shows the variant count and a link on the genetics tab for a signed-in user', function () {
+it('shows the signed-in user\'s own variants on the genetics tab', function () {
     $user = User::factory()->create();
     app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG');
     app(AddVariant::class)->handle($user->id, 'rs4680', 'AA');
-    UserVariant::factory()->create();
+    UserVariant::factory()->create(['rsid' => 'rs999']);
 
     $this->actingAs($user)->get('/?tab=genetics')
         ->assertOk()
-        ->assertSee('SNPs on file')
-        ->assertSeeInOrder(['data-stat="variants"', '2'], false)
-        ->assertSee(route('genetics.profile'), false);
+        ->assertSee('rs1801133')
+        ->assertSee('rs4680')
+        ->assertDontSee('rs999');
+});
+
+it('does not show the upload form to a guest on the genetics tab', function () {
+    $this->get('/?tab=genetics')
+        ->assertOk()
+        ->assertSee('Sign in to add your genetic results')
+        ->assertDontSee('Upload results')
+        ->assertDontSee('Add SNP');
 });
 
 it('shows the genetics upload and add-SNP tools inside the dashboard genetics tab', function () {
