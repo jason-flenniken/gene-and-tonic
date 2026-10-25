@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:14:28.799Z",
+  "updated": "2026-10-25T19:14:31.204Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -306,7 +306,7 @@
     {
       "id": "shell",
       "name": "Shell and routes",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "shell-routes",
@@ -358,7 +358,7 @@
     {
       "id": "screens",
       "name": "Screens",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "supplements-index",
@@ -881,6 +881,11 @@
       "at": "2026-10-25T19:14:28.799Z",
       "event": "task done",
       "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:14:31.204Z",
+      "event": "phase finished",
+      "detail": "Shell and routes (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
