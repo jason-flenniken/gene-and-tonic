@@ -23,6 +23,28 @@ enum ResearchStatus: string
         return ucfirst($this->value);
     }
 
+    /** Status tone: neutral, active, ok or bad. */
+    public function tone(): string
+    {
+        return match ($this) {
+            self::Queued => 'neutral',
+            self::Searching, self::Analyzing => 'active',
+            self::Complete => 'ok',
+            self::Failed => 'bad',
+        };
+    }
+
+    /** Progress step out of 4 for an active run, null once finished. */
+    public function step(): ?int
+    {
+        return match ($this) {
+            self::Queued => 1,
+            self::Searching => 2,
+            self::Analyzing => 3,
+            self::Complete, self::Failed => null,
+        };
+    }
+
     public function color(): string
     {
         return match ($this) {

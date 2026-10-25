@@ -5,6 +5,7 @@ namespace Modules\Supplements\Data;
 use Illuminate\Contracts\Support\Arrayable;
 use Modules\Shared\Data\Concerns\ArrayableData;
 use Modules\Supplements\Enums\EvidenceGrade;
+use Modules\Supplements\Enums\HealthTopic;
 
 /**
  * @implements Arrayable<string, mixed>
@@ -21,5 +22,7 @@ final readonly class EffectData implements Arrayable
         public ?string $outcome,
         public EvidenceGrade $evidenceGrade,
         public array $sourceKeys,
+        public ?string $title = null,
+        public ?HealthTopic $category = null,
     ) {}
 }

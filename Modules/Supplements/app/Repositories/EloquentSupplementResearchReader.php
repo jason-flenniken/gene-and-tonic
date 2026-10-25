@@ -10,6 +10,7 @@ use Modules\Supplements\Data\MechanismData;
 use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Enums\HealthTopic;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
 use Modules\Supplements\Models\SupplementGeneInteraction;
@@ -42,6 +43,8 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
                 outcome: $e->outcome,
                 evidenceGrade: $e->evidence_grade,
                 sourceKeys: $this->keys($e->source_keys),
+                title: $e->title,
+                category: $e->category,
             ))->all()),
             mechanisms: array_values($research->mechanisms->map(fn (SupplementMechanism $m): MechanismData => new MechanismData(
                 description: $m->description,
@@ -75,7 +78,28 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
                 sourceKeys: $this->keys($g->source_keys),
             ))->all()),
             geneticsChecked: $research->genetics_checked_at !== null,
+            kicker: $research->kicker,
+            topics: $this->topics($research->topics),
         );
+    }
+
+    /** @return list<HealthTopic> */
+    private function topics(mixed $topics): array
+    {
+        if (! is_array($topics)) {
+            return [];
+        }
+
+        $cases = [];
+        foreach ($topics as $topic) {
+            $case = is_string($topic) ? HealthTopic::tryFrom($topic) : null;
+
+            if ($case !== null) {
+                $cases[$case->value] = $case;
+            }
+        }
+
+        return array_values($cases);
     }
 
     /** @return list<string> */
