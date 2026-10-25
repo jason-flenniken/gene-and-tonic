@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:00:42.193Z",
+  "updated": "2026-10-25T19:09:09.070Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -45,7 +45,7 @@
     {
       "id": "foundations",
       "name": "Foundations and data",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "theme-light",
@@ -287,16 +287,19 @@
             "Modules/Genetics/tests/Unit/GenotypeTest.php"
           ],
           "complexity": "complex",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "reads users' genotypes and exposes match data across modules",
-          "substep": "implementing",
           "branch": "task/gene-and-tonic-redesign/relevance-contracts",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--relevance-contracts",
           "base": "2000c974a6eb8a296695cc8f11c34ee252c889f5",
           "startedAt": "2026-10-25T19:00:12.033Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T19:09:09.069Z",
+          "tip": "77eebe9",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "8b503ebe628894b6412b6e1bbbd906f80c812754"
         }
       ]
     },
@@ -802,6 +805,21 @@
       "at": "2026-10-25T19:00:42.193Z",
       "event": "task done",
       "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T19:07:59.167Z",
+      "event": "task reviewing",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:08:52.291Z",
+      "event": "task merging",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:09:09.070Z",
+      "event": "task done",
+      "detail": "Match allele and name, topForUser, VariantLinks"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -998,6 +1016,36 @@
       ],
       "from": "implementer",
       "at": "2026-10-25T19:00:05.912Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Arch test that Modules\\Shared imports no other module",
+      "where": [
+        "Modules/Shared/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:07:59.038Z"
+    },
+    {
+      "id": "s21",
+      "area": "perf",
+      "text": "topForUser and VariantLinks each read the profile and catalog; cache per request if both are used on one page",
+      "where": [
+        "Modules/Recommendations/app/Services/GeneMatchVariantLinks.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:07:59.101Z"
+    },
+    {
+      "id": "s22",
+      "area": "quality",
+      "text": "Fake repeats topForUser's filter/sort/slice; extract a shared ranking helper if a third caller appears",
+      "where": [
+        "Modules/Recommendations/app/Testing/FakeGeneticRelevanceReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:08:52.223Z"
     }
   ]
 }
