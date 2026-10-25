@@ -6,8 +6,8 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T20:20:41.795Z",
-  "stage": "verify",
+  "updated": "2026-10-25T20:20:41.904Z",
+  "stage": "review",
   "stageHistory": [
     {
       "stage": "discover",
@@ -28,6 +28,10 @@
     {
       "stage": "verify",
       "at": "2026-10-25T19:45:30.555Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-25T20:20:41.904Z"
     }
   ],
   "paused": null,
@@ -1343,6 +1347,11 @@
       "at": "2026-10-25T20:20:41.795Z",
       "event": "verify pass",
       "detail": "tests: 788 passing, 3 skipped (pint, phpstan level 7 clean); build ok; 48 FRs + 2 NFRs met after fixes (NFR-01 your-genes profile read memoized per request, flushed on writes and after QueueLookups); FR-47 browser pass done at 1440px and 390px (iframe) on a copy DB: fixed OS-dark Flux styling and empty effect tiles; untested: FR-47 code-level a11y, FR-30 add toast (logged); secret scan: clean; audit: composer + npm clean; no manifest changes"
+    },
+    {
+      "at": "2026-10-25T20:20:41.904Z",
+      "event": "advanced",
+      "detail": "review"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1930,11 +1939,5 @@
       "from": "check",
       "at": "2026-10-25T20:20:41.727Z"
     }
-  ],
-  "step": {
-    "stage": "verify",
-    "name": "fixing",
-    "count": 1,
-    "at": "2026-10-25T20:11:43.556Z"
-  }
+  ]
 }
