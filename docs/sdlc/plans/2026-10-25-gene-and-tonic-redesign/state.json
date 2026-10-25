@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:51:17.236Z",
+  "updated": "2026-10-25T18:55:31.442Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -101,9 +101,15 @@
             "tests/Feature/Ui/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "substep": "implementing",
+          "branch": "task/gene-and-tonic-redesign/ui-components",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--ui-components",
+          "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
+          "startedAt": "2026-10-25T18:51:35.820Z",
+          "level": "standard"
         },
         {
           "id": "research-topics",
@@ -124,10 +130,19 @@
             "Modules/Supplements/tests/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "stores new model output and adds migrations"
+          "riskReason": "stores new model output and adds migrations",
+          "branch": "task/gene-and-tonic-redesign/research-topics",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--research-topics",
+          "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
+          "startedAt": "2026-10-25T18:51:41.488Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:55:31.442Z",
+          "tip": "322c962",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "9df0f551830fe405ee0b2d9cf0d7075c1a8ca89f"
         },
         {
           "id": "variant-names-lookups",
@@ -147,10 +162,16 @@
             "Modules/Genetics/tests/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "model output, a migration, and a paid bulk lookup action over a user's genetic data"
+          "riskReason": "model output, a migration, and a paid bulk lookup action over a user's genetic data",
+          "substep": "reviewing",
+          "branch": "task/gene-and-tonic-redesign/variant-names-lookups",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--variant-names-lookups",
+          "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
+          "startedAt": "2026-10-25T18:51:47.225Z",
+          "level": "standard"
         },
         {
           "id": "usage-data",
@@ -560,6 +581,56 @@
       "at": "2026-10-25T18:51:17.236Z",
       "event": "task done",
       "detail": "Tokens, Figtree, light only, brand files"
+    },
+    {
+      "at": "2026-10-25T18:51:35.821Z",
+      "event": "task started",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:51:41.489Z",
+      "event": "task started",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:51:47.226Z",
+      "event": "task started",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:52:28.861Z",
+      "event": "task implementing",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:52:28.933Z",
+      "event": "task implementing",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:52:29.010Z",
+      "event": "task implementing",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:54:21.903Z",
+      "event": "task reviewing",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:54:56.310Z",
+      "event": "task reviewing",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:55:14.676Z",
+      "event": "task merging",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:55:31.442Z",
+      "event": "task done",
+      "detail": "Research topics, kicker, effect titles and categories"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -596,6 +667,36 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T18:51:02.280Z"
+    },
+    {
+      "id": "s4",
+      "area": "security",
+      "text": "line() keeps markup and control/zero-width chars; strip_tags and \\p{C} so kicker/title are safe in any non-Blade consumer (PDF, export)",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:14.453Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Escaping test uses inline Blade::render; add a real supplement page and PDF render test asserting &lt;script&gt; for kicker/title",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchTopicsTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:14.525Z"
+    },
+    {
+      "id": "s6",
+      "area": "quality",
+      "text": "Comment the second trim() after mb_substr in line()",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:55:14.602Z"
     }
   ]
 }
