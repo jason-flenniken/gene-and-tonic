@@ -6,8 +6,8 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:47:56.687Z",
-  "stage": "plan",
+  "updated": "2026-10-25T18:47:59.781Z",
+  "stage": "execute",
   "stageHistory": [
     {
       "stage": "discover",
@@ -20,6 +20,10 @@
     {
       "stage": "plan",
       "at": "2026-10-25T18:41:44.066Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-25T18:47:59.780Z"
     }
   ],
   "paused": null,
@@ -41,7 +45,7 @@
     {
       "id": "foundations",
       "name": "Foundations and data",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "theme-light",
@@ -517,6 +521,11 @@
       "at": "2026-10-25T18:47:56.687Z",
       "event": "plan approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T18:47:59.781Z",
+      "event": "advanced",
+      "detail": "execute"
     }
   ],
   "cairnVersion": "0.3.0",
