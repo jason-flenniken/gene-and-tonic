@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:57:31.126Z",
+  "updated": "2026-10-25T18:59:32.277Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -199,15 +199,18 @@
             "Modules/Supplements/config/config.php"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": false,
-          "substep": "implementing",
           "branch": "task/gene-and-tonic-redesign/usage-data",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--usage-data",
           "base": "99996ce3891ca7b89acaf2f9f4edb1700a5955c3",
           "startedAt": "2026-10-25T18:56:02.422Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T18:59:32.276Z",
+          "tip": "039a3de",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "17c31a9ed8f3274b54f0e5d9cf8e2bdc3fbb837b"
         },
         {
           "id": "pdf-brand",
@@ -224,9 +227,9 @@
           ],
           "complexity": "simple",
           "status": "in_progress",
-          "fixRound": 0,
+          "fixRound": 1,
           "risky": false,
-          "substep": "implementing",
+          "substep": "fixing",
           "branch": "task/gene-and-tonic-redesign/pdf-brand",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--pdf-brand",
           "base": "0b362bc609d8999753ae9b10966721060d7f75c7",
@@ -248,9 +251,15 @@
             "Modules/Supplements/tests/**"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
-          "risky": false
+          "risky": false,
+          "substep": "reviewing",
+          "branch": "task/gene-and-tonic-redesign/supplement-listing",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplement-listing",
+          "base": "01a8872b64232b870683479fcf61f2a1bcf9eec3",
+          "startedAt": "2026-10-25T18:57:44.376Z",
+          "level": "standard"
         },
         {
           "id": "relevance-contracts",
@@ -711,6 +720,46 @@
       "at": "2026-10-25T18:57:31.126Z",
       "event": "task done",
       "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:57:44.377Z",
+      "event": "task started",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:57:44.505Z",
+      "event": "task implementing",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:58:21.165Z",
+      "event": "task reviewing",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T18:58:28.096Z",
+      "event": "task reviewing",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:58:59.322Z",
+      "event": "task reviewing",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:59:14.388Z",
+      "event": "task fixing",
+      "detail": "Gene & Tonic in PDF headers and footers (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T18:59:14.592Z",
+      "event": "task merging",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:59:32.277Z",
+      "event": "task done",
+      "detail": "Profile labels, usage window, cost by profile"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -857,6 +906,26 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T18:57:11.983Z"
+    },
+    {
+      "id": "s15",
+      "area": "tests",
+      "text": "Assert callsLast24h/costLast24hUsd for Week and All windows",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsageWindowTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:14.454Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Extract a private profileConfig($name) helper shared by get() and labelFor()",
+      "where": [
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:14.523Z"
     }
   ]
 }
