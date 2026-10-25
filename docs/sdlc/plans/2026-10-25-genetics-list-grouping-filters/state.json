@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:55:45.102Z",
+  "updated": "2026-10-25T14:59:39.065Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -114,10 +114,16 @@
             "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "in_progress",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "untrusted search and dropdown input over the user's genetic rows"
+          "riskReason": "untrusted search and dropdown input over the user's genetic rows",
+          "substep": "implementing",
+          "branch": "task/genetics-list-grouping-filters/grouped-list-ui",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--grouped-list-ui",
+          "base": "1b8182f9e77211869249d11744636b9fc90e5d0c",
+          "startedAt": "2026-10-25T14:55:51.359Z",
+          "level": "standard"
         },
         {
           "id": "group-backfill",
@@ -138,10 +144,19 @@
             "CLAUDE.md"
           ],
           "complexity": "standard",
-          "status": "pending",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
-          "riskReason": "outbound AI prompt and model output written to the shared reference table"
+          "riskReason": "outbound AI prompt and model output written to the shared reference table",
+          "branch": "task/genetics-list-grouping-filters/group-backfill",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--group-backfill",
+          "base": "1b8182f9e77211869249d11744636b9fc90e5d0c",
+          "startedAt": "2026-10-25T14:55:57.107Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T14:59:39.065Z",
+          "tip": "06b4b9a",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "45e530d9cae21a4a922657a3067a9eb23f819f3a"
         }
       ]
     }
@@ -217,6 +232,41 @@
       "at": "2026-10-25T14:55:45.102Z",
       "event": "phase finished",
       "detail": "Groups in the data (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T14:55:51.360Z",
+      "event": "task started",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T14:55:57.108Z",
+      "event": "task started",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:56:48.629Z",
+      "event": "task implementing",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T14:56:48.700Z",
+      "event": "task implementing",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:58:32.717Z",
+      "event": "task reviewing",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:59:23.798Z",
+      "event": "task merging",
+      "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:59:39.065Z",
+      "event": "task done",
+      "detail": "Group backfill command"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -261,6 +311,56 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T14:55:19.875Z"
+    },
+    {
+      "id": "s5",
+      "area": "perf",
+      "text": "Chunk group-backfill items (e.g. 150 per call) if distinct gene/category pairs grow past one call's output budget",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:58:32.570Z"
+    },
+    {
+      "id": "s6",
+      "area": "tests",
+      "text": "Cover a looked-up row with a null gene in the group backfill",
+      "where": [
+        "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:58:32.645Z"
+    },
+    {
+      "id": "s7",
+      "area": "quality",
+      "text": "Skip empty-string categories and collapse whitespace/newlines in category text before building the group prompt",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T14:59:11.125Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "Group backfill: collapse whitespace/control chars in gene and category, cap gene ~32 chars (second-order injection from earlier model output); test with newline-bearing category",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T14:59:23.647Z"
+    },
+    {
+      "id": "s9",
+      "area": "tests",
+      "text": "Group backfill tests: Log::spy on the failure path (context keys rows+exception only); create a user_variants row and assert its genotype/user id never reach the request",
+      "where": [
+        "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T14:59:23.720Z"
     }
   ],
   "planHash": "dd634ff18e0753eb",
