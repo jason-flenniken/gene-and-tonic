@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:25:50.347Z",
+  "updated": "2026-10-25T19:25:52.650Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -358,7 +358,7 @@
     {
       "id": "screens",
       "name": "Screens",
-      "status": "awaiting_approval",
+      "status": "done",
       "tasks": [
         {
           "id": "supplements-index",
@@ -508,7 +508,7 @@
     {
       "id": "home",
       "name": "Home",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "home-hero-stats",
@@ -1087,6 +1087,11 @@
       "at": "2026-10-25T19:25:50.347Z",
       "event": "task done",
       "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:25:52.649Z",
+      "event": "phase finished",
+      "detail": "Screens (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
     }
   ],
   "cairnVersion": "0.3.0",
