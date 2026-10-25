@@ -37,7 +37,7 @@ class LookupVariant
     {
         $reference = GeneVariant::where('rsid', $rsid)->first();
 
-        if ($reference === null || ! in_array($reference->status, [LookupStatus::Pending, LookupStatus::LookingUp, LookupStatus::Failed], true)) {
+        if ($reference === null || $reference->status->isLookedUp()) {
             return;
         }
 
