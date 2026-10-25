@@ -3,7 +3,7 @@
 ## Links
 - PRD: docs/sdlc/plans/2026-10-25-gene-and-tonic-redesign/prd.md
 - Plan: docs/sdlc/plans/2026-10-25-gene-and-tonic-redesign/plan.md
-- PR: <pending>
+- PR: none (no git remote; merged locally into main)
 - Tracker: none
 
 ## Why
