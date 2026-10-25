@@ -6,7 +6,7 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T19:45:30.555Z",
+  "updated": "2026-10-25T20:20:41.795Z",
   "stage": "verify",
   "stageHistory": [
     {
@@ -633,7 +633,13 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-25T20:20:41.794Z",
+      "note": "tests: 788 passing, 3 skipped (pint, phpstan level 7 clean); build ok; 48 FRs + 2 NFRs met after fixes (NFR-01 your-genes profile read memoized per request, flushed on writes and after QueueLookups); FR-47 browser pass done at 1440px and 390px (iframe) on a copy DB: fixed OS-dark Flux styling and empty effect tiles; untested: FR-47 code-level a11y, FR-30 add toast (logged); secret scan: clean; audit: composer + npm clean; no manifest changes"
+    }
+  },
   "drift": [
     {
       "path": "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
@@ -1317,6 +1323,26 @@
       "at": "2026-10-25T19:45:30.555Z",
       "event": "advanced",
       "detail": "verify"
+    },
+    {
+      "at": "2026-10-25T19:45:41.536Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-25T19:46:09.380Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-25T20:11:43.556Z",
+      "event": "step",
+      "detail": "fixing (1)"
+    },
+    {
+      "at": "2026-10-25T20:20:41.795Z",
+      "event": "verify pass",
+      "detail": "tests: 788 passing, 3 skipped (pint, phpstan level 7 clean); build ok; 48 FRs + 2 NFRs met after fixes (NFR-01 your-genes profile read memoized per request, flushed on writes and after QueueLookups); FR-47 browser pass done at 1440px and 390px (iframe) on a copy DB: fixed OS-dark Flux styling and empty effect tiles; untested: FR-47 code-level a11y, FR-30 add toast (logged); secret scan: clean; audit: composer + npm clean; no manifest changes"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -1853,6 +1879,62 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T19:45:08.847Z"
+    },
+    {
+      "id": "s54",
+      "area": "tests",
+      "text": "FR-47 code-level a11y (44px targets, labels, focus ring) has no automated test; add a render test per page",
+      "where": [
+        "tests/Feature/**"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:11:43.427Z"
+    },
+    {
+      "id": "s55",
+      "area": "tests",
+      "text": "Assert the '{name} queued for research.' toast on add",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:11:43.492Z"
+    },
+    {
+      "id": "s56",
+      "area": "ux",
+      "text": "Upload file names wrap mid-word at 390px (Genetic Markers.cs / v); truncate with title or break at spaces",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:20:41.589Z"
+    },
+    {
+      "id": "s57",
+      "area": "ux",
+      "text": "Download PDF label wraps to two lines at 390px; keep it on one line",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:20:41.660Z"
+    },
+    {
+      "id": "s58",
+      "area": "quality",
+      "text": "Stored safety notes still show raw [S8] citation markers on older research rows",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:20:41.727Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "verify",
+    "name": "fixing",
+    "count": 1,
+    "at": "2026-10-25T20:11:43.556Z"
+  }
 }

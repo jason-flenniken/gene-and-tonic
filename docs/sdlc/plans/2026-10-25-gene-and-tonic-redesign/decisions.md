@@ -91,3 +91,8 @@ _2026-10-25 18:39_
 **Decision:** A variant is linked to a supplement when it is one of that supplement's gene matches for the user (same rules as the Your genes panel), so the contract takes the user id and Recommendations reads the profile itself; amends decision 17's input shape
 **Why:** keeps 'linked', 'gene matches' and the Home hero on one definition; still no genotypes pass through Shared
 _2026-10-25 18:39_
+
+### 19. FR-02 dark custom variant
+**Decision:** Keep @custom-variant dark bound to a .dark class that nothing sets, instead of deleting it
+**Why:** deleting it made dark: follow the OS colour scheme, so Flux's own components rendered dark on a dark-mode Mac; the class binding is what actually pins light
+_2026-10-25 20:17_
