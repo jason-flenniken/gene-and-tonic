@@ -116,3 +116,29 @@ it('shows the same supplement total in the subtitle and the stat, including a su
         ->assertSee('· 2 supplements · 2 variants')
         ->assertSeeInOrder(['data-stat="supplements"', 'Supplements', '2']);
 });
+
+it('shows the three sections on Home for a signed-in user', function () {
+    homeSupplement();
+
+    $this->actingAs(homeUser())->get('/')
+        ->assertOk()
+        ->assertSeeHtml('data-section="latest-research"')
+        ->assertSeeHtml('data-section="your-genes"')
+        ->assertSeeHtml('data-section="your-supplements"')
+        ->assertSee('Latest research')
+        ->assertSee('Your genes')
+        ->assertSee('Your supplements')
+        ->assertSee('1 variant is waiting for a lookup');
+});
+
+it('shows a guest the sign-in card in place of Your genes and keeps genetics data out of the sections', function () {
+    homeSupplement();
+    $other = homeUser();
+
+    $this->get('/')
+        ->assertOk()
+        ->assertSee('Sign in to see your genes')
+        ->assertDontSee('Look up now')
+        ->assertDontSeeHtml('data-gene-group')
+        ->assertDontSeeHtml('data-match-count');
+});

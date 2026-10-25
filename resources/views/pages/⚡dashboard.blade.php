@@ -75,4 +75,11 @@ new #[Title('Home')] class extends Component
         @endauth
         <livewire:intelligence::spend-stat />
     </div>
+
+    <div class="grid gap-7 [grid-template-columns:repeat(auto-fit,minmax(min(400px,100%),1fr))]">
+        <livewire:supplements::latest-research />
+        <livewire:genetics::your-genes />
+    </div>
+
+    <livewire:supplements::your-supplements />
 </div>

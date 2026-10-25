@@ -35,4 +35,21 @@ return [
         'gene_query' => '%s gene polymorphism nutrigenomics',
         'gene_limit' => (int) env('RESEARCH_GENE_LIMIT', 4),
     ],
+
+    /*
+    | Short tile labels for well-known supplements, keyed by lowercase name.
+    | Anything not listed gets one derived from its name.
+    */
+    'abbreviations' => [
+        'methylfolate' => 'MTHF',
+        'magnesium' => 'Mg',
+        'magnesium glycinate' => 'Mg',
+        'l-tyrosine' => 'Tyr',
+        'iron' => 'Fe',
+        'zinc' => 'Zn',
+        'vitamin d' => 'D3',
+        'vitamin b12' => 'B12',
+        'omega-3' => 'Ω3',
+        'creatine' => 'Cr',
+    ],
 ];
