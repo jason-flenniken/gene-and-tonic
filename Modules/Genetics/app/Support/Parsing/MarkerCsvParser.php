@@ -78,7 +78,8 @@ final class MarkerCsvParser implements RowParser
 
     /**
      * Every data row: a MarkerRow for one with a variant or an unread rsID, null
-     * for one with neither (no rsID anywhere, or an explicit no-call).
+     * for one with neither (no rsID anywhere, an explicit no-call, or cells that
+     * don't line up with the header).
      *
      * @return Generator<int, MarkerRow|null>
      */
@@ -119,11 +120,14 @@ final class MarkerCsvParser implements RowParser
             $columns['gene'] === null ? null : ($fields[$columns['gene']] ?? null),
         );
 
-        if ($variant === null && preg_match('/\brs\d{1,10}\b/i', $line) !== 1) {
+        $promptLine = $this->promptLine($fields, $columns);
+
+        // An unread row with no rsID, or one whose cells don't line up with the header, is not a marker row.
+        if ($variant === null && ($promptLine === null || preg_match('/\brs\d{1,10}\b/i', $line) !== 1)) {
             return null;
         }
 
-        return new MarkerRow($variant, $this->promptLine($fields, $columns));
+        return new MarkerRow($variant, $promptLine);
     }
 
     /**

@@ -215,19 +215,19 @@ it('fails an over-cap marker list before any model call', function () {
         ->and(UserVariant::count())->toBe(0);
 });
 
-/** Ten marker lines in a file no parser recognises. */
+/** Ten marker lines in a CSV with no header any parser recognises. */
 function unrecognisedMarkerText(): string
 {
     return implode("\n", array_map(fn (int $i): string => 'Sample rs'.(90000100 + $i).' genotype AG and some filler', range(1, 10)))."\n";
 }
 
-it('splits a long unrecognised file into several calls of at most max_chars, dropping nothing', function () {
+it('splits a long headerless CSV into several calls of at most max_chars, dropping nothing', function () {
     config(['genetics.extract.max_chars' => 100, 'genetics.extract.max_chunks' => 10]);
     $all = array_map(fn (int $i): array => ['rsid' => 'rs'.(90000100 + $i), 'gene' => null, 'genotype' => 'AG'], range(1, 10));
     foreach (range(1, 10) as $ignored) {
         $this->text->respondWith(['variants' => $all]);
     }
-    $upload = markerUpload($this->user, unrecognisedMarkerText(), 'txt');
+    $upload = markerUpload($this->user, unrecognisedMarkerText());
 
     ProcessGeneticUpload::dispatchSync($upload->id);
 
@@ -252,7 +252,7 @@ it('stops at max_chunks and logs the truncation without any marker text', functi
     Log::spy();
     $this->text->respondWith(['variants' => []])->respondWith(['variants' => []]);
 
-    ProcessGeneticUpload::dispatchSync(markerUpload($this->user, unrecognisedMarkerText(), 'txt')->id);
+    ProcessGeneticUpload::dispatchSync(markerUpload($this->user, unrecognisedMarkerText())->id);
 
     expect($this->text->requests())->toHaveCount(2);
     Log::shouldHaveReceived('warning')->withArgs(

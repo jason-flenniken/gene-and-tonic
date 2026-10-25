@@ -90,13 +90,14 @@ it('splits rows into read, unread and no-call when scanning', function () {
         ->and(implode("\n", $scan->candidateLines()))->not->toContain('SECRET-NOTE')->not->toContain('METHYLATION');
 });
 
-it('does not offer a row whose cells do not line up with the header to the model', function () {
-    $path = markerCsvFile("rsID,Genotype,Notes\nrs4244285,*2/*2,\"first line of a note\nrs1801133 second line\"\n");
+it('ignores an unread row whose cells do not line up with the header', function () {
+    $path = markerCsvFile("rsID,Genotype,Notes\nrs4680,A/A,ok\nrs4244285,*2/*2,\"first line of a note\nrs1801133 second line\"\n");
 
     $scan = (new MarkerCsvParser)->scan($path, 100);
 
-    expect($scan->leftoverLines())->toBe(['rsID: rs4244285 | Genotype: *2/*2'])
-        ->and($scan->readRatio())->toBe(0.0);
+    expect($scan->candidates)->toHaveCount(2)
+        ->and($scan->leftoverLines())->toBe(['rsID: rs4244285 | Genotype: *2/*2'])
+        ->and($scan->readRatio())->toBe(0.5);
 });
 
 it('returns null when the file has more marker rows than the limit', function () {

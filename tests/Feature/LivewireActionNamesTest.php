@@ -23,12 +23,17 @@ function livewireWireAliases(): array
 /** @return list<string> */
 function livewireSingleFileComponents(): array
 {
-    $files = [
-        ...File::glob(base_path('Modules/*/resources/views/livewire/*.blade.php')),
-        ...File::glob(base_path('resources/views/pages/*.blade.php')),
-    ];
+    $files = [];
 
-    return array_values($files);
+    foreach ([...File::glob(base_path('Modules/*/resources/views/livewire')), base_path('resources/views/pages')] as $directory) {
+        foreach (File::allFiles($directory) as $file) {
+            if (str_ends_with($file->getFilename(), '.blade.php')) {
+                $files[] = $file->getPathname();
+            }
+        }
+    }
+
+    return $files;
 }
 
 it('reads the $wire aliases from the Livewire bundle', function () {
