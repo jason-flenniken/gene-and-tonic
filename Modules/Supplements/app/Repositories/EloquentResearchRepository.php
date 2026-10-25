@@ -120,6 +120,8 @@ class EloquentResearchRepository implements ResearchRepository
                 'error' => null,
                 'completed_at' => now(),
                 'genetics_checked_at' => now(),
+                'kicker' => $findings->kicker,
+                'topics' => $findings->topics,
             ]);
         });
     }

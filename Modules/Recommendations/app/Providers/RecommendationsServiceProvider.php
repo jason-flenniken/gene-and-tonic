@@ -4,8 +4,10 @@ namespace Modules\Recommendations\Providers;
 
 use Livewire\Livewire;
 use Modules\Recommendations\Contracts\GeneticRelevanceReader;
+use Modules\Recommendations\Services\GeneMatchVariantLinks;
 use Modules\Recommendations\Services\RuleBasedGeneticRelevanceReader;
 use Modules\Shared\Contracts\PageActions;
+use Modules\Shared\Contracts\VariantLinks;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class RecommendationsServiceProvider extends ModuleServiceProvider
@@ -44,6 +46,9 @@ class RecommendationsServiceProvider extends ModuleServiceProvider
         );
 
         app(PageActions::class)->register('supplement.panels', 'recommendations::slots.genetic-panel');
+        app(PageActions::class)->register('supplement.preview', 'recommendations::slots.preview-strip');
+        app(PageActions::class)->register('supplement.card', 'recommendations::slots.match-count');
+        app(PageActions::class)->register('supplement.overview-links', 'recommendations::slots.genes-link');
     }
 
     public function register(): void
@@ -52,6 +57,8 @@ class RecommendationsServiceProvider extends ModuleServiceProvider
 
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 
-        $this->app->bind(GeneticRelevanceReader::class, RuleBasedGeneticRelevanceReader::class);
+        // Scoped: one reader per request memoizes the profile and research reads. GeneMatchVariantLinks resolves the same reader.
+        $this->app->scoped(GeneticRelevanceReader::class, RuleBasedGeneticRelevanceReader::class);
+        $this->app->scoped(VariantLinks::class, GeneMatchVariantLinks::class);
     }
 }

@@ -30,5 +30,6 @@ final readonly class VariantData implements Arrayable
         public LookupStatus $status,
         public string $source,
         public ?VariantGroup $group = null,
+        public ?string $variantName = null,
     ) {}
 }

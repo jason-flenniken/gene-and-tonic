@@ -8,6 +8,7 @@ return [
     | "supplements.research" when the module boots.
     */
     'research_profile' => [
+        'label' => 'Supplement research',
         'provider' => env('AI_RESEARCH_PROVIDER', 'openai'),
         'model' => env('AI_RESEARCH_MODEL', 'gpt-6.1-sol'),
         'effort' => env('AI_RESEARCH_EFFORT', 'medium'),
@@ -33,5 +34,22 @@ return [
         'limit' => 8,
         'gene_query' => '%s gene polymorphism nutrigenomics',
         'gene_limit' => (int) env('RESEARCH_GENE_LIMIT', 4),
+    ],
+
+    /*
+    | Short tile labels for well-known supplements, keyed by lowercase name.
+    | Anything not listed gets one derived from its name.
+    */
+    'abbreviations' => [
+        'methylfolate' => 'MTHF',
+        'magnesium' => 'Mg',
+        'magnesium glycinate' => 'Mg',
+        'l-tyrosine' => 'Tyr',
+        'iron' => 'Fe',
+        'zinc' => 'Zn',
+        'vitamin d' => 'D3',
+        'vitamin b12' => 'B12',
+        'omega-3' => 'Ω3',
+        'creatine' => 'Cr',
     ],
 ];

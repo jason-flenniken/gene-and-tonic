@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Queue;
 use Livewire\Livewire;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Database\Seeders\GeneVariantSeeder;
+use Modules\Genetics\Models\GeneticUpload;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
 
@@ -24,7 +25,7 @@ it('lists a user\'s variants with gene, genotype, category, affects and effect',
     app(AddVariant::class)->handle($user->id, 'rs4680', 'AA');
     $mthfr = GeneVariant::where('rsid', 'rs1801133')->sole();
 
-    $this->actingAs($user)->get('/?tab=genetics')
+    $this->actingAs($user)->get('/genetics')
         ->assertOk()
         ->assertSee('rs1801133')
         ->assertSee('rs4680')
@@ -41,7 +42,7 @@ it('drops the Your genotype column and shows the effect under Affects', function
     app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG');
     $mthfr = GeneVariant::where('rsid', 'rs1801133')->sole();
 
-    $this->actingAs($user)->get('/?tab=genetics')
+    $this->actingAs($user)->get('/genetics')
         ->assertDontSee('Your genotype')
         ->assertSee('Your AG')
         ->assertSee($mthfr->genotype_effects['AG']);
@@ -54,14 +55,14 @@ it('sorts the list by gene', function () {
     UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs1', 'genotype' => 'AG']);
     UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs2', 'genotype' => 'AG']);
 
-    $this->actingAs($user)->get('/?tab=genetics')->assertSeeInOrder(['AAA1', 'ZZZ1']);
+    $this->actingAs($user)->get('/genetics')->assertSeeInOrder(['AAA1', 'ZZZ1']);
 });
 
 it('shows "Not looked up yet" for a pending variant', function () {
     $user = User::factory()->create();
     app(AddVariant::class)->handle($user->id, 'rs999', 'AG');
 
-    $this->actingAs($user)->get('/?tab=genetics')->assertSee('rs999')->assertSee('Not looked up yet');
+    $this->actingAs($user)->get('/genetics')->assertSee('rs999')->assertSee('Not looked up yet');
 });
 
 it('adds a variant by hand, normalising the genotype', function () {
@@ -115,7 +116,7 @@ it('never shows another user\'s variants', function () {
     app(AddVariant::class)->handle($a->id, 'rs111', 'AG');
     app(AddVariant::class)->handle($b->id, 'rs222', 'CT');
 
-    $this->actingAs($a)->get('/?tab=genetics')->assertSee('rs111')->assertDontSee('rs222');
+    $this->actingAs($a)->get('/genetics')->assertSee('rs111')->assertDontSee('rs222');
     Livewire::actingAs($a)->test('genetics::profile')->assertSee('rs111')->assertDontSee('rs222')->assertDontSee('CT');
 });
 
@@ -129,4 +130,20 @@ it('stops adding after 20 attempts a minute', function () {
 
     $component->assertHasErrors('rsid');
     expect(UserVariant::count())->toBe(20);
+});
+
+it('shows the header copy for upload-only and mixed sources', function () {
+    $user = User::factory()->create();
+    $upload = GeneticUpload::factory()->complete()->create(['user_id' => $user->id]);
+    GeneVariant::factory()->create(['rsid' => 'rs1']);
+    GeneVariant::factory()->create(['rsid' => 'rs2']);
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs1', 'source' => 'file.csv']);
+
+    $this->actingAs($user)->get('/genetics')
+        ->assertSee('1 variant from one upload.')
+        ->assertSee('Raw files are deleted after processing; only marker lines ever reach the AI model.');
+
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs2', 'source' => 'manual']);
+
+    $this->actingAs($user)->get('/genetics')->assertSee('1 variant from one upload and 1 added by hand.');
 });

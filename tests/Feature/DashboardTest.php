@@ -2,86 +2,49 @@
 
 use App\Models\User;
 use Livewire\Livewire;
-use Modules\Genetics\Actions\AddVariant;
-use Modules\Genetics\Models\UserVariant;
 
 beforeEach(fn () => $this->withoutVite());
 
-it('renders the dashboard at the home route', function () {
+it('renders Home with the overview panel', function () {
     $this->get('/')
         ->assertOk()
-        ->assertSee('Overview')
-        ->assertSee('Supplements')
-        ->assertSee('AI Usage')
-        ->assertSee('data-panel="overview"', false);
+        ->assertSee('data-panel="overview"', false)
+        ->assertDontSee('role="tab"', false);
 });
 
-it('shows the supplements panel active for ?tab=supplements', function () {
-    $this->get('/?tab=supplements')
+it('redirects each old tab link to its route', function (string $tab, string $route) {
+    $this->get('/?tab='.$tab)->assertRedirect(route($route));
+})->with([
+    'supplements' => ['supplements', 'supplements.index'],
+    'genetics' => ['genetics', 'genetics.profile'],
+    'usage' => ['usage', 'usage'],
+]);
+
+it('renders Home for the overview tab, an unknown tab and an array tab without redirecting', function (string $query) {
+    $this->get('/'.$query)->assertOk()->assertSee('data-panel="overview"', false);
+})->with(['?tab=overview', '?tab=garbage', '?tab[]=genetics', '?tab=']);
+
+it('mounts the home page component without a redirect', function () {
+    Livewire::test('pages::dashboard')->assertNoRedirect();
+});
+
+it('sends a guest from the old genetics tab to login, not the genetics markup', function () {
+    $this->followingRedirects()->get('/?tab=genetics')
         ->assertOk()
-        ->assertSee('data-panel="supplements"', false)
-        ->assertDontSee('data-panel="overview"', false)
-        ->assertSeeInOrder(['role="tab"', 'aria-selected="false"', 'role="tab"', 'aria-selected="true"'], false);
-});
-
-it('falls back to overview for an unknown tab', function () {
-    $this->get('/?tab=garbage')->assertOk()->assertSee('data-panel="overview"', false);
-});
-
-it('updates the url-bound tab property', function () {
-    Livewire::test('pages::dashboard')
-        ->assertSet('tab', 'overview')
-        ->set('tab', 'usage')
-        ->assertSet('tab', 'usage')
-        ->set('tab', 'nope')
-        ->assertSet('tab', 'overview');
-});
-
-it('shows a sign-in prompt on the genetics tab for a guest', function () {
-    $this->get('/?tab=genetics')
-        ->assertOk()
-        ->assertSee('data-panel="genetics"', false)
-        ->assertSee('Sign in to add your genetic results')
-        ->assertDontSee('SNPs on file');
-});
-
-it('shows the signed-in user\'s own variants on the genetics tab', function () {
-    $user = User::factory()->create();
-    app(AddVariant::class)->handle($user->id, 'rs1801133', 'AG');
-    app(AddVariant::class)->handle($user->id, 'rs4680', 'AA');
-    UserVariant::factory()->create(['rsid' => 'rs999']);
-
-    $this->actingAs($user)->get('/?tab=genetics')
-        ->assertOk()
-        ->assertSee('rs1801133')
-        ->assertSee('rs4680')
-        ->assertDontSee('rs999');
-});
-
-it('does not show the upload form to a guest on the genetics tab', function () {
-    $this->get('/?tab=genetics')
-        ->assertOk()
-        ->assertSee('Sign in to add your genetic results')
         ->assertDontSee('Upload results')
-        ->assertDontSee('Add SNP');
+        ->assertDontSee('data-panel="genetics"', false);
 });
 
-it('shows the genetics upload and add-SNP tools inside the dashboard genetics tab', function () {
+it('never renders genetics markup on Home for a guest', function () {
+    $this->get('/')->assertDontSee('Upload results')->assertDontSee('Add SNP');
+});
+
+it('links the brand in the sidebar back to Home', function () {
+    $this->get('/supplements')->assertOk()->assertSee('href="'.route('home').'"', false);
+});
+
+it('does not use the old tab links to home anywhere', function () {
     $user = User::factory()->create();
 
-    $this->actingAs($user)->get('/?tab=genetics')
-        ->assertOk()
-        ->assertSee('data-panel="genetics"', false)
-        ->assertSee('Upload results')
-        ->assertSee('Add SNP');
-});
-
-it('sends the old genetics page to the dashboard genetics tab', function () {
-    $user = User::factory()->create();
-
-    $this->actingAs($user)->get('/genetics')->assertRedirect(route('home', ['tab' => 'genetics']));
-});
-
-it('links the app name in the header back to the dashboard', function () {
-    $this->get('/?tab=genetics')->assertOk()->assertSee('href="'.route('home').'"', false);
+    $this->actingAs($user)->get('/genetics')->assertOk()->assertDontSee('?tab=', false);
 });

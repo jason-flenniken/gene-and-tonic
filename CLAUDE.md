@@ -89,6 +89,20 @@ Real-render check (opt-in, launches Chrome, writes a PDF per template and assert
 RUN_CHROME_TESTS=1 REPORTS_PDF_OUTPUT_DIR=/tmp/pdfs vendor/bin/pest Modules/Reports/tests/Feature/ChromeRenderTest.php
 ```
 
+## Routes and shell
+
+`layouts/app.blade.php` is a sidebar shell (a top bar with a menu toggle below `lg`). Nav: Home · Supplements · Genetics · AI usage, with `aria-current="page"` set from `request()->routeIs()`; Supplements stays active on a supplement page.
+
+| Path | Route name | Component |
+|---|---|---|
+| `/` | `home` | `pages::dashboard` (module widgets; no tabs) |
+| `/supplements` | `supplements.index` | `supplements::catalog` |
+| `/supplements/{supplement}` | `supplements.show` | `supplements::show` |
+| `/genetics` | `genetics.profile` (auth) | `genetics::profile` |
+| `/usage` | `usage` | `intelligence::usage-log` |
+
+On `/`, `?tab=supplements|genetics|usage` redirects to the matching route; any other `tab` renders Home. Every full page sets `#[Title]`.
+
 ## Boundary rules
 
 1. A module's **public** API is its `Contracts`, `Data` (DTOs), `Events`, `Enums`, `Exceptions` and `Testing` (fakes) namespaces. Everything else (`Models`, `Actions`, `Services`, `Livewire`, `Http`, `Listeners`, `Policies`, `Providers`) is private. Another module may use only the public namespaces of a module it is allowed to depend on (see the map).
@@ -98,12 +112,12 @@ RUN_CHROME_TESTS=1 REPORTS_PDF_OUTPUT_DIR=/tmp/pdfs vendor/bin/pest Modules/Repo
 5. Module-owned Blade/Livewire names are always prefixed (`genetics::`, `<x-genetics::…>`). Unprefixed components belong to Flux or the app shell.
 6. Each owning module ships an in-memory fake of its contracts under `Testing`. Other modules' tests use the fake, not Mockery against internals.
 
-These rules are not enforced automatically yet. When the first two modules exist, add Pest architecture tests under `tests/Arch/` that fail on any import of another module's private namespaces, and consider Deptrac for the module dependency graph and cycles. Background, evidence and caveats: `reports/Laravel modular monolith practices.md`. That report recommended internachi/modular; the project chose nwidart instead, and the boundary advice applies either way.
+Each module's `tests/Unit/BoundaryTest.php` is a Pest architecture test that fails on any import of another module's private namespaces. Deptrac for the dependency graph and cycles is not set up yet. Background, evidence and caveats: `reports/Laravel modular monolith practices.md`. That report recommended internachi/modular; the project chose nwidart instead, and the boundary advice applies either way.
 
 ## Domain constraints
 
 - **Genetic data is sensitive.** Raw uploads and genotypes stay inside Genetics, stored with encrypted casts and private storage. Other modules, including the AI calls, receive only the summarized `GeneticProfile` DTO. Two exceptions, both through the `genetics.extract` profile: PDF and unknown-format extraction sends the model only marker lines (rsID/gene lines), never full documents; and a marker CSV's rows the local parser can't read (or all its rsID rows, below the local threshold) go as their rsID, gene, genotype and marker-name cells only, never notes or other columns. Gene lookups (`genetics.lookup`) send only rsIDs and gene symbols. Genotypes are never logged.
-- **Auth is a hand-rolled Livewire login** at `/login`. `DemoUserSeeder` creates the demo user from `DEMO_USER_NAME/EMAIL/PASSWORD` (`config/auth.php`), and `php artisan db:seed` runs it. Only the Genetics routes use the `auth` middleware (`/genetics` just redirects to the dashboard's `?tab=genetics`, where the full genetics UI lives, signed-in users only); the supplement catalog and PDF download are public. The PDF's genetics section renders only for the signed-in owner. Every Genetics and Recommendations query is scoped by `auth()->id()`.
+- **Auth is a hand-rolled Livewire login** at `/login`. `DemoUserSeeder` creates the demo user from `DEMO_USER_NAME/EMAIL/PASSWORD` (`config/auth.php`), and `php artisan db:seed` runs it. Only `/genetics` (route `genetics.profile`, the full Genetics page) uses the `auth` middleware; a guest is sent to `/login` and back after signing in. Home (`/`), the catalog (`/supplements`), a supplement, AI usage (`/usage`) and the PDF download are public. The PDF's genetics section renders only for the signed-in owner. Every Genetics and Recommendations query is scoped by `auth()->id()`.
 - **AI calls go only through the Intelligence contract.** Nothing outside Intelligence talks to a provider SDK or HTTP API. Tests bind the Intelligence fake and never hit a real API. The AI layer is `laravel/ai` (pinned `^1.3`, migrations never published) behind Intelligence contracts. Firecrawl is called over REST through `Http` (no SDK). Tests run with `Http::preventStrayRequests()` (set in `tests/TestCase.php`).
 - **PDF reports render from DTOs only.** Reports never queries other modules' tables.
 - **PDFs use spatie/laravel-pdf v2 with the `chrome` driver** (chrome-php driving a local Chrome/Chromium binary, so no Node or Puppeteer). The default is set in `config/laravel-pdf.php`. Only the Reports module uses the `Pdf` facade.

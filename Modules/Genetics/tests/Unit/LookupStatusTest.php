@@ -16,3 +16,8 @@ it('has readable labels', function () {
     expect(LookupStatus::LookingUp->label())->toBe('Looking up')
         ->and(LookupStatus::Seeded->label())->toBe('Seeded');
 });
+
+it('is looked up for every status except pending, looking up and failed', function () {
+    expect(array_values(array_filter(LookupStatus::cases(), fn (LookupStatus $s): bool => $s->isLookedUp())))
+        ->toBe([LookupStatus::Seeded, LookupStatus::Complete]);
+});

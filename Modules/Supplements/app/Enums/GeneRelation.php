@@ -13,6 +13,16 @@ enum GeneRelation: string
         return ucfirst($this->value);
     }
 
+    /** Badge tone: ok, warn or neutral. */
+    public function tone(): string
+    {
+        return match ($this) {
+            self::Helps => 'ok',
+            self::Caution => 'warn',
+            self::Related => 'neutral',
+        };
+    }
+
     public function color(): string
     {
         return match ($this) {

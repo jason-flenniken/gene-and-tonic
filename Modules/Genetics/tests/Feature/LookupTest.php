@@ -4,12 +4,14 @@ use App\Models\User;
 use Illuminate\JsonSchema\JsonSchemaTypeFactory;
 use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Livewire;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Actions\LookupVariant;
 use Modules\Genetics\Actions\QueueLookups;
+use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Jobs\LookupGeneVariant;
@@ -317,7 +319,7 @@ it('renders model-written text escaped', function () {
     GeneVariant::factory()->create(['rsid' => 'rs123', 'affects' => '<script>alert(1)</script>']);
     UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs123', 'genotype' => 'AG']);
 
-    $this->actingAs($user)->get('/?tab=genetics')
+    $this->actingAs($user)->get('/genetics')
         ->assertDontSee('<script>alert(1)</script>', false)
         ->assertSee('&lt;script&gt;alert(1)&lt;/script&gt;', false);
 });
@@ -378,4 +380,91 @@ it('asks the model for a group from the fixed list', function () {
 
     expect($group['enum'])->toBe(array_column(VariantGroup::cases(), 'value'))
         ->and($fields['group'])->toBeInstanceOf(StringType::class);
+});
+
+it('stores the variant name and exposes it on the profile', function () {
+    $user = User::factory()->create();
+    Queue::fake();
+    app(AddVariant::class)->handle($user->id, 'rs123', 'AG');
+    $this->web->returning([lookupSource('S1'), lookupSource('S2')]);
+    $this->text->respondWith(lookupOutput(['variant_name' => 'A1298C']));
+
+    app(LookupVariant::class)->handle('rs123');
+
+    expect(GeneVariant::where('rsid', 'rs123')->value('variant_name'))->toBe('A1298C')
+        ->and(app(GeneticProfileReader::class)->forUser($user->id)->variants[0]->variantName)->toBe('A1298C');
+});
+
+it('caps a long variant name at 40 characters and stores null when it is missing', function () {
+    $row = pendingRow('rs123');
+    $this->web->returning([lookupSource('S1')]);
+    $this->text->respondWith(lookupOutput(['variant_name' => str_repeat('x', 60)]));
+    app(LookupVariant::class)->handle('rs123');
+
+    $other = pendingRow('rs456');
+    $this->text->respondWith(lookupOutput(['variant_name' => null]));
+    app(LookupVariant::class)->handle('rs456');
+
+    expect($row->refresh()->variant_name)->toBe(str_repeat('x', 40))
+        ->and($other->refresh()->variant_name)->toBeNull();
+});
+
+it('asks for a variant name in a strict schema and sends no genotype in the prompt', function () {
+    $user = User::factory()->create();
+    Queue::fake();
+    app(AddVariant::class)->handle($user->id, 'rs123', 'CT', 'MTHFR');
+    $this->web->returning([lookupSource('S1')]);
+    $this->text->respondWith(lookupOutput());
+
+    app(LookupVariant::class)->handle('rs123');
+
+    $request = $this->text->requests()[0];
+    $schema = ($request->schema)(new JsonSchemaTypeFactory);
+    $prompt = view('genetics::prompts.lookup', $request->variables)->render();
+
+    expect($schema)->toHaveKey('variant_name')
+        ->and($request->variables)->toHaveKeys(['rsid', 'gene', 'sources'])
+        ->and(array_keys($request->variables))->toHaveCount(3)
+        ->and($prompt)->toContain('rs123')->toContain('MTHFR')
+        ->and($prompt)->not->toContain('CT')->not->toContain('genotype');
+});
+
+it('toasts the queued count from lookUpAll', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+    foreach (range(1, 3) as $i) {
+        pendingRow("rs{$i}");
+        UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => "rs{$i}", 'genotype' => 'AG']);
+    }
+
+    Livewire::actingAs($user)->test('genetics::profile')->call('lookUpAll')
+        ->assertDispatched('toast-show', fn ($event, $params) => str_contains(json_encode($params), '3 variants queued for lookup.'));
+
+    Queue::assertPushed(LookupGeneVariant::class, 3);
+});
+
+it('toasts Nothing to look up from lookUpAll and queues nothing', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+
+    Livewire::actingAs($user)->test('genetics::profile')->call('lookUpAll')
+        ->assertDispatched('toast-show', fn ($event, $params) => str_contains(json_encode($params), 'Nothing to look up.'));
+
+    Queue::assertNothingPushed();
+});
+
+it('toasts the limiter message from a rate-limited lookUpAll and queues nothing', function () {
+    Queue::fake();
+    $user = User::factory()->create();
+    $key = 'genetics-lookup-all:'.$user->id;
+    foreach (range(1, 3) as $i) {
+        RateLimiter::hit($key, 60);
+    }
+    pendingRow('rs1');
+    UserVariant::factory()->create(['user_id' => $user->id, 'rsid' => 'rs1', 'genotype' => 'AG']);
+
+    Livewire::actingAs($user)->test('genetics::profile')->call('lookUpAll')
+        ->assertDispatched('toast-show', fn ($event, $params) => str_contains(json_encode($params), 'Too many requests, try again in a minute.'));
+
+    Queue::assertNothingPushed();
 });

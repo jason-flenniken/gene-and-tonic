@@ -23,7 +23,7 @@ function aiRequest(array $overrides = []): AiRequest
     ]);
 }
 
-it('summarises totals with failures and the last 24 hours', function () {
+it('summarises totals with failures', function () {
     aiRequest(['input_tokens' => 1000, 'output_tokens' => 200, 'estimated_cost_usd' => 0.5]);
     aiRequest(['status' => 'failed', 'error' => 'boom', 'input_tokens' => 10, 'output_tokens' => 0, 'estimated_cost_usd' => 0.25]);
     aiRequest(['estimated_cost_usd' => 1])->forceFill(['created_at' => now()->subDays(3)])->save();
@@ -34,26 +34,14 @@ it('summarises totals with failures and the last 24 hours', function () {
         ->and($summary->failedCalls)->toBe(1)
         ->and($summary->inputTokens)->toBe(1110)
         ->and($summary->outputTokens)->toBe(250)
-        ->and($summary->estimatedCostUsd)->toBe(1.75)
-        ->and($summary->callsLast24h)->toBe(2)
-        ->and($summary->costLast24hUsd)->toBe(0.75);
+        ->and($summary->estimatedCostUsd)->toBe(1.75);
 });
 
 it('returns zeros for an empty table', function () {
     $summary = app(AiRequestRepository::class)->summary();
 
     expect($summary->calls)->toBe(0)
-        ->and($summary->estimatedCostUsd)->toBe(0.0)
-        ->and($summary->costLast24hUsd)->toBe(0.0);
-});
-
-it('renders the usage summary tiles', function () {
-    aiRequest(['input_tokens' => 12345, 'estimated_cost_usd' => 0.1234]);
-
-    Livewire::test('intelligence::usage-summary')
-        ->assertSee('12,345')
-        ->assertSee('$0.1234')
-        ->assertSee('0 failed');
+        ->and($summary->estimatedCostUsd)->toBe(0.0);
 });
 
 it('lists requests newest first, 20 per page', function () {
@@ -85,9 +73,9 @@ it('shows an empty state without rows', function () {
     Livewire::test('intelligence::usage-log')->assertSee('No AI calls recorded yet.');
 });
 
-it('renders the usage tab on the dashboard', function () {
+it('renders the usage page', function () {
     $this->withoutVite();
     aiRequest(['model' => 'dash-model']);
 
-    $this->get('/?tab=usage')->assertOk()->assertSee('dash-model')->assertSee('AI usage');
+    $this->get('/usage')->assertOk()->assertSee('dash-model')->assertSee('AI usage');
 });

@@ -18,6 +18,18 @@ enum UploadStatus: string
         return in_array($this, [self::Queued, self::Parsing, self::LookingUp], true);
     }
 
+    /**
+     * Status tone for the UI: active, ok, bad or neutral.
+     */
+    public function tone(): string
+    {
+        return match ($this) {
+            self::Queued, self::Parsing, self::LookingUp => 'active',
+            self::Complete => 'ok',
+            self::Failed => 'bad',
+        };
+    }
+
     public function label(): string
     {
         return ucfirst(str_replace('_', ' ', $this->value));

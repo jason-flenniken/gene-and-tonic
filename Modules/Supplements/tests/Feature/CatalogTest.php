@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use Livewire\Livewire;
 use Modules\Supplements\Actions\AddSupplement;
 use Modules\Supplements\Actions\StartResearch;
+use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Enums\ResearchStatus;
 use Modules\Supplements\Jobs\RunSupplementResearch;
 use Modules\Supplements\Models\Supplement;
@@ -42,19 +43,19 @@ it('adds a supplement as queued and pushes exactly one job', function () {
     Queue::assertPushed(RunSupplementResearch::class, 1);
 });
 
-it('renders the catalog on the dashboard tab with rows and links', function () {
+it('renders the catalog on its page with rows and links', function () {
     $supplement = Supplement::factory()->create(['name' => 'Zinc']);
     $research = SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Complete]);
     SupplementEffect::factory()->count(2)->for($research, 'research')->create();
     SupplementStudy::factory()->for($research, 'research')->create();
 
-    $this->get('/?tab=supplements')
+    $this->get('/supplements')
         ->assertOk()
         ->assertSee('Zinc')
         ->assertSee('Complete')
         ->assertSee('/supplements/'.$supplement->id);
 
-    Livewire::test('supplements::catalog')->assertSeeInOrder(['Zinc', 'Complete', '2', '1']);
+    Livewire::test('supplements::catalog')->assertSeeInOrder(['Zinc', '2 effects', '1 study', '0 sources']);
 });
 
 it('rejects invalid names', function (string $name) {
@@ -106,9 +107,14 @@ it('turns a unique constraint race into a validation error', function () {
             $this->inner->delete($supplement);
         }
 
-        public function paginateWithResearch(int $perPage): LengthAwarePaginator
+        public function paginateWithResearch(int $perPage, string $status = 'all'): LengthAwarePaginator
         {
-            return $this->inner->paginateWithResearch($perPage);
+            return $this->inner->paginateWithResearch($perPage, $status);
+        }
+
+        public function firstComplete(): ?Supplement
+        {
+            return $this->inner->firstComplete();
         }
 
         public function countByStatus(): array
@@ -272,4 +278,134 @@ it('shows a Re-run button on completed rows', function () {
     Livewire::test('supplements::catalog')->assertSee('Re-run')->call('retry', $supplement->id);
 
     Queue::assertPushed(RunSupplementResearch::class, 1);
+});
+
+it('filters the catalog by status and counts sources', function () {
+    $make = function (string $name, ResearchStatus $status, int $sources = 0) {
+        $supplement = Supplement::factory()->create(['name' => $name]);
+        $research = SupplementResearch::factory()->create(['supplement_id' => $supplement->id, 'status' => $status]);
+        SupplementSource::factory()->count($sources)->create(['research_id' => $research->id]);
+    };
+    $make('A', ResearchStatus::Complete, 3);
+    $make('B', ResearchStatus::Queued);
+    $make('C', ResearchStatus::Analyzing);
+    $make('D', ResearchStatus::Failed);
+
+    $repo = app(SupplementRepository::class);
+    $names = fn (string $status) => $repo->paginateWithResearch(10, $status)->pluck('name')->all();
+
+    expect($names('all'))->toBe(['A', 'B', 'C', 'D'])
+        ->and($names('complete'))->toBe(['A'])
+        ->and($names('active'))->toBe(['B', 'C'])
+        ->and($names('failed'))->toBe(['D'])
+        ->and($names('nonsense'))->toBe(['A', 'B', 'C', 'D'])
+        ->and($repo->paginateWithResearch(10)->first()->sources_count)->toBe(3);
+});
+
+function catalogRow(string $name, ResearchStatus $status, array $research = []): SupplementResearch
+{
+    return SupplementResearch::factory()->for(Supplement::factory()->create(['name' => $name]))->create(['status' => $status] + $research);
+}
+
+it('shows only active rows under In progress, with the step', function () {
+    $alpha = catalogRow('Alpha', ResearchStatus::Complete);
+    $beta = catalogRow('Beta', ResearchStatus::Complete);
+    $gamma = catalogRow('Gamma', ResearchStatus::Searching);
+
+    Livewire::test('supplements::catalog')
+        ->assertSee('In progress')
+        ->set('status', 'active')
+        ->assertSeeHtml('wire:key="supplement-'.$gamma->supplement_id.'"')
+        ->assertSee('Searching sources')
+        ->assertSee('step 2 of 4')
+        ->assertDontSeeHtml('wire:key="supplement-'.$alpha->supplement_id.'"')
+        ->assertDontSeeHtml('wire:key="supplement-'.$beta->supplement_id.'"');
+});
+
+it('shows chip counts and the Failed chip only when something failed', function () {
+    catalogRow('Alpha', ResearchStatus::Complete);
+    catalogRow('Gamma', ResearchStatus::Queued);
+
+    $component = Livewire::test('supplements::catalog')->assertDontSee('Failed');
+    expect($component->get('counts'))->toBe(['all' => 2, 'complete' => 1, 'active' => 1, 'failed' => 0]);
+
+    catalogRow('Delta', ResearchStatus::Failed, ['error' => 'No sources']);
+
+    Livewire::test('supplements::catalog')->assertSee('Failed')->assertSee('No sources')->assertSee('Retry');
+});
+
+it('falls back to All for an unknown status and resets pagination on a filter', function () {
+    catalogRow('Alpha', ResearchStatus::Complete);
+
+    Livewire::withQueryParams(['status' => 'bogus'])->test('supplements::catalog')
+        ->assertSet('status', 'all')
+        ->assertSee('Alpha');
+
+    Livewire::test('supplements::catalog')->set('status', 'bogus')->assertSet('status', 'all');
+});
+
+it('resets to page one when the filter changes', function () {
+    foreach (range(1, 12) as $i) {
+        catalogRow(sprintf('Item %02d', $i), ResearchStatus::Complete);
+    }
+
+    Livewire::test('supplements::catalog')
+        ->call('gotoPage', 2)
+        ->assertSet('paginators.page', 2)
+        ->set('status', 'complete')
+        ->assertSet('paginators.page', 1);
+});
+
+it('keeps the default preview on the first complete supplement on any list page', function () {
+    foreach (range(1, 12) as $i) {
+        catalogRow(sprintf('Item %02d', $i), ResearchStatus::Complete);
+    }
+
+    Livewire::test('supplements::catalog')
+        ->call('gotoPage', 2)
+        ->assertSee('TOP EFFECTS IN')
+        ->assertSeeHtml('ITEM 01</span>')
+        ->assertDontSeeHtml('ITEM 11</span>');
+});
+
+it('previews the selected supplement top three effects, strongest first', function () {
+    $research = catalogRow('Methylfolate', ResearchStatus::Complete, ['completed_at' => now()]);
+    foreach ([['Limited one', EvidenceGrade::Limited], ['Moderate one', EvidenceGrade::Moderate], ['Strong one', EvidenceGrade::Strong], ['Dropped fourth', EvidenceGrade::Limited]] as [$title, $grade]) {
+        SupplementEffect::factory()->for($research, 'research')->create(['title' => $title, 'evidence_grade' => $grade]);
+    }
+    $other = catalogRow('Aardvark', ResearchStatus::Complete);
+
+    Livewire::withQueryParams(['selected' => $research->supplement_id])->test('supplements::catalog')
+        ->assertSet('selectedId', $research->supplement_id)
+        ->assertSeeInOrder(['TOP EFFECTS IN', 'METHYLFOLATE', 'Strong one', 'Moderate one', 'Limited one'])
+        ->assertDontSee('Dropped fourth')
+        ->call('selectSupplement', $other->supplement_id)
+        ->assertSeeInOrder(['TOP EFFECTS IN', 'AARDVARK']);
+});
+
+it('previews the first complete supplement for an unknown selection, or the empty state', function () {
+    Livewire::withQueryParams(['selected' => 99999])->test('supplements::catalog')
+        ->assertSee('No supplements yet')
+        ->assertSee('Nothing to preview');
+
+    catalogRow('Queued one', ResearchStatus::Queued);
+    catalogRow('Zinc', ResearchStatus::Complete);
+
+    Livewire::withQueryParams(['selected' => 99999])->test('supplements::catalog')
+        ->assertSee('TOP EFFECTS IN')
+        ->assertSee('ZINC');
+});
+
+it('keeps phones on the supplement page and offers the preview only from md up', function () {
+    $research = catalogRow('Zinc', ResearchStatus::Complete);
+
+    $this->get('/supplements')
+        ->assertSee('href="'.route('supplements.show', $research->supplement_id).'"', false)
+        ->assertSeeHtml('hidden md:block');
+});
+
+it('survives a non-numeric selected parameter', function () {
+    catalogRow('Zinc', ResearchStatus::Complete);
+
+    $this->get('/supplements?selected=abc')->assertOk()->assertSee('ZINC');
 });

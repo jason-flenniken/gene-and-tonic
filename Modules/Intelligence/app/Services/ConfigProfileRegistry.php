@@ -11,7 +11,7 @@ class ConfigProfileRegistry implements ProfileRegistry
 {
     private const REQUIRED = ['provider', 'model', 'max_tokens', 'timeout', 'instructions', 'prompt'];
 
-    /** @var array<string, array{provider: string, model: string, effort?: string|null, max_tokens: int, timeout: int, instructions: view-string, prompt: view-string}> */
+    /** @var array<string, array{provider: string, model: string, effort?: string|null, label?: string, max_tokens: int, timeout: int, instructions: view-string, prompt: view-string}> */
     private array $registered = [];
 
     public function register(string $name, array $profile): void
@@ -23,7 +23,7 @@ class ConfigProfileRegistry implements ProfileRegistry
 
     public function get(string $name): ProfileData
     {
-        /** @var array{provider: string, model: string, effort?: string|null, max_tokens: int, timeout: int, instructions: view-string, prompt: view-string}|null $profile */
+        /** @var array{provider: string, model: string, effort?: string|null, label?: string, max_tokens: int, timeout: int, instructions: view-string, prompt: view-string}|null $profile */
         $profile = $this->registered[$name] ?? config("intelligence.profiles.{$name}");
 
         if (! is_array($profile)) {
@@ -41,7 +41,19 @@ class ConfigProfileRegistry implements ProfileRegistry
             timeout: (int) $profile['timeout'],
             instructionsView: $profile['instructions'],
             promptView: $profile['prompt'],
+            label: isset($profile['label']) && $profile['label'] !== '' ? (string) $profile['label'] : $name,
         );
+    }
+
+    public function labelFor(?string $name, string $operation): string
+    {
+        if ($name === null || $name === '') {
+            return $operation === 'search' ? 'Web search' : 'Unknown';
+        }
+
+        $label = ($this->registered[$name] ?? config("intelligence.profiles.{$name}"))['label'] ?? null;
+
+        return is_string($label) && $label !== '' ? $label : $name;
     }
 
     /**

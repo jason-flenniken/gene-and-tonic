@@ -10,6 +10,8 @@ use Modules\Supplements\Data\MechanismData;
 use Modules\Supplements\Data\SourceData;
 use Modules\Supplements\Data\StudyData;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Data\SupplementSummaryData;
+use Modules\Supplements\Enums\HealthTopic;
 use Modules\Supplements\Models\Supplement;
 use Modules\Supplements\Models\SupplementEffect;
 use Modules\Supplements\Models\SupplementGeneInteraction;
@@ -42,6 +44,8 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
                 outcome: $e->outcome,
                 evidenceGrade: $e->evidence_grade,
                 sourceKeys: $this->keys($e->source_keys),
+                title: $e->title,
+                category: $e->category,
             ))->all()),
             mechanisms: array_values($research->mechanisms->map(fn (SupplementMechanism $m): MechanismData => new MechanismData(
                 description: $m->description,
@@ -66,16 +70,83 @@ class EloquentSupplementResearchReader implements SupplementResearchReader
             ))->all()),
             completedAt: $research->completed_at !== null ? CarbonImmutable::instance($research->completed_at) : null,
             error: $research->error,
-            geneInteractions: array_values($supplement->geneInteractions->sortBy('position')->map(fn (SupplementGeneInteraction $g): GeneInteractionData => new GeneInteractionData(
-                gene: $g->gene,
-                rsid: $g->rsid,
-                allele: $g->allele,
-                relation: $g->relation,
-                explanation: $g->explanation,
-                sourceKeys: $this->keys($g->source_keys),
-            ))->all()),
+            geneInteractions: $this->interactions($supplement),
             geneticsChecked: $research->genetics_checked_at !== null,
+            kicker: $research->kicker,
+            topics: $this->topics($research->topics),
         );
+    }
+
+    public function count(): int
+    {
+        return Supplement::query()->count();
+    }
+
+    public function all(): array
+    {
+        $supplements = Supplement::query()
+            ->with(['research', 'geneInteractions'])
+            ->withCount(['effects', 'studies', 'sources'])
+            ->whereHas('research')
+            ->orderBy('name')
+            ->get();
+
+        $summaries = [];
+
+        foreach ($supplements as $supplement) {
+            $research = $supplement->research;
+
+            if ($research === null) {
+                continue;
+            }
+
+            $summaries[] = new SupplementSummaryData(
+                supplementId: $supplement->id,
+                name: $supplement->name,
+                status: $research->status,
+                completedAt: $research->completed_at !== null ? CarbonImmutable::instance($research->completed_at) : null,
+                effectsCount: (int) $supplement->effects_count,
+                studiesCount: (int) $supplement->studies_count,
+                sourcesCount: (int) $supplement->sources_count,
+                topics: $this->topics($research->topics),
+                geneInteractions: $this->interactions($supplement),
+                geneticsChecked: $research->genetics_checked_at !== null,
+            );
+        }
+
+        return $summaries;
+    }
+
+    /** @return list<GeneInteractionData> */
+    private function interactions(Supplement $supplement): array
+    {
+        return array_values($supplement->geneInteractions->sortBy('position')->map(fn (SupplementGeneInteraction $g): GeneInteractionData => new GeneInteractionData(
+            gene: $g->gene,
+            rsid: $g->rsid,
+            allele: $g->allele,
+            relation: $g->relation,
+            explanation: $g->explanation,
+            sourceKeys: $this->keys($g->source_keys),
+        ))->all());
+    }
+
+    /** @return list<HealthTopic> */
+    private function topics(mixed $topics): array
+    {
+        if (! is_array($topics)) {
+            return [];
+        }
+
+        $cases = [];
+        foreach ($topics as $topic) {
+            $case = is_string($topic) ? HealthTopic::tryFrom($topic) : null;
+
+            if ($case !== null) {
+                $cases[$case->value] = $case;
+            }
+        }
+
+        return array_values($cases);
     }
 
     /** @return list<string> */

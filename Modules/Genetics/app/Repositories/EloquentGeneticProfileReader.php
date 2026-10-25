@@ -12,7 +12,24 @@ use Modules\Genetics\Models\UserVariant;
 
 class EloquentGeneticProfileReader implements GeneticProfileReader
 {
+    /** @var array<int, GeneticProfileData> */
+    private array $profiles = [];
+
+    /**
+     * Drop the memoized profiles. The reader is bound as scoped, so the cache lives for one request;
+     * model events on UserVariant and GeneVariant call this so a write is never followed by a stale read.
+     */
+    public function flush(): void
+    {
+        $this->profiles = [];
+    }
+
     public function forUser(int $userId): GeneticProfileData
+    {
+        return $this->profiles[$userId] ??= $this->load($userId);
+    }
+
+    private function load(int $userId): GeneticProfileData
     {
         $variants = UserVariant::query()->where('user_id', $userId)->orderBy('rsid')->get();
 
@@ -40,6 +57,7 @@ class EloquentGeneticProfileReader implements GeneticProfileReader
                 status: $reference->status ?? LookupStatus::Pending,
                 source: $variant->source,
                 group: $reference?->category_group,
+                variantName: $reference?->variant_name,
             );
         })->all()));
     }

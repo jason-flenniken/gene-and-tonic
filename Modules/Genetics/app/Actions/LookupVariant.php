@@ -37,7 +37,7 @@ class LookupVariant
     {
         $reference = GeneVariant::where('rsid', $rsid)->first();
 
-        if ($reference === null || ! in_array($reference->status, [LookupStatus::Pending, LookupStatus::LookingUp, LookupStatus::Failed], true)) {
+        if ($reference === null || $reference->status->isLookedUp()) {
             return;
         }
 
@@ -93,6 +93,7 @@ class LookupVariant
             'reference_allele' => $result->referenceAllele,
             'risk_allele' => $result->riskAllele,
             'category' => $result->category,
+            'variant_name' => $result->variantName,
             'category_group' => $result->group,
             'affects' => $result->affects,
             'genotype_effects' => $result->genotypeEffects,
@@ -118,6 +119,7 @@ class LookupVariant
         return [
             'gene' => $s->string()->required(),
             'category' => $s->string()->required(),
+            'variant_name' => $s->string()->nullable()->required(),
             'group' => $s->string()->enum(VariantGroup::class)->required(),
             'affects' => $s->string()->required(),
             'reference_allele' => $s->string()->nullable()->required(),

@@ -47,6 +47,9 @@ it('matches a user variant to a model-written HGVS allele end to end', function 
 
     app(ResearchSupplement::class)->handle($supplement->id);
 
+    // The research was written after the earlier requests; a new request gets a fresh scoped reader.
+    app()->forgetScopedInstances();
+
     $relevance = app(GeneticRelevanceReader::class)->forUserAndSupplement($user->id, $supplement->id);
 
     expect($relevance->hasProfile)->toBeTrue()

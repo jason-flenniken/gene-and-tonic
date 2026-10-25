@@ -1,0 +1,2461 @@
+{
+  "schema": 1,
+  "slug": "gene-and-tonic-redesign",
+  "title": "Gene & Tonic redesign",
+  "track": "feature",
+  "branch": "feature/gene-and-tonic-redesign",
+  "base": "main",
+  "created": "2026-10-25T18:16:31.084Z",
+  "updated": "2026-10-25T20:38:07.447Z",
+  "stage": "closed",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-25T18:16:31.084Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-25T18:30:40.420Z"
+    },
+    {
+      "stage": "plan",
+      "at": "2026-10-25T18:41:44.066Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-25T18:47:59.780Z"
+    },
+    {
+      "stage": "verify",
+      "at": "2026-10-25T19:45:30.555Z"
+    },
+    {
+      "stage": "review",
+      "at": "2026-10-25T20:20:41.904Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-25T20:34:04.697Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-25T20:37:37.113Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-25T20:38:07.446Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {
+    "prd": {
+      "at": "2026-10-25T18:41:40.606Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "4427a68190a1d79e"
+    },
+    "plan": {
+      "at": "2026-10-25T18:47:56.687Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "76bf7d973871e427"
+    },
+    "ship": {
+      "at": "2026-10-25T20:36:55.266Z",
+      "via": "human",
+      "source": "mod"
+    }
+  },
+  "phases": [
+    {
+      "id": "foundations",
+      "name": "Foundations and data",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "theme-light",
+          "name": "Tokens, Figtree, light only, brand files",
+          "covers": [
+            "FR-01",
+            "FR-02",
+            "FR-03"
+          ],
+          "blockedBy": [],
+          "scope": [
+            "resources/css/**",
+            "vite.config.js",
+            "resources/views/layouts/**",
+            "resources/views/components/tabs/**",
+            "public/favicon.ico",
+            "public/favicon.svg",
+            "public/apple-touch-icon.png",
+            ".env.example",
+            "Modules/*/resources/views/**",
+            "tests/Feature/LayoutTest.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/theme-light",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--theme-light",
+          "base": "497582e526ec2407fc5a03fb68730f6d473dd158",
+          "startedAt": "2026-10-25T18:48:11.628Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:51:17.235Z",
+          "tip": "b7f061c",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "46b3e0c44584bc7fbeebca7e0e0bbf5358d0c8a1"
+        },
+        {
+          "id": "ui-components",
+          "name": "x-ui, x-icon, x-brand components and /_ui",
+          "covers": [
+            "FR-04",
+            "FR-05",
+            "FR-06",
+            "FR-07"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "resources/views/components/**",
+            "resources/views/pages/⚡ui.blade.php",
+            "routes/web.php",
+            "tests/Feature/Ui/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/ui-components",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--ui-components",
+          "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
+          "startedAt": "2026-10-25T18:51:35.820Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:57:31.126Z",
+          "tip": "a8d9c82",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "455e3e6de8353d194682f9f46caee22cd45e1803"
+        },
+        {
+          "id": "research-topics",
+          "name": "Research topics, kicker, effect titles and categories",
+          "covers": [
+            "FR-13",
+            "FR-14",
+            "FR-16",
+            "FR-45"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/database/**",
+            "Modules/Supplements/resources/views/prompts/**",
+            "Modules/Supplements/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "stores new model output and adds migrations",
+          "branch": "task/gene-and-tonic-redesign/research-topics",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--research-topics",
+          "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
+          "startedAt": "2026-10-25T18:51:41.488Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:55:31.442Z",
+          "tip": "322c962",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "9df0f551830fe405ee0b2d9cf0d7075c1a8ca89f"
+        },
+        {
+          "id": "variant-names-lookups",
+          "name": "Variant names, looked-up rule, LookUpAll action",
+          "covers": [
+            "FR-15",
+            "FR-37",
+            "FR-45"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Genetics/app/**",
+            "Modules/Genetics/database/**",
+            "Modules/Genetics/resources/views/prompts/**",
+            "Modules/Genetics/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "model output, a migration, and a paid bulk lookup action over a user's genetic data",
+          "branch": "task/gene-and-tonic-redesign/variant-names-lookups",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--variant-names-lookups",
+          "base": "e75aaedc220a3ce07a5ce2e364303c5a3393b861",
+          "startedAt": "2026-10-25T18:51:47.225Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:56:47.017Z",
+          "tip": "f02cfe1",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "873957b16e9027776cfe818b4fe96b6e083d4962"
+        },
+        {
+          "id": "usage-data",
+          "name": "Profile labels, usage window, cost by profile",
+          "covers": [
+            "FR-22",
+            "FR-23"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Intelligence/app/**",
+            "Modules/Intelligence/database/**",
+            "Modules/Intelligence/config/**",
+            "Modules/Intelligence/tests/**",
+            "Modules/Intelligence/resources/views/livewire/⚡usage-summary.blade.php",
+            "Modules/Genetics/config/config.php",
+            "Modules/Supplements/config/config.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/usage-data",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--usage-data",
+          "base": "99996ce3891ca7b89acaf2f9f4edb1700a5955c3",
+          "startedAt": "2026-10-25T18:56:02.422Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:59:32.276Z",
+          "tip": "039a3de",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "17c31a9ed8f3274b54f0e5d9cf8e2bdc3fbb837b"
+        },
+        {
+          "id": "pdf-brand",
+          "name": "Gene & Tonic in PDF headers and footers",
+          "covers": [
+            "FR-46"
+          ],
+          "blockedBy": [
+            "theme-light"
+          ],
+          "scope": [
+            "Modules/Reports/resources/views/templates/**",
+            "Modules/Reports/tests/Feature/TemplatesTest.php"
+          ],
+          "complexity": "simple",
+          "status": "done",
+          "fixRound": 1,
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/pdf-brand",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--pdf-brand",
+          "base": "0b362bc609d8999753ae9b10966721060d7f75c7",
+          "startedAt": "2026-10-25T18:57:00.525Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:00:42.193Z",
+          "tip": "ae392ed",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "d4dcf8a6e4302f71d1b24fd61c5b282a85f77fe6"
+        },
+        {
+          "id": "supplement-listing",
+          "name": "Supplements listing contract, sources count, status filter",
+          "covers": [
+            "FR-18",
+            "FR-21"
+          ],
+          "blockedBy": [
+            "research-topics"
+          ],
+          "scope": [
+            "Modules/Supplements/app/**",
+            "Modules/Supplements/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/supplement-listing",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplement-listing",
+          "base": "01a8872b64232b870683479fcf61f2a1bcf9eec3",
+          "startedAt": "2026-10-25T18:57:44.376Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T18:59:56.614Z",
+          "tip": "d0d2fed",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "2373964eeb141300b2114f711121980a476a9499"
+        },
+        {
+          "id": "relevance-contracts",
+          "name": "Match allele and name, topForUser, VariantLinks",
+          "covers": [
+            "FR-17",
+            "FR-19",
+            "FR-20"
+          ],
+          "blockedBy": [
+            "supplement-listing",
+            "variant-names-lookups"
+          ],
+          "scope": [
+            "Modules/Recommendations/app/**",
+            "Modules/Recommendations/tests/**",
+            "Modules/Shared/**",
+            "Modules/Genetics/app/Data/Genotype.php",
+            "Modules/Genetics/tests/Unit/GenotypeTest.php"
+          ],
+          "complexity": "complex",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "reads users' genotypes and exposes match data across modules",
+          "branch": "task/gene-and-tonic-redesign/relevance-contracts",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--relevance-contracts",
+          "base": "2000c974a6eb8a296695cc8f11c34ee252c889f5",
+          "startedAt": "2026-10-25T19:00:12.033Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:09:09.069Z",
+          "tip": "77eebe9",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "8b503ebe628894b6412b6e1bbbd906f80c812754"
+        }
+      ]
+    },
+    {
+      "id": "shell",
+      "name": "Shell and routes",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "shell-routes",
+          "name": "Sidebar shell, real routes, tab redirects",
+          "covers": [
+            "FR-08",
+            "FR-09",
+            "FR-10",
+            "FR-11",
+            "FR-12"
+          ],
+          "blockedBy": [
+            "ui-components",
+            "research-topics",
+            "variant-names-lookups",
+            "usage-data",
+            "pdf-brand",
+            "supplement-listing",
+            "relevance-contracts"
+          ],
+          "scope": [
+            "resources/views/layouts/**",
+            "resources/views/pages/**",
+            "routes/web.php",
+            "Modules/*/routes/web.php",
+            "Modules/Genetics/resources/views/livewire/⚡summary.blade.php",
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "tests/Feature/**",
+            "Modules/*/tests/Feature/**",
+            "CLAUDE.md"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "changes auth on /genetics and the public routes",
+          "branch": "task/gene-and-tonic-redesign/shell-routes",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--shell-routes",
+          "base": "2ee64e4b79cd8647499cc0eb2738420bb8955254",
+          "startedAt": "2026-10-25T19:09:29.051Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:14:28.799Z",
+          "tip": "c52c5a8",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "7a05e31ee5bfbbd9b13bcb93c095a8737cf78467"
+        }
+      ]
+    },
+    {
+      "id": "screens",
+      "name": "Screens",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "supplements-index",
+          "name": "Supplements split view, filter, preview and card slots",
+          "covers": [
+            "FR-30",
+            "FR-31",
+            "FR-32",
+            "FR-33"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+            "Modules/Supplements/resources/views/components/catalog/**",
+            "Modules/Supplements/tests/Feature/CatalogTest.php",
+            "Modules/Supplements/tests/Feature/HardeningTest.php",
+            "Modules/Recommendations/resources/views/slots/**",
+            "Modules/Recommendations/app/Providers/**",
+            "Modules/Recommendations/tests/Feature/SlotsTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "public page that renders an owner-only gene strip through a slot",
+          "branch": "task/gene-and-tonic-redesign/supplements-index",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplements-index",
+          "base": "53d92dcf12c7e0cfb2b527db71364fa4242350dd",
+          "startedAt": "2026-10-25T19:14:47.184Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:22:40.067Z",
+          "tip": "7905a07",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "3114885035804f375efacc3ee40a4ba3ca087cc0"
+        },
+        {
+          "id": "supplement-page",
+          "name": "Supplement hero, tabs, Overview grid, genetic panel",
+          "covers": [
+            "FR-34",
+            "FR-35",
+            "FR-36",
+            "FR-16"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+            "Modules/Supplements/resources/views/components/show/**",
+            "Modules/Supplements/resources/views/components/source-badges.blade.php",
+            "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+            "Modules/Recommendations/resources/views/livewire/⚡genetic-panel.blade.php",
+            "Modules/Recommendations/tests/Feature/GeneticPanelTest.php",
+            "Modules/Reports/resources/views/components/**",
+            "Modules/Reports/tests/Feature/DownloadMenuTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "public page showing model output and owner-only genotypes",
+          "branch": "task/gene-and-tonic-redesign/supplement-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--supplement-page",
+          "base": "53d92dcf12c7e0cfb2b527db71364fa4242350dd",
+          "startedAt": "2026-10-25T19:14:53.036Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:23:18.076Z",
+          "tip": "76caeea",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "a5efb26c130a2ae19492d3b5295b01774fe0ebc7"
+        },
+        {
+          "id": "genetics-page",
+          "name": "Genetics page, chips, variant list, Look up now",
+          "covers": [
+            "FR-37",
+            "FR-38",
+            "FR-39",
+            "FR-40",
+            "FR-41"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+            "Modules/Genetics/resources/views/components/**",
+            "Modules/Genetics/app/Support/VariantGrouping.php",
+            "Modules/Genetics/tests/Feature/VariantListFilterTest.php",
+            "Modules/Genetics/tests/Feature/UploadPageTest.php",
+            "Modules/Genetics/tests/Feature/ProfilePageTest.php",
+            "Modules/Genetics/tests/Feature/ComplexMarkerCsvTest.php",
+            "Modules/Genetics/tests/Feature/LookupTest.php",
+            "Modules/Genetics/tests/Unit/VariantGroupingTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "personal genetic data and the paid Look up now action",
+          "branch": "task/gene-and-tonic-redesign/genetics-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--genetics-page",
+          "base": "53d92dcf12c7e0cfb2b527db71364fa4242350dd",
+          "startedAt": "2026-10-25T19:15:00.444Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:21:11.526Z",
+          "tip": "7bbed02",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "2533788936001b15ac6e99a3634999d842a382e3"
+        },
+        {
+          "id": "usage-page",
+          "name": "AI usage page with period, cost by task, table",
+          "covers": [
+            "FR-42",
+            "FR-43",
+            "FR-44"
+          ],
+          "blockedBy": [
+            "shell-routes"
+          ],
+          "scope": [
+            "Modules/Intelligence/resources/views/**",
+            "Modules/Intelligence/tests/Feature/UsageViewsTest.php",
+            "Modules/Intelligence/tests/Feature/UsagePageTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "public page that takes an untrusted window parameter",
+          "branch": "task/gene-and-tonic-redesign/usage-page",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--usage-page",
+          "base": "14316d4a1a587a0832337af9a9d61c4fcfdc4189",
+          "startedAt": "2026-10-25T19:21:37.099Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:25:50.346Z",
+          "tip": "c777165",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "55957015fb00a88b3c0cbff199b14f2a19c58278"
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "name": "Home",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "home-hero-stats",
+          "name": "Home header, gene-match hero, stat row",
+          "covers": [
+            "FR-24",
+            "FR-25",
+            "FR-26"
+          ],
+          "blockedBy": [
+            "supplements-index",
+            "supplement-page",
+            "genetics-page",
+            "usage-page"
+          ],
+          "scope": [
+            "resources/views/pages/⚡dashboard.blade.php",
+            "tests/Feature/DashboardTest.php",
+            "tests/Feature/HomeTest.php",
+            "Modules/Recommendations/resources/views/livewire/⚡top-match.blade.php",
+            "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+            "Modules/Recommendations/tests/Feature/TopMatchTest.php",
+            "Modules/Supplements/resources/views/livewire/⚡stats.blade.php",
+            "Modules/Supplements/tests/Feature/StatsTest.php",
+            "Modules/Genetics/resources/views/livewire/⚡variant-stat.blade.php",
+            "Modules/Genetics/tests/Feature/HomeWidgetsTest.php",
+            "Modules/Intelligence/resources/views/livewire/⚡spend-stat.blade.php",
+            "Modules/Intelligence/tests/Feature/SpendStatTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 1,
+          "risky": true,
+          "riskReason": "public page that shows owner-only genotypes",
+          "branch": "task/gene-and-tonic-redesign/home-hero-stats",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--home-hero-stats",
+          "base": "8978937dbd0334d798994efbb94c907b0a1102b9",
+          "startedAt": "2026-10-25T19:26:10.587Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:31:37.944Z",
+          "tip": "3bf0b9e",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "bf2eaabc3260838f5814be44a4ede7226cfc8d5c"
+        },
+        {
+          "id": "home-sections",
+          "name": "Latest research, your genes, your supplements",
+          "covers": [
+            "FR-27",
+            "FR-28",
+            "FR-29"
+          ],
+          "blockedBy": [
+            "home-hero-stats"
+          ],
+          "scope": [
+            "resources/views/pages/⚡dashboard.blade.php",
+            "tests/Feature/HomeTest.php",
+            "Modules/Supplements/resources/views/livewire/⚡latest-research.blade.php",
+            "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php",
+            "Modules/Supplements/config/config.php",
+            "Modules/Supplements/tests/Feature/HomeSectionsTest.php",
+            "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php",
+            "Modules/Genetics/tests/Feature/HomeWidgetsTest.php"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": true,
+          "riskReason": "triggers the paid Look up now action from a public page",
+          "branch": "task/gene-and-tonic-redesign/home-sections",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--home-sections",
+          "base": "c6b1b4cfda6f96a54ecb7ed05139fe5d04fe460e",
+          "startedAt": "2026-10-25T19:31:45.749Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:36:12.439Z",
+          "tip": "80ff50f",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "809e08ff104cae52722a486b171b450cfffe3b95"
+        }
+      ]
+    },
+    {
+      "id": "polish",
+      "name": "Polish",
+      "status": "done",
+      "tasks": [
+        {
+          "id": "polish-a11y",
+          "name": "Phone, keyboard and loading-state pass",
+          "covers": [
+            "FR-47",
+            "FR-48"
+          ],
+          "blockedBy": [
+            "home-sections"
+          ],
+          "scope": [
+            "resources/views/**",
+            "Modules/*/resources/views/**",
+            "tests/**",
+            "Modules/*/tests/**"
+          ],
+          "complexity": "standard",
+          "status": "done",
+          "fixRound": 0,
+          "risky": false,
+          "branch": "task/gene-and-tonic-redesign/polish-a11y",
+          "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-gene-and-tonic-redesign--polish-a11y",
+          "base": "2d605a7bd0469666d5e2bbe64d7364100251653b",
+          "startedAt": "2026-10-25T19:36:39.098Z",
+          "level": "standard",
+          "doneAt": "2026-10-25T19:45:28.239Z",
+          "tip": "fa8ddbe",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "13e24399df1d2ef31a2aa10c5305baf1727b2836"
+        }
+      ]
+    }
+  ],
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-25T20:20:41.794Z",
+      "note": "tests: 788 passing, 3 skipped (pint, phpstan level 7 clean); build ok; 48 FRs + 2 NFRs met after fixes (NFR-01 your-genes profile read memoized per request, flushed on writes and after QueueLookups); FR-47 browser pass done at 1440px and 390px (iframe) on a copy DB: fixed OS-dark Flux styling and empty effect tiles; untested: FR-47 code-level a11y, FR-30 add toast (logged); secret scan: clean; audit: composer + npm clean; no manifest changes"
+    },
+    "review": {
+      "result": "pass",
+      "at": "2026-10-25T20:34:04.594Z",
+      "note": "2 Required fixed (duplicate relevance profile cache, dead 24h usage fields); 12 branch-review and 1 security-review follow-ups logged",
+      "blocking": 0
+    }
+  },
+  "drift": [
+    {
+      "path": "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+      "at": "2026-10-25T18:56:47.017Z",
+      "reason": "changed outside task \"Variant names, looked-up rule, LookUpAll action\" scope (found at task done)",
+      "task": "variant-names-lookups"
+    },
+    {
+      "path": "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php",
+      "at": "2026-10-25T19:14:28.798Z",
+      "reason": "changed outside task \"Sidebar shell, real routes, tab redirects\" scope (found at task done)",
+      "task": "shell-routes"
+    },
+    {
+      "path": "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php",
+      "at": "2026-10-25T19:14:28.799Z",
+      "reason": "changed outside task \"Sidebar shell, real routes, tab redirects\" scope (found at task done)",
+      "task": "shell-routes"
+    },
+    {
+      "path": "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+      "at": "2026-10-25T19:22:40.067Z",
+      "reason": "changed outside task \"Supplements split view, filter, preview and card slots\" scope (found at task done)",
+      "task": "supplements-index"
+    },
+    {
+      "path": "Modules/Supplements/app/Repositories/SupplementRepository.php",
+      "at": "2026-10-25T19:22:40.067Z",
+      "reason": "changed outside task \"Supplements split view, filter, preview and card slots\" scope (found at task done)",
+      "task": "supplements-index"
+    },
+    {
+      "path": "Modules/Supplements/tests/Feature/ResearchPipelineTest.php",
+      "at": "2026-10-25T19:22:40.067Z",
+      "reason": "changed outside task \"Supplements split view, filter, preview and card slots\" scope (found at task done)",
+      "task": "supplements-index"
+    },
+    {
+      "path": "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php",
+      "at": "2026-10-25T19:23:18.076Z",
+      "reason": "changed outside task \"Supplement hero, tabs, Overview grid, genetic panel\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Recommendations/resources/views/slots/genes-link.blade.php",
+      "at": "2026-10-25T19:23:18.076Z",
+      "reason": "changed outside task \"Supplement hero, tabs, Overview grid, genetic panel\" scope (found at task done)",
+      "task": "supplement-page"
+    },
+    {
+      "path": "Modules/Intelligence/resources/views/livewire/⚡usage-summary.blade.php",
+      "at": "2026-10-25T19:31:37.943Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Intelligence/tests/Feature/UsageViewsTest.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/app/Contracts/SupplementResearchReader.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php",
+      "at": "2026-10-25T19:31:37.944Z",
+      "reason": "changed outside task \"Home header, gene-match hero, stat row\" scope (found at task done)",
+      "task": "home-hero-stats"
+    },
+    {
+      "path": "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php",
+      "at": "2026-10-25T19:45:28.239Z",
+      "reason": "changed outside task \"Phone, keyboard and loading-state pass\" scope (found at task done)",
+      "task": "polish-a11y"
+    },
+    {
+      "path": "Modules/Supplements/app/Data/SupplementSummaryData.php",
+      "at": "2026-10-25T19:45:28.239Z",
+      "reason": "changed outside task \"Phone, keyboard and loading-state pass\" scope (found at task done)",
+      "task": "polish-a11y"
+    },
+    {
+      "path": "resources/css/app.css",
+      "at": "2026-10-25T19:45:28.239Z",
+      "reason": "changed outside task \"Phone, keyboard and loading-state pass\" scope (found at task done)",
+      "task": "polish-a11y"
+    }
+  ],
+  "log": [
+    {
+      "at": "2026-10-25T18:16:31.084Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-25T18:16:31.084Z",
+      "event": "level",
+      "detail": "standard"
+    },
+    {
+      "at": "2026-10-25T18:30:40.420Z",
+      "event": "advanced",
+      "detail": "prd"
+    },
+    {
+      "at": "2026-10-25T18:41:40.607Z",
+      "event": "PRD approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T18:41:44.067Z",
+      "event": "advanced",
+      "detail": "plan"
+    },
+    {
+      "at": "2026-10-25T18:47:35.688Z",
+      "event": "plan loaded",
+      "detail": "5 phases, 16 tasks"
+    },
+    {
+      "at": "2026-10-25T18:47:56.687Z",
+      "event": "plan approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T18:47:59.781Z",
+      "event": "advanced",
+      "detail": "execute"
+    },
+    {
+      "at": "2026-10-25T18:48:11.629Z",
+      "event": "task started",
+      "detail": "Tokens, Figtree, light only, brand files"
+    },
+    {
+      "at": "2026-10-25T18:48:34.619Z",
+      "event": "task implementing",
+      "detail": "Tokens, Figtree, light only, brand files"
+    },
+    {
+      "at": "2026-10-25T18:49:56.790Z",
+      "event": "task reviewing",
+      "detail": "Tokens, Figtree, light only, brand files"
+    },
+    {
+      "at": "2026-10-25T18:51:02.344Z",
+      "event": "task merging",
+      "detail": "Tokens, Figtree, light only, brand files"
+    },
+    {
+      "at": "2026-10-25T18:51:17.236Z",
+      "event": "task done",
+      "detail": "Tokens, Figtree, light only, brand files"
+    },
+    {
+      "at": "2026-10-25T18:51:35.821Z",
+      "event": "task started",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:51:41.489Z",
+      "event": "task started",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:51:47.226Z",
+      "event": "task started",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:52:28.861Z",
+      "event": "task implementing",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:52:28.933Z",
+      "event": "task implementing",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:52:29.010Z",
+      "event": "task implementing",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:54:21.903Z",
+      "event": "task reviewing",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:54:56.310Z",
+      "event": "task reviewing",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:55:14.676Z",
+      "event": "task merging",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:55:31.442Z",
+      "event": "task done",
+      "detail": "Research topics, kicker, effect titles and categories"
+    },
+    {
+      "at": "2026-10-25T18:55:42.778Z",
+      "event": "task fixing",
+      "detail": "Variant names, looked-up rule, LookUpAll action (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T18:55:55.390Z",
+      "event": "task reviewing",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:56:02.423Z",
+      "event": "task started",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:56:02.585Z",
+      "event": "task implementing",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:56:29.880Z",
+      "event": "task merging",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:56:47.017Z",
+      "event": "drift",
+      "detail": "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+    },
+    {
+      "at": "2026-10-25T18:56:47.018Z",
+      "event": "task done",
+      "detail": "Variant names, looked-up rule, LookUpAll action"
+    },
+    {
+      "at": "2026-10-25T18:57:00.526Z",
+      "event": "task started",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T18:57:00.668Z",
+      "event": "task implementing",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T18:57:12.054Z",
+      "event": "task merging",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:57:31.126Z",
+      "event": "task done",
+      "detail": "x-ui, x-icon, x-brand components and /_ui"
+    },
+    {
+      "at": "2026-10-25T18:57:44.377Z",
+      "event": "task started",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:57:44.505Z",
+      "event": "task implementing",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:58:21.165Z",
+      "event": "task reviewing",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T18:58:28.096Z",
+      "event": "task reviewing",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:58:59.322Z",
+      "event": "task reviewing",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:59:14.388Z",
+      "event": "task fixing",
+      "detail": "Gene & Tonic in PDF headers and footers (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T18:59:14.592Z",
+      "event": "task merging",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:59:32.277Z",
+      "event": "task done",
+      "detail": "Profile labels, usage window, cost by profile"
+    },
+    {
+      "at": "2026-10-25T18:59:39.806Z",
+      "event": "task merging",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T18:59:56.614Z",
+      "event": "task done",
+      "detail": "Supplements listing contract, sources count, status filter"
+    },
+    {
+      "at": "2026-10-25T19:00:12.033Z",
+      "event": "task started",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:00:12.177Z",
+      "event": "task implementing",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:00:25.528Z",
+      "event": "task merging",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T19:00:42.193Z",
+      "event": "task done",
+      "detail": "Gene & Tonic in PDF headers and footers"
+    },
+    {
+      "at": "2026-10-25T19:07:59.167Z",
+      "event": "task reviewing",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:08:52.291Z",
+      "event": "task merging",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:09:09.070Z",
+      "event": "task done",
+      "detail": "Match allele and name, topForUser, VariantLinks"
+    },
+    {
+      "at": "2026-10-25T19:09:16.629Z",
+      "event": "phase finished",
+      "detail": "Foundations and data (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:09:29.052Z",
+      "event": "task started",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:09:29.210Z",
+      "event": "task implementing",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:13:05.231Z",
+      "event": "task reviewing",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:14:10.069Z",
+      "event": "task merging",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:14:28.799Z",
+      "event": "drift",
+      "detail": "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:14:28.799Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/resources/views/livewire/⚡catalog.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:14:28.799Z",
+      "event": "task done",
+      "detail": "Sidebar shell, real routes, tab redirects"
+    },
+    {
+      "at": "2026-10-25T19:14:31.204Z",
+      "event": "phase finished",
+      "detail": "Shell and routes (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:14:47.186Z",
+      "event": "task started",
+      "detail": "Supplements split view, filter, preview and card slots"
+    },
+    {
+      "at": "2026-10-25T19:14:53.037Z",
+      "event": "task started",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel"
+    },
+    {
+      "at": "2026-10-25T19:15:00.445Z",
+      "event": "task started",
+      "detail": "Genetics page, chips, variant list, Look up now"
+    },
+    {
+      "at": "2026-10-25T19:15:00.709Z",
+      "event": "task implementing",
+      "detail": "Supplements split view, filter, preview and card slots"
+    },
+    {
+      "at": "2026-10-25T19:15:00.784Z",
+      "event": "task implementing",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel"
+    },
+    {
+      "at": "2026-10-25T19:15:00.861Z",
+      "event": "task implementing",
+      "detail": "Genetics page, chips, variant list, Look up now"
+    },
+    {
+      "at": "2026-10-25T19:19:05.082Z",
+      "event": "task reviewing",
+      "detail": "Supplements split view, filter, preview and card slots"
+    },
+    {
+      "at": "2026-10-25T19:19:41.622Z",
+      "event": "task reviewing",
+      "detail": "Genetics page, chips, variant list, Look up now"
+    },
+    {
+      "at": "2026-10-25T19:20:07.216Z",
+      "event": "task reviewing",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel"
+    },
+    {
+      "at": "2026-10-25T19:20:33.323Z",
+      "event": "task fixing",
+      "detail": "Supplements split view, filter, preview and card slots (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T19:20:50.508Z",
+      "event": "task merging",
+      "detail": "Genetics page, chips, variant list, Look up now"
+    },
+    {
+      "at": "2026-10-25T19:21:11.527Z",
+      "event": "task done",
+      "detail": "Genetics page, chips, variant list, Look up now"
+    },
+    {
+      "at": "2026-10-25T19:21:29.771Z",
+      "event": "task fixing",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T19:21:37.099Z",
+      "event": "task started",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:21:37.243Z",
+      "event": "task implementing",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:22:18.375Z",
+      "event": "task merging",
+      "detail": "Supplements split view, filter, preview and card slots"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Repositories/SupplementRepository.php"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Feature/ResearchPipelineTest.php"
+    },
+    {
+      "at": "2026-10-25T19:22:40.067Z",
+      "event": "task done",
+      "detail": "Supplements split view, filter, preview and card slots"
+    },
+    {
+      "at": "2026-10-25T19:22:47.571Z",
+      "event": "task merging",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel"
+    },
+    {
+      "at": "2026-10-25T19:23:18.076Z",
+      "event": "drift",
+      "detail": "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php"
+    },
+    {
+      "at": "2026-10-25T19:23:18.076Z",
+      "event": "drift",
+      "detail": "Modules/Recommendations/resources/views/slots/genes-link.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:23:18.076Z",
+      "event": "task done",
+      "detail": "Supplement hero, tabs, Overview grid, genetic panel"
+    },
+    {
+      "at": "2026-10-25T19:24:44.123Z",
+      "event": "task reviewing",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:25:30.919Z",
+      "event": "task merging",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:25:50.347Z",
+      "event": "task done",
+      "detail": "AI usage page with period, cost by task, table"
+    },
+    {
+      "at": "2026-10-25T19:25:52.649Z",
+      "event": "phase finished",
+      "detail": "Screens (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:26:10.588Z",
+      "event": "task started",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:26:10.741Z",
+      "event": "task implementing",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:29:05.964Z",
+      "event": "task reviewing",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:30:17.448Z",
+      "event": "task fixing",
+      "detail": "Home header, gene-match hero, stat row (attempt 1)"
+    },
+    {
+      "at": "2026-10-25T19:31:18.027Z",
+      "event": "task merging",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Intelligence/resources/views/livewire/⚡usage-summary.blade.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Intelligence/tests/Feature/UsageViewsTest.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Contracts/SupplementResearchReader.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/tests/Feature/SupplementResearchReaderTest.php"
+    },
+    {
+      "at": "2026-10-25T19:31:37.944Z",
+      "event": "task done",
+      "detail": "Home header, gene-match hero, stat row"
+    },
+    {
+      "at": "2026-10-25T19:31:45.749Z",
+      "event": "task started",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:31:45.894Z",
+      "event": "task implementing",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:34:44.098Z",
+      "event": "task reviewing",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:35:53.198Z",
+      "event": "task merging",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:36:12.439Z",
+      "event": "task done",
+      "detail": "Latest research, your genes, your supplements"
+    },
+    {
+      "at": "2026-10-25T19:36:14.809Z",
+      "event": "phase finished",
+      "detail": "Home (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:36:39.099Z",
+      "event": "task started",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:36:39.234Z",
+      "event": "task implementing",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:43:30.865Z",
+      "event": "task reviewing",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:45:08.910Z",
+      "event": "task merging",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "drift",
+      "detail": "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "drift",
+      "detail": "Modules/Supplements/app/Data/SupplementSummaryData.php"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "drift",
+      "detail": "resources/css/app.css"
+    },
+    {
+      "at": "2026-10-25T19:45:28.239Z",
+      "event": "task done",
+      "detail": "Phone, keyboard and loading-state pass"
+    },
+    {
+      "at": "2026-10-25T19:45:30.555Z",
+      "event": "phase finished",
+      "detail": "Polish (tests green (Warning: Module \"herd\" is already loaded in Unknown on line 0))"
+    },
+    {
+      "at": "2026-10-25T19:45:30.555Z",
+      "event": "advanced",
+      "detail": "verify"
+    },
+    {
+      "at": "2026-10-25T19:45:41.536Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-25T19:46:09.380Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-25T20:11:43.556Z",
+      "event": "step",
+      "detail": "fixing (1)"
+    },
+    {
+      "at": "2026-10-25T20:20:41.795Z",
+      "event": "verify pass",
+      "detail": "tests: 788 passing, 3 skipped (pint, phpstan level 7 clean); build ok; 48 FRs + 2 NFRs met after fixes (NFR-01 your-genes profile read memoized per request, flushed on writes and after QueueLookups); FR-47 browser pass done at 1440px and 390px (iframe) on a copy DB: fixed OS-dark Flux styling and empty effect tiles; untested: FR-47 code-level a11y, FR-30 add toast (logged); secret scan: clean; audit: composer + npm clean; no manifest changes"
+    },
+    {
+      "at": "2026-10-25T20:20:41.904Z",
+      "event": "advanced",
+      "detail": "review"
+    },
+    {
+      "at": "2026-10-25T20:20:47.864Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-25T20:31:24.809Z",
+      "event": "step",
+      "detail": "fixing (2)"
+    },
+    {
+      "at": "2026-10-25T20:33:36.353Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-25T20:34:04.594Z",
+      "event": "review pass",
+      "detail": "2 Required fixed (duplicate relevance profile cache, dead 24h usage fields); 12 branch-review and 1 security-review follow-ups logged"
+    },
+    {
+      "at": "2026-10-25T20:34:04.697Z",
+      "event": "advanced",
+      "detail": "ship"
+    },
+    {
+      "at": "2026-10-25T20:36:01.600Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-25T20:36:55.266Z",
+      "event": "ship approved",
+      "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T20:36:59.401Z",
+      "event": "step",
+      "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-25T20:37:37.114Z",
+      "event": "advanced",
+      "detail": "learn"
+    },
+    {
+      "at": "2026-10-25T20:38:07.447Z",
+      "event": "closed"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard",
+  "planHash": "76bf7d973871e427",
+  "configHash": "85d35cf89052f183",
+  "suggestions": [
+    {
+      "id": "s1",
+      "area": "tests",
+      "text": "Favicon test checks link hrefs only; assert public/ favicon bytes equal the brand files",
+      "where": [
+        "tests/Feature/LayoutTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T18:49:56.726Z"
+    },
+    {
+      "id": "s2",
+      "area": "quality",
+      "text": "Strip the ~7 KB c2pa <metadata> blob from public/favicon.svg",
+      "where": [
+        "public/favicon.svg"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:51:02.208Z"
+    },
+    {
+      "id": "s3",
+      "area": "quality",
+      "text": "Layout title still falls back to 'Laravel' in config('app.name', 'Laravel')",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:51:02.280Z"
+    },
+    {
+      "id": "s4",
+      "area": "security",
+      "text": "line() keeps markup and control/zero-width chars; strip_tags and \\p{C} so kicker/title are safe in any non-Blade consumer (PDF, export)",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:14.453Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Escaping test uses inline Blade::render; add a real supplement page and PDF render test asserting &lt;script&gt; for kicker/title",
+      "where": [
+        "Modules/Supplements/tests/Feature/ResearchTopicsTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:14.525Z"
+    },
+    {
+      "id": "s6",
+      "area": "quality",
+      "text": "Comment the second trim() after mb_substr in line()",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:55:14.602Z"
+    },
+    {
+      "id": "s7",
+      "area": "security",
+      "text": "Limiter is hit before the pending query; consider hitting only when rows were queued; Livewire callers must pass auth()->id() only",
+      "where": [
+        "Modules/Genetics/app/Actions/LookUpAll.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:42.847Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "variant_name is model output without a character allowlist; consider letters/digits/.-_>* and space only",
+      "where": [
+        "Modules/Genetics/app/Support/LookupResultBuilder.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T18:55:42.922Z"
+    },
+    {
+      "id": "s9",
+      "area": "quality",
+      "text": "Add LookupStatus::isQueueable() for the [Pending, Failed] claimable rule used in QueueLookups and LookUpAll",
+      "where": [
+        "Modules/Genetics/app/Actions/QueueLookups.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:55:42.997Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Add a mixed LookingUp + Pending case to show the skip",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookUpAllTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:55:43.073Z"
+    },
+    {
+      "id": "s11",
+      "area": "tests",
+      "text": "Add a no-dark: guard test over app and module views",
+      "where": [
+        "tests/Feature/Ui"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T18:55:43.151Z"
+    },
+    {
+      "id": "s12",
+      "area": "ux",
+      "text": "Dropzone has no upload progress; add an optional progress prop (0-100) with a thin bar",
+      "where": [
+        "resources/views/components/ui/dropzone.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:57:11.836Z"
+    },
+    {
+      "id": "s13",
+      "area": "ux",
+      "text": "Segmented item is ~36px tall; HANDOFF wants 44px hit targets (min-h-11), also affects x-tabs",
+      "where": [
+        "resources/views/components/ui/segmented/item.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:57:11.910Z"
+    },
+    {
+      "id": "s14",
+      "area": "tests",
+      "text": "Showcase test list omits x-ui.page-header, x-ui.section, x-ui.copies",
+      "where": [
+        "tests/Feature/Ui/UiShowcaseRouteTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:57:11.983Z"
+    },
+    {
+      "id": "s15",
+      "area": "tests",
+      "text": "Assert callsLast24h/costLast24hUsd for Week and All windows",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsageWindowTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:14.454Z"
+    },
+    {
+      "id": "s16",
+      "area": "quality",
+      "text": "Extract a private profileConfig($name) helper shared by get() and labelFor()",
+      "where": [
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:14.523Z"
+    },
+    {
+      "id": "s17",
+      "area": "quality",
+      "text": "Build the active status list from ResearchStatus::isActive() instead of hard-coding it",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:39.665Z"
+    },
+    {
+      "id": "s18",
+      "area": "quality",
+      "text": "Replace the phpstan-only null research continue with an assert",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T18:59:39.736Z"
+    },
+    {
+      "id": "s19",
+      "area": "tests",
+      "text": "Tie the 8pt check to the brand span rather than the minimum font-size in the markup",
+      "where": [
+        "Modules/Reports/tests/Feature/TemplatesTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:00:05.912Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Arch test that Modules\\Shared imports no other module",
+      "where": [
+        "Modules/Shared/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:07:59.038Z"
+    },
+    {
+      "id": "s21",
+      "area": "perf",
+      "text": "topForUser and VariantLinks each read the profile and catalog; cache per request if both are used on one page",
+      "where": [
+        "Modules/Recommendations/app/Services/GeneMatchVariantLinks.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:07:59.101Z"
+    },
+    {
+      "id": "s22",
+      "area": "quality",
+      "text": "Fake repeats topForUser's filter/sort/slice; extract a shared ranking helper if a third caller appears",
+      "where": [
+        "Modules/Recommendations/app/Testing/FakeGeneticRelevanceReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:08:52.223Z"
+    },
+    {
+      "id": "s23",
+      "area": "tests",
+      "text": "HTTP-level test that a guest Livewire update to genetics::profile (e.g. lookUp) is rejected by persistent auth middleware",
+      "where": [
+        "tests/Feature/ShellRoutesTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:13:48.615Z"
+    },
+    {
+      "id": "s24",
+      "area": "ux",
+      "text": "Sidebar fixed at 240px vs design flex 1 1 210px; user row name should be 16px/500 and initials 10px; check mobile sheet open/close in a browser",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:14:09.918Z"
+    },
+    {
+      "id": "s25",
+      "area": "tests",
+      "text": "Title test misses the supplement show page",
+      "where": [
+        "tests/Feature/ShellRoutesTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:14:09.991Z"
+    },
+    {
+      "id": "s26",
+      "area": "perf",
+      "text": "Batch per-row relevance lookups for the catalog match count if the catalog grows",
+      "where": [
+        "Modules/Recommendations/resources/views/slots/match-count.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:19:05.008Z"
+    },
+    {
+      "id": "s27",
+      "area": "quality",
+      "text": "x-ui.button hardcodes type=button; accept a type prop so form submits can use it",
+      "where": [
+        "resources/views/components/ui/button.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:19:41.547Z"
+    },
+    {
+      "id": "s28",
+      "area": "security",
+      "text": "Real relevance reader should return empty for userId <= 0 as defence in depth behind @auth in slots",
+      "where": [
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:20:07.074Z"
+    },
+    {
+      "id": "s29",
+      "area": "tests",
+      "text": "Browser check of the summary Read more clamp (Alpine only)",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:20:07.146Z"
+    },
+    {
+      "id": "s30",
+      "area": "tests",
+      "text": "Pin escaping of variantName and genotypeEffect with a <script> payload render test",
+      "where": [
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:20:38.373Z"
+    },
+    {
+      "id": "s31",
+      "area": "tests",
+      "text": "Guest call('lookUpAll') expects 401",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:20:38.449Z"
+    },
+    {
+      "id": "s32",
+      "area": "tests",
+      "text": "Row link on md+ only selects; consider a direct Open affordance per row",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:20:38.521Z"
+    },
+    {
+      "id": "s33",
+      "area": "quality",
+      "text": "hasLookingUp duplicates counts['looking_up'] and groupOptions recomputes counts(); derive from one source",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:20:50.362Z"
+    },
+    {
+      "id": "s34",
+      "area": "ux",
+      "text": "Hide or disable Look up now when nothing is Pending or Failed",
+      "where": [
+        "Modules/Genetics/resources/views/components/variant-list.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:20:50.433Z"
+    },
+    {
+      "id": "s35",
+      "area": "tests",
+      "text": "Render recommendations::genetic-panel as a guest directly; assert no data-genotype/data-allele and the sign-in prompt",
+      "where": [
+        "Modules/Recommendations/tests/Feature/GeneticPanelTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:21:29.844Z"
+    },
+    {
+      "id": "s36",
+      "area": "ux",
+      "text": "Your genes panel is absent on Overview while research is null/active/failed; decide whether to show a placeholder",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:21:29.915Z"
+    },
+    {
+      "id": "s37",
+      "area": "tests",
+      "text": "Bogus window test should assert usageWindow resolves to All, or normalise $window on mount/update",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsagePageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:25:24.323Z"
+    },
+    {
+      "id": "s38",
+      "area": "tests",
+      "text": "Per-window calls test uses assertSeeInOrder(['Calls','1']); assert on the data-stat=calls value (1 vs 2)",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsagePageTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:25:30.786Z"
+    },
+    {
+      "id": "s39",
+      "area": "quality",
+      "text": "Use UsageWindow::label() instead of an inline label array in the template",
+      "where": [
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:25:30.852Z"
+    },
+    {
+      "id": "s40",
+      "area": "quality",
+      "text": "Header subtitle counts supplements via all() (research rows only) while the stat uses total(); expose one count on a Supplements contract",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:29:05.895Z"
+    },
+    {
+      "id": "s41",
+      "area": "tests",
+      "text": "Seed fakes at user id 0 in the match-stat, variant-stat and Home guest tests so the computed-property guard is exercised",
+      "where": [
+        "Modules/Recommendations/tests/Feature/TopMatchTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:29:53.007Z"
+    },
+    {
+      "id": "s42",
+      "area": "quality",
+      "text": "match-stat uses a silent ALL=1000 cap and pulls full match payloads to count; add a count method to GeneticRelevanceReader",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:30:17.515Z"
+    },
+    {
+      "id": "s43",
+      "area": "ux",
+      "text": "Cap the Home supplement card grid (e.g. 8) with a see-all link",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:34:43.973Z"
+    },
+    {
+      "id": "s44",
+      "area": "quality",
+      "text": "Move the per-group linked tally from the your-genes widget into VariantGrouping",
+      "where": [
+        "Modules/Genetics/app/Support/VariantGrouping.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:34:44.036Z"
+    },
+    {
+      "id": "s45",
+      "area": "tests",
+      "text": "Home-level test for the lookUpAll rate-limited toast (4 calls, at most 3 queue)",
+      "where": [
+        "Modules/Genetics/tests/Feature/HomeWidgetsTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:35:23.498Z"
+    },
+    {
+      "id": "s46",
+      "area": "ux",
+      "text": "Empty state says No supplements yet when all are still researching; show in-progress cards or reword",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:35:53.069Z"
+    },
+    {
+      "id": "s47",
+      "area": "tests",
+      "text": "Remove unused $other = homeUser() or use it in guest assertions",
+      "where": [
+        "tests/Feature/HomeTest.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:35:53.135Z"
+    },
+    {
+      "id": "s48",
+      "area": "perf",
+      "text": "your-genes reads the profile twice per render (itself + VariantLinks); let VariantLinks reuse it or add a write-flushed Genetics memo",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:43:30.738Z"
+    },
+    {
+      "id": "s49",
+      "area": "quality",
+      "text": "Fold hasProfile into one reader call so the no-match case is one profile read",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡top-match.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T19:43:30.801Z"
+    },
+    {
+      "id": "s50",
+      "area": "tests",
+      "text": "Two-user test on one reader instance proving the profile cache never serves user A's data to user B",
+      "where": [
+        "Modules/Recommendations/tests/Feature/GeneticRelevanceReaderTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T19:44:14.311Z"
+    },
+    {
+      "id": "s51",
+      "area": "perf",
+      "text": "forUserAndSupplement loads the whole research listing even on the single-supplement page; use forSupplement when the listing isn't loaded yet",
+      "where": [
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:45:08.716Z"
+    },
+    {
+      "id": "s52",
+      "area": "tests",
+      "text": "Document/helper for forgetScopedInstances() in read-write-read tests now that the relevance reader is scoped",
+      "where": [
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:45:08.779Z"
+    },
+    {
+      "id": "s53",
+      "area": "ux",
+      "text": "loading targets by bare action name disable every retry/lookUp button at once; target with parameters",
+      "where": [
+        "resources/views/components/ui/button.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T19:45:08.847Z"
+    },
+    {
+      "id": "s54",
+      "area": "tests",
+      "text": "FR-47 code-level a11y (44px targets, labels, focus ring) has no automated test; add a render test per page",
+      "where": [
+        "tests/Feature/**"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:11:43.427Z"
+    },
+    {
+      "id": "s55",
+      "area": "tests",
+      "text": "Assert the '{name} queued for research.' toast on add",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:11:43.492Z"
+    },
+    {
+      "id": "s56",
+      "area": "ux",
+      "text": "Upload file names wrap mid-word at 390px (Genetic Markers.cs / v); truncate with title or break at spaces",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:20:41.589Z"
+    },
+    {
+      "id": "s57",
+      "area": "ux",
+      "text": "Download PDF label wraps to two lines at 390px; keep it on one line",
+      "where": [
+        "Modules/Reports/resources/views/components/download-menu.blade.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:20:41.660Z"
+    },
+    {
+      "id": "s58",
+      "area": "quality",
+      "text": "Stored safety notes still show raw [S8] citation markers on older research rows",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T20:20:41.727Z"
+    },
+    {
+      "id": "s59",
+      "area": "tests",
+      "text": "Escape tests with a <script> effect title and variant name on the real supplement page and genetic panel",
+      "where": [
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T20:22:34.233Z"
+    },
+    {
+      "id": "s60",
+      "area": "ux",
+      "text": "Greeting uses now()->hour in UTC, so US evenings read Good morning; use a display timezone or pick it client-side",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.115Z"
+    },
+    {
+      "id": "s61",
+      "area": "ux",
+      "text": "Waiting banner counts LookingUp rows and Home doesn't poll; count Pending/Failed for the button and show queued count",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.179Z"
+    },
+    {
+      "id": "s62",
+      "area": "perf",
+      "text": "all() runs three times per Home render; memoize per request or use forSupplement() for single-supplement relevance",
+      "where": [
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.243Z"
+    },
+    {
+      "id": "s63",
+      "area": "quality",
+      "text": "Genotype split into alleles four different ways; add Genotype::alleles() and use it everywhere",
+      "where": [
+        "Modules/Genetics/app/Data/Genotype.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.309Z"
+    },
+    {
+      "id": "s64",
+      "area": "quality",
+      "text": "Home subtitle reads module contracts directly and hand-copies x-ui.panel classes; use x-ui.panel and move counts into widgets or update the plan wording",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.375Z"
+    },
+    {
+      "id": "s65",
+      "area": "security",
+      "text": "Public view helper methods (labelFor, title, meta, abbreviation, tone) are callable as Livewire actions; make them protected",
+      "where": [
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.441Z"
+    },
+    {
+      "id": "s66",
+      "area": "quality",
+      "text": "'All supplements' spelled ALL=1000 and PHP_INT_MAX; use one name or a nullable limit",
+      "where": [
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.502Z"
+    },
+    {
+      "id": "s67",
+      "area": "tests",
+      "text": "Fake count() ignores with() research while all() includes it",
+      "where": [
+        "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.566Z"
+    },
+    {
+      "id": "s68",
+      "area": "ux",
+      "text": "Supplement page title is always 'Supplement'; use the supplement name",
+      "where": [
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.626Z"
+    },
+    {
+      "id": "s69",
+      "area": "ux",
+      "text": "Brand mark role=img label duplicates the visible app name for screen readers; mark it decorative there",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.688Z"
+    },
+    {
+      "id": "s70",
+      "area": "docs",
+      "text": "Boundary test line says each module; Shared has none — say each domain module or add a Shared test",
+      "where": [
+        "CLAUDE.md"
+      ],
+      "from": "branch-review",
+      "at": "2026-10-25T20:31:24.748Z"
+    },
+    {
+      "id": "s71",
+      "area": "ux",
+      "text": "Dismissed gene-and-tonic-redesign:s13",
+      "where": [
+        "resources/views/components/ui/segmented/item.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s13",
+      "dismissed": true,
+      "note": "44px targets added in the polish task",
+      "at": "2026-10-25T20:34:23.913Z"
+    },
+    {
+      "id": "s72",
+      "area": "tests",
+      "text": "Dismissed gene-and-tonic-redesign:s15",
+      "where": [
+        "Modules/Intelligence/tests/Feature/UsageWindowTest.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s15",
+      "dismissed": true,
+      "note": "24h fields removed in the review fix",
+      "at": "2026-10-25T20:34:24.099Z"
+    },
+    {
+      "id": "s73",
+      "area": "ux",
+      "text": "Dismissed gene-and-tonic-redesign:s24",
+      "where": [
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s24",
+      "dismissed": true,
+      "note": "sidebar 210px and user row sizes fixed in polish",
+      "at": "2026-10-25T20:34:24.274Z"
+    },
+    {
+      "id": "s74",
+      "area": "quality",
+      "text": "Dismissed gene-and-tonic-redesign:s27",
+      "where": [
+        "resources/views/components/ui/button.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s27",
+      "dismissed": true,
+      "note": "type prop added in polish",
+      "at": "2026-10-25T20:34:24.458Z"
+    },
+    {
+      "id": "s75",
+      "area": "quality",
+      "text": "Dismissed gene-and-tonic-redesign:s39",
+      "where": [
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s39",
+      "dismissed": true,
+      "note": "label() now drives the view",
+      "at": "2026-10-25T20:34:24.658Z"
+    },
+    {
+      "id": "s76",
+      "area": "quality",
+      "text": "Dismissed gene-and-tonic-redesign:s40",
+      "where": [
+        "resources/views/pages/⚡dashboard.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s40",
+      "dismissed": true,
+      "note": "count() added to the Supplements contract",
+      "at": "2026-10-25T20:34:24.854Z"
+    },
+    {
+      "id": "s77",
+      "area": "perf",
+      "text": "Dismissed gene-and-tonic-redesign:s48",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s48",
+      "dismissed": true,
+      "note": "profile reader memoized per request",
+      "at": "2026-10-25T20:34:25.057Z"
+    },
+    {
+      "id": "s78",
+      "area": "perf",
+      "text": "Dismissed gene-and-tonic-redesign:s21",
+      "where": [
+        "Modules/Recommendations/app/Services/GeneMatchVariantLinks.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s21",
+      "dismissed": true,
+      "note": "profile and listing memoized per request",
+      "at": "2026-10-25T20:34:25.276Z"
+    },
+    {
+      "id": "s79",
+      "area": "ux",
+      "text": "Dismissed gene-and-tonic-redesign:s12",
+      "where": [
+        "resources/views/components/ui/dropzone.blade.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s12",
+      "dismissed": true,
+      "note": "Genetics page shows upload progress itself",
+      "at": "2026-10-25T20:34:25.491Z"
+    },
+    {
+      "id": "s80",
+      "area": "tests",
+      "text": "Dismissed gene-and-tonic-redesign:s25",
+      "where": [
+        "tests/Feature/ShellRoutesTest.php"
+      ],
+      "from": "user",
+      "resolves": "gene-and-tonic-redesign:s25",
+      "dismissed": true,
+      "note": "covered by the page title follow-up",
+      "at": "2026-10-25T20:34:25.695Z"
+    },
+    {
+      "id": "s81",
+      "area": "tests",
+      "text": "Tighten the redesign's tests: real-page escaping for kicker/title/variant name, non-vacuous guest guards (seed fakes at id 0), a11y and favicon checks, exact stat assertions, and a guest Livewire-update rejection test",
+      "where": [
+        "tests/Feature/LayoutTest.php",
+        "Modules/Supplements/tests/Feature/ResearchTopicsTest.php",
+        "Modules/Genetics/tests/Feature/LookUpAllTest.php",
+        "tests/Feature/Ui",
+        "tests/Feature/Ui/UiShowcaseRouteTest.php",
+        "Modules/Reports/tests/Feature/TemplatesTest.php",
+        "Modules/Shared/tests/**",
+        "tests/Feature/ShellRoutesTest.php",
+        "Modules/Supplements/tests/Feature/SupplementPageTest.php",
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php",
+        "Modules/Genetics/tests/Feature/LookupTest.php",
+        "Modules/Recommendations/tests/Feature/GeneticPanelTest.php",
+        "Modules/Intelligence/tests/Feature/UsagePageTest.php",
+        "Modules/Recommendations/tests/Feature/TopMatchTest.php",
+        "Modules/Genetics/tests/Feature/HomeWidgetsTest.php",
+        "tests/Feature/HomeTest.php",
+        "Modules/Recommendations/tests/Feature/GeneticRelevanceReaderTest.php",
+        "Modules/Recommendations/app/Providers/RecommendationsServiceProvider.php",
+        "tests/Feature/**",
+        "Modules/Supplements/tests/Feature/CatalogTest.php",
+        "Modules/Supplements/app/Testing/FakeSupplementResearchReader.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s1",
+        "gene-and-tonic-redesign:s5",
+        "gene-and-tonic-redesign:s10",
+        "gene-and-tonic-redesign:s11",
+        "gene-and-tonic-redesign:s14",
+        "gene-and-tonic-redesign:s19",
+        "gene-and-tonic-redesign:s20",
+        "gene-and-tonic-redesign:s23",
+        "gene-and-tonic-redesign:s29",
+        "gene-and-tonic-redesign:s30",
+        "gene-and-tonic-redesign:s31",
+        "gene-and-tonic-redesign:s35",
+        "gene-and-tonic-redesign:s37",
+        "gene-and-tonic-redesign:s38",
+        "gene-and-tonic-redesign:s41",
+        "gene-and-tonic-redesign:s45",
+        "gene-and-tonic-redesign:s47",
+        "gene-and-tonic-redesign:s50",
+        "gene-and-tonic-redesign:s52",
+        "gene-and-tonic-redesign:s54",
+        "gene-and-tonic-redesign:s55",
+        "gene-and-tonic-redesign:s59",
+        "gene-and-tonic-redesign:s67"
+      ],
+      "at": "2026-10-25T20:34:43.570Z"
+    },
+    {
+      "id": "s82",
+      "area": "security",
+      "text": "Harden model-output text (strip tags and control chars, variant-name allowlist), hit the lookUpAll limiter only when rows queue, empty relevance for userId <= 0, and make public view helpers protected",
+      "where": [
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/LookUpAll.php",
+        "Modules/Genetics/app/Support/LookupResultBuilder.php",
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php",
+        "Modules/Intelligence/resources/views/livewire/⚡usage-log.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s4",
+        "gene-and-tonic-redesign:s7",
+        "gene-and-tonic-redesign:s8",
+        "gene-and-tonic-redesign:s28",
+        "gene-and-tonic-redesign:s65"
+      ],
+      "at": "2026-10-25T20:34:43.753Z"
+    },
+    {
+      "id": "s83",
+      "area": "ux",
+      "text": "UX polish: local-time greeting, Look up now only when something is pending, Home waiting banner and empty states, supplement page title, per-row loading targets, 390px wrapping, decorative logo label",
+      "where": [
+        "Modules/Supplements/tests/Feature/CatalogTest.php",
+        "Modules/Genetics/resources/views/components/variant-list.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡show.blade.php",
+        "Modules/Supplements/resources/views/livewire/⚡your-supplements.blade.php",
+        "resources/views/components/ui/button.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Reports/resources/views/components/download-menu.blade.php",
+        "resources/views/pages/⚡dashboard.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡your-genes.blade.php",
+        "resources/views/layouts/app.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s32",
+        "gene-and-tonic-redesign:s34",
+        "gene-and-tonic-redesign:s36",
+        "gene-and-tonic-redesign:s43",
+        "gene-and-tonic-redesign:s46",
+        "gene-and-tonic-redesign:s53",
+        "gene-and-tonic-redesign:s56",
+        "gene-and-tonic-redesign:s57",
+        "gene-and-tonic-redesign:s60",
+        "gene-and-tonic-redesign:s61",
+        "gene-and-tonic-redesign:s68",
+        "gene-and-tonic-redesign:s69"
+      ],
+      "at": "2026-10-25T20:34:43.940Z"
+    },
+    {
+      "id": "s84",
+      "area": "perf",
+      "text": "Batch and memoize the relevance and research-listing reads (catalog match counts, match-stat, single-supplement page, Home's three all() calls)",
+      "where": [
+        "Modules/Recommendations/resources/views/slots/match-count.blade.php",
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+        "Modules/Recommendations/app/Services/RuleBasedGeneticRelevanceReader.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s26",
+        "gene-and-tonic-redesign:s42",
+        "gene-and-tonic-redesign:s51",
+        "gene-and-tonic-redesign:s62"
+      ],
+      "at": "2026-10-25T20:34:44.128Z"
+    },
+    {
+      "id": "s85",
+      "area": "quality",
+      "text": "Code tidy-ups: shared Genotype::alleles(), LookupStatus::isQueueable(), one 'all supplements' limit, Home via x-ui.panel and widgets, small helper extractions, favicon metadata, stray [S8] markers, CLAUDE.md boundary wording",
+      "where": [
+        "public/favicon.svg",
+        "resources/views/layouts/app.blade.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php",
+        "Modules/Recommendations/app/Testing/FakeGeneticRelevanceReader.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/app/Support/VariantGrouping.php",
+        "Modules/Genetics/app/Data/Genotype.php",
+        "resources/views/pages/⚡dashboard.blade.php",
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+        "CLAUDE.md"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s2",
+        "gene-and-tonic-redesign:s3",
+        "gene-and-tonic-redesign:s6",
+        "gene-and-tonic-redesign:s9",
+        "gene-and-tonic-redesign:s16",
+        "gene-and-tonic-redesign:s17",
+        "gene-and-tonic-redesign:s18",
+        "gene-and-tonic-redesign:s22",
+        "gene-and-tonic-redesign:s33",
+        "gene-and-tonic-redesign:s44",
+        "gene-and-tonic-redesign:s58",
+        "gene-and-tonic-redesign:s63",
+        "gene-and-tonic-redesign:s64",
+        "gene-and-tonic-redesign:s66",
+        "gene-and-tonic-redesign:s70"
+      ],
+      "at": "2026-10-25T20:34:44.322Z"
+    },
+    {
+      "id": "s86",
+      "area": "quality",
+      "text": "Code tidy-ups: shared Genotype::alleles(), LookupStatus::isQueueable(), one 'all supplements' limit, one profile read in top-match's no-match case, Home via x-ui.panel and widgets, small helper extractions, favicon metadata, stray [S8] markers, CLAUDE.md boundary wording",
+      "where": [
+        "public/favicon.svg",
+        "resources/views/layouts/app.blade.php",
+        "Modules/Supplements/app/Support/ResearchFindingsBuilder.php",
+        "Modules/Genetics/app/Actions/QueueLookups.php",
+        "Modules/Intelligence/app/Services/ConfigProfileRegistry.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementRepository.php",
+        "Modules/Supplements/app/Repositories/EloquentSupplementResearchReader.php",
+        "Modules/Recommendations/app/Testing/FakeGeneticRelevanceReader.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php",
+        "Modules/Genetics/app/Support/VariantGrouping.php",
+        "Modules/Genetics/app/Data/Genotype.php",
+        "resources/views/pages/⚡dashboard.blade.php",
+        "Modules/Recommendations/resources/views/livewire/⚡match-stat.blade.php",
+        "CLAUDE.md",
+        "Modules/Recommendations/resources/views/livewire/⚡top-match.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "gene-and-tonic-redesign:s85",
+        "gene-and-tonic-redesign:s49"
+      ],
+      "at": "2026-10-25T20:34:53.902Z"
+    }
+  ]
+}

@@ -4,7 +4,9 @@ namespace Modules\Shared\Providers;
 
 use Livewire\Livewire;
 use Modules\Shared\Contracts\PageActions;
+use Modules\Shared\Contracts\VariantLinks;
 use Modules\Shared\Services\InMemoryPageActions;
+use Modules\Shared\Services\NoVariantLinks;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 
 class SharedServiceProvider extends ModuleServiceProvider
@@ -50,5 +52,9 @@ class SharedServiceProvider extends ModuleServiceProvider
         // Bind this module's public contracts (app/Contracts) to their private implementations here.
 
         $this->app->singleton(PageActions::class, InMemoryPageActions::class);
+
+        // An empty default that Recommendations rebinds; bindIf keeps it from
+        // overwriting that binding whichever provider registers first.
+        $this->app->bindIf(VariantLinks::class, NoVariantLinks::class);
     }
 }

@@ -50,12 +50,12 @@ function panelResearch(bool $geneticsChecked = true, string $explanation = 'Meth
     ));
 }
 
-function panelUserWith(string $rsid, string $genotype): User
+function panelUserWith(string $rsid, string $genotype, ?string $variantName = 'C677T'): User
 {
     $user = User::factory()->create();
 
     test()->profiles->for($user->id, new GeneticProfileData($user->id, [
-        new VariantData($rsid, 'MTHFR', $genotype, 'G', 'A', null, null, null, LookupStatus::Seeded, 'manual'),
+        new VariantData($rsid, 'MTHFR', $genotype, 'G', 'A', null, null, null, LookupStatus::Seeded, 'manual', null, $variantName),
     ]));
 
     return $user;
@@ -69,22 +69,43 @@ it('lists a signed-in user\'s match with gene, rsID, genotype, copies, relation 
     $this->actingAs(panelUserWith('rs1801133', 'AG'));
 
     Livewire::test('recommendations::genetic-panel', ['supplementId' => PANEL_SUPPLEMENT])
-        ->assertSee('Your genetics')
+        ->assertSee('Your genes')
         ->assertSee('MTHFR')
         ->assertSee('rs1801133')
         ->assertSeeHtml('<span data-genotype>AG</span>')
-        ->assertSee('1 copy')
+        ->assertSee('1 COPY')
         ->assertSee('Helps')
         ->assertSee('Methylfolate bypasses the reduced MTHFR step.')
         ->assertSee('Educational summary of published research, not medical advice or a diagnosis. Talk to a qualified clinician before acting on genetic results.');
+});
+
+it('shows the ring count, variant name, allele pair and relation badge for the owner', function () {
+    $this->actingAs(panelUserWith('rs1801133', 'AG'));
+
+    Livewire::test('recommendations::genetic-panel', ['supplementId' => PANEL_SUPPLEMENT])
+        ->assertSee('1 of your variants relates to this supplement')
+        ->assertSee('rs1801133')
+        ->assertSee('C677T')
+        ->assertSeeHtml('data-variant-gene="MTHFR"')
+        ->assertSeeHtml('aria-label="Genotype A G; one copy of effect allele A"')
+        ->assertSee('Helps');
+});
+
+it('falls back to the rsID alone when the variant has no name', function () {
+    $this->actingAs(panelUserWith('rs1801133', 'AG', null));
+
+    Livewire::test('recommendations::genetic-panel', ['supplementId' => PANEL_SUPPLEMENT])
+        ->assertSee('rs1801133')
+        ->assertDontSee('C677T')
+        ->assertDontSeeHtml('rs1801133 &middot;');
 });
 
 it('says two copies for a homozygous genotype', function () {
     $this->actingAs(panelUserWith('rs1801133', 'AA'));
 
     Livewire::test('recommendations::genetic-panel', ['supplementId' => PANEL_SUPPLEMENT])
-        ->assertSee('2 copies')
-        ->assertDontSee('1 copy');
+        ->assertSee('2 COPIES')
+        ->assertDontSee('1 COPY');
 });
 
 it('says when none of the user\'s variants match', function () {
@@ -123,7 +144,9 @@ it('shows a guest only the sign-in prompt and no genetic data', function () {
         ->assertDontSee('rs1801133')
         ->assertDontSee('copy')
         ->assertDontSee('Methylfolate bypasses')
-        ->assertDontSeeHtml('data-genotype');
+        ->assertDontSeeHtml('data-genotype')
+        ->assertDontSeeHtml('data-allele')
+        ->assertDontSeeHtml('data-variant-gene');
 });
 
 it('shows each signed-in user only their own matches', function () {
@@ -134,9 +157,9 @@ it('shows each signed-in user only their own matches', function () {
 
     Livewire::test('recommendations::genetic-panel', ['supplementId' => PANEL_SUPPLEMENT])
         ->assertSeeHtml('<span data-genotype>AA</span>')
-        ->assertSee('2 copies')
+        ->assertSee('2 COPIES')
         ->assertDontSeeHtml('<span data-genotype>AG</span>')
-        ->assertDontSee('1 copy');
+        ->assertDontSee('1 COPY');
 });
 
 it('rejects a supplement id set from the client', function () {
@@ -157,6 +180,6 @@ it('escapes the explanation', function () {
 
 it('embeds the panel from the slot view with only the supplement id', function () {
     $this->blade('@include($view, ["supplementId" => $id])', ['view' => 'recommendations::slots.genetic-panel', 'id' => PANEL_SUPPLEMENT])
-        ->assertSee('Your genetics')
+        ->assertSee('Your genes')
         ->assertSee('Sign in to see how this relates to your genetics.');
 });

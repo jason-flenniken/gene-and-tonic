@@ -16,3 +16,7 @@ Route::post('/logout', function (Request $request): RedirectResponse {
 
     return redirect()->route('home');
 })->middleware('auth')->name('logout');
+
+if (app()->isLocal()) {
+    Route::livewire('/_ui', 'pages::ui')->name('ui');
+}

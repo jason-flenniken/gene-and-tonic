@@ -16,3 +16,8 @@ it('has readable labels', function () {
     expect(UploadStatus::LookingUp->label())->toBe('Looking up')
         ->and(UploadStatus::Queued->label())->toBe('Queued');
 });
+
+it('maps each status to a tone', function () {
+    expect(array_map(fn (UploadStatus $s): string => $s->tone(), UploadStatus::cases()))
+        ->toBe(['active', 'active', 'active', 'ok', 'bad']);
+});

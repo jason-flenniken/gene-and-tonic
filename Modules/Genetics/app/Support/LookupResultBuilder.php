@@ -57,6 +57,7 @@ final class LookupResultBuilder
             riskAllele: $risk,
             genotypeEffects: self::effects($output['genotype_effects'] ?? null),
             sources: $cited,
+            variantName: self::variantName($output['variant_name'] ?? null),
         );
     }
 
@@ -90,6 +91,13 @@ final class LookupResultBuilder
         }
 
         return array_values($kept);
+    }
+
+    private static function variantName(mixed $value): ?string
+    {
+        $name = self::text($value, 40);
+
+        return $name === '' ? null : $name;
     }
 
     private static function gene(mixed $value): ?string
