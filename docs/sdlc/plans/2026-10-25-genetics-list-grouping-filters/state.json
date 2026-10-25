@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "slug": "genetics-list-grouping-filters",
+  "title": "Genetics list grouping and filters",
+  "track": "feature",
+  "branch": "feature/genetics-list-grouping-filters",
+  "base": "main",
+  "created": "2026-10-25T14:34:57.259Z",
+  "updated": "2026-10-25T14:34:57.259Z",
+  "stage": "discover",
+  "stageHistory": [
+    {
+      "stage": "discover",
+      "at": "2026-10-25T14:34:57.259Z"
+    }
+  ],
+  "paused": null,
+  "approvals": {},
+  "phases": [],
+  "evidence": {},
+  "drift": [],
+  "log": [
+    {
+      "at": "2026-10-25T14:34:57.259Z",
+      "event": "created"
+    },
+    {
+      "at": "2026-10-25T14:34:57.259Z",
+      "event": "level",
+      "detail": "standard"
+    }
+  ],
+  "cairnVersion": "0.3.0",
+  "level": "standard"
+}
