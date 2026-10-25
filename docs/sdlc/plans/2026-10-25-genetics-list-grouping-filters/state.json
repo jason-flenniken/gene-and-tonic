@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:15:32.565Z",
+  "updated": "2026-10-25T15:17:14.087Z",
   "stage": "ship",
   "stageHistory": [
     {
@@ -51,6 +51,11 @@
       "via": "human",
       "source": "mod",
       "hash": "dd634ff18e0753eb"
+    },
+    "ship": {
+      "at": "2026-10-25T15:17:14.087Z",
+      "via": "human",
+      "source": "mod"
     }
   },
   "phases": [
@@ -381,6 +386,16 @@
       "at": "2026-10-25T15:15:32.565Z",
       "event": "advanced",
       "detail": "ship"
+    },
+    {
+      "at": "2026-10-25T15:16:49.765Z",
+      "event": "step",
+      "detail": "approving"
+    },
+    {
+      "at": "2026-10-25T15:17:14.087Z",
+      "event": "ship approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -565,8 +580,95 @@
       ],
       "from": "branch-review",
       "at": "2026-10-25T15:15:32.375Z"
+    },
+    {
+      "id": "s19",
+      "area": "tests",
+      "text": "Resolved genetics-list-grouping-filters:s13",
+      "where": [
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+      ],
+      "from": "user",
+      "resolves": "genetics-list-grouping-filters:s13",
+      "note": "search-by-rsID/category/effect and clear-both tests added during verify",
+      "at": "2026-10-25T15:15:59.846Z"
+    },
+    {
+      "id": "s20",
+      "area": "tests",
+      "text": "Deeper tests for variant groups: lookup prompt lists every group, pending reader row has null group, backfill with null gene, failure-log spy and a user_variants row proven absent from the prompt, and a browser test that open sections survive polling",
+      "where": [
+        "Modules/Genetics/tests/Feature/LookupTest.php",
+        "Modules/Genetics/tests/Feature/GeneticProfileReaderTest.php",
+        "Modules/Genetics/tests/Feature/GroupVariantsCommandTest.php",
+        "Modules/Genetics/tests/**"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s2",
+        "genetics-list-grouping-filters:s4",
+        "genetics-list-grouping-filters:s6",
+        "genetics-list-grouping-filters:s9",
+        "genetics-list-grouping-filters:s10"
+      ],
+      "at": "2026-10-25T15:16:00.069Z"
+    },
+    {
+      "id": "s21",
+      "area": "security",
+      "text": "Harden the group backfill: chunk with a per-run pair cap, skip blank categories, collapse whitespace/control characters and cap gene length before building the prompt",
+      "where": [
+        "Modules/Genetics/app/Console/GroupVariantsCommand.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s5",
+        "genetics-list-grouping-filters:s7",
+        "genetics-list-grouping-filters:s8",
+        "genetics-list-grouping-filters:s14"
+      ],
+      "at": "2026-10-25T15:16:00.303Z"
+    },
+    {
+      "id": "s22",
+      "area": "ux",
+      "text": "Genetics list polish: expand/collapse-all control, fall back to All when the selected group empties, open sections that newly match under an active search",
+      "where": [
+        "Modules/Genetics/resources/views/components/variant-list.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s11",
+        "genetics-list-grouping-filters:s12",
+        "genetics-list-grouping-filters:s17"
+      ],
+      "at": "2026-10-25T15:16:00.528Z"
+    },
+    {
+      "id": "s23",
+      "area": "quality",
+      "text": "Variant groups tidy: tolerant category_group cast, one source for the group list in both prompts, an 'unlooked' constant and safer test helpers, trim the search before the 100-character cut",
+      "where": [
+        "Modules/Genetics/app/Models/GeneVariant.php",
+        "Modules/Genetics/resources/views/prompts/*instructions.blade.php",
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-list-grouping-filters:s3",
+        "genetics-list-grouping-filters:s15",
+        "genetics-list-grouping-filters:s16",
+        "genetics-list-grouping-filters:s18"
+      ],
+      "at": "2026-10-25T15:16:00.741Z"
     }
   ],
   "planHash": "dd634ff18e0753eb",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "ship",
+    "name": "approving",
+    "at": "2026-10-25T15:16:49.764Z"
+  }
 }
