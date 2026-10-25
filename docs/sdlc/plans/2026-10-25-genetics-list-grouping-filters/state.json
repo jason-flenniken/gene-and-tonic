@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:59:39.065Z",
+  "updated": "2026-10-25T15:01:11.385Z",
   "stage": "execute",
   "stageHistory": [
     {
@@ -89,7 +89,7 @@
     {
       "id": "list-and-backfill",
       "name": "Grouped list and backfill",
-      "status": "in_progress",
+      "status": "awaiting_approval",
       "tasks": [
         {
           "id": "grouped-list-ui",
@@ -114,16 +114,19 @@
             "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
           ],
           "complexity": "standard",
-          "status": "in_progress",
+          "status": "done",
           "fixRound": 0,
           "risky": true,
           "riskReason": "untrusted search and dropdown input over the user's genetic rows",
-          "substep": "implementing",
           "branch": "task/genetics-list-grouping-filters/grouped-list-ui",
           "worktree": "/Users/jasonflenniken/Development/laravel/.claude/worktrees/feature-genetics-list-grouping-filters--grouped-list-ui",
           "base": "1b8182f9e77211869249d11744636b9fc90e5d0c",
           "startedAt": "2026-10-25T14:55:51.359Z",
-          "level": "standard"
+          "level": "standard",
+          "doneAt": "2026-10-25T15:01:11.385Z",
+          "tip": "0f98973",
+          "tests": "composer test → Warning: Module \"herd\" is already loaded in Unknown on line 0",
+          "testedCommit": "eb86bba99e18dc7289eeb4462c7aecba60efd0b4"
         },
         {
           "id": "group-backfill",
@@ -162,7 +165,14 @@
     }
   ],
   "evidence": {},
-  "drift": [],
+  "drift": [
+    {
+      "path": "Modules/Genetics/tests/Feature/UploadPageTest.php",
+      "at": "2026-10-25T15:01:11.384Z",
+      "reason": "changed outside task \"Grouped list with filter and search\" scope (found at task done)",
+      "task": "grouped-list-ui"
+    }
+  ],
   "log": [
     {
       "at": "2026-10-25T14:34:57.259Z",
@@ -267,6 +277,26 @@
       "at": "2026-10-25T14:59:39.065Z",
       "event": "task done",
       "detail": "Group backfill command"
+    },
+    {
+      "at": "2026-10-25T14:59:46.291Z",
+      "event": "task reviewing",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T15:00:56.376Z",
+      "event": "task merging",
+      "detail": "Grouped list with filter and search"
+    },
+    {
+      "at": "2026-10-25T15:01:11.385Z",
+      "event": "drift",
+      "detail": "Modules/Genetics/tests/Feature/UploadPageTest.php"
+    },
+    {
+      "at": "2026-10-25T15:01:11.385Z",
+      "event": "task done",
+      "detail": "Grouped list with filter and search"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -361,6 +391,36 @@
       ],
       "from": "security-review",
       "at": "2026-10-25T14:59:23.720Z"
+    },
+    {
+      "id": "s10",
+      "area": "tests",
+      "text": "Browser test that an opened group section stays open across the 3s poll (needs a browser harness)",
+      "where": [
+        "Modules/Genetics/tests/**"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:59:46.147Z"
+    },
+    {
+      "id": "s11",
+      "area": "ux",
+      "text": "Add an expand-all / collapse-all control for the group sections",
+      "where": [
+        "Modules/Genetics/resources/views/components/variant-list.blade.php"
+      ],
+      "from": "implementer",
+      "at": "2026-10-25T14:59:46.217Z"
+    },
+    {
+      "id": "s12",
+      "area": "ux",
+      "text": "When the selected group no longer has rows (e.g. last pending lookup finishes), fall back to All instead of showing 'No variants match' with a stale dropdown value",
+      "where": [
+        "Modules/Genetics/resources/views/livewire/⚡profile.blade.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T15:00:52.522Z"
     }
   ],
   "planHash": "dd634ff18e0753eb",
