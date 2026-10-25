@@ -46,6 +46,8 @@ class RecommendationsServiceProvider extends ModuleServiceProvider
         );
 
         app(PageActions::class)->register('supplement.panels', 'recommendations::slots.genetic-panel');
+        app(PageActions::class)->register('supplement.preview', 'recommendations::slots.preview-strip');
+        app(PageActions::class)->register('supplement.card', 'recommendations::slots.match-count');
     }
 
     public function register(): void

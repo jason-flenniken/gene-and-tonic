@@ -148,7 +148,7 @@ it('shows Complete with counts in the dashboard list', function () {
     runResearch($supplement);
 
     Livewire\Livewire::test('supplements::catalog')
-        ->assertSeeInOrder(['Magnesium glycinate', 'Complete', '2', '1'])
+        ->assertSeeInOrder(['Magnesium glycinate', '2 effects', '1 study'])
         ->assertDontSeeHtml('wire:poll');
 });
 
