@@ -71,3 +71,8 @@ _2026-10-25 14:39_
 **Decision:** Outcome: Genetics tab list grouped into ~10 broad groups, collapsed by default with counts, 'Not looked up yet' group last; filter bar with group dropdown (All, each group, Not looked up yet) and search over gene, rsID, group, category, Affects, genotype effect; 'Your genotype' folds under Affects; lookup picks a group from the fixed list; one batched AI call backfills existing rows. User: signed-in user viewing own variants (demo user, 73 rows). Why now: demo 2026-10-26, flat table hard to scan. Success: scan group headers; search COMT or pick Methylation shows only matches with groups opened; pending rows together at bottom with Look up. Constraint: lands tonight; genotypes never logged or sent to the model. Out of scope: better genotype-effect sources (follow-up), Look up all, pagination, saving filter state across reloads.
 **Why:** confirmed by the user
 _2026-10-25 14:47_
+
+### 15. Non-goal: PDF report genetics layout
+**Decision:** out of scope
+**Why:** user asked for the dashboard list UI; the PDF section stays as is
+_2026-10-25 14:48_

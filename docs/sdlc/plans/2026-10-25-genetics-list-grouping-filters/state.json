@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:47:45.987Z",
+  "updated": "2026-10-25T14:49:31.814Z",
   "stage": "prd",
   "stageHistory": [
     {
@@ -19,7 +19,14 @@
     }
   ],
   "paused": null,
-  "approvals": {},
+  "approvals": {
+    "prd": {
+      "at": "2026-10-25T14:49:31.813Z",
+      "via": "human",
+      "source": "mod",
+      "hash": "df34c3b428d5d4df"
+    }
+  },
   "phases": [],
   "evidence": {},
   "drift": [],
@@ -37,6 +44,11 @@
       "at": "2026-10-25T14:47:45.987Z",
       "event": "advanced",
       "detail": "prd"
+    },
+    {
+      "at": "2026-10-25T14:49:31.814Z",
+      "event": "PRD approved",
+      "detail": "mod"
     }
   ],
   "cairnVersion": "0.3.0",
