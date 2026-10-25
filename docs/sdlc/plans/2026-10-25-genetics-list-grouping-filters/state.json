@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T14:52:20.578Z",
-  "stage": "plan",
+  "updated": "2026-10-25T14:52:22.984Z",
+  "stage": "execute",
   "stageHistory": [
     {
       "stage": "discover",
@@ -20,6 +20,10 @@
     {
       "stage": "plan",
       "at": "2026-10-25T14:49:34.388Z"
+    },
+    {
+      "stage": "execute",
+      "at": "2026-10-25T14:52:22.984Z"
     }
   ],
   "paused": null,
@@ -41,7 +45,7 @@
     {
       "id": "groups-data",
       "name": "Groups in the data",
-      "status": "pending",
+      "status": "in_progress",
       "tasks": [
         {
           "id": "variant-groups",
@@ -169,6 +173,11 @@
       "at": "2026-10-25T14:52:20.578Z",
       "event": "plan approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T14:52:22.984Z",
+      "event": "advanced",
+      "detail": "execute"
     }
   ],
   "cairnVersion": "0.3.0",
