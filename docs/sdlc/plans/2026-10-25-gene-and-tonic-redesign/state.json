@@ -6,12 +6,16 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T18:16:31.084Z",
-  "stage": "discover",
+  "updated": "2026-10-25T18:30:40.420Z",
+  "stage": "prd",
   "stageHistory": [
     {
       "stage": "discover",
       "at": "2026-10-25T18:16:31.084Z"
+    },
+    {
+      "stage": "prd",
+      "at": "2026-10-25T18:30:40.420Z"
     }
   ],
   "paused": null,
@@ -28,6 +32,11 @@
       "at": "2026-10-25T18:16:31.084Z",
       "event": "level",
       "detail": "standard"
+    },
+    {
+      "at": "2026-10-25T18:30:40.420Z",
+      "event": "advanced",
+      "detail": "prd"
     }
   ],
   "cairnVersion": "0.3.0",
