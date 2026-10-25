@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:15:32.448Z",
-  "stage": "review",
+  "updated": "2026-10-25T15:15:32.565Z",
+  "stage": "ship",
   "stageHistory": [
     {
       "stage": "discover",
@@ -32,6 +32,10 @@
     {
       "stage": "review",
       "at": "2026-10-25T15:06:14.304Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-25T15:15:32.565Z"
     }
   ],
   "paused": null,
@@ -372,6 +376,11 @@
       "at": "2026-10-25T15:15:32.448Z",
       "event": "review pass",
       "detail": "2 Required fixed (header close under filter; browser check done: sections stayed open across 3 polls, closed header stayed closed under search); 13 follow-ups logged"
+    },
+    {
+      "at": "2026-10-25T15:15:32.565Z",
+      "event": "advanced",
+      "detail": "ship"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -559,10 +568,5 @@
     }
   ],
   "planHash": "dd634ff18e0753eb",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "review",
-    "name": "rechecking",
-    "at": "2026-10-25T15:13:40.921Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
