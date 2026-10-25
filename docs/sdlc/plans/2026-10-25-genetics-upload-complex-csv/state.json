@@ -6,7 +6,7 @@
   "branch": "fix/genetics-upload-complex-csv",
   "base": "main",
   "created": "2026-10-25T13:26:58.864Z",
-  "updated": "2026-10-25T13:50:27.687Z",
+  "updated": "2026-10-25T13:51:28.853Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -53,7 +53,14 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "review": {
+      "result": "fail",
+      "at": "2026-10-25T13:51:28.852Z",
+      "note": "1 blocking; 6 advisory",
+      "blocking": 1
+    }
+  },
   "drift": [],
   "log": [
     {
@@ -100,6 +107,16 @@
       "at": "2026-10-25T13:50:27.687Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-25T13:50:27.785Z",
+      "event": "step",
+      "detail": "reviewing"
+    },
+    {
+      "at": "2026-10-25T13:51:28.853Z",
+      "event": "review fail",
+      "detail": "1 blocking; 6 advisory"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -129,6 +146,51 @@
       ],
       "from": "implementer",
       "at": "2026-10-25T13:49:17.108Z"
+    },
+    {
+      "id": "s3",
+      "area": "security",
+      "text": "promptLine sends whole genotype/gene/marker cells to the AI; cap them (allele pair or 32 chars, gene-symbol pattern) so notes inside those cells can't reach the provider, with a test",
+      "where": [
+        "Modules/Genetics/app/Support/Parsing/MarkerCsvParser.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T13:51:22.465Z"
+    },
+    {
+      "id": "s4",
+      "area": "security",
+      "text": "Check AI-returned genotype alleles appear in the sent line for that rsID, or mark AI-read rows in the UI",
+      "where": [
+        "Modules/Genetics/app/Support/Extraction/Extraction.php"
+      ],
+      "from": "security-review",
+      "at": "2026-10-25T13:51:22.533Z"
+    },
+    {
+      "id": "s5",
+      "area": "tests",
+      "text": "Test that a failed leftover AI call keeps local rows and counts the leftovers as skipped",
+      "where": [
+        "Modules/Genetics/app/Support/MarkerListReader.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T13:51:28.722Z"
+    },
+    {
+      "id": "s6",
+      "area": "quality",
+      "text": "Bare two-letter tokens (CT, DI) inside free-text genotype cells can be read as genotypes; consider requiring short cells for the bare form",
+      "where": [
+        "Modules/Genetics/app/Support/Parsing/MarkerCsvParser.php"
+      ],
+      "from": "task-review",
+      "at": "2026-10-25T13:51:28.787Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "review",
+    "name": "reviewing",
+    "at": "2026-10-25T13:50:27.785Z"
+  }
 }
