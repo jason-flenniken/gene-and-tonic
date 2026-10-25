@@ -27,3 +27,12 @@ it('maps model output to a group, or Other for anything invalid', function (mixe
     [3, VariantGroup::Other],
     [['methylation'], VariantGroup::Other],
 ]);
+
+it('maps each group to an icon and a tone', function () {
+    expect(array_map(fn (VariantGroup $g): string => $g->icon(), VariantGroup::cases()))->toBe([
+        'helix', 'capsule', 'group-flame', 'group-heart', 'group-smile',
+        'group-drop', 'group-shield', 'group-moon', 'group-leaf', 'group-dots',
+    ])->and(array_map(fn (VariantGroup $g): string => $g->tone(), VariantGroup::cases()))->toBe([
+        'green', 'butter', 'peach', 'coral', 'blue', 'rose', 'teal', 'indigo', 'leaf', 'stone',
+    ]);
+});

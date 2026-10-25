@@ -35,6 +35,44 @@ enum VariantGroup: string
     }
 
     /**
+     * Name of the icon in docs/design/gene-and-tonic/icons.
+     */
+    public function icon(): string
+    {
+        return match ($this) {
+            self::Methylation => 'helix',
+            self::VitaminsMinerals => 'capsule',
+            self::MetabolismWeight => 'group-flame',
+            self::HeartLipids => 'group-heart',
+            self::BrainMood => 'group-smile',
+            self::Hormones => 'group-drop',
+            self::DetoxDrugResponse => 'group-shield',
+            self::SleepCircadian => 'group-moon',
+            self::AntioxidantInflammation => 'group-leaf',
+            self::Other => 'group-dots',
+        };
+    }
+
+    /**
+     * Name of the icon tile tone (the --color-tone-* pairs).
+     */
+    public function tone(): string
+    {
+        return match ($this) {
+            self::Methylation => 'green',
+            self::VitaminsMinerals => 'butter',
+            self::MetabolismWeight => 'peach',
+            self::HeartLipids => 'coral',
+            self::BrainMood => 'blue',
+            self::Hormones => 'rose',
+            self::DetoxDrugResponse => 'teal',
+            self::SleepCircadian => 'indigo',
+            self::AntioxidantInflammation => 'leaf',
+            self::Other => 'stone',
+        };
+    }
+
+    /**
      * Untrusted model output becomes a group, or Other when it is not exactly one of the values.
      */
     public static function fromModel(mixed $value): self

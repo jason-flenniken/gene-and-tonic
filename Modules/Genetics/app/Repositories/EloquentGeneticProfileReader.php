@@ -40,6 +40,7 @@ class EloquentGeneticProfileReader implements GeneticProfileReader
                 status: $reference->status ?? LookupStatus::Pending,
                 source: $variant->source,
                 group: $reference?->category_group,
+                variantName: $reference?->variant_name,
             );
         })->all()));
     }

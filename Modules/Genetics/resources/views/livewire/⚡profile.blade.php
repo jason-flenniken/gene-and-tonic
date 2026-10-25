@@ -378,7 +378,7 @@ new #[Title('My genetics')] class extends Component
 
     private function isLookedUpVariant(VariantData $variant): bool
     {
-        return ! in_array($variant->status, [LookupStatus::Pending, LookupStatus::LookingUp, LookupStatus::Failed], true);
+        return $variant->status->isLookedUp();
     }
 };
 ?>

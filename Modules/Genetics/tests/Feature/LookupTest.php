@@ -10,6 +10,7 @@ use Livewire\Livewire;
 use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Actions\LookupVariant;
 use Modules\Genetics\Actions\QueueLookups;
+use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Enums\LookupStatus;
 use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Jobs\LookupGeneVariant;
@@ -378,4 +379,51 @@ it('asks the model for a group from the fixed list', function () {
 
     expect($group['enum'])->toBe(array_column(VariantGroup::cases(), 'value'))
         ->and($fields['group'])->toBeInstanceOf(StringType::class);
+});
+
+it('stores the variant name and exposes it on the profile', function () {
+    $user = User::factory()->create();
+    Queue::fake();
+    app(AddVariant::class)->handle($user->id, 'rs123', 'AG');
+    $this->web->returning([lookupSource('S1'), lookupSource('S2')]);
+    $this->text->respondWith(lookupOutput(['variant_name' => 'A1298C']));
+
+    app(LookupVariant::class)->handle('rs123');
+
+    expect(GeneVariant::where('rsid', 'rs123')->value('variant_name'))->toBe('A1298C')
+        ->and(app(GeneticProfileReader::class)->forUser($user->id)->variants[0]->variantName)->toBe('A1298C');
+});
+
+it('caps a long variant name at 40 characters and stores null when it is missing', function () {
+    $row = pendingRow('rs123');
+    $this->web->returning([lookupSource('S1')]);
+    $this->text->respondWith(lookupOutput(['variant_name' => str_repeat('x', 60)]));
+    app(LookupVariant::class)->handle('rs123');
+
+    $other = pendingRow('rs456');
+    $this->text->respondWith(lookupOutput(['variant_name' => null]));
+    app(LookupVariant::class)->handle('rs456');
+
+    expect($row->refresh()->variant_name)->toBe(str_repeat('x', 40))
+        ->and($other->refresh()->variant_name)->toBeNull();
+});
+
+it('asks for a variant name in a strict schema and sends no genotype in the prompt', function () {
+    $user = User::factory()->create();
+    Queue::fake();
+    app(AddVariant::class)->handle($user->id, 'rs123', 'CT', 'MTHFR');
+    $this->web->returning([lookupSource('S1')]);
+    $this->text->respondWith(lookupOutput());
+
+    app(LookupVariant::class)->handle('rs123');
+
+    $request = $this->text->requests()[0];
+    $schema = ($request->schema)(new JsonSchemaTypeFactory);
+    $prompt = view('genetics::prompts.lookup', $request->variables)->render();
+
+    expect($schema)->toHaveKey('variant_name')
+        ->and($request->variables)->toHaveKeys(['rsid', 'gene', 'sources'])
+        ->and(array_keys($request->variables))->toHaveCount(3)
+        ->and($prompt)->toContain('rs123')->toContain('MTHFR')
+        ->and($prompt)->not->toContain('CT')->not->toContain('genotype');
 });
