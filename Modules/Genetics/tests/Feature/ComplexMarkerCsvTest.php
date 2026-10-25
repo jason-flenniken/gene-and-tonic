@@ -8,6 +8,7 @@ use Modules\Genetics\Enums\UploadStatus;
 use Modules\Genetics\Jobs\LookupGeneVariant;
 use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
+use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
 use Modules\Intelligence\Testing\FakeTextGenerator;
 use Modules\Intelligence\Testing\FakeWebResearcher;
@@ -49,5 +50,6 @@ it('reads a complex marker CSV locally, with loose headers and messy genotype ce
             'rs4680' => 'AA',
             'rs601338' => 'AG',
         ])
-        ->and(UserVariant::where('user_id', $this->user->id)->where('rsid', 'rs1805087')->value('gene'))->toBe('MTR');
+        // Gene symbols live on the shared reference row; user_variants has no gene column.
+        ->and(GeneVariant::where('rsid', 'rs1805087')->value('gene'))->toBe('MTR');
 });
