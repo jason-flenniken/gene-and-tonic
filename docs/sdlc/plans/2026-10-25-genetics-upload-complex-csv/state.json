@@ -6,8 +6,8 @@
   "branch": "fix/genetics-upload-complex-csv",
   "base": "main",
   "created": "2026-10-25T13:26:58.864Z",
-  "updated": "2026-10-25T13:55:02.798Z",
-  "stage": "ship",
+  "updated": "2026-10-25T13:55:53.038Z",
+  "stage": "closed",
   "stageHistory": [
     {
       "stage": "repro",
@@ -32,6 +32,10 @@
     {
       "stage": "ship",
       "at": "2026-10-25T13:54:23.896Z"
+    },
+    {
+      "stage": "closed",
+      "at": "2026-10-25T13:55:53.037Z"
     }
   ],
   "paused": null,
@@ -201,6 +205,11 @@
       "at": "2026-10-25T13:55:02.798Z",
       "event": "step",
       "detail": "opening-pr"
+    },
+    {
+      "at": "2026-10-25T13:55:53.038Z",
+      "event": "advanced",
+      "detail": "closed"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -270,11 +279,33 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T13:51:28.787Z"
+    },
+    {
+      "id": "s7",
+      "area": "tests",
+      "text": "Resolved genetics-upload-complex-csv:s2",
+      "where": [
+        "Modules/Genetics/app/Jobs/ProcessGeneticUpload.php"
+      ],
+      "from": "user",
+      "resolves": "genetics-upload-complex-csv:s2",
+      "note": "Done in the review fix: unsent lines are recorded as skipped on the upload row",
+      "at": "2026-10-25T13:55:39.525Z"
+    },
+    {
+      "id": "s8",
+      "area": "security",
+      "text": "Harden the AI marker extraction: cap the gene/genotype/marker cells sent to the model and check returned alleles against the sent line",
+      "where": [
+        "Modules/Genetics/app/Support/Parsing/MarkerCsvParser.php",
+        "Modules/Genetics/app/Support/Extraction/Extraction.php"
+      ],
+      "from": "plan",
+      "merges": [
+        "genetics-upload-complex-csv:s3",
+        "genetics-upload-complex-csv:s4"
+      ],
+      "at": "2026-10-25T13:55:39.696Z"
     }
-  ],
-  "step": {
-    "stage": "ship",
-    "name": "opening-pr",
-    "at": "2026-10-25T13:55:02.798Z"
-  }
+  ]
 }
