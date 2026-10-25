@@ -123,3 +123,26 @@ it('escapes hostile text in every template with no scripts, links or remote asse
         });
     }
 });
+
+it('shows the Gene & Tonic brand as inline-styled text at 8pt or more in every template header and footer', function () {
+    $this->reader->with(ReportFixtures::research());
+
+    foreach (configuredTemplateKeys() as $key) {
+        $this->get(ReportFixtures::url(query: ['template' => $key]))->assertOk();
+
+        Pdf::assertRespondedWithPdf(function ($pdf) use ($key) {
+            if ($pdf->downloadName !== "magnesium-{$key}.pdf") {
+                return false;
+            }
+
+            foreach ([$pdf->getHeaderHtml(), $pdf->getFooterHtml()] as $html) {
+                expect($html)->toContain('Gene &amp; Tonic');
+                preg_match_all('/font-size:\s*([\d.]+)pt/', $html, $sizes);
+                expect($sizes[1])->not->toBeEmpty()
+                    ->and(min(array_map('floatval', $sizes[1])))->toBeGreaterThanOrEqual(8.0);
+            }
+
+            return true;
+        });
+    }
+});
