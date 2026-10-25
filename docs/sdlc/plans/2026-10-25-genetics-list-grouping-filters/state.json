@@ -6,7 +6,7 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:01:17.242Z",
+  "updated": "2026-10-25T15:06:14.195Z",
   "stage": "verify",
   "stageHistory": [
     {
@@ -168,7 +168,13 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "verify": {
+      "result": "pass",
+      "at": "2026-10-25T15:06:14.194Z",
+      "note": "tests: 564 passing, 3 skipped; 12 requirements met (FR-07 fixed: open state now server-owned, survives re-render), 2 partial-coverage gaps logged; secret scan: clean; audit: composer + npm clean; no lockfile changes"
+    }
+  },
   "drift": [
     {
       "path": "Modules/Genetics/tests/Feature/UploadPageTest.php",
@@ -311,6 +317,26 @@
       "at": "2026-10-25T15:01:17.242Z",
       "event": "advanced",
       "detail": "verify"
+    },
+    {
+      "at": "2026-10-25T15:01:24.250Z",
+      "event": "step",
+      "detail": "testing"
+    },
+    {
+      "at": "2026-10-25T15:01:45.606Z",
+      "event": "step",
+      "detail": "scanning"
+    },
+    {
+      "at": "2026-10-25T15:03:47.621Z",
+      "event": "step",
+      "detail": "fixing (1)"
+    },
+    {
+      "at": "2026-10-25T15:06:14.195Z",
+      "event": "verify pass",
+      "detail": "tests: 564 passing, 3 skipped; 12 requirements met (FR-07 fixed: open state now server-owned, survives re-render), 2 partial-coverage gaps logged; secret scan: clean; audit: composer + npm clean; no lockfile changes"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -435,8 +461,24 @@
       ],
       "from": "task-review",
       "at": "2026-10-25T15:00:52.522Z"
+    },
+    {
+      "id": "s13",
+      "area": "tests",
+      "text": "Search tests for rsID, specific category and genotype-effect text; one test that sets both filter and search then clears both",
+      "where": [
+        "Modules/Genetics/tests/Feature/VariantListFilterTest.php"
+      ],
+      "from": "check",
+      "at": "2026-10-25T15:03:47.551Z"
     }
   ],
   "planHash": "dd634ff18e0753eb",
-  "configHash": "85d35cf89052f183"
+  "configHash": "85d35cf89052f183",
+  "step": {
+    "stage": "verify",
+    "name": "fixing",
+    "count": 1,
+    "at": "2026-10-25T15:03:47.620Z"
+  }
 }
