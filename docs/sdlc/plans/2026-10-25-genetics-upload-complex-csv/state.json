@@ -6,7 +6,7 @@
   "branch": "fix/genetics-upload-complex-csv",
   "base": "main",
   "created": "2026-10-25T13:26:58.864Z",
-  "updated": "2026-10-25T13:54:02.647Z",
+  "updated": "2026-10-25T13:54:23.794Z",
   "stage": "review",
   "stageHistory": [
     {
@@ -61,7 +61,14 @@
       ]
     }
   ],
-  "evidence": {},
+  "evidence": {
+    "review": {
+      "result": "pass",
+      "at": "2026-10-25T13:54:23.793Z",
+      "note": "6 follow-ups logged",
+      "blocking": 0
+    }
+  },
   "drift": [],
   "log": [
     {
@@ -154,6 +161,16 @@
       "at": "2026-10-25T13:54:02.647Z",
       "event": "advanced",
       "detail": "review"
+    },
+    {
+      "at": "2026-10-25T13:54:02.747Z",
+      "event": "step",
+      "detail": "rechecking"
+    },
+    {
+      "at": "2026-10-25T13:54:23.794Z",
+      "event": "review pass",
+      "detail": "6 follow-ups logged"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -224,5 +241,10 @@
       "from": "task-review",
       "at": "2026-10-25T13:51:28.787Z"
     }
-  ]
+  ],
+  "step": {
+    "stage": "review",
+    "name": "rechecking",
+    "at": "2026-10-25T13:54:02.746Z"
+  }
 }
