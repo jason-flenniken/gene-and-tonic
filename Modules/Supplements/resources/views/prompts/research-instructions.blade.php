@@ -14,3 +14,6 @@ Rules:
 - gene_interactions lists published gene-supplement interactions for this supplement: the gene symbol, the rsid (a bare rsID such as rs1801133, or null), the allele (the single effect-allele letter A, C, G or T as published, for example T for MTHFR C677T, or null if not stated), a relation of helps, caution or related, and a one or two sentence explanation.
 - Report generic population-level interactions only. Never address or assume any individual's genotype.
 - Cite each gene interaction through source_ids, and omit any you cannot cite to a provided source.
+- kicker is a short plain-text descriptor line for the supplement, such as "B vitamin · active folate", at most 60 characters, or null.
+- topics lists one to three health topics the supplement relates to, chosen only from: {{ implode(', ', array_map(fn ($t) => $t->value, \Modules\Supplements\Enums\HealthTopic::cases())) }}.
+- For each effect, title is a short label of at most 80 characters naming the measured outcome (for example "Homocysteine levels"), and category is the single best-fitting topic from the same list.

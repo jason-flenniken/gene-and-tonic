@@ -12,6 +12,7 @@ use Modules\Intelligence\Exceptions\GenerationFailedException;
 use Modules\Intelligence\Exceptions\ResearchProviderException;
 use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Enums\GeneRelation;
+use Modules\Supplements\Enums\HealthTopic;
 use Modules\Supplements\Repositories\ResearchRepository;
 use Modules\Supplements\Repositories\SupplementRepository;
 use Modules\Supplements\Support\ResearchFindingsBuilder;
@@ -126,13 +127,18 @@ class ResearchSupplement
     private function schema(JsonSchema $s): array
     {
         $grades = array_map(fn (EvidenceGrade $g): string => $g->value, EvidenceGrade::cases());
+        $topics = array_map(fn (HealthTopic $t): string => $t->value, HealthTopic::cases());
         $ids = fn () => $s->array()->items($s->string())->required();
 
         return [
             'summary' => $s->string()->required(),
             'safety_notes' => $s->string()->required(),
+            'kicker' => $s->string()->nullable()->required(),
+            'topics' => $s->array()->items($s->string()->enum($topics))->required(),
             'effects' => $s->array()->items($s->object([
                 'claim' => $s->string()->required(),
+                'title' => $s->string()->nullable()->required(),
+                'category' => $s->string()->enum($topics)->nullable()->required(),
                 'outcome' => $s->string()->required(),
                 'evidence_grade' => $s->string()->enum($grades)->required(),
                 'source_ids' => $ids(),

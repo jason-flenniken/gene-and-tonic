@@ -365,9 +365,10 @@ it('declares a strict-compatible schema', function () {
     $schema = ($ai->requests()[0]->schema)(new JsonSchemaTypeFactory);
     $json = json_encode(array_map(fn ($t) => $t->toArray(), $schema));
 
-    expect(array_keys($schema))->toBe(['summary', 'safety_notes', 'effects', 'mechanisms', 'studies', 'gene_interactions'])
+    expect(array_keys($schema))->toBe(['summary', 'safety_notes', 'kicker', 'topics', 'effects', 'mechanisms', 'studies', 'gene_interactions'])
         ->and($json)->toContain('"enum":["strong","moderate","limited"]')
         ->and($json)->toContain('"enum":["helps","caution","related"]')
+        ->and($json)->toContain('"enum":["methylation","heart","mood","sleep","stress","energy","focus","blood","immune","digestion","other"]')
         ->and($json)->toContain('source_id');
 });
 

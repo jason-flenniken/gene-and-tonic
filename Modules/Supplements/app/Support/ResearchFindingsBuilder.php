@@ -6,6 +6,7 @@ use Modules\Intelligence\Data\SourceDocument;
 use Modules\Shared\Support\SourceUrl;
 use Modules\Supplements\Enums\EvidenceGrade;
 use Modules\Supplements\Enums\GeneRelation;
+use Modules\Supplements\Enums\HealthTopic;
 
 /**
  * Turns the model's untrusted structured answer into ResearchFindings, keeping only cited findings.
@@ -57,6 +58,8 @@ final class ResearchFindingsBuilder
 
             $effects[] = [
                 'claim' => self::prose($item['claim'], 500),
+                'title' => self::line($item['title'] ?? null, 80),
+                'category' => self::category($item['category'] ?? null),
                 'outcome' => self::prose($item['outcome'], 1000),
                 'evidence_grade' => $grade->value,
                 'source_keys' => $keys,
@@ -129,6 +132,8 @@ final class ResearchFindingsBuilder
             mechanisms: $mechanisms,
             studies: $studies,
             geneInteractions: $geneInteractions,
+            kicker: self::line($output['kicker'] ?? null, 60),
+            topics: self::topics($output['topics'] ?? null),
         );
     }
 
@@ -216,6 +221,48 @@ final class ResearchFindingsBuilder
         }
 
         return array_values($keys);
+    }
+
+    /**
+     * Trims, collapses all whitespace (including newlines) to single spaces and caps the length.
+     * Markup is left as is: views escape it on output.
+     */
+    private static function line(mixed $value, int $max): ?string
+    {
+        if (! is_string($value)) {
+            return null;
+        }
+
+        $line = mb_substr(trim((string) preg_replace('/\s+/u', ' ', $value)), 0, $max);
+
+        return $line === '' ? null : trim($line);
+    }
+
+    /** Anything that is not a HealthTopic becomes Other; a missing category stays null. */
+    private static function category(mixed $value): ?string
+    {
+        if (! is_string($value) || trim($value) === '') {
+            return null;
+        }
+
+        return (HealthTopic::tryFrom(strtolower(trim($value))) ?? HealthTopic::Other)->value;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private static function topics(mixed $value): array
+    {
+        $topics = [];
+        foreach (is_array($value) ? $value : [] as $item) {
+            $topic = is_string($item) ? HealthTopic::tryFrom(strtolower(trim($item))) : null;
+
+            if ($topic !== null) {
+                $topics[$topic->value] = $topic->value;
+            }
+        }
+
+        return array_slice(array_values($topics), 0, 3);
     }
 
     private static function grade(mixed $value): ?EvidenceGrade
