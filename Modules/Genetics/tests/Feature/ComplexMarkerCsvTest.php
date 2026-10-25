@@ -23,7 +23,7 @@ beforeEach(function () {
 });
 
 it('does not name the upload action after a Livewire JavaScript helper', function () {
-    $this->withoutVite()->actingAs($this->user)->get('/?tab=genetics')
+    $this->withoutVite()->actingAs($this->user)->get('/genetics')
         ->assertOk()
         ->assertSee('Upload results')
         ->assertDontSee('wire:submit="upload"', false);

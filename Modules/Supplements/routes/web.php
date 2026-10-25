@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::livewire('/supplements', 'supplements::catalog')->name('supplements.index');
+
 Route::livewire('/supplements/{supplement}', 'supplements::show')
     ->whereNumber('supplement')
     ->name('supplements.show');

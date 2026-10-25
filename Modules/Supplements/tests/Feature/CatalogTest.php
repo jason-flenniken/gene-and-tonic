@@ -42,13 +42,13 @@ it('adds a supplement as queued and pushes exactly one job', function () {
     Queue::assertPushed(RunSupplementResearch::class, 1);
 });
 
-it('renders the catalog on the dashboard tab with rows and links', function () {
+it('renders the catalog on its page with rows and links', function () {
     $supplement = Supplement::factory()->create(['name' => 'Zinc']);
     $research = SupplementResearch::factory()->for($supplement)->create(['status' => ResearchStatus::Complete]);
     SupplementEffect::factory()->count(2)->for($research, 'research')->create();
     SupplementStudy::factory()->for($research, 'research')->create();
 
-    $this->get('/?tab=supplements')
+    $this->get('/supplements')
         ->assertOk()
         ->assertSee('Zinc')
         ->assertSee('Complete')

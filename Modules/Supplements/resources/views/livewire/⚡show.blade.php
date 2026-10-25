@@ -91,7 +91,7 @@ new #[Title('Supplement')] class extends Component
     @php($research = $this->research)
 
     <div>
-        <a href="{{ route('home', ['tab' => 'supplements']) }}" class="text-sm text-zinc-500 hover:underline">&larr; Back to supplements</a>
+        <a href="{{ route('supplements.index') }}" class="text-sm text-zinc-500 hover:underline">&larr; Back to supplements</a>
         <div class="mt-2 flex items-center gap-3">
             <flux:heading size="xl">{{ $research?->name ?? $name }}</flux:heading>
             @if ($research)
