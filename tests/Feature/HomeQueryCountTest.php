@@ -55,7 +55,7 @@ it('decrypts the genetic profile at most once per component render', function (s
     'match-stat' => ['recommendations::match-stat'],
 ]);
 
-it('reads the profile at most twice in your-genes (profile, then the variant links)', function () {
+it('decrypts the profile at most twice in your-genes: its own read, then the shared Recommendations reader', function () {
     $user = User::factory()->create();
     seedHome($user, 4);
 
@@ -69,10 +69,12 @@ it('keeps Home queries flat as supplements grow from 1 to 4', function () {
     seedHome($user, 1);
     $one = homeQueries(fn () => $this->actingAs($user)->get('/')->assertOk());
 
+    app()->forgetScopedInstances(); // a new request gets fresh scoped readers
+
     Supplement::factory()->count(3)->create()->each(
         fn (Supplement $supplement) => SupplementResearch::factory()->create(['supplement_id' => $supplement->id, 'status' => ResearchStatus::Complete]),
     );
     $four = homeQueries(fn () => $this->actingAs($user)->get('/')->assertOk());
 
     expect(count($four))->toBe(count($one));
-})->skip('NFR-01 gap: the supplement.card match-count slot calls forUserAndSupplement per card (N+1); the fix is in Recommendations app code, outside this task.');
+});

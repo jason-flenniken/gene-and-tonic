@@ -31,5 +31,6 @@ final readonly class SupplementSummaryData implements Arrayable
         public int $sourcesCount,
         public array $topics = [],
         public array $geneInteractions = [],
+        public bool $geneticsChecked = false,
     ) {}
 }
