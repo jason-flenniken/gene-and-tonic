@@ -184,6 +184,17 @@ it('ignores invalid section keys and never renders them', function (string $key)
     $component->assertDontSeeHtml('<script>');
 })->with(['<script>', '../x', 'METHYLATION', '']);
 
+it('ignores tampered open-section values set from the client', function () {
+    seedList($this->user);
+
+    $component = Livewire::actingAs($this->user)->test('genetics::profile')
+        ->set('openSections', [['methylation'], 7, '<script>', 'brain_mood']);
+
+    expect(sectionIsOpen($component, 'brain_mood'))->toBeTrue()
+        ->and(sectionIsOpen($component, 'methylation'))->toBeFalse();
+    $component->assertDontSeeHtml('<script>');
+});
+
 it('keeps an opened section open when another row finishes its lookup', function () {
     seedList($this->user);
     GeneVariant::where('rsid', 'rs4')->update(['status' => LookupStatus::LookingUp]);

@@ -359,7 +359,7 @@ new #[Title('My genetics')] class extends Component
     #[Computed]
     public function openSectionKeys(): array
     {
-        return array_values(array_intersect($this->sectionKeys(), array_map('strval', $this->openSections)));
+        return array_values(array_intersect($this->sectionKeys(), array_filter($this->openSections, 'is_string')));
     }
 
     private function collapseWhenUnfiltered(): void
