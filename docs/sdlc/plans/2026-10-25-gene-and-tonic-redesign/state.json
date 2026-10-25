@@ -6,8 +6,8 @@
   "branch": "feature/gene-and-tonic-redesign",
   "base": "main",
   "created": "2026-10-25T18:16:31.084Z",
-  "updated": "2026-10-25T20:34:04.594Z",
-  "stage": "review",
+  "updated": "2026-10-25T20:34:04.697Z",
+  "stage": "ship",
   "stageHistory": [
     {
       "stage": "discover",
@@ -32,6 +32,10 @@
     {
       "stage": "review",
       "at": "2026-10-25T20:20:41.904Z"
+    },
+    {
+      "stage": "ship",
+      "at": "2026-10-25T20:34:04.697Z"
     }
   ],
   "paused": null,
@@ -1378,6 +1382,11 @@
       "at": "2026-10-25T20:34:04.594Z",
       "event": "review pass",
       "detail": "2 Required fixed (duplicate relevance profile cache, dead 24h usage fields); 12 branch-review and 1 security-review follow-ups logged"
+    },
+    {
+      "at": "2026-10-25T20:34:04.697Z",
+      "event": "advanced",
+      "detail": "ship"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -2085,10 +2094,5 @@
       "from": "branch-review",
       "at": "2026-10-25T20:31:24.748Z"
     }
-  ],
-  "step": {
-    "stage": "review",
-    "name": "rechecking",
-    "at": "2026-10-25T20:33:36.353Z"
-  }
+  ]
 }
