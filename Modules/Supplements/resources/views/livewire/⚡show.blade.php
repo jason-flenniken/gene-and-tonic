@@ -6,7 +6,9 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Modules\Supplements\Contracts\SupplementResearchReader;
+use Modules\Supplements\Data\EffectData;
 use Modules\Supplements\Data\SupplementResearchData;
+use Modules\Supplements\Enums\HealthTopic;
 use Modules\Supplements\Actions\StartResearch;
 use Modules\Supplements\Repositories\SupplementRepository;
 use Modules\Supplements\Support\ActionThrottle;
@@ -22,6 +24,9 @@ new #[Title('Supplement')] class extends Component
     #[Url(as: 'tab', except: 'overview')]
     public string $tab = 'overview';
 
+    #[Url(except: '')]
+    public string $effectTopic = '';
+
     public function mount(int|string $supplement, SupplementRepository $supplements): void
     {
         $model = is_numeric($supplement) ? $supplements->find((int) $supplement) : null;
@@ -31,6 +36,12 @@ new #[Title('Supplement')] class extends Component
         $this->supplementId = $model->id;
         $this->name = $model->name;
         $this->normalizeTab();
+        $this->normalizeEffectTopic();
+    }
+
+    public function updatedEffectTopic(): void
+    {
+        $this->normalizeEffectTopic();
     }
 
     public function updatedTab(): void
@@ -78,6 +89,53 @@ new #[Title('Supplement')] class extends Component
         return $byKey;
     }
 
+    /**
+     * Effect categories in use, in enum order, with their counts. Empty for legacy research with no categories.
+     *
+     * @return list<array{value: string, label: string, count: int}>
+     */
+    #[Computed]
+    public function effectTopics(): array
+    {
+        $counts = [];
+
+        foreach ($this->research?->effects ?? [] as $effect) {
+            if ($effect->category !== null) {
+                $counts[$effect->category->value] = ($counts[$effect->category->value] ?? 0) + 1;
+            }
+        }
+
+        $topics = [];
+
+        foreach (HealthTopic::cases() as $topic) {
+            if (isset($counts[$topic->value])) {
+                $topics[] = ['value' => $topic->value, 'label' => $topic->label(), 'count' => $counts[$topic->value]];
+            }
+        }
+
+        return $topics;
+    }
+
+    /** @return list<EffectData> */
+    #[Computed]
+    public function visibleEffects(): array
+    {
+        $effects = $this->research?->effects ?? [];
+
+        if (HealthTopic::tryFrom($this->effectTopic) === null) {
+            return $effects;
+        }
+
+        return array_values(array_filter($effects, fn (EffectData $effect) => $effect->category?->value === $this->effectTopic));
+    }
+
+    private function normalizeEffectTopic(): void
+    {
+        if (HealthTopic::tryFrom($this->effectTopic) === null) {
+            $this->effectTopic = '';
+        }
+    }
+
     private function normalizeTab(): void
     {
         if (! in_array($this->tab, self::TABS, true)) {
@@ -87,209 +145,272 @@ new #[Title('Supplement')] class extends Component
 };
 ?>
 
-<div class="space-y-6">
-    @php($research = $this->research)
+@php
+    $research = $this->research;
+    $active = $research?->status->isActive() ?? false;
+    $topics = $this->effectTopics;
+    $visibleEffects = $this->visibleEffects;
+    $slotViews = fn (string $slot) => app(\Modules\Shared\Contracts\PageActions::class)->for($slot);
+    $card = 'rounded-card border border-line p-5';
+    $summary = $research?->summary;
+@endphp
 
-    <div>
-        <a href="{{ route('supplements.index') }}" class="text-sm text-zinc-500 hover:underline">&larr; Back to supplements</a>
-        <div class="mt-2 flex items-center gap-3">
-            <flux:heading size="xl">{{ $research?->name ?? $name }}</flux:heading>
-            @if ($research)
-                <flux:badge color="{{ $research->status->color() }}" size="sm">{{ $research->status->label() }}</flux:badge>
-            @endif
-            <div class="ml-auto flex items-center gap-3">
-                @if ($research && ! $research->status->isActive())
-                    <flux:button size="sm" wire:click="rerun">Re-run</flux:button>
+<div @if ($active) wire:poll.3s @endif>
+<x-ui.panel narrow>
+    <nav aria-label="Breadcrumb" class="flex flex-wrap gap-2 text-[14px] text-ink-subtle">
+        <a href="{{ route('supplements.index') }}" class="font-medium text-juniper hover:text-juniper-hover">Supplements</a>
+        <span aria-hidden="true">&rsaquo;</span>
+        <span aria-current="page">{{ $research?->name ?? $name }}</span>
+    </nav>
+
+    <section class="flex flex-col gap-3.5 rounded-section bg-juniper-tint p-6" data-hero>
+        <div class="flex items-start gap-4">
+            <div class="flex min-w-0 flex-1 flex-col gap-1">
+                <h1 class="text-[30px] leading-[1.15] font-bold tracking-[-0.02em] text-ink">{{ $research?->name ?? $name }}</h1>
+                @if (filled($research?->kicker))
+                    <span data-kicker class="text-[12px] font-bold tracking-[0.08em] text-ink-muted uppercase">{{ $research->kicker }}</span>
                 @endif
-                @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.header') as $actionView)
-                    @include($actionView, ['supplementId' => $supplementId, 'status' => $research?->status])
+            </div>
+            <span class="flex size-14 shrink-0 items-center justify-center rounded-[14px] border border-juniper-line bg-surface text-juniper">
+                <x-icon.capsule class="size-[30px]" />
+            </span>
+        </div>
+
+        @if ($research && $research->topics !== [])
+            <div class="flex flex-wrap gap-2" data-topics>
+                @foreach ($research->topics as $topic)
+                    <span class="rounded-lg border border-juniper-line bg-surface px-2.5 py-1 text-[13px] font-medium text-ink">{{ $topic->label() }}</span>
                 @endforeach
             </div>
-        </div>
-    </div>
+        @endif
 
-    <x-tabs>
-        <x-tabs.item :active="$tab === 'overview'" wire:click="$set('tab', 'overview')">Overview</x-tabs.item>
-        <x-tabs.item :active="$tab === 'effects'" wire:click="$set('tab', 'effects')">Effects ({{ count($research?->effects ?? []) }})</x-tabs.item>
-        <x-tabs.item :active="$tab === 'mechanisms'" wire:click="$set('tab', 'mechanisms')">Mechanisms ({{ count($research?->mechanisms ?? []) }})</x-tabs.item>
-        <x-tabs.item :active="$tab === 'studies'" wire:click="$set('tab', 'studies')">Studies ({{ count($research?->studies ?? []) }})</x-tabs.item>
-        <x-tabs.item :active="$tab === 'genetics'" wire:click="$set('tab', 'genetics')">Genetics ({{ count($research?->geneInteractions ?? []) }})</x-tabs.item>
-        <x-tabs.item :active="$tab === 'sources'" wire:click="$set('tab', 'sources')">Sources ({{ count($research?->sources ?? []) }})</x-tabs.item>
-    </x-tabs>
+        @if ($research && $research->status !== \Modules\Supplements\Enums\ResearchStatus::Complete)
+            <div class="flex flex-col gap-2" data-run-status>
+                <x-ui.status :tone="$research->status->tone()" :label="$research->status->label()" />
+                @if ($active)
+                    <x-ui.progress-steps :step="$research->status->step() ?? 1" :total="4" :label="$research->status->label()" class="max-w-[680px]" />
+                @endif
+            </div>
+        @endif
+
+        @if ($research && $research->status === \Modules\Supplements\Enums\ResearchStatus::Complete)
+            @if (filled($summary))
+                <div x-data="{ open: false }" class="max-w-[680px]" data-summary>
+                    <p class="text-[15px] leading-[1.6] whitespace-pre-line text-ink-body" x-bind:class="open ? '' : 'line-clamp-3'">{{ $summary }}</p>
+                    @if (mb_strlen($summary) > 240)
+                        <button type="button" class="mt-1 text-[14px] font-semibold text-juniper hover:text-juniper-hover" x-on:click="open = ! open" x-text="open ? 'Show less' : 'Read more'">Read more</button>
+                    @endif
+                </div>
+            @else
+                <p class="text-[15px] text-ink-muted">No summary available.</p>
+            @endif
+        @endif
+
+        <div class="mt-1 flex flex-wrap items-center gap-2.5">
+            @foreach ($slotViews('supplement.header') as $actionView)
+                @include($actionView, ['supplementId' => $supplementId, 'status' => $research?->status])
+            @endforeach
+            @if ($research)
+                <x-ui.button variant="on-tint" wire:click="rerun" :disabled="$active">Re-run</x-ui.button>
+            @endif
+        </div>
+    </section>
+
+    <x-ui.notice>This is a research summary generated from published sources, not medical advice. Talk to a qualified clinician before starting a supplement.</x-ui.notice>
+
+    <x-ui.segmented>
+        <x-ui.segmented.item :active="$tab === 'overview'" wire:click="$set('tab', 'overview')">Overview</x-ui.segmented.item>
+        <x-ui.segmented.item :active="$tab === 'effects'" wire:click="$set('tab', 'effects')">Effects ({{ count($research?->effects ?? []) }})</x-ui.segmented.item>
+        <x-ui.segmented.item :active="$tab === 'mechanisms'" wire:click="$set('tab', 'mechanisms')">Mechanisms ({{ count($research?->mechanisms ?? []) }})</x-ui.segmented.item>
+        <x-ui.segmented.item :active="$tab === 'studies'" wire:click="$set('tab', 'studies')">Studies ({{ count($research?->studies ?? []) }})</x-ui.segmented.item>
+        <x-ui.segmented.item :active="$tab === 'genetics'" wire:click="$set('tab', 'genetics')">Genetics ({{ count($research?->geneInteractions ?? []) }})</x-ui.segmented.item>
+        <x-ui.segmented.item :active="$tab === 'sources'" wire:click="$set('tab', 'sources')">Sources ({{ count($research?->sources ?? []) }})</x-ui.segmented.item>
+    </x-ui.segmented>
 
     @if ($tab === 'overview')
-        <div role="tabpanel" data-panel="overview" class="space-y-4">
-            <flux:callout icon="information-circle" color="zinc">
-                <flux:callout.text>This is a research summary generated from published sources, not medical advice. Talk to a qualified clinician before starting a supplement.</flux:callout.text>
-            </flux:callout>
-
+        <div role="tabpanel" data-panel="overview" class="flex flex-col gap-6">
             @if ($research === null)
-                <flux:card>
-                    <flux:heading>No research yet</flux:heading>
-                    <flux:text class="mt-1">Research has not been started for this supplement.</flux:text>
-                </flux:card>
-            @elseif ($research->status->isActive())
-                <flux:card>
-                    <flux:heading>Research in progress</flux:heading>
-                    <flux:text class="mt-1">Status: {{ $research->status->label() }}. Check back shortly.</flux:text>
-                </flux:card>
+                <div class="{{ $card }}">
+                    <h2 class="text-[18px] font-bold text-ink">No research yet</h2>
+                    <p class="mt-1 text-[15px] text-ink-muted">Research has not been started for this supplement.</p>
+                </div>
+            @elseif ($active)
+                <div class="{{ $card }}">
+                    <h2 class="text-[18px] font-bold text-ink">Research in progress</h2>
+                    <p class="mt-1 text-[15px] text-ink-muted">Status: {{ $research->status->label() }}. This page updates on its own.</p>
+                </div>
             @elseif ($research->status === \Modules\Supplements\Enums\ResearchStatus::Failed)
-                <flux:card>
-                    <flux:heading>Research failed</flux:heading>
+                <div class="{{ $card }}">
+                    <h2 class="text-[18px] font-bold text-ink">Research failed</h2>
                     @if ($research->error)
-                        <flux:text class="mt-1">{{ $research->error }}</flux:text>
+                        <p class="mt-1 text-[15px] text-ink-muted">{{ $research->error }}</p>
                     @endif
-                </flux:card>
+                </div>
             @else
-                <flux:card class="space-y-4">
-                    <div>
-                        <flux:heading>Summary</flux:heading>
-                        <flux:text class="mt-1 whitespace-pre-line">{{ $research->summary ?? 'No summary available.' }}</flux:text>
+                @foreach ($slotViews('supplement.overview-links') as $linkView)
+                    @include($linkView, ['supplementId' => $supplementId, 'name' => $research->name])
+                @endforeach
+
+                <div class="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))]">
+                    <section class="flex flex-col gap-3" data-section="effects">
+                        <h2 class="text-[18px] font-bold text-ink">Health effects</h2>
+                        <x-supplements::show.effect-chips :topics="$topics" :active="$effectTopic" :total="count($research->effects)" />
+                        <div class="flex flex-col">
+                            @forelse (array_slice($visibleEffects, 0, 4) as $effect)
+                                <x-supplements::show.effect-row :effect="$effect" wire:key="overview-effect-{{ $loop->index }}" />
+                            @empty
+                                <p class="py-2 text-[15px] text-ink-muted">No effects recorded.</p>
+                            @endforelse
+                        </div>
+                        @if ($visibleEffects !== [])
+                            <x-ui.button variant="secondary" class="!h-[46px] !text-[14px]" wire:click="$set('tab', 'effects')">Show all effects</x-ui.button>
+                        @endif
+                    </section>
+
+                    <div class="flex flex-col gap-4" data-section="your-genes">
+                        @foreach ($slotViews('supplement.panels') as $panelView)
+                            @include($panelView, ['supplementId' => $supplementId])
+                        @endforeach
                     </div>
-                    <div>
-                        <flux:heading>Safety notes</flux:heading>
-                        <flux:text class="mt-1 whitespace-pre-line">{{ $research->safetyNotes ?? 'No safety notes recorded.' }}</flux:text>
-                    </div>
+                </div>
+
+                <x-ui.section title="Safety notes" class="border-t border-line-soft pt-5" data-section="safety">
+                    <p class="text-[15px] leading-[1.6] whitespace-pre-line text-ink-body">{{ $research->safetyNotes ?? 'No safety notes recorded.' }}</p>
                     @if ($research->completedAt)
-                        <flux:text size="sm">Completed {{ $research->completedAt->toDayDateTimeString() }}</flux:text>
+                        <p class="text-[13px] text-ink-muted">Completed {{ $research->completedAt->toDayDateTimeString() }}</p>
                     @endif
-                </flux:card>
+                </x-ui.section>
             @endif
         </div>
     @elseif ($tab === 'effects')
-        <div role="tabpanel" data-panel="effects" class="space-y-3">
-            @forelse ($research?->effects ?? [] as $effect)
-                <flux:card wire:key="effect-{{ $loop->index }}">
-                    <div class="flex items-start justify-between gap-3">
-                        <flux:heading>{{ $effect->claim }}</flux:heading>
-                        <flux:badge size="sm">{{ ucfirst($effect->evidenceGrade->value) }}</flux:badge>
-                    </div>
-                    @if ($effect->outcome)
-                        <flux:text class="mt-1">{{ $effect->outcome }}</flux:text>
-                    @endif
-                    <x-supplements::source-badges :keys="$effect->sourceKeys" :sources="$this->sourcesByKey" />
-                </flux:card>
+        <div role="tabpanel" data-panel="effects" class="flex flex-col gap-3">
+            <x-supplements::show.effect-chips :topics="$topics" :active="$effectTopic" :total="count($research?->effects ?? [])" />
+            @forelse ($visibleEffects as $effect)
+                <x-supplements::show.effect-row :effect="$effect" :sources="$this->sourcesByKey" :detail="true" wire:key="effect-{{ $loop->index }}" />
             @empty
-                <flux:card><flux:text>No effects recorded.</flux:text></flux:card>
+                <div class="{{ $card }}"><p class="text-[15px] text-ink-muted">No effects recorded.</p></div>
             @endforelse
         </div>
     @elseif ($tab === 'mechanisms')
-        <div role="tabpanel" data-panel="mechanisms" class="space-y-3">
+        <div role="tabpanel" data-panel="mechanisms" class="flex flex-col gap-3">
             @forelse ($research?->mechanisms ?? [] as $mechanism)
-                <flux:card wire:key="mechanism-{{ $loop->index }}">
-                    <flux:text>{{ $mechanism->description }}</flux:text>
+                <div wire:key="mechanism-{{ $loop->index }}" class="rounded-row border border-line px-4 py-3.5">
+                    <p class="text-[15px] leading-normal text-ink">{{ $mechanism->description }}</p>
                     <x-supplements::source-badges :keys="$mechanism->sourceKeys" :sources="$this->sourcesByKey" />
-                </flux:card>
+                </div>
             @empty
-                <flux:card><flux:text>No mechanisms recorded.</flux:text></flux:card>
+                <div class="{{ $card }}"><p class="text-[15px] text-ink-muted">No mechanisms recorded.</p></div>
             @endforelse
         </div>
     @elseif ($tab === 'studies')
         <div role="tabpanel" data-panel="studies">
             @if (($research?->studies ?? []) === [])
-                <flux:card><flux:text>No studies recorded.</flux:text></flux:card>
+                <div class="{{ $card }}"><p class="text-[15px] text-ink-muted">No studies recorded.</p></div>
             @else
-                <flux:card class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="border-b border-zinc-200 text-zinc-500">
+                <div class="overflow-x-auto rounded-card border border-line">
+                    <table class="w-full text-left text-[14px]">
+                        <thead class="border-b border-line bg-surface-muted text-ink-muted">
                             <tr>
-                                <th class="py-2 pr-4 font-medium">Title</th>
-                                <th class="py-2 pr-4 font-medium">Design</th>
-                                <th class="py-2 pr-4 font-medium">Population</th>
-                                <th class="py-2 pr-4 font-medium">n</th>
-                                <th class="py-2 pr-4 font-medium">Year</th>
-                                <th class="py-2 pr-4 font-medium">Finding</th>
-                                <th class="py-2 pr-4 font-medium">Grade</th>
-                                <th class="py-2 font-medium">PubMed</th>
+                                <th class="px-3 py-2.5 font-semibold">Title</th>
+                                <th class="px-3 py-2.5 font-semibold">Design</th>
+                                <th class="px-3 py-2.5 font-semibold">Population</th>
+                                <th class="px-3 py-2.5 font-semibold">n</th>
+                                <th class="px-3 py-2.5 font-semibold">Year</th>
+                                <th class="px-3 py-2.5 font-semibold">Finding</th>
+                                <th class="px-3 py-2.5 font-semibold">Grade</th>
+                                <th class="px-3 py-2.5 font-semibold">PubMed</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100">
+                        <tbody class="divide-y divide-line-soft">
                             @foreach ($research->studies as $study)
                                 <tr wire:key="study-{{ $loop->index }}" class="align-top">
-                                    <td class="py-2 pr-4 font-medium">{{ $study->title }}</td>
-                                    <td class="py-2 pr-4">{{ $study->design }}</td>
-                                    <td class="py-2 pr-4">{{ $study->population }}</td>
-                                    <td class="py-2 pr-4">{{ $study->sampleSize }}</td>
-                                    <td class="py-2 pr-4">{{ $study->year }}</td>
-                                    <td class="py-2 pr-4">{{ $study->finding }}</td>
-                                    <td class="py-2 pr-4">
+                                    <td class="px-3 py-2.5 font-semibold text-ink">{{ $study->title }}</td>
+                                    <td class="px-3 py-2.5">{{ $study->design }}</td>
+                                    <td class="px-3 py-2.5">{{ $study->population }}</td>
+                                    <td class="px-3 py-2.5">{{ $study->sampleSize }}</td>
+                                    <td class="px-3 py-2.5">{{ $study->year }}</td>
+                                    <td class="px-3 py-2.5">{{ $study->finding }}</td>
+                                    <td class="px-3 py-2.5">
                                         @if ($study->evidenceGrade)
-                                            <flux:badge size="sm">{{ ucfirst($study->evidenceGrade->value) }}</flux:badge>
+                                            <x-ui.grade :grade="$study->evidenceGrade->value" />
                                         @endif
                                     </td>
-                                    <td class="py-2">
+                                    <td class="px-3 py-2.5">
                                         @if ($study->pubmedUrl())
-                                            <a href="{{ $study->pubmedUrl() }}" target="_blank" rel="noopener noreferrer" class="underline">PMID {{ $study->pmid }}</a>
+                                            <a href="{{ $study->pubmedUrl() }}" target="_blank" rel="noopener noreferrer" class="font-semibold text-juniper hover:text-juniper-hover">PMID {{ $study->pmid }}</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </flux:card>
+                </div>
             @endif
         </div>
     @elseif ($tab === 'genetics')
-        <div role="tabpanel" data-panel="genetics" class="space-y-3">
+        <div role="tabpanel" data-panel="genetics" class="flex flex-col gap-4">
             @if ($research === null || ! $research->geneticsChecked)
-                <flux:card><flux:text>Re-run research to check genetic interactions.</flux:text></flux:card>
+                <div class="{{ $card }}"><p class="text-[15px] text-ink-muted">Re-run research to check genetic interactions.</p></div>
             @else
-                @forelse ($research->geneInteractions as $interaction)
-                    <flux:card wire:key="gene-{{ $loop->index }}">
-                        <div class="flex flex-wrap items-center gap-2">
-                            <flux:heading>{{ $interaction->gene }}</flux:heading>
-                            @if ($interaction->rsid)
-                                <flux:badge size="sm">{{ $interaction->rsid }}</flux:badge>
-                            @endif
-                            @if ($interaction->allele)
-                                <flux:badge size="sm">Allele {{ $interaction->allele }}</flux:badge>
-                            @endif
-                            <flux:badge size="sm" color="{{ $interaction->relation->color() }}">{{ $interaction->relation->label() }}</flux:badge>
+                <div class="flex flex-col gap-3">
+                    @forelse ($research->geneInteractions as $interaction)
+                        <div wire:key="gene-{{ $loop->index }}" class="rounded-row border border-line px-4 py-3.5">
+                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                                <h3 class="text-[15px] font-bold text-ink">{{ $interaction->gene }}</h3>
+                                @if ($interaction->rsid)
+                                    <span class="text-[13px] text-ink-subtle">{{ $interaction->rsid }}</span>
+                                @endif
+                                @if ($interaction->allele)
+                                    <span class="rounded-lg border border-line-input px-2 py-0.5 text-[12px] font-semibold text-ink-muted">Allele {{ $interaction->allele }}</span>
+                                @endif
+                                <x-ui.status class="ml-auto" :tone="$interaction->relation->tone()" :label="$interaction->relation->label()" />
+                            </div>
+                            <p class="mt-1.5 text-[14px] leading-normal text-ink-body">{{ $interaction->explanation }}</p>
+                            <x-supplements::source-badges :keys="$interaction->sourceKeys" :sources="$this->sourcesByKey" />
                         </div>
-                        <flux:text class="mt-1">{{ $interaction->explanation }}</flux:text>
-                        <x-supplements::source-badges :keys="$interaction->sourceKeys" :sources="$this->sourcesByKey" />
-                    </flux:card>
-                @empty
-                    <flux:card><flux:text>No genetic interactions found in the sources.</flux:text></flux:card>
-                @endforelse
+                    @empty
+                        <div class="{{ $card }}"><p class="text-[15px] text-ink-muted">No genetic interactions found in the sources.</p></div>
+                    @endforelse
+                </div>
             @endif
+
+            @foreach ($slotViews('supplement.panels') as $panelView)
+                @include($panelView, ['supplementId' => $supplementId])
+            @endforeach
         </div>
     @else
         <div role="tabpanel" data-panel="sources">
             @if (($research?->sources ?? []) === [])
-                <flux:card><flux:text>No sources recorded.</flux:text></flux:card>
+                <div class="{{ $card }}"><p class="text-[15px] text-ink-muted">No sources recorded.</p></div>
             @else
-                <flux:card class="overflow-x-auto">
-                    <table class="w-full text-left text-sm">
-                        <thead class="border-b border-zinc-200 text-zinc-500">
+                <div class="overflow-x-auto rounded-card border border-line">
+                    <table class="w-full text-left text-[14px]">
+                        <thead class="border-b border-line bg-surface-muted text-ink-muted">
                             <tr>
-                                <th class="py-2 pr-4 font-medium">Key</th>
-                                <th class="py-2 pr-4 font-medium">Title</th>
-                                <th class="py-2 font-medium">Domain</th>
+                                <th class="px-3 py-2.5 font-semibold">Key</th>
+                                <th class="px-3 py-2.5 font-semibold">Title</th>
+                                <th class="px-3 py-2.5 font-semibold">Domain</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-zinc-100">
+                        <tbody class="divide-y divide-line-soft">
                             @foreach ($research->sources as $source)
                                 <tr wire:key="source-{{ $loop->index }}">
-                                    <td class="py-2 pr-4">{{ $source->key }}</td>
-                                    <td class="py-2 pr-4">
+                                    <td class="px-3 py-2.5">{{ $source->key }}</td>
+                                    <td class="px-3 py-2.5">
                                         @if ($source->safeUrl())
-                                            <a href="{{ $source->safeUrl() }}" target="_blank" rel="noopener noreferrer" class="underline">{{ $source->title }}</a>
+                                            <a href="{{ $source->safeUrl() }}" target="_blank" rel="noopener noreferrer" class="font-semibold text-juniper hover:text-juniper-hover">{{ $source->title }}</a>
                                         @else
                                             {{ $source->title }}
                                         @endif
                                     </td>
-                                    <td class="py-2">{{ $source->domain }}</td>
+                                    <td class="px-3 py-2.5">{{ $source->domain }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                </flux:card>
+                </div>
             @endif
         </div>
     @endif
-
-    @foreach (app(\Modules\Shared\Contracts\PageActions::class)->for('supplement.panels') as $panelView)
-        @include($panelView, ['supplementId' => $supplementId])
-    @endforeach
+</x-ui.panel>
 </div>
