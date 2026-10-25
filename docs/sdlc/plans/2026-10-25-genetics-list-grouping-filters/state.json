@@ -6,8 +6,8 @@
   "branch": "feature/genetics-list-grouping-filters",
   "base": "main",
   "created": "2026-10-25T14:34:57.259Z",
-  "updated": "2026-10-25T15:17:14.087Z",
-  "stage": "ship",
+  "updated": "2026-10-25T15:17:18.070Z",
+  "stage": "learn",
   "stageHistory": [
     {
       "stage": "discover",
@@ -36,6 +36,10 @@
     {
       "stage": "ship",
       "at": "2026-10-25T15:15:32.565Z"
+    },
+    {
+      "stage": "learn",
+      "at": "2026-10-25T15:17:18.069Z"
     }
   ],
   "paused": null,
@@ -396,6 +400,11 @@
       "at": "2026-10-25T15:17:14.087Z",
       "event": "ship approved",
       "detail": "mod"
+    },
+    {
+      "at": "2026-10-25T15:17:18.069Z",
+      "event": "advanced",
+      "detail": "learn"
     }
   ],
   "cairnVersion": "0.3.0",
@@ -665,10 +674,5 @@
     }
   ],
   "planHash": "dd634ff18e0753eb",
-  "configHash": "85d35cf89052f183",
-  "step": {
-    "stage": "ship",
-    "name": "approving",
-    "at": "2026-10-25T15:16:49.764Z"
-  }
+  "configHash": "85d35cf89052f183"
 }
