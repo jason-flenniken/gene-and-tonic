@@ -3,6 +3,8 @@
 namespace Modules\Intelligence\Repositories;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
+use Modules\Intelligence\Enums\UsageWindow;
 use Modules\Intelligence\Models\AiRequest;
 
 class EloquentAiRequestRepository implements AiRequestRepository
@@ -12,11 +14,11 @@ class EloquentAiRequestRepository implements AiRequestRepository
         AiRequest::query()->create($attributes);
     }
 
-    public function summary(): UsageSummary
+    public function summary(UsageWindow $window = UsageWindow::All): UsageSummary
     {
         $since = now()->subDay();
 
-        $row = AiRequest::query()
+        $row = $this->within($window)
             ->selectRaw(
                 "count(*) as calls,
                 sum(case when status = 'failed' then 1 else 0 end) as failed_calls,
@@ -41,8 +43,45 @@ class EloquentAiRequestRepository implements AiRequestRepository
         );
     }
 
-    public function paginateLatest(int $perPage): LengthAwarePaginator
+    public function paginateLatest(int $perPage, UsageWindow $window = UsageWindow::All): LengthAwarePaginator
     {
-        return AiRequest::query()->orderByDesc('id')->paginate($perPage);
+        return $this->within($window)->orderByDesc('id')->paginate($perPage);
+    }
+
+    public function costByProfile(UsageWindow $window = UsageWindow::All): array
+    {
+        $rows = $this->within($window)
+            ->selectRaw(
+                "profile, operation, count(*) as calls,
+                sum(case when status = 'failed' then 1 else 0 end) as failed,
+                sum(coalesce(credits, 0)) as credits,
+                sum(estimated_cost_usd) as cost",
+            )
+            ->groupBy('profile', 'operation')
+            ->orderByDesc('cost')
+            ->orderBy('profile')
+            ->toBase()
+            ->get();
+
+        return array_values($rows->map(fn (object $row): ProfileCost => new ProfileCost(
+            profile: $row->profile,
+            operation: (string) $row->operation,
+            calls: (int) $row->calls,
+            failed: (int) $row->failed,
+            credits: (int) $row->credits,
+            cost: (float) $row->cost,
+        ))->all());
+    }
+
+    /** @return Builder<AiRequest> */
+    private function within(UsageWindow $window): Builder
+    {
+        $query = AiRequest::query();
+
+        if ($since = $window->since()) {
+            $query->where('created_at', '>=', $since);
+        }
+
+        return $query;
     }
 }

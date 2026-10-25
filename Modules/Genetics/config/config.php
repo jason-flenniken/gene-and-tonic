@@ -33,6 +33,7 @@ return [
     | with Intelligence as "genetics.lookup" when the module boots.
     */
     'lookup_profile' => [
+        'label' => 'Gene lookup',
         'provider' => env('AI_GENETICS_LOOKUP_PROVIDER', 'openai'),
         'model' => env('AI_GENETICS_LOOKUP_MODEL', 'gpt-6-luna'),
         'effort' => env('AI_GENETICS_LOOKUP_EFFORT', 'low'),
@@ -47,6 +48,7 @@ return [
     | (genetics:group-variants). Registered with Intelligence as "genetics.group".
     */
     'group_profile' => [
+        'label' => 'Variant grouping',
         'provider' => env('AI_GENETICS_GROUP_PROVIDER', 'openai'),
         'model' => env('AI_GENETICS_GROUP_MODEL', 'gpt-6-luna'),
         'effort' => env('AI_GENETICS_GROUP_EFFORT', 'low'),
@@ -61,6 +63,7 @@ return [
     | Registered with Intelligence as "genetics.extract" when the module boots.
     */
     'extract_profile' => [
+        'label' => 'Marker extraction',
         'provider' => env('AI_GENETICS_EXTRACT_PROVIDER', 'openai'),
         'model' => env('AI_GENETICS_EXTRACT_MODEL', 'gpt-6-luna'),
         'effort' => env('AI_GENETICS_EXTRACT_EFFORT', 'low'),

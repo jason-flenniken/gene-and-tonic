@@ -25,5 +25,6 @@ final readonly class ProfileData implements Arrayable
         public int $timeout,
         public string $instructionsView,
         public string $promptView,
+        public string $label = '',
     ) {}
 }
