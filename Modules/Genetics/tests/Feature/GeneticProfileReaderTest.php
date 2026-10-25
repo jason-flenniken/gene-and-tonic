@@ -5,6 +5,7 @@ use Modules\Genetics\Contracts\GeneticProfileReader;
 use Modules\Genetics\Data\GeneticProfileData;
 use Modules\Genetics\Data\VariantData;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Models\UserVariant;
 
@@ -38,6 +39,7 @@ it('returns the user\'s variants joined to reference data', function () {
             genotypeEffect: 'One copy.',
             status: LookupStatus::Seeded,
             source: 'genome.txt',
+            group: VariantGroup::Methylation,
         ));
 });
 

@@ -39,6 +39,7 @@ class EloquentGeneticProfileReader implements GeneticProfileReader
                 genotypeEffect: $reference?->genotype_effects[$genotype] ?? null,
                 status: $reference->status ?? LookupStatus::Pending,
                 source: $variant->source,
+                group: $reference?->category_group,
             );
         })->all()));
     }

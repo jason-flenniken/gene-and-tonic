@@ -4,6 +4,7 @@ namespace Modules\Genetics\Actions;
 
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Models\GeneVariant;
 use Modules\Genetics\Support\LookupResult;
 use Modules\Genetics\Support\LookupResultBuilder;
@@ -92,6 +93,7 @@ class LookupVariant
             'reference_allele' => $result->referenceAllele,
             'risk_allele' => $result->riskAllele,
             'category' => $result->category,
+            'category_group' => $result->group,
             'affects' => $result->affects,
             'genotype_effects' => $result->genotypeEffects,
             'sources' => $result->sources,
@@ -116,6 +118,7 @@ class LookupVariant
         return [
             'gene' => $s->string()->required(),
             'category' => $s->string()->required(),
+            'group' => $s->string()->enum(VariantGroup::class)->required(),
             'affects' => $s->string()->required(),
             'reference_allele' => $s->string()->nullable()->required(),
             'risk_allele' => $s->string()->nullable()->required(),

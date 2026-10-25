@@ -2,6 +2,8 @@
 
 namespace Modules\Genetics\Support;
 
+use Modules\Genetics\Enums\VariantGroup;
+
 /**
  * A validated lookup answer, ready to store on a gene_variants row.
  */
@@ -14,6 +16,7 @@ final readonly class LookupResult
     public function __construct(
         public ?string $gene,
         public string $category,
+        public VariantGroup $group,
         public string $affects,
         public ?string $referenceAllele,
         public ?string $riskAllele,

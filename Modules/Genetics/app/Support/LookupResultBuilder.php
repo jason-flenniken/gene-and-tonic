@@ -4,6 +4,7 @@ namespace Modules\Genetics\Support;
 
 use InvalidArgumentException;
 use Modules\Genetics\Data\Genotype;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Intelligence\Data\SourceDocument;
 use Modules\Shared\Support\SourceUrl;
 
@@ -50,6 +51,7 @@ final class LookupResultBuilder
         return new LookupResult(
             gene: self::gene($output['gene'] ?? null),
             category: $category,
+            group: VariantGroup::fromModel($output['group'] ?? null),
             affects: $affects,
             referenceAllele: $reference,
             riskAllele: $risk,

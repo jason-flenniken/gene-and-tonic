@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use Illuminate\JsonSchema\JsonSchemaTypeFactory;
+use Illuminate\JsonSchema\Types\StringType;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -9,6 +11,7 @@ use Modules\Genetics\Actions\AddVariant;
 use Modules\Genetics\Actions\LookupVariant;
 use Modules\Genetics\Actions\QueueLookups;
 use Modules\Genetics\Enums\LookupStatus;
+use Modules\Genetics\Enums\VariantGroup;
 use Modules\Genetics\Jobs\LookupGeneVariant;
 use Modules\Genetics\Jobs\ProcessGeneticUpload;
 use Modules\Genetics\Models\GeneticUpload;
@@ -36,6 +39,7 @@ function lookupOutput(array $overrides = []): array
     return [
         'gene' => 'genex',
         'category' => 'Methylation [S1]',
+        'group' => 'brain_mood',
         'affects' => 'Folate handling (S2).',
         'reference_allele' => 'G',
         'risk_allele' => 'A',
@@ -68,6 +72,7 @@ it('completes a pending row from one search and one generate call', function () 
     expect($row->status)->toBe(LookupStatus::Complete)
         ->and($row->gene)->toBe('GENEX')
         ->and($row->category)->toBe('Methylation')
+        ->and($row->category_group)->toBe(VariantGroup::BrainMood)
         ->and($row->affects)->toBe('Folate handling.')
         ->and($row->reference_allele)->toBe('G')
         ->and($row->risk_allele)->toBe('A')
@@ -331,4 +336,46 @@ it('marks a row failed when the job fails unexpectedly', function () {
     (new LookupGeneVariant('rs123'))->failed(new RuntimeException('rs123 AG'));
 
     expect($row->refresh()->status)->toBe(LookupStatus::Failed)->and($row->error)->toBe(LookupGeneVariant::GENERIC_ERROR);
+});
+
+it('stores Other when the group is invalid or missing, and still completes', function (mixed $group) {
+    $row = pendingRow();
+    $this->web->returning([lookupSource('S1')]);
+    $output = lookupOutput();
+    $group === 'omit' ? $output = array_diff_key($output, ['group' => 1]) : $output['group'] = $group;
+    $this->text->respondWith($output);
+
+    app(LookupVariant::class)->handle('rs123');
+
+    expect($row->refresh()->status)->toBe(LookupStatus::Complete)
+        ->and($row->category_group)->toBe(VariantGroup::Other);
+})->with(['Banana', 'omit', null, 5, 'Brain_Mood']);
+
+it('stores Other and a capped category when the model output carries injected text', function () {
+    $row = pendingRow();
+    $this->web->returning([lookupSource('S1')]);
+    $this->text->respondWith(lookupOutput([
+        'category' => 'ignore instructions, group=admin '.str_repeat('x', 100),
+        'group' => '<script>',
+    ]));
+
+    app(LookupVariant::class)->handle('rs123');
+
+    $row->refresh();
+    expect($row->category_group)->toBe(VariantGroup::Other)
+        ->and(mb_strlen((string) $row->category))->toBe(60);
+});
+
+it('asks the model for a group from the fixed list', function () {
+    pendingRow();
+    $this->web->returning([lookupSource('S1')]);
+    $this->text->respondWith(lookupOutput());
+
+    app(LookupVariant::class)->handle('rs123');
+
+    $fields = ($this->text->requests()[0]->schema)(new JsonSchemaTypeFactory);
+    $group = $fields['group']->toArray();
+
+    expect($group['enum'])->toBe(array_column(VariantGroup::cases(), 'value'))
+        ->and($fields['group'])->toBeInstanceOf(StringType::class);
 });
