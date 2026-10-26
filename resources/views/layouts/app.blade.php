@@ -12,7 +12,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>{{ isset($title) ? $title.' - ' : '' }}{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ isset($title) ? $title.' - ' : '' }}{{ config('app.name') }}</title>
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -27,7 +27,7 @@
         <flux:header class="lg:hidden !bg-canvas">
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 text-lg font-bold tracking-tight text-ink">
                 <x-brand.mark :size="34" />
-                <span>{{ config('app.name', 'Laravel') }}</span>
+                <span>{{ config('app.name') }}</span>
             </a>
 
             <flux:spacer />
@@ -38,7 +38,7 @@
         <flux:sidebar collapsible="mobile" class="!border-r-0 !bg-canvas lg:!w-[210px] lg:shrink-0 lg:!px-5 lg:!py-7">
             <a href="{{ route('home') }}" class="flex items-center gap-2.5 text-lg font-bold tracking-tight text-ink">
                 <x-brand.mark :size="34" />
-                <span>{{ config('app.name', 'Laravel') }}</span>
+                <span>{{ config('app.name') }}</span>
             </a>
 
             <nav aria-label="Main" class="mt-8 flex flex-col gap-1">
