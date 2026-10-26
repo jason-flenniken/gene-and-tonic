@@ -128,7 +128,7 @@ To add a template, add a config entry and a view folder. No code changes are nee
 
 ---
 
-## Key decisions
+## Key decisions - designed by developer via long planning sessions, resulting in PRDs
 
 | Decision | Why |
 |---|---|
