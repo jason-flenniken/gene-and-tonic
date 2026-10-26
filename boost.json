@@ -19,6 +19,7 @@
         "testing-best-practices",
         "fluxui-development",
         "livewire-development",
+        "telescope-debugging",
         "tailwindcss-development"
     ]
 }
